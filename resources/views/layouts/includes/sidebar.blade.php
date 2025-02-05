@@ -38,17 +38,25 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.brand.index') }}"
+                    <a href="{{ route('brands.index') }}"
                         class="nav-link menu-link {{ $active == 'brand' ? 'active' : '' }}" aria-expanded="false">
                         <i class="ph-gauge"></i>
                         <span data-key="t-dashboards">Brand</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.categories.index') }}"
+                    <a href="{{ route('categories.index') }}"
                         class="nav-link menu-link {{ $active == 'category' ? 'active' : '' }}" aria-expanded="false">
                         <i class="ph-gauge"></i>
                         <span data-key="t-dashboards">Category</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('settings.index') }}"
+                        class="nav-link menu-link {{ $active == 'settings' ? 'active' : '' }}"
+                        aria-expanded="false">
+                        <i class="ph-gear"></i>
+                        <span data-key="t-dashboards">Settings</span>
                     </a>
                 </li>
             </ul>
