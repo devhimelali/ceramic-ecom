@@ -26,10 +26,7 @@
     <!-- extra css-->
     <link href="{{ asset('assets/css/extra-css.css') }}" rel="stylesheet" type="text/css">
 
-
-    {{-- <script src="{{ asset('assets/cdn/datatables/jquery.dataTables.min.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.css') }}">
-    <script src="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.js') }}"></script> --}}
+    <link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.min.css') }}">
     @yield('vendor-css')
     @yield('page-css')
 </head>
@@ -99,6 +96,48 @@
     <script src="{{ asset('assets/js/plugins.js') }}"></script>
     {{-- public/assets/cdn/datatables/jquery.dataTables.min.js --}}
 
+    <script src="{{ asset('assets/libs/toastr/toastr.min.js') }}"></script>
+    {{-- Get withErrors --}}
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                notify('error', "{{ $error }}");
+            </script>
+        @endforeach
+    @endif
+
+    <script>
+        @if (Session::has('success'))
+            notify('success', "{{ session('success') }}");
+        @elseif (Session::has('error'))
+            notify('error', "{{ Session::get('error') }}");
+        @elseif (Session::has('warning'))
+            notify('warning', "{{ Session::get('warning') }}");
+        @elseif (Session::has('info'))
+            notify('info', "{{ Session::get('info') }}");
+        @endif
+
+        @foreach (session('toasts', collect())->toArray() as $toast)
+            const options = {
+                title: '{{ $toast['title'] ?? '' }}',
+                message: '{{ $toast['message'] ?? 'No message provided' }}',
+                position: '{{ $toast['position'] ?? 'topRight' }}',
+            };
+            show('{{ $toast['type'] ?? 'info' }}', options);
+        @endforeach
+
+        function notify(type, msg, position = 'topRight') {
+            toastr[type](msg);
+        }
+
+        function show(type, options) {
+            if (['info', 'success', 'warning', 'error'].includes(type)) {
+                toastr[type](options);
+            } else {
+                toastr.show(options);
+            }
+        }
+    </script>
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
     @yield('vendor-script')

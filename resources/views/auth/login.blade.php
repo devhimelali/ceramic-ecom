@@ -1,7 +1,7 @@
 @extends('layouts.guest')
 @section('title', 'Login')
 @section('content')
-    <div class="col-lg-6">
+    <div class="col-lg-5">
         <div class="card mb-0">
             <div class="row g-0 align-items-center">
                 <div class="col-xxl-12 mx-auto">
@@ -9,7 +9,7 @@
                         <div class="card-body p-sm-5 m-lg-1">
                             <div class="text-center">
                                 <h5 class="fs-3xl">Welcome Back</h5>
-                                <p class="text-muted">Sign in to continue to Koormal Extras.</p>
+                                <p class="text-muted">Sign in to continue to {{env('APP_NAME')}}.</p>
                             </div>
                             <div class="p-2 mt-2">
                                 <form method="POST" action="{{ route('login') }}">
