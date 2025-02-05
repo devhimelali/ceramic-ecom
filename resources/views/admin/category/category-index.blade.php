@@ -106,7 +106,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.categories.store') }}" class="dynamic-form" method="POST" id="addForm">
+                    <form action="{{ route('categories.store') }}" class="dynamic-form" method="POST" id="addForm">
                         @csrf
                         <div class="row g-3">
                             <div class="col-xl-6">
@@ -203,7 +203,7 @@
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.categories.index') }}",
+                ajax: "{{ route('categories.index') }}",
                 columns: [{
                         data: 'id',
                         name: 'id'
@@ -247,7 +247,7 @@
                 submitButton.prop("disabled", true);
 
                 $.ajax({
-                    url: "{{ route('admin.categories.store') }}",
+                    url: "{{ route('categories.store') }}",
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -294,7 +294,7 @@
 
         function editCategory(slug) {
             $.ajax({
-                url: "{{ route('admin.categories.edit', 'slug') }}".replace('slug',
+                url: "{{ route('categories.edit', 'slug') }}".replace('slug',
                     slug),
                 type: "GET",
                 success: function(response) {
