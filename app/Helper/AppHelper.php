@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Setting;
+
 function app_setting($key)
 {
     $setting = Setting::where('key', $key)->first();
