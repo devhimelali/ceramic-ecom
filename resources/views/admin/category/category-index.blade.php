@@ -145,12 +145,12 @@
                                         <div class="image-container" id="imagePreview">
                                             <img src="{{ asset('assets/placeholder-image.webp') }}" class="previewImg"
                                                 alt="Image Preview">
-                                            <button type="button" class="remove-btn" id="removeImage"
+                                            <button type="button" class="remove-btn removeImage"
                                                 style="display:none;">&times;</button>
                                         </div>
-                                        <input type="file" name="image" id="imageUpload" class="d-none"
-                                            accept="image/*">
-                                        <label for="imageUpload" class="upload-label d-block mt-3">Choose a Category
+                                        <input type="file" name="image" class="d-none imageUpload" accept="image/*">
+                                        <label for="imageUpload" class="upload-label d-block mt-3 imageUploadLavel">Choose a
+                                            Category
                                             Image</label>
                                     </div>
                                 </div>
@@ -310,23 +310,26 @@
 
     <script>
         $(document).ready(function() {
-            $('#imageUpload').change(function(event) {
+            $('.imageUploadLavel').click(function() {
+                $('.imageUpload').click();
+            });
+            $('.imageUpload').change(function(event) {
                 const file = event.target.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         $('.previewImg').attr('src', e.target.result);
-                        $('#removeImage').show(); // Show remove button
+                        $('.removeImage').show();
                     };
                     reader.readAsDataURL(file);
                 }
             });
 
-            $('#removeImage').click(function() {
+            $('.removeImage').click(function() {
                 $('.previewImg').attr('src',
-                    '{{ asset('assets/placeholder-image.webp') }}'); // Reset image to placeholder
-                $('#imageUpload').val(''); // Clear file input
-                $('#removeImage').hide(); // Hide remove button
+                    '{{ asset('assets/placeholder-image.webp') }}');
+                $('.imageUpload').val('');
+                $('.removeImage').hide();
             });
         });
     </script>

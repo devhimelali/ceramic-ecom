@@ -62,7 +62,9 @@ class CategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
-        $imagePath = ImageUploadHelper::uploadImage($request);
+        if ($request->hasFile('image')) {
+            $imagePath = ImageUploadHelper::uploadImage($request->image, 'uploads/categories');
+        }
 
         Category::create([
             'name' => $request->name,
@@ -91,8 +93,9 @@ class CategoryController extends Controller
             'name' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
+        dd($request->all());
         $imagePath  = null;
-        if ($request->hasFile('image')) {
+        if ($request->image) {
             $imagePath = ImageUploadHelper::uploadImage($request->image, 'uploads/categories');
         }
         $category = Category::where('slug', $slug)->first();
@@ -106,7 +109,8 @@ class CategoryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Category updated successfully'
+            'message' => 'Category updated successfully',
+            'imagepath' => $imagePath
         ]);
     }
 }

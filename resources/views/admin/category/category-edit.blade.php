@@ -36,17 +36,20 @@
         </div>
 
         <div class="col-xxl-6 pt-4">
-            <div class="d-flex justify-content-center align-items-center">
+            {{-- <div class="d-flex justify-content-center align-items-center">
                 <div class="text-center">
                     <div class="image-container" id="imagePreview">
                         <img src="{{ asset('assets/placeholder-image.webp') }}" class="previewImg" alt="Image Preview">
-                        <button type="button" class="remove-btn" id="removeImage"
-                            style="display:none;">&times;</button>
+                        <button type="button" class="remove-btn removeImage" style="display:none;">&times;</button>
                     </div>
-                    <input type="file" name="image" id="imageUpload" class="d-none" accept="image/*">
-                    <label for="imageUpload" class="upload-label d-block mt-3">Choose a Category Image</label>
+                    <input type="file" name="image" id="" class="d-none imageUpload" accept="image/*">
+                    <label for="imageUpload" class="upload-label imageUploadlavel d-block mt-3">Choose a
+                        Category
+                        Image</label>
                 </div>
-            </div>
+            </div> --}}
+            <label for="image" class="form-label">Category Image</label>
+            <input type="file" name="upimage" id="">
         </div>
         <div class="col-lg-12">
             <div class="hstack gap-2 justify-content-end">
