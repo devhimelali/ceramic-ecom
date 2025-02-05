@@ -12,6 +12,7 @@ class Brand extends Model
         "slug",
         "image",
         "description",
+        "status",
     ];
 
     /**
