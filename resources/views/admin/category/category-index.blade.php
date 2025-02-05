@@ -143,16 +143,16 @@
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="text-center">
                                         <div class="image-container" id="imagePreview">
-                                            <img src="{{ asset('assets/placeholder-image.webp') }}" id="previewImg"
+                                            <img src="{{ asset('assets/placeholder-image.webp') }}" class="previewImg"
                                                 alt="Image Preview">
-                                            <button type="button" class="remove-btn" id="removeImage">&times;</button>
+                                            <button type="button" class="remove-btn" id="removeImage"
+                                                style="display:none;">&times;</button>
                                         </div>
-                                        <input type="file" id="imageUpload" name="image" class="d-none"
+                                        <input type="file" name="image" id="imageUpload" class="d-none"
                                             accept="image/*">
-                                        <label for="imageUpload" class="upload-label d-block mt-3">Choose an Category
+                                        <label for="imageUpload" class="upload-label d-block mt-3">Choose a Category
                                             Image</label>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -180,32 +180,20 @@
         </div>
     </div>
 
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalgridLabel" aria-hidden="true">
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalgridLabel">Edit Category</h5>
+                    <h5 class="modal-title" id="editModalLabel">Edit Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-
+                <div class="modal-body" id="editModalContent">
+                    <!-- The AJAX response (edit form) will be loaded here -->
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="exampleModalgridLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalgridLabel">Category Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
 
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 @section('page-script')
     <script src="{{ asset('assets/cdn/datatables/jquery.dataTables.min.js') }}"></script>
@@ -246,10 +234,7 @@
                     },
                 ]
             });
-        });
 
-
-        $(document).ready(function() {
             $("#addForm").on("submit", function(e) {
                 e.preventDefault();
                 let formData = new FormData(this);
@@ -274,7 +259,7 @@
                         if (response.status === "success") {
                             alert("Category added successfully!");
                             $("#addForm")[0].reset();
-                            $("#previewImg").attr("src",
+                            $(".previewImg").attr("src",
                                 "{{ asset('assets/placeholder-image.webp') }}");
 
                             if ($.fn.DataTable.isDataTable("#dataTable")) {
@@ -306,31 +291,43 @@
                 });
             });
         });
+
+        function editCategory(slug) {
+            $.ajax({
+                url: "{{ route('admin.categories.edit', 'slug') }}".replace('slug',
+                    slug),
+                type: "GET",
+                success: function(response) {
+                    $("#editModalContent").html(response); // Load the response (view) into modal
+                    $("#editModal").modal("show"); // Show the modal
+                },
+                error: function(xhr) {
+                    alert("Failed to load the category edit form.");
+                }
+            });
+        }
     </script>
 
     <script>
-        const imageUpload = document.getElementById("imageUpload");
-        const previewImg = document.getElementById("previewImg");
-        const removeImage = document.getElementById("removeImage");
-        const imagePreview = document.getElementById("imagePreview");
+        $(document).ready(function() {
+            $('#imageUpload').change(function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('.previewImg').attr('src', e.target.result);
+                        $('#removeImage').show(); // Show remove button
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
-        imageUpload.addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    removeImage.style.display = "flex";
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        removeImage.addEventListener("click", function() {
-            public / assets / placeholder - image.webp
-            previewImg.src = "{{ asset('assets/placeholder-image.webp') }}";
-            imageUpload.value = "";
-            removeImage.style.display = "none";
+            $('#removeImage').click(function() {
+                $('.previewImg').attr('src',
+                    '{{ asset('assets/placeholder-image.webp') }}'); // Reset image to placeholder
+                $('#imageUpload').val(''); // Clear file input
+                $('#removeImage').hide(); // Hide remove button
+            });
         });
     </script>
 @endsection

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Helpers\ImageUploadHelper;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -33,14 +34,17 @@ class CategoryController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     return '
-
-                       <div class="btn-group">
-                                <a href="" class="btn btn-sm btn-success edit-item-btn"><i class="bi bi-pencil me-2"></i>Edit</a>
-                                <button data-id="' . $row->id . '" class="btn btn-sm btn-danger remove-item-btn"><i
-                                        class="bi bi-trash me-2"></i>Delete</button>
-                            </div>
+                        <div class="btn-group">
+                            <a href="javascript:void(0);" onclick="editCategory(\'' . $row->slug . '\')" class="btn btn-sm btn-success edit-item-btn">
+                                <i class="bi bi-pencil me-2"></i>Edit
+                            </a>
+                            <button data-id="' . $row->id . '" class="btn btn-sm btn-danger remove-item-btn">
+                                <i class="bi bi-trash me-2"></i>Delete
+                            </button>
+                        </div>
                     ';
                 })
+
                 ->rawColumns(['is_active', 'actions', 'image'])
                 ->make(true);
         }
@@ -53,30 +57,56 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-        // ]);
-        // $imageName = null;
-        // if ($request->hasFile('image')) {
-        //     $image = $request->file('image');
-        //     $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $request->validate([
+            'name' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+        ]);
 
-        //     // Store in the 'categories' folder inside storage/app/public
-        //     $path = $image->storeAs('categories', $imageName, 'public');
-        // }
+        $imagePath = ImageUploadHelper::uploadImage($request);
 
-        // Category::create([
-        //     'name' => $request->name,
-        //     'slug' => Str::slug($request->name),
-        //     'parent_id' => $request->parent_id,
-        //     'is_active' => $request->is_active,
-        //     'image' => $imageName ? 'storage/categories/' . $imageName : null,
-        // ]);
+        Category::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'parent_id' => $request->parent_id,
+            'is_active' => $request->is_active,
+            'image' => $imagePath,
+        ]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Category created successfully'
+        ]);
+    }
+
+    public function edit($slug)
+    {
+        $category = Category::where('slug', $slug)->first();
+        $categories = Category::whereNull('parent_id')->get();
+        return view('admin.category.category-edit', compact('category', 'categories'));
+    }
+
+    public function update(Request $request, $slug)
+    {
+        $request->validate([
+            'name' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+        ]);
+        $imagePath  = null;
+        if ($request->hasFile('image')) {
+            $imagePath = ImageUploadHelper::uploadImage($request->image, 'uploads/categories');
+        }
+        $category = Category::where('slug', $slug)->first();
+        $category->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'parent_id' => $request->parent_id,
+            'is_active' => $request->is_active,
+            'image' => $imagePath ?? $category->image,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category updated successfully'
         ]);
     }
 }
