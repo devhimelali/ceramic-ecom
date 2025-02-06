@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Brand;
 
 use App\Enum\StatusEnum;
+use App\Models\Brand;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,7 +24,8 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route("brand");
+        $slug = $this->route("brand");
+        $id = Brand::where('slug', $slug)->first()->id;
         return [
             'name' => ['required', 'string', 'max:255', Rule::unique('brands', 'name')->ignore($id)],
             'slug' => ['required', 'string', 'max:255', Rule::unique('brands', 'slug')->ignore($id)],

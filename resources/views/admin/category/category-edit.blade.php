@@ -1,4 +1,4 @@
-<form action="{{ route('admin.categories.update', $category->slug) }}" class="dynamic-form" method="POST" id="editForm">
+<form action="{{ route('categories.update', $category->slug) }}" class="dynamic-form" method="POST" id="editForm">
     @csrf
     @method('PUT')
     <div class="row g-3">
@@ -13,12 +13,12 @@
             <div class="my-4">
                 <div>
                     <label for="name" class="form-label">Parent Category<span class="text-danger">*</span></label>
-                    <select class="form-select" name="parent_id" id="parent_id">
+                    <select class="form-select" data-choices name="parent_id" id="parent_id">
                         <option selected value="">Select Parent Category</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}"
-                                {{ $category->id == $category->parent_id ? 'selected' : '' }}>
-                                {{ $category->name }}
+                        @foreach ($parent_categories as $edit_parent_category)
+                            <option value="{{ $edit_parent_category->id }}"
+                                {{ $edit_parent_category->id == $edit_parent_category->parent_id ? 'selected' : '' }}>
+                                {{ $edit_parent_category->name }}
                             </option>
                         @endforeach
                     </select>
@@ -36,20 +36,21 @@
         </div>
 
         <div class="col-xxl-6 pt-4">
-            {{-- <div class="d-flex justify-content-center align-items-center">
+            <div class="d-flex justify-content-center align-items-center">
                 <div class="text-center">
-                    <div class="image-container" id="imagePreview">
-                        <img src="{{ asset('assets/placeholder-image.webp') }}" class="previewImg" alt="Image Preview">
+                    <div class="custom-upload-box">
+                        <img src="{{ $category->image ? asset($category->image) : asset('assets/placeholder-image-2.png') }}"
+                            class="edit-preview-img" alt="Image Preview">
                         <button type="button" class="remove-btn removeImage" style="display:none;">&times;</button>
                     </div>
-                    <input type="file" name="image" id="" class="d-none imageUpload" accept="image/*">
-                    <label for="imageUpload" class="upload-label imageUploadlavel d-block mt-3">Choose a
-                        Category
-                        Image</label>
+                    <input type="file" name="image" class="d-none edit-hidden-input" accept="image/*">
+
+                    <button type="button" class="btn btn-dark mt-1 px-4"
+                        onclick="setupImagePreview('.edit-hidden-input', '.edit-preview-img')"><i
+                            class="bx bx-cloud-upload fs-3"></i> Choose a
+                        Category</button>
                 </div>
-            </div> --}}
-            <label for="image" class="form-label">Category Image</label>
-            <input type="file" name="upimage" id="">
+            </div>
         </div>
         <div class="col-lg-12">
             <div class="hstack gap-2 justify-content-end">
@@ -89,7 +90,7 @@
                 },
                 success: function(response) {
                     if (response.status === "success") {
-                        alert("Category updated successfully!");
+                        notify(response.status, response.message);
                         $('#addForm')[0].reset(); // Reset form
                         $('#editModal').modal('hide'); // Close modal
                         $('#dataTable').DataTable().ajax
@@ -109,6 +110,7 @@
                             let inputField = $('[name="' + key + '"]');
                             inputField.after('<small class="text-danger">' + value[
                                 0] + '</small>');
+                            notify('error', value[0]);
                         });
                     }
                 }

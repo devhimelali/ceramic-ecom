@@ -52,9 +52,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('attributes.index') }}"
+                        class="nav-link menu-link {{ $active == 'attribute' ? 'active' : '' }}" aria-expanded="false">
+                        <i class="ph-gauge"></i>
+                        <span data-key="t-dashboards">Attribute</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('settings.index') }}"
-                        class="nav-link menu-link {{ $active == 'settings' ? 'active' : '' }}"
-                        aria-expanded="false">
+                        class="nav-link menu-link {{ $active == 'settings' ? 'active' : '' }}" aria-expanded="false">
                         <i class="ph-gear"></i>
                         <span data-key="t-dashboards">Settings</span>
                     </a>

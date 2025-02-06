@@ -1,4 +1,5 @@
-<form action="{{ route('brands.update', $brand->slug) }}" class="dynamic-form" method="POST" id="editForm" enctype="multipart/form-data">
+<form action="{{ route('brands.update', $brand->slug) }}" class="dynamic-form" method="POST" id="editForm"
+    enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="row g-3">
@@ -23,7 +24,9 @@
                     <select class="form-select" name="status" id="brandStatus">
                         <option selected value="">Select Status</option>
                         @foreach ($statuses as $status)
-                            <option value="{{ $status->value }}" {{ $brand->status->value == $status->value ? 'selected' : '' }}>{{ $status->description() }}</option>
+                            <option value="{{ $status->value }}"
+                                {{ $brand->status->value == $status->value ? 'selected' : '' }}>
+                                {{ $status->description() }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -31,28 +34,32 @@
             <div class="my-3">
                 <div>
                     <label for="description" class="form-label">Description<span class="text-danger">*</span></label>
-                    <textarea name="description" id="description" class="form-control" rows="4">{{$brand->description}}</textarea>
+                    <textarea name="description" id="description" class="form-control" rows="4">{{ $brand->description }}</textarea>
                 </div>
             </div>
         </div>
 
+
+
         <div class="col-xxl-5 pt-4">
             <div class="d-flex justify-content-center align-items-center">
                 <div class="text-center">
-                    <div class="image-container" id="imagePreview">
-                        @php
-                            $image = $brand->image ? asset($brand->image) : asset('assets/placeholder-image.webp');
-                        @endphp
-                        <img src="{{ $image }}" class="previewImg" alt="Image Preview">
-                        <button type="button" class="remove-btn" id="removeImage"
-                            style="display:none;">&times;</button>
+                    <div class="custom-upload-box">
+                        <img src="{{ $brand->image ? asset($brand->image) : asset('assets/placeholder-image-2.png') }}"
+                            class="edit-preview-img" alt="Image Preview">
+                        <button type="button" class="remove-btn removeImage" style="display:none;">&times;</button>
                     </div>
-                    <input type="file" name="image" id="imageUpload" class="d-none" accept="image/*">
-                    <label for="imageUpload" class="upload-label d-block mt-3">Choose a Category
-                        Image</label>
+                    <input type="file" name="image" class="d-none edit-hidden-input" accept="image/*">
+
+                    <button type="button" class="btn btn-dark mt-1 px-4"
+                        onclick="setupImagePreview('.edit-hidden-input', '.edit-preview-img')"><i
+                            class="bx bx-cloud-upload fs-3"></i> Choose a
+                        Category</button>
                 </div>
             </div>
         </div>
+
+
 
         <div class="col-lg-12">
             <div class="hstack gap-2 justify-content-end">
@@ -96,7 +103,7 @@
                         $('#addForm')[0].reset(); // Reset form
                         $('#editModal').modal('hide'); // Close modal
                         $('#dataTable').DataTable().ajax
-                            .reload(); // Reload DataTable if needed
+                            .reload();
                     }
                 },
                 error: function(xhr) {

@@ -1,31 +1,34 @@
 @extends('layouts.app')
 @section('title', 'Category')
 @section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.css') }}">
+
     <style>
-        .image-container {
-            position: relative;
+        .custom-upload-box {
             width: 200px;
             height: 200px;
-            border: 2px dashed #ccc;
-            border-radius: 10px;
+            border: 2px dashed #ddd;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            margin: auto;
+            border-radius: 10px;
             overflow: hidden;
-            background-color: #f8f9fa;
+            position: relative;
         }
 
-        .image-container img {
-            max-width: 100%;
-            max-height: 100%;
+        .custom-upload-box img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
 
-        .upload-label {
-            cursor: pointer;
-            color: #007bff;
-            font-weight: bold;
+        .custom-upload-box:hover {
+            border-color: #aaa;
+        }
+
+        .hidden-input {
+            display: none;
         }
 
         .remove-btn {
@@ -42,6 +45,10 @@
             display: none;
             align-items: center;
             justify-content: center;
+        }
+
+        .choices__list--dropdown .choices__item--selectable {
+            padding-left: 30px !important;
         }
     </style>
 @endsection
@@ -106,7 +113,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('categories.store') }}" class="dynamic-form" method="POST" id="addForm">
+                    <form action="{{ route('categories.store') }}" class="dynamic-form" method="POST" id="addForm"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="row g-3">
                             <div class="col-xl-6">
@@ -122,8 +130,12 @@
                                     <div>
                                         <label for="name" class="form-label">Parent Category<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select" name="parent_id" id="parent_id">
+                                        <select class="form-select" data-choices name="parent_id" id="parent_id">
                                             <option selected value="">Select Parent Category</option>
+                                            @foreach ($categories as $parent_category)
+                                                <option value="{{ $parent_category->id }}">{{ $parent_category->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -142,16 +154,18 @@
                             <div class="col-xxl-6 pt-4">
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="text-center">
-                                        <div class="image-container" id="imagePreview">
-                                            <img src="{{ asset('assets/placeholder-image.webp') }}" class="previewImg"
+                                        <div class="custom-upload-box">
+                                            <img src="{{ asset('assets/placeholder-image-2.png') }}" class="preview-img"
                                                 alt="Image Preview">
                                             <button type="button" class="remove-btn removeImage"
                                                 style="display:none;">&times;</button>
                                         </div>
-                                        <input type="file" name="image" class="d-none imageUpload" accept="image/*">
-                                        <label for="imageUpload" class="upload-label d-block mt-3 imageUploadLavel">Choose a
-                                            Category
-                                            Image</label>
+                                        <input type="file" name="image" class="d-none hidden-input" accept="image/*">
+
+                                        <button type="button" class="btn btn-dark mt-1 px-4"
+                                            onclick="setupImagePreview('.hidden-input', '.preview-img')"><i
+                                                class="bx bx-cloud-upload fs-3"></i> Choose a
+                                            Category</button>
                                     </div>
                                 </div>
                             </div>
@@ -196,17 +210,19 @@
 
 @endsection
 @section('page-script')
-    <script src="{{ asset('assets/cdn/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+            $("#editModal").on("shown.bs.modal", function() {
+                reinitializeChoices();
+            });
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('categories.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false
                     },
                     {
                         data: 'name',
@@ -257,7 +273,7 @@
                     },
                     success: function(response) {
                         if (response.status === "success") {
-                            alert("Category added successfully!");
+                            notify(response.status, response.message);
                             $("#addForm")[0].reset();
                             $(".previewImg").attr("src",
                                 "{{ asset('assets/placeholder-image.webp') }}");
@@ -280,6 +296,7 @@
                                 let inputField = $('[name="' + key + '"]');
                                 inputField.after('<small class="text-danger">' + value[
                                     0] + '</small>');
+                                notify('error', value[0]);
                             });
                         }
                     },
@@ -287,6 +304,25 @@
                         submitText.removeClass("d-none");
                         loader.addClass("d-none");
                         submitButton.prop("disabled", false);
+                    }
+                });
+            });
+
+            $('body').on('click', '.delete-employee', function(e) {
+                e.preventDefault();
+                var id = $(this).attr('employee-id');
+                var title = "Are you sure?";
+                Swal.fire({
+                    icon: "warning",
+                    title: title,
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "Cancel",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.clear();
+                        window.location.href = "{{ url('admin/employee/delete') }}/" + id;
                     }
                 });
             });
@@ -302,35 +338,63 @@
                     $("#editModal").modal("show"); // Show the modal
                 },
                 error: function(xhr) {
-                    alert("Failed to load the category edit form.");
+                    notify('error', "Failed to load the brand edit form.");
+                }
+            });
+        }
+
+        function confirmDelete(slug, deleteUrl) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to undo this action!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteCategory(slug, deleteUrl);
+                }
+            });
+        }
+
+        function deleteCategory(slug, deleteUrl) {
+            $.ajax({
+                url: deleteUrl,
+                type: 'DELETE',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('Deleted!', 'The category has been deleted.', 'success');
+                        $('#dataTable').DataTable().ajax.reload();
+                    } else {
+                        Swal.fire('Error!', 'There was a problem deleting the category.', 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error!', 'There was a problem with the request.', 'error');
                 }
             });
         }
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('.imageUploadLavel').click(function() {
-                $('.imageUpload').click();
-            });
-            $('.imageUpload').change(function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
+        function setupImagePreview(inputSelector, previewSelector) {
+            // inputSelector means which input field to listen to
+            // previewSelector means which image to change
+            $(inputSelector).click();
+            $(inputSelector).change(function() {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
                     reader.onload = function(e) {
-                        $('.previewImg').attr('src', e.target.result);
-                        $('.removeImage').show();
+                        $(previewSelector).attr("src", e.target.result);
                     };
-                    reader.readAsDataURL(file);
+                    reader.readAsDataURL(this.files[0]);
                 }
             });
-
-            $('.removeImage').click(function() {
-                $('.previewImg').attr('src',
-                    '{{ asset('assets/placeholder-image.webp') }}');
-                $('.imageUpload').val('');
-                $('.removeImage').hide();
-            });
-        });
+        }
     </script>
 @endsection

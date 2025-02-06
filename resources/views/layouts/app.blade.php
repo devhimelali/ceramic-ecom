@@ -25,6 +25,9 @@
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css">
     <!-- extra css-->
     <link href="{{ asset('assets/css/extra-css.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}">
+    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
 
     <link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.min.css') }}">
     @yield('vendor-css')
@@ -93,10 +96,16 @@
 
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins.js') }}"></script>
+    <!-- App js -->
     {{-- public/assets/cdn/datatables/jquery.dataTables.min.js --}}
 
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/plugins.js') }}"></script> --}}
     <script src="{{ asset('assets/libs/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('assets/cdn/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.all.min.js') }}"></script>
+
     {{-- Get withErrors --}}
     @if ($errors->any())
         @foreach ($errors->all() as $error)
@@ -137,9 +146,20 @@
                 toastr.show(options);
             }
         }
+
+        $(document).ready(function() {
+            $("[data-choices]").each(function() {
+                new Choices(this);
+            });
+
+            function reinitializeChoices() {
+                $("[data-choices]").each(function() {
+                    new Choices(this);
+                });
+            }
+        });
     </script>
-    <!-- App js -->
-    <script src="{{ asset('assets/js/app.js') }}"></script>
+
     @yield('vendor-script')
     @yield('page-script')
 </body>
