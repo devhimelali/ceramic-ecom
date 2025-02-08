@@ -12,7 +12,3 @@ Route::middleware([
 ])->group(function () {
     Route::get('/redirect', [RedirectController::class, 'redirectUser'])->name('dashboard');
 });
-
-Route::get('/', function () {
-    return view('welcome');
-});
