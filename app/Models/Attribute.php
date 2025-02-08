@@ -12,7 +12,7 @@ class Attribute extends Model
         'status',
     ];
 
-    public function attributeValues()
+    public function values()
     {
         return $this->hasMany(AttributeValue::class);
     }

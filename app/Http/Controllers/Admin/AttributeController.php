@@ -13,9 +13,23 @@ class AttributeController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Attribute::orderBy('id', 'desc');
+            $data = Attribute::with('values')->orderBy('id', 'desc');
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('total_value', function ($row) {
+                    // return $row->attributeValues->count();
+                    // <span class="badge bg-success-subtle text-success text-uppercase">Active</span>
+                    return '
+                    <a href="' . route('attribute-values.index', ['attribute_id' => encrypt($row->id)]) . '">
+                        <span type="button" class="badge bg-success-subtle text-success text-uppercase position-relative">
+                            Attribute values
+                            <small class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            ' . $row->values->count() . '
+                                <span class="visually-hidden">Attribute values</span>
+                            </small>
+                        </span>
+                    </a>';
+                })
                 ->addColumn('status', function ($row) {
                     $encryptedData = encrypt(json_encode([
                         'id' => $row->id,
@@ -64,7 +78,7 @@ class AttributeController extends Controller
                 })
 
 
-                ->rawColumns(['status', 'actions', 'image', 'status'])
+                ->rawColumns(['status', 'actions', 'image', 'status', 'total_value'])
                 ->make(true);
         }
         $data = [

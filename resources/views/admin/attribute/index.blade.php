@@ -29,6 +29,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Total Value</th>
                                     <th>Status</th>
                                     <th style="width: 40px">Actions</th>
                                 </tr>
@@ -89,6 +90,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'total_value',
+                        name: 'total_value'
                     },
                     {
                         data: 'status',
