@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,8 @@ class FrontendController extends Controller
     public function home()
     {
         $data = [
-            'active' => 'home'
+            'active' => 'home',
+            'brands' => Brand::latest()->limit(15)->get(),
         ];
         return view('frontend.home', $data);
     }

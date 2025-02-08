@@ -15,14 +15,14 @@
                 <i class="icon-twitter" aria-hidden="true"></i>
                 <span class="sr-only">Twitter</span>
             </a>
-            <a href="https://instagram.com/">
+            {{-- <a href="https://instagram.com/">
                 <i class="icon-instagram" aria-hidden="true"></i>
                 <span class="sr-only">Instagram</span>
             </a>
             <a href="https://youtube.com/">
                 <i class="icon-youtube" aria-hidden="true"></i>
                 <span class="sr-only">Youtube</span>
-            </a>
+            </a> --}}
         </div><!-- /.hero-slider__social -->
         <a href="#about" class="main-slider__scroll-btn"><span></span></a><!-- /.main-slider__scroll-btn -->
         <div class="main-slider__carousel floens-slick__carousel--with-counter"
@@ -55,9 +55,11 @@
                             </div><!-- /.sec-title -->
 
 
-                            <p class="main-slider__text">Tiles companies typically offer a wide variety of tile
-                                styles, shapes, sizes, colors, and finishes. Customers can choose from options such
-                                as ceramic tiles porcelain tiles, mosaic tiles, subway tiles, and more.</p>
+                            <p class="main-slider__text">Welcome to Melbourne Building Products, your one-stop destination
+                                for high-quality building and renovation supplies in Melton, Victoria.
+                                At Melbourne Building Products, we’re dedicated to helping you transform your home or
+                                project into a masterpiece. Whether you’re updating a single room, renovating your entire
+                                house, or working on a large-scale construction project. </p>
                             <!-- /.main-slider__text -->
                             <a href="about.html" class="main-slider__btn floens-btn">
                                 <span>discover more</span>
@@ -97,9 +99,11 @@
                             </div><!-- /.sec-title -->
 
 
-                            <p class="main-slider__text">Tiles companies typically offer a wide variety of tile
-                                styles, shapes, sizes, colors, and finishes. Customers can choose from options such
-                                as ceramic tiles porcelain tiles, mosaic tiles, subway tiles, and more.</p>
+                            <p class="main-slider__text">Welcome to Melbourne Building Products, your one-stop destination
+                                for high-quality building and renovation supplies in Melton, Victoria.
+                                At Melbourne Building Products, we’re dedicated to helping you transform your home or
+                                project into a masterpiece. Whether you’re updating a single room, renovating your entire
+                                house, or working on a large-scale construction project, </p>
                             <!-- /.main-slider__text -->
                             <a href="about.html" class="main-slider__btn floens-btn">
                                 <span>discover more</span>
@@ -139,9 +143,11 @@
                             </div><!-- /.sec-title -->
 
 
-                            <p class="main-slider__text">Tiles companies typically offer a wide variety of tile
-                                styles, shapes, sizes, colors, and finishes. Customers can choose from options such
-                                as ceramic tiles porcelain tiles, mosaic tiles, subway tiles, and more.</p>
+                            <p class="main-slider__text">Welcome to Melbourne Building Products, your one-stop destination
+                                for high-quality building and renovation supplies in Melton, Victoria.
+                                At Melbourne Building Products, we’re dedicated to helping you transform your home or
+                                project into a masterpiece. Whether you’re updating a single room, renovating your entire
+                                house, or working on a large-scale construction project, </p>
                             <!-- /.main-slider__text -->
                             <a href="about.html" class="main-slider__btn floens-btn">
                                 <span>discover more</span>
@@ -377,9 +383,15 @@
 
                         <div class="about-one__content__text wow fadeInUp" data-wow-duration="1500ms"
                             data-wow-delay="00ms">
-                            <h5 class="about-one__text-title">We’re providing the best quality tiles in town.</h5>
+                            <h5 class="about-one__text-title">Welcome to Melbourne Building Products, your one-stop
+                                destination
+                                for high-quality building and renovation supplies in Melton, Victoria.</h5>
                             <!-- /.about-one__text-title -->
-                            <p class="about-one__text">Tiles company, also known as a tile manufacturer or
+                            <p class="about-one__text">We’re providing the best quality tiles in town.
+                                At Melbourne Building Products, we’re dedicated to helping you transform your home or
+                                project into a masterpiece. Whether you’re updating a single room, renovating your entire
+                                house, or working on a large-scale construction project. Tiles company, also known as a tile
+                                manufacturer or
                                 distributor,
                                 specializes in the production and distribution of various types of tiles used for a
                                 wide
@@ -434,237 +446,10 @@
     </section><!-- /.about-one section-space -->
     <!-- about End -->
 
-    <!-- services start -->
-    <section class="services-one">
-        <div class="services-one__bg"
-            style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/services-bg-1.png);">
-        </div>
-        <!-- /.services-one__bg -->
-        <div class="container">
-            <div class="services-one__top">
-                <div class="row gutter-y-50 align-items-center">
-                    <div class="col-lg-7 col-md-10">
-                        <div class="sec-title @@extraClassName">
 
-                            <h6 class="sec-title__tagline">services</h6><!-- /.sec-title__tagline -->
-
-                            <h3 class="sec-title__title">We Provides Best florring Services For You</h3>
-                            <!-- /.sec-title__title -->
-                        </div><!-- /.sec-title -->
-
-
-                    </div><!-- /.col-lg-7 -->
-                    <div class="col-lg-5">
-                        <div class="services-one__top__button">
-                            <a href="services.html" class="floens-btn services-one__top__btn">
-                                <span>view all</span>
-                                <i class="icon-right-arrow"></i>
-                            </a><!-- /.floens-btn services-one__top__btn -->
-                        </div><!-- /.services-one__top__button -->
-                    </div><!-- /.col-lg-5 -->
-                </div><!-- /.row -->
-            </div><!-- /.services-one__top -->
-        </div><!-- /.container -->
-        <div class="container-fluid services-one__container">
-            <div class="services-one__carousel floens-owl__carousel floens-owl__carousel--basic-nav owl-carousel owl-theme"
-                data-owl-options='{
-                    "items": 1,
-                    "margin": 0,
-                    "loop": true,
-                    "smartSpeed": 700,
-                    "stagePadding": 100,
-                    "nav": false,
-                    "navText": ["<span class=\"icon-slide-left-arrow\"></span>","<span class=\"icon-slide-right-arrow\"></span>"],
-                    "dots": false,
-                    "autoplay": 600,
-                    "responsive":{
-                        "0":{
-                            "items": 1,
-                            "stagePadding": 0,
-                            "margin": 15
-                        },
-                        "530":{
-                            "items": 1,
-                            "stagePadding": 70,
-                            "margin": 30
-                        },
-                        "576":{
-                            "items": 1,
-                            "stagePadding": 110,
-                            "margin": 30
-                        },
-                        "768":{
-                            "items": 2,
-                            "stagePadding": 50,
-                            "margin": 30
-                        },
-                        "992":{
-                            "items": 2,
-                            "stagePadding": 110,
-                            "margin": 30
-                        },
-                        "1200":{
-                            "items": 2,
-                            "stagePadding": 200,
-                            "margin": 30
-                        },
-                        "1400":{
-                            "items": 3,
-                            "stagePadding": 130,
-                            "margin": 30
-                        },
-                        "1600":{
-                            "items": 3,
-                            "stagePadding": 260,
-                            "margin": 30
-                        },
-                        "1830":{
-                            "items": 3,
-                            "stagePadding": 375,
-                            "margin": 30
-                        }
-                    }
-                }'>
-                <div class="item">
-                    <div class="service-card">
-                        <div class="service-card__bg"></div><!-- /.service-card__bg -->
-                        <div class="service-card__top">
-                            <div class="service-card__image">
-                                <img src="{{ asset('frontend') }}/assets/images/services/service-1-1.jpg"
-                                    alt="Tiling & concrete">
-                            </div><!-- /.service-card__image -->
-                            <div class="service-card__icon">
-                                <span class="icon-tile"></span>
-                            </div><!-- /.service-card__icon -->
-                        </div><!-- /.service-card__top -->
-                        <div class="service-card__content">
-                            <h3 class="service-card__title"><a href='service-d-tiling-concrete.html'>Tiling &
-                                    concrete</a></h3><!-- /.service-card__title -->
-                            <p class="service-card__text">Laminate flooring is a type of synthetic flooring that
-                                designed like hardwood, tile, or other natural materials</p>
-                            <!-- /.service-card__text -->
-                            <a href='service-d-tiling-concrete.html'
-                                class="service-card__btn floens-btn floens-btn--border">
-                                <span>service details</span>
-                                <i class="icon-right-arrow"></i>
-                            </a><!-- /.service-card__btn -->
-                        </div><!-- /.service-card__content -->
-                    </div><!-- /.service-card -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="service-card">
-                        <div class="service-card__bg"></div><!-- /.service-card__bg -->
-                        <div class="service-card__top">
-                            <div class="service-card__image">
-                                <img src="{{ asset('frontend') }}/assets/images/services/service-1-2.jpg"
-                                    alt="Oak Flooring">
-                            </div><!-- /.service-card__image -->
-                            <div class="service-card__icon">
-                                <span class="icon-stones"></span>
-                            </div><!-- /.service-card__icon -->
-                        </div><!-- /.service-card__top -->
-                        <div class="service-card__content">
-                            <h3 class="service-card__title"><a href='service-d-oak-flooring.html'>Oak Flooring</a>
-                            </h3><!-- /.service-card__title -->
-                            <p class="service-card__text">Laminate flooring is a type of synthetic flooring that
-                                designed like hardwood, tile, or other natural materials</p>
-                            <!-- /.service-card__text -->
-                            <a href='service-d-oak-flooring.html' class="service-card__btn floens-btn floens-btn--border">
-                                <span>service details</span>
-                                <i class="icon-right-arrow"></i>
-                            </a><!-- /.service-card__btn -->
-                        </div><!-- /.service-card__content -->
-                    </div><!-- /.service-card -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="service-card">
-                        <div class="service-card__bg"></div><!-- /.service-card__bg -->
-                        <div class="service-card__top">
-                            <div class="service-card__image">
-                                <img src="{{ asset('frontend') }}/assets/images/services/service-1-3.jpg"
-                                    alt="Vinyl Plank">
-                            </div><!-- /.service-card__image -->
-                            <div class="service-card__icon">
-                                <span class="icon-tiles"></span>
-                            </div><!-- /.service-card__icon -->
-                        </div><!-- /.service-card__top -->
-                        <div class="service-card__content">
-                            <h3 class="service-card__title"><a href='service-d-vinyl-plank.html'>Vinyl Plank</a>
-                            </h3><!-- /.service-card__title -->
-                            <p class="service-card__text">Laminate flooring is a type of synthetic flooring that
-                                designed like hardwood, tile, or other natural materials</p>
-                            <!-- /.service-card__text -->
-                            <a href='service-d-vinyl-plank.html' class="service-card__btn floens-btn floens-btn--border">
-                                <span>service details</span>
-                                <i class="icon-right-arrow"></i>
-                            </a><!-- /.service-card__btn -->
-                        </div><!-- /.service-card__content -->
-                    </div><!-- /.service-card -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="service-card">
-                        <div class="service-card__bg"></div><!-- /.service-card__bg -->
-                        <div class="service-card__top">
-                            <div class="service-card__image">
-                                <img src="{{ asset('frontend') }}/assets/images/services/service-1-4.jpg"
-                                    alt="Industrial Flooring">
-                            </div><!-- /.service-card__image -->
-                            <div class="service-card__icon">
-                                <span class="icon-parquet"></span>
-                            </div><!-- /.service-card__icon -->
-                        </div><!-- /.service-card__top -->
-                        <div class="service-card__content">
-                            <h3 class="service-card__title"><a href='service-d-industrial-flooring.html'>Industrial
-                                    Flooring</a></h3><!-- /.service-card__title -->
-                            <p class="service-card__text">Laminate flooring is a type of synthetic flooring that
-                                designed like hardwood, tile, or other natural materials</p>
-                            <!-- /.service-card__text -->
-                            <a href='service-d-industrial-flooring.html'
-                                class="service-card__btn floens-btn floens-btn--border">
-                                <span>service details</span>
-                                <i class="icon-right-arrow"></i>
-                            </a><!-- /.service-card__btn -->
-                        </div><!-- /.service-card__content -->
-                    </div><!-- /.service-card -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="service-card">
-                        <div class="service-card__bg"></div><!-- /.service-card__bg -->
-                        <div class="service-card__top">
-                            <div class="service-card__image">
-                                <img src="{{ asset('frontend') }}/assets/images/services/service-1-5.jpg"
-                                    alt="Carpets & Rugs">
-                            </div><!-- /.service-card__image -->
-                            <div class="service-card__icon">
-                                <span class="icon-carpet"></span>
-                            </div><!-- /.service-card__icon -->
-                        </div><!-- /.service-card__top -->
-                        <div class="service-card__content">
-                            <h3 class="service-card__title"><a href='service-d-carpets-rugs.html'>Carpets &
-                                    Rugs</a>
-                            </h3><!-- /.service-card__title -->
-                            <p class="service-card__text">Laminate flooring is a type of synthetic flooring that
-                                designed like hardwood, tile, or other natural materials</p>
-                            <!-- /.service-card__text -->
-                            <a href='service-d-carpets-rugs.html' class="service-card__btn floens-btn floens-btn--border">
-                                <span>service details</span>
-                                <i class="icon-right-arrow"></i>
-                            </a><!-- /.service-card__btn -->
-                        </div><!-- /.service-card__content -->
-                    </div><!-- /.service-card -->
-                </div><!-- /.item -->
-            </div><!-- /.services-one__carousel -->
-            <div class="services-one__cursor">
-                <i class="icon-arrow-left"></i>
-                <span class="services-one__cursor__text">DRAG</span>
-                <i class="icon-arrow-right"></i>
-            </div><!-- /.services-one__cursor -->
-        </div><!-- /.container-fluid -->
-    </section><!-- /.services-one section-space-top -->
-    <!-- services end -->
 
     <!-- services info start -->
-    <section class="services-one__info">
+    <section class="services-one__info mt-3">
         <div class="container">
             <div class="services-one__info__inner">
                 <div class="services-one__info__bg"
@@ -688,8 +473,8 @@
                                 <div class="services-one__info__icon">
                                     <span class="icon-telephone"></span>
                                 </div><!-- /.services-one__info__icon -->
-                                <a href="tel:+913060420001" class="services-one__info__number">+91 3060 420
-                                    001</a>
+                                <a href="tel:{{ app_setting('contact_phone') }}"
+                                    class="services-one__info__number">{{ app_setting('contact_phone') }}</a>
                                 <!-- /.services-one__info__number -->
                             </div><!-- /.services-one__info__right__inner -->
                         </div><!-- /.services-one__info__right -->
@@ -702,7 +487,7 @@
     </section><!-- /.services-one__info -->
     <!-- services info end -->
 
-    <!-- offer start -->
+    {{-- <!-- offer start -->
     <section class="offer-one section-space-two" id="offer">
         <div class="container">
             <div class="offer-one__top">
@@ -876,7 +661,7 @@
             </div><!-- /.pricing-page__main-tab-box -->
         </div><!-- /.container -->
     </section><!-- /.offer-one section-space-two -->
-    <!-- offer end -->
+    <!-- offer end --> --}}
 
     <!-- projects start -->
     <section class="projects-one">
@@ -1026,10 +811,7 @@
                 <div class="col-xl-6 col-lg-7 projects-one__content-col">
                     <div class="projects-one__content">
                         <div class="sec-title sec-title--border">
-
-                            <h6 class="sec-title__tagline">projects</h6><!-- /.sec-title__tagline -->
-
-                            <h3 class="sec-title__title">Discover Completed Projects</h3>
+                            <h3 class="sec-title__title">Some Design</h3>
                             <!-- /.sec-title__title -->
                         </div><!-- /.sec-title -->
 
@@ -1253,245 +1035,6 @@
     </section><!-- /.product-home -->
     <!-- shop end -->
 
-    <!-- testimonials start -->
-    <section class="testimonials-one section-space">
-        <div class="container">
-            <div class="row">
-                <div class="testimonials-one__image-col col-lg-6 wow fadeInLeft" data-wow-duration="1500ms">
-                    <div class="testimonials-one__image">
-                        <img src="{{ asset('frontend') }}/assets/images/testimonials/testimonials-image-1-1.jpg"
-                            alt="testimonials">
-                    </div><!-- /.testimonials-one__image -->
-                </div><!-- /.testimonials-one__image-col col-lg-6 -->
-                <div class="col-lg-6">
-                    <div class="sec-title @@extraClassName">
-
-                        <h6 class="sec-title__tagline">testimoial</h6><!-- /.sec-title__tagline -->
-
-                        <h3 class="sec-title__title">What People Say <br> About Services</h3>
-                        <!-- /.sec-title__title -->
-                    </div><!-- /.sec-title -->
-
-
-                </div><!-- /.col-lg-6 -->
-                <div class="testimonials-one__testimonials-col col-xl-9">
-                    <div class="testimonials-one__carousel floens-owl__carousel floens-owl__carousel--basic-nav owl-carousel owl-theme"
-                        data-owl-options='{
-                    "items": 1,
-                    "margin": 0,
-                    "loop": true,
-                    "smartSpeed": 700,
-                    "nav": false,
-                    "navText": ["<span class=\"icon-slide-left-arrow\"></span>","<span class=\"icon-slide-right-arrow\"></span>"],
-                    "dots": true,
-                    "autoplay": 600,
-                    "responsive":{
-                        "0":{
-                            "items": 1,
-                            "margin": 15
-                        },
-                        "576":{
-                            "items": 1,
-                            "margin": 30
-                        },
-                        "768":{
-                            "items": 1,
-                            "margin": 30
-                        },
-                        "992":{
-                            "items": 1,
-                            "margin": 30
-                        },
-                        "1200":{
-                            "items": 1,
-                            "margin": 30
-                        }
-                    }
-                }'>
-                        <div class="item">
-                            <div class="testimonials-card testimonials-card--two">
-                                <div class="testimonials-card__bg"
-                                    style="background-image: url({{ asset('frontend') }}/assets/images/testimonials/testimonials-card-bg.png);">
-                                </div><!-- /.testimonials-card__bg -->
-                                <div class="testimonials-card__top">
-                                    <svg class="testimonials-card__quotes__icon" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 87 64" fill="none">
-                                        <path d="M0 40.1428H17.5714L5.85705 63.5713H23.4285L35.1428 40.1428V5H0V40.1428Z"
-                                            fill="white" />
-                                        <path d="M46.8572 5V40.1428H64.4286L52.7142 63.5713H70.2856L82 40.1428V5H46.8572Z"
-                                            fill="white" />
-                                        <path
-                                            d="M22.5714 34.6428H5.5V0.5H39.6428V35.0248L28.1194 58.0713H11.6661L23.0186 35.3664L23.3804 34.6428H22.5714Z"
-                                            stroke="#C7844F" />
-                                        <path
-                                            d="M69.4286 34.6428H52.3572V0.5H86.5V35.0248L74.9766 58.0713H58.5232L69.8758 35.3664L70.2376 34.6428H69.4286Z"
-                                            stroke="#C7844F" />
-                                    </svg>
-                                    <div class="floens-ratings @@extraClassName">
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                    </div><!-- /.product-ratings -->
-                                </div><!-- /.testimonials-card__top -->
-                                <div class="testimonials-card__content">
-                                    <div class="testimonials-card__content__inner">
-                                        <p class="testimonials-card__text">"I recently worked with <a href="about.html"
-                                                class="testimonials-card__text__highlight">Floens</a> for my home
-                                            renovation
-                                            project, and I couldn't be happier with the results. From the moment I
-                                            walked
-                                            into their showroom, I was impressed by the extensive selection of
-                                            high-quality
-                                            tiles and their knowledgeable staff.</p>
-                                        <!-- /.testimonials-card__text -->
-                                    </div>
-                                    <div class="testimonials-card__person">
-                                        <div class="testimonials-card__person__inner">
-                                            <img src="{{ asset('frontend') }}/assets/images/testimonials/testimonials-1-3.jpg"
-                                                alt="Michael G. Ware" class="testimonials-card__person__image">
-                                            <div class="testimonials-card__person__info">
-                                                <h3 class="testimonials-card__person__name">Jay G. Rothstein</h3>
-                                                <!-- /.testimonials-card__person__name -->
-                                                <span class="testimonials-card__person__designation">managing
-                                                    director</span><!-- /.testimonials-card__person__designation -->
-                                            </div><!-- /.testimonials-card__person__info -->
-                                        </div><!-- /.testimonials-card__person__inner -->
-                                        <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
-                                            class="testimonials-card__video video-button video-popup">
-                                            <span class="icon-play"></span>
-                                            <i class="video-button__ripple"></i>
-                                        </a><!-- /.testimonials-card__video -->
-                                    </div><!-- /.testimonials-card__person -->
-                                </div><!-- /.testimonials-card__content -->
-                            </div><!-- /.testimonials-card -->
-                        </div><!-- /.item -->
-                        <div class="item">
-                            <div class="testimonials-card testimonials-card--two">
-                                <div class="testimonials-card__bg"
-                                    style="background-image: url({{ asset('frontend') }}/assets/images/testimonials/testimonials-card-bg.png);">
-                                </div><!-- /.testimonials-card__bg -->
-                                <div class="testimonials-card__top">
-                                    <svg class="testimonials-card__quotes__icon" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 87 64" fill="none">
-                                        <path d="M0 40.1428H17.5714L5.85705 63.5713H23.4285L35.1428 40.1428V5H0V40.1428Z"
-                                            fill="white" />
-                                        <path d="M46.8572 5V40.1428H64.4286L52.7142 63.5713H70.2856L82 40.1428V5H46.8572Z"
-                                            fill="white" />
-                                        <path
-                                            d="M22.5714 34.6428H5.5V0.5H39.6428V35.0248L28.1194 58.0713H11.6661L23.0186 35.3664L23.3804 34.6428H22.5714Z"
-                                            stroke="#C7844F" />
-                                        <path
-                                            d="M69.4286 34.6428H52.3572V0.5H86.5V35.0248L74.9766 58.0713H58.5232L69.8758 35.3664L70.2376 34.6428H69.4286Z"
-                                            stroke="#C7844F" />
-                                    </svg>
-                                    <div class="floens-ratings @@extraClassName">
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                    </div><!-- /.product-ratings -->
-                                </div><!-- /.testimonials-card__top -->
-                                <div class="testimonials-card__content">
-                                    <div class="testimonials-card__content__inner">
-                                        <p class="testimonials-card__text">"I recently worked with <a href="about.html"
-                                                class="testimonials-card__text__highlight">Floens</a> for my home
-                                            renovation
-                                            project, and I couldn't be happier with the results. From the moment I
-                                            walked
-                                            into their showroom, I was impressed by the extensive selection of
-                                            high-quality
-                                            tiles and their knowledgeable staff.</p>
-                                        <!-- /.testimonials-card__text -->
-                                    </div>
-                                    <div class="testimonials-card__person">
-                                        <div class="testimonials-card__person__inner">
-                                            <img src="{{ asset('frontend') }}/assets/images/testimonials/testimonials-1-1.jpg"
-                                                alt="Michael G. Ware" class="testimonials-card__person__image">
-                                            <div class="testimonials-card__person__info">
-                                                <h3 class="testimonials-card__person__name">Michael G. Ware</h3>
-                                                <!-- /.testimonials-card__person__name -->
-                                                <span class="testimonials-card__person__designation">managing
-                                                    director</span><!-- /.testimonials-card__person__designation -->
-                                            </div><!-- /.testimonials-card__person__info -->
-                                        </div><!-- /.testimonials-card__person__inner -->
-                                        <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
-                                            class="testimonials-card__video video-button video-popup">
-                                            <span class="icon-play"></span>
-                                            <i class="video-button__ripple"></i>
-                                        </a><!-- /.testimonials-card__video -->
-                                    </div><!-- /.testimonials-card__person -->
-                                </div><!-- /.testimonials-card__content -->
-                            </div><!-- /.testimonials-card -->
-                        </div><!-- /.item -->
-                        <div class="item">
-                            <div class="testimonials-card testimonials-card--two">
-                                <div class="testimonials-card__bg"
-                                    style="background-image: url({{ asset('frontend') }}/assets/images/testimonials/testimonials-card-bg.png);">
-                                </div><!-- /.testimonials-card__bg -->
-                                <div class="testimonials-card__top">
-                                    <svg class="testimonials-card__quotes__icon" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 87 64" fill="none">
-                                        <path d="M0 40.1428H17.5714L5.85705 63.5713H23.4285L35.1428 40.1428V5H0V40.1428Z"
-                                            fill="white" />
-                                        <path d="M46.8572 5V40.1428H64.4286L52.7142 63.5713H70.2856L82 40.1428V5H46.8572Z"
-                                            fill="white" />
-                                        <path
-                                            d="M22.5714 34.6428H5.5V0.5H39.6428V35.0248L28.1194 58.0713H11.6661L23.0186 35.3664L23.3804 34.6428H22.5714Z"
-                                            stroke="#C7844F" />
-                                        <path
-                                            d="M69.4286 34.6428H52.3572V0.5H86.5V35.0248L74.9766 58.0713H58.5232L69.8758 35.3664L70.2376 34.6428H69.4286Z"
-                                            stroke="#C7844F" />
-                                    </svg>
-                                    <div class="floens-ratings @@extraClassName">
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                        <span class="icon-star"></span>
-                                    </div><!-- /.product-ratings -->
-                                </div><!-- /.testimonials-card__top -->
-                                <div class="testimonials-card__content">
-                                    <div class="testimonials-card__content__inner">
-                                        <p class="testimonials-card__text">"I recently worked with <a href="about.html"
-                                                class="testimonials-card__text__highlight">Floens</a> for my home
-                                            renovation
-                                            project, and I couldn't be happier with the results. From the moment I
-                                            walked
-                                            into their showroom, I was impressed by the extensive selection of
-                                            high-quality
-                                            tiles and their knowledgeable staff.</p>
-                                        <!-- /.testimonials-card__text -->
-                                    </div>
-                                    <div class="testimonials-card__person">
-                                        <div class="testimonials-card__person__inner">
-                                            <img src="{{ asset('frontend') }}/assets/images/testimonials/testimonials-1-2.jpg"
-                                                alt="Michael G. Ware" class="testimonials-card__person__image">
-                                            <div class="testimonials-card__person__info">
-                                                <h3 class="testimonials-card__person__name">Kevin J. Poling</h3>
-                                                <!-- /.testimonials-card__person__name -->
-                                                <span class="testimonials-card__person__designation">managing
-                                                    director</span><!-- /.testimonials-card__person__designation -->
-                                            </div><!-- /.testimonials-card__person__info -->
-                                        </div><!-- /.testimonials-card__person__inner -->
-                                        <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
-                                            class="testimonials-card__video video-button video-popup">
-                                            <span class="icon-play"></span>
-                                            <i class="video-button__ripple"></i>
-                                        </a><!-- /.testimonials-card__video -->
-                                    </div><!-- /.testimonials-card__person -->
-                                </div><!-- /.testimonials-card__content -->
-                            </div><!-- /.testimonials-card -->
-                        </div><!-- /.item -->
-                    </div><!-- /.testimonials-one__carousel -->
-                </div><!-- /.testimonials-one__testimonials-col col-xl-9 -->
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </section><!-- /.testimonal-one section-space -->
-    <!-- testimonials end -->
-
     <!-- gallery instagram start -->
     <section class="gallery-instagram @@extraClassName section-space-bottom">
         <div class="container-fluid">
@@ -1561,116 +1104,6 @@
     </section><!-- /.gallery-instagram section-space-bottom -->
     <!-- gallery instagram end -->
 
-    <!-- blog start -->
-    <section class="blog-one section-space-two">
-        <div class="blog-one__bg"
-            style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/blog-bg-1.jpg);">
-        </div>
-        <!-- /.blog-one__bg -->
-        <div class="container">
-            <div class="blog-one__top">
-                <div class="row gutter-y-50 align-items-center">
-                    <div class="col-lg-8">
-                        <div class="sec-title @@extraClassName">
-
-                            <h6 class="sec-title__tagline">news room</h6><!-- /.sec-title__tagline -->
-
-                            <h3 class="sec-title__title">See Latest News <br> from the Blog Posts</h3>
-                            <!-- /.sec-title__title -->
-                        </div><!-- /.sec-title -->
-
-
-                    </div><!-- /.col-lg-8 -->
-                    <div class="col-lg-4">
-                        <div class="blog-one__top__button">
-                            <a href="blog-grid-right.html" class="floens-btn floens-btn--border">
-                                <span>view all</span>
-                                <i class="icon-right-arrow"></i>
-                            </a><!-- /.floens-btn floens-btn--border -->
-                        </div><!-- /.blog-one__top__button -->
-                    </div><!-- /.col-lg-4 -->
-                </div><!-- /.row -->
-            </div><!-- /.blog-one__top -->
-            <div class="row gutter-y-30">
-                <div class="col-md-6 col-lg-4">
-                    <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                        <div class="blog-card__image">
-                            <img src="{{ asset('frontend') }}/assets/images/blog/blog-1-1.jpg"
-                                alt="Talk About the Three Major Types of Floor Tiles">
-                            <a href="blog-details-right.html" class="blog-card__image__link"><span class="sr-only">Talk
-                                    About the Three Major Types of Floor Tiles</span>
-                                <!-- /.sr-only --></a>
-                        </div><!-- /.blog-card__image -->
-                        <div class="blog-card__date">
-                            <span class="blog-card__date__day">20</span>
-                            <span class="blog-card__date__month">june</span>
-                        </div><!-- /.blog-card__date -->
-                        <div class="blog-card__content">
-                            <h3 class="blog-card__title"><a href="blog-details-right.html">Talk About the Three
-                                    Major Types of Floor Tiles</a></h3><!-- /.blog-card__title -->
-                            <p class="blog-card__text">Tiles company, also known as a tile manufacturer or
-                                distributor, specializes in the production.</p><!-- /.blog-card__text -->
-                        </div><!-- /.blog-card__content -->
-                        <ul class="list-unstyled blog-card__meta">
-                            <li><a href="#"><i class="icon-user"></i> by Admin</a></li>
-                            <li><a href="#"><i class="icon-comment"></i> 2 Comments</a></li>
-                        </ul><!-- /.list-unstyled blog-card__meta -->
-                    </div><!-- /.blog-card -->
-                </div><!-- /.col-md-6 col-lg-4 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='200ms'>
-                        <div class="blog-card__image">
-                            <img src="{{ asset('frontend') }}/assets/images/blog/blog-1-2.jpg"
-                                alt="Talk About the Three Major Types of Floor Tiles">
-                            <a href="blog-details-right.html" class="blog-card__image__link"><span class="sr-only">Talk
-                                    About the Three Major Types of Floor Tiles</span>
-                                <!-- /.sr-only --></a>
-                        </div><!-- /.blog-card__image -->
-                        <div class="blog-card__date">
-                            <span class="blog-card__date__day">22</span>
-                            <span class="blog-card__date__month">june</span>
-                        </div><!-- /.blog-card__date -->
-                        <div class="blog-card__content">
-                            <h3 class="blog-card__title"><a href="blog-details-right.html">Talk About the Three
-                                    Major Types of Floor Tiles</a></h3><!-- /.blog-card__title -->
-                            <p class="blog-card__text">Tiles company, also known as a tile manufacturer or
-                                distributor, specializes in the production.</p><!-- /.blog-card__text -->
-                        </div><!-- /.blog-card__content -->
-                        <ul class="list-unstyled blog-card__meta">
-                            <li><a href="#"><i class="icon-user"></i> by Admin</a></li>
-                            <li><a href="#"><i class="icon-comment"></i> 2 Comments</a></li>
-                        </ul><!-- /.list-unstyled blog-card__meta -->
-                    </div><!-- /.blog-card -->
-                </div><!-- /.col-md-6 col-lg-4 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='400ms'>
-                        <div class="blog-card__image">
-                            <img src="{{ asset('frontend') }}/assets/images/blog/blog-1-3.jpg"
-                                alt="Talk About the Three Major Types of Floor Tiles">
-                            <a href="blog-details-right.html" class="blog-card__image__link"><span class="sr-only">Talk
-                                    About the Three Major Types of Floor Tiles</span>
-                                <!-- /.sr-only --></a>
-                        </div><!-- /.blog-card__image -->
-                        <div class="blog-card__date">
-                            <span class="blog-card__date__day">8</span>
-                            <span class="blog-card__date__month">june</span>
-                        </div><!-- /.blog-card__date -->
-                        <div class="blog-card__content">
-                            <h3 class="blog-card__title"><a href="blog-details-right.html">Talk About the Three
-                                    Major Types of Floor Tiles</a></h3><!-- /.blog-card__title -->
-                            <p class="blog-card__text">Tiles company, also known as a tile manufacturer or
-                                distributor, specializes in the production.</p><!-- /.blog-card__text -->
-                        </div><!-- /.blog-card__content -->
-                        <ul class="list-unstyled blog-card__meta">
-                            <li><a href="#"><i class="icon-user"></i> by Admin</a></li>
-                            <li><a href="#"><i class="icon-comment"></i> 2 Comments</a></li>
-                        </ul><!-- /.list-unstyled blog-card__meta -->
-                    </div><!-- /.blog-card -->
-                </div><!-- /.col-md-6 col-lg-4 -->
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </section><!-- /.blog-one section-space-two -->
-    <!-- blog end -->
 
     <!-- client carousel start -->
     <div class="client-carousel @@extraClassName">
@@ -1708,10 +1141,16 @@
                         }
                     }
                     }'>
-                <div class="client-carousel__one__item">
+                @foreach ($brands as $barand)
+                    <div class="client-carousel__one__item">
+                        <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
+                            alt="brand">
+                    </div><!-- /.owl-slide-item-->
+                @endforeach
+                {{-- <div class="client-carousel__one__item">
                     <img src="{{ asset('frontend') }}/assets/images/resources/brand-1-1.png" alt="brand">
-                </div><!-- /.owl-slide-item-->
-                <div class="client-carousel__one__item">
+                </div><!-- /.owl-slide-item--> --}}
+                {{-- <div class="client-carousel__one__item">
                     <img src="{{ asset('frontend') }}/assets/images/resources/brand-1-1.png" alt="brand">
                 </div><!-- /.owl-slide-item-->
                 <div class="client-carousel__one__item">
@@ -1728,7 +1167,7 @@
                 </div><!-- /.owl-slide-item-->
                 <div class="client-carousel__one__item">
                     <img src="{{ asset('frontend') }}/assets/images/resources/brand-1-6.png" alt="brand">
-                </div><!-- /.owl-slide-item-->
+                </div><!-- /.owl-slide-item--> --}}
             </div><!-- /.thm-owl__slider -->
         </div><!-- /.container -->
     </div><!-- /.client-carousel -->

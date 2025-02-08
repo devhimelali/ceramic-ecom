@@ -9,19 +9,10 @@
                 <div class="col-xl-4 col-lg-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <div class="footer-widget footer-widget--about">
                         <a href="index.html" class="footer-widget__logo">
-                            <img src="{{ asset('frontend') }}/assets/images/logo-light.png" width="123"
+                            <img src="{{ app_setting('dark_logo') ?? app_setting('light_logo') }}" width="123"
                                 alt="Floens HTML Template">
                         </a>
-                        <p class="footer-widget__about-text">Tiles company, also known as a tile manufacturer
-                            or
-                            distributor, specializes in the production and distri</p>
-                        <!-- /.footer-widget__about-text -->
-                        <form action="#" data-url="MAILCHIMP_FORM_URL" class="footer-widget__newsletter mc-form">
-                            <input type="text" name="EMAIL" placeholder="enter email">
-                            <button type="submit" class="icon-right-arrow">
-                                <span class="sr-only">submit</span><!-- /.sr-only -->
-                            </button>
-                        </form><!-- /.footer-widget__newsletter mc-form -->
+                        <p class="footer-widget__about-text">{{ app_setting('about_description') }}</p>
                         <div class="mc-form__response"></div><!-- /.mc-form__response -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-4 col-lg-6 -->
@@ -41,22 +32,6 @@
                         </ul><!-- /.list-unstyled footer-widget__links -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-2 col-lg-3 col-md-3 col-sm-6 -->
-                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
-                    data-wow-delay="400ms">
-                    <div class="footer-widget footer-widget--links footer-widget--links-two">
-                        <div class="footer-widget__top">
-                            <div class="footer-widget__title-box"></div><!-- /.footer-widget__title-box -->
-                            <h2 class="footer-widget__title">Services</h2><!-- /.footer-widget__title -->
-                        </div><!-- /.footer-widget__top -->
-                        <ul class="list-unstyled footer-widget__links">
-                            <li><a href="services.html">flooring service</a></li>
-                            <li><a href="services.html">wooden Services</a></li>
-                            <li><a href="services.html">corporate tiles</a></li>
-                            <li><a href="services.html">carpet setup</a></li>
-                            <li><a href="services.html">tiles setup</a></li>
-                        </ul><!-- /.list-unstyled footer-widget__links -->
-                    </div><!-- /.footer-widget -->
-                </div><!-- /.col-xl-3 col-lg-3 col-md-4 col-sm-6 -->
                 <div class="col-xl-3 col-lg-6 col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="600ms">
                     <div class="footer-widget footer-widget--contact">
                         <div class="footer-widget__top">
