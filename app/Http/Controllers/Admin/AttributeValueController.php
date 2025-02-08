@@ -3,23 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enum\StatusEnum;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Attribute;
+use Illuminate\Http\Request;
+use App\Models\AttributeValue;
+use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
-class AttributeController extends Controller
+class AttributeValueController extends Controller
 {
     public function index(Request $request)
     {
+        $attributeId = decrypt($request->attribute_id);
+        $data = AttributeValue::with('attribute')->where('attribute_id', $attributeId)->orderBy('id', 'desc');
+        $attribute = Attribute::select('id', 'name')->find($attributeId);
         if ($request->ajax()) {
-            $data = Attribute::orderBy('id', 'desc');
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function ($row) {
                     $encryptedData = encrypt(json_encode([
                         'id' => $row->id,
-                        'model' => 'Attribute'
+                        'model' => 'AttributeValue'
                     ]));
 
                     $url = route('status.update', ['encryptModelNameID' => $encryptedData]);
@@ -35,19 +38,13 @@ class AttributeController extends Controller
                 })
 
                 ->addColumn('actions', function ($row) {
-                    $deleteUrl = route('attributes.destroy', $row->id);
-                    $addValueUrl = route('attribute-values.index', ['attribute_id' => encrypt($row->id)]);
+                    $deleteUrl = route('attribute-values.destroy', $row->id);
                     return '
                         <div class="dropdown">
                             <button class="btn btn-subtle-danger btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-three-dots-vertical"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item text-primary" href="' . $addValueUrl . '">
-                                        <i class="bi bi-plus-circle align-baseline me-2"></i>Add Value
-                                    </a>
-                                </li>
                                 <li>
                                     <a class="dropdown-item text-success" href="javascript:void(0);" onclick="editAttribute(\'' . $row->id . '\')">
                                         <i class="bi bi-pencil me-2"></i>Edit
@@ -67,43 +64,46 @@ class AttributeController extends Controller
                 ->rawColumns(['status', 'actions', 'image', 'status'])
                 ->make(true);
         }
+
         $data = [
             'active' => 'attribute',
+            'title' => 'Attributes',
+            'attribute' => $attribute
         ];
-        return view('admin.attribute.index', $data);
+        return view('admin.attribute-value.index', $data);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:categories,name',
+            'value' => 'required|string|max:255',
         ]);
 
-        $attribute = new Attribute();
-        $attribute->name = $request->name;
-        $attribute->save();
+        $attribute_value = new AttributeValue();
+        $attribute_value->attribute_id = $request->attribute_id;
+        $attribute_value->value = $request->value;
+        $attribute_value->save();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Attribute created successfully'
+            'message' => 'Attribute value created successfully'
         ]);
     }
 
     public function edit(Request $request, $id)
     {
-        sleep(2);
-        $attribute = Attribute::find($id);
-        return view('admin.attribute.edit', compact('attribute'));
+        $attributeValue = AttributeValue::find($id);
+        return view('admin.attribute-value.edit', compact('attributeValue'));
     }
 
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:attributes,name,' . $id,
+            'value' => 'required|string|max:255',
         ]);
-        $attribute = Attribute::find($id);
-        $attribute->name = $request->name;
+        $attribute = AttributeValue::find($id);
+        $attribute->value = $request->value;
         $attribute->save();
 
         return response()->json([
@@ -114,7 +114,7 @@ class AttributeController extends Controller
 
     public function destroy($id)
     {
-        $attribute = Attribute::find($id)->delete();
+        $attributeValue = AttributeValue::find($id)->delete();
         return response()->json(['success' => true]);
     }
 }
