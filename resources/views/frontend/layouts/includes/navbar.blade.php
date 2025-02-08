@@ -69,8 +69,8 @@
                             </ul>
                         </li>
 
-                        <li class="dropdown">
-                            <a href="#">Products</a>
+                        <li class="{{ $active == 'products' ? 'current' : '' }}">
+                            <a href="{{ route('frontend.allProducts') }}">Products</a>
                         </li>
                         <li class="dropdown">
                             <a href="#">About us</a>

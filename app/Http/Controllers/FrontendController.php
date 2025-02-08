@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\StatusEnum;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Attribute;
 use Illuminate\Http\Request;
 
 class FrontendController extends Controller
@@ -12,7 +14,7 @@ class FrontendController extends Controller
     {
         $data = [
             'active' => 'home',
-            'brands' => Brand::latest()->limit(15)->get(),
+            'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->limit(15)->get(),
         ];
         return view('frontend.home', $data);
     }
@@ -26,5 +28,18 @@ class FrontendController extends Controller
             'active' => 'allCategories',
             'categories' => $categories
         ]);
+    }
+
+    public function allProducts()
+    {
+        $data = [
+            'active' => 'products',
+            'attributes' => Attribute::with(['values' => function ($query) {
+                $query->where('status', StatusEnum::ACTIVE)
+                    ->whereNotNull('value');
+            }])->get(),
+        ];
+
+        return view('frontend.products', $data);
     }
 }
