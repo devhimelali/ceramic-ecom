@@ -12,7 +12,14 @@ class Attribute extends Model
         'status',
     ];
 
-    public function attributeValues()
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_attribute_values')
+            ->withPivot('attribute_value_id')
+            ->withTimestamps();
+    }
+
+    public function values()
     {
         return $this->hasMany(AttributeValue::class);
     }
