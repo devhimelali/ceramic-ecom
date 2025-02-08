@@ -5,12 +5,13 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Attributes</h4>
+                <h4 class="mb-sm-0">Attributes Value For <a href="{{ route('attributes.index') }}"><span
+                            class="text-primary">{{ $attribute->name }}</span></a></h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Attributes</li>
+                        <li class="breadcrumb-item active">Attributes Value</li>
                     </ol>
                 </div>
 
@@ -28,8 +29,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Total Value</th>
+                                    <th>Value</th>
                                     <th>Status</th>
                                     <th style="width: 40px">Actions</th>
                                 </tr>
@@ -51,7 +51,7 @@
                 <div class="skeleton skeleton-box"></div>
             </div>
             <div id='addAttribute'>
-                @include('admin.attribute.add')
+                @include('admin.attribute-value.add')
             </div>
             <div id='editAttribute'></div>
         </div><!--end col-->
@@ -81,19 +81,15 @@
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('attributes.index') }}",
+                ajax: "{{ route('attribute-values.index', ['attribute_id' => Request::get('attribute_id')]) }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false
                     },
                     {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'total_value',
-                        name: 'total_value'
+                        data: 'value',
+                        name: 'value'
                     },
                     {
                         data: 'status',
@@ -118,9 +114,9 @@
                 submitText.addClass("d-none");
                 loader.removeClass("d-none");
                 submitButton.prop("disabled", true);
-
+                let addUrl = $(this).attr('action');
                 $.ajax({
-                    url: "{{ route('attributes.store') }}",
+                    url: addUrl,
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -172,7 +168,7 @@
             $("#editAttribute").addClass('d-none');
 
             $.ajax({
-                url: "{{ route('attributes.edit', 'id') }}".replace('id', id),
+                url: "{{ route('attribute-values.edit', 'id') }}".replace('id', id),
                 type: "GET",
                 success: function(response) {
                     $("#attributeLoader").hide(); // Hide the spinner

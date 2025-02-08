@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AttributeValueController;
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -15,4 +16,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('brands', BrandController::class);
     Route::resource('settings', SettingController::class);
     Route::resource('attributes', AttributeController::class);
+    Route::resource('attribute-values', AttributeValueController::class);
 });
