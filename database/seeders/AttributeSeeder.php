@@ -19,7 +19,7 @@ class AttributeSeeder extends Seeder
             ['name' => 'Color', 'status' => StatusEnum::ACTIVE],
             ['name' => 'Material', 'status' => StatusEnum::ACTIVE],
             ['name' => 'Finish', 'status' => StatusEnum::ACTIVE],
-            ['name' => 'Size', 'status' => StatusEnum::ACTIVE`],
+            ['name' => 'Size', 'status' => StatusEnum::ACTIVE],
         ];
 
         foreach ($attributes as $attribute) {
