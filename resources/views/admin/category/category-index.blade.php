@@ -90,6 +90,7 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Image</th>
+                                    <th>Front Show</th>
                                     <th>Parent</th>
                                     <th>Status</th>
                                     <th style="width: 40px">Actions</th>
@@ -231,6 +232,10 @@
                     {
                         data: 'image',
                         name: 'image'
+                    },
+                    {
+                        data: 'front_show',
+                        name: 'front_show'
                     },
                     {
                         data: 'parent',
@@ -378,6 +383,25 @@
                     Swal.fire('Error!', 'There was a problem with the request.', 'error');
                 }
             });
+        }
+
+        function frontShow(url) {
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(response) {
+                    if (response.status === 'success') {
+                        notify('success', response.message);
+                    } else {
+                        notify('error', 'Failed to update status.');
+                    }
+                    $('#dataTable').DataTable().ajax.reload();
+                },
+                error: function() {
+                    $('#dataTable').DataTable().ajax.reload();
+                    notify('error', 'Something went wrong.');
+                }
+            })
         }
     </script>
 
