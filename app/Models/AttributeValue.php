@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class AttributeValue extends Model
@@ -15,5 +16,12 @@ class AttributeValue extends Model
     public function attribute()
     {
         return $this->belongsTo(Attribute::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'status' => StatusEnum::class,
+        ];
     }
 }
