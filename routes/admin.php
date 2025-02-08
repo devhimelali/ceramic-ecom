@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
@@ -17,4 +18,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('settings', SettingController::class);
     Route::resource('attributes', AttributeController::class);
     Route::resource('attribute-values', AttributeValueController::class);
+    Route::resource('products', ProductController::class);
 });
