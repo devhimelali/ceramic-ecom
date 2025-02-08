@@ -1,10 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FrontendController;
 
-Route::get('/', function () {
-    $data = [
-        'active' => 'home'
-    ];
-    return view('frontend.home', $data);
-});
+Route::get('/', [FrontendController::class, 'home'])->name('frontend.home');
+Route::get('/all-categories', [FrontendController::class, 'allCategories'])->name('frontend.allCategories');

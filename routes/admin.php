@@ -13,6 +13,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('status-update/{encryptModelNameID}', [GeneralController::class, 'statusUpdate'])->name('status.update');
     Route::resource('categories', CategoryController::class);
+    Route::get('categories/front-show/{id}', [CategoryController::class, 'frontShow'])->name('category.frontShow');
+
     Route::resource('brands', BrandController::class);
     Route::resource('settings', SettingController::class);
     Route::resource('attributes', AttributeController::class);

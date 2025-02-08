@@ -46,6 +46,7 @@
 
     <!-- template styles -->
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/floens.css" />
+    @yield('page-style')
 </head>
 
 <body class="custom-cursor">
@@ -133,22 +134,23 @@
             <span class="sidebar-one__close sidebar-btn__toggler"><i class="fa fa-times"></i></span>
             <div class="sidebar-one__logo sidebar-one__item">
                 <a href="index.html" aria-label="logo image"><img
-                        src="{{ asset('frontend') }}/assets/images/logo-light.png" width="123"
+                        src="{{ app_setting('dark_logo') ?? app_setting('light_logo') }}" width="123"
                         alt="logo-dark" /></a>
             </div><!-- /.sidebar-one__logo -->
             <div class="sidebar-one__about sidebar-one__item">
-                <p class="sidebar-one__about__text">Tiles company, also known as a tile manufacturer or distributor,
-                    specializes in the production and distri</p>
+                <p class="sidebar-one__about__text">{{ app_setting('about_description') }}</p>
             </div><!-- /.sidebar-one__about -->
             <div class="sidebar-one__info sidebar-one__item">
                 <h4 class="sidebar-one__title">Information</h4>
                 <ul class="sidebar-one__info__list">
                     <li><span class="icon-location-2"></span>
-                        <address>85 Ketch Harbour Road Bensal PA 19020</address>
+                        <address>{{ app_setting('contact_address') }}</address>
                     </li>
                     <li><span class="icon-paper-plane"></span> <a
-                            href="mailto:needhelp@company.com">needhelp@company.com</a></li>
-                    <li><span class="icon-phone-call"></span> <a href="tel:+9156980036420">+91 5698 0036 420</a>
+                            href="mailto:{{ app_setting('contact_email') }}">{{ app_setting('contact_email') }}</a>
+                    </li>
+                    <li><span class="icon-phone-call"></span> <a
+                            href="tel:{{ app_setting('contact_phone') }}">{{ app_setting('contact_phone') }}</a>
                     </li>
                 </ul><!-- /.sidebar-one__info__list -->
             </div><!-- /.sidebar-one__info -->
@@ -161,16 +163,8 @@
                     <i class="icon-twitter" aria-hidden="true"></i>
                     <span class="sr-only">Twitter</span>
                 </a>
-                <a href="https://instagram.com/">
-                    <i class="icon-instagram" aria-hidden="true"></i>
-                    <span class="sr-only">Instagram</span>
-                </a>
-                <a href="https://youtube.com/">
-                    <i class="icon-youtube" aria-hidden="true"></i>
-                    <span class="sr-only">Youtube</span>
-                </a>
             </div><!-- /sidebar-one__social -->
-            <div class="sidebar-one__newsletter sidebar-one__item">
+            {{-- <div class="sidebar-one__newsletter sidebar-one__item">
                 <label class="sidebar-one__title" for="sidebar-email">Newsletter Subscribe</label>
                 <form action="#" class="sidebar-one__newsletter__inner mc-form" data-url="MAILCHIMP_FORM_URL">
                     <input type="email" name="sidebar-email" id="sidebar-email"
@@ -179,7 +173,7 @@
                             aria-hidden="true"></span></button>
                 </form>
                 <div class="mc-form__response"></div><!-- /.mc-form__response -->
-            </div><!-- /.sidebar-one__form -->
+            </div><!-- /.sidebar-one__form --> --}}
         </div><!-- /.sidebar__content -->
     </aside><!-- /.sidebar-one -->
 

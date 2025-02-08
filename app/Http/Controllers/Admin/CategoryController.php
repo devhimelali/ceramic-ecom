@@ -17,10 +17,21 @@ class CategoryController extends Controller
     {
         $categories = Category::with('children')->whereNull('parent_id')->orderBy('id', 'desc');
         if ($request->ajax()) {
-            $categories = Category::with('parent')->select('id', 'name', 'slug', 'image', 'parent_id', 'is_active');
-
+            $categories = Category::with('parent')->select('id', 'name', 'slug', 'image', 'parent_id', 'is_active', 'front_show');
             return DataTables::of($categories)
                 ->addIndexColumn()
+                ->addColumn('front_show', function ($row) {
+                    $url = route('category.frontShow', $row->id);
+                    $checked = $row->front_show == 1 ? 'checked' : '';
+
+                    return '
+                        <a href="javascript:void(0);" onclick="return frontShow(\'' . $url . '\')">
+                            <div class="form-check form-switch-info form-switch">
+                                <input class="form-check-input front_show-toggle" type="checkbox" ' . $checked . '>
+                            </div>
+                        </a>
+                    ';
+                })
                 ->addColumn('parent', function ($row) {
                     return $row->parent ? $row->parent->name : '-';
                 })
@@ -49,7 +60,7 @@ class CategoryController extends Controller
                 })
 
 
-                ->rawColumns(['is_active', 'actions', 'image'])
+                ->rawColumns(['is_active', 'actions', 'image', 'front_show'])
                 ->make(true);
         }
 
@@ -133,5 +144,17 @@ class CategoryController extends Controller
         }
         $category->delete();
         return response()->json(['success' => true]);
+    }
+
+    function frontShow($id)
+    {
+        $category = Category::find($id);
+        if ($category->front_show == 1) {
+            $category->front_show = 0;
+        } else {
+            $category->front_show = 1;
+        }
+        $category->save();
+        return response()->json(['status' => 'success', 'message' => 'Status updated successfully!']);
     }
 }

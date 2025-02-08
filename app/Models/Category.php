@@ -12,6 +12,7 @@ class Category extends Model
         'image',
         'parent_id',
         'is_active',
+        'front_show',
     ];
 
     public function parent()
