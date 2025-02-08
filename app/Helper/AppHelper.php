@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Setting;
+use App\Models\Category;
 
 function app_setting($key)
 {
@@ -15,4 +16,10 @@ function app_setting($key)
         $setting = '';
     }
     return $setting;
+}
+
+function category_show()
+{
+    $categories = Category::with('children')->get();
+    return $categories;
 }
