@@ -61,7 +61,7 @@
                 <li class="nav-item">
                     <a href="{{ route('products.index') }}"
                         class="nav-link menu-link {{ $active == 'products' ? 'active' : '' }}" aria-expanded="false">
-                        <i class="ph-gauge"></i>
+                        <i class="ph ph-package"></i>
                         <span data-key="t-dashboards">Products</span>
                     </a>
                 </li>

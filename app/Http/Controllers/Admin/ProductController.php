@@ -4,10 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Brand;
 use App\Models\Product;
+use App\Enum\StatusEnum;
 use App\Models\Category;
+use App\Models\Attribute;
+use Illuminate\Support\Str;
+use App\Helpers\ImageUploadHelper;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
+use App\Http\Requests\Admin\Product\StoreRequest;
 
 class ProductController extends Controller
 {
@@ -35,9 +42,9 @@ class ProductController extends Controller
                     return $row->brand->name;
                 })
                 ->addColumn('action', function ($row) {
-                    return view('admin.product.action', compact('row'));
+                    return '';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['image', 'action'])
                 ->make(true);
         }
 
@@ -49,13 +56,64 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::with('children')->whereNull('parent_id')->orderBy('name', 'asc')->get();
-        $brands = Brand::orderBy('name', 'asc')->get(); 
+        $categories = Category::orderBy('name', 'asc')->get();
+        $brands = Brand::orderBy('name', 'asc')->get();
+        $statuses = StatusEnum::cases();
+        $attributes = Attribute::where('status', StatusEnum::ACTIVE)->orderBy('name', 'asc')->get();
         $data = [
             'categories' => $categories,
             'brands' => $brands,
-            'active' => 'products'
+            'statuses' => $statuses,
+            'active' => 'products',
+            'attributes' => $attributes
+
         ];
         return view('admin.product.create', $data);
+    }
+
+    public function store(StoreRequest $request)
+    {
+        $product = Product::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'category_id' => $request->category,
+            'brand_id' => $request->brand,
+            'price' => $request->price,
+            'short_description' => $request->short_description,
+            'description' => $request->description,
+            'status' => $request->status,
+        ]);
+
+        foreach ($request->variation_names as $key => $variation_name) {
+            $product->attributes()->attach([
+                $variation_name => ['attribute_value_id' => $request->variation_values[$key]]
+            ]);
+        }
+
+        if ($request->hasFile('image')) {
+            $imageData = ImageUploadHelper::uploadProductImage($request->file('image'), 'products', $product->id);
+
+            $product->images()->create([
+                'type' => 'thumbnail',
+                'image' => $imageData['filename'],
+            ]);
+        }
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageData = ImageUploadHelper::uploadProductImage($image, 'products', $product->id);
+
+                $product->images()->create([
+                    'type' => 'gallery',
+                    'image' => $imageData['filename'],
+                ]);
+            }
+        }
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product created successfully',
+        ]);
     }
 }

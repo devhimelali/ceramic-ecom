@@ -19,4 +19,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('attributes', AttributeController::class);
     Route::resource('attribute-values', AttributeValueController::class);
     Route::resource('products', ProductController::class);
+    Route::get('get-attribute-values', [GeneralController::class, 'getAttributeValues'])->name('get.attribute.values');
 });
