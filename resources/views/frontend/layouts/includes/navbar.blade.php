@@ -78,7 +78,7 @@
                         <li class="dropdown">
                             <a href="#">About us</a>
                         </li>
-                        <li>
+                        <li class="{{ $active == 'contact' ? 'current' : '' }}">
                             <a href="{{ route('frontend.contact') }}">Contact</a>
                         </li>
                     </ul>
