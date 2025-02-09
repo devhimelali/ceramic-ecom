@@ -74,21 +74,17 @@
             left: 0;
             width: 100%;
             height: 80%;
-            background: rgba(0, 0, 0, 0.6);
-            /* Black background with some transparency */
+            background: rgba(10, 10, 10, 0.141);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            /* Makes sure the loader appears on top of the content */
         }
 
         /* Spinner Style */
         .spinner {
             border: 8px solid #f3f3f3;
-            /* Light gray background */
-            border-top: 8px solid #3498db;
-            /* Blue color */
+            border-top: 8px solid #dc7221;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -114,7 +110,28 @@
                 transform: rotate(360deg);
             }
         }
+
+        .no-products-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--floens-base, #C7844F) !important;
+            border-color: var(--floens-base, #C7844F) !important;
+            color: #fff !important;
+        }
+
+        .pagination .page-link {
+            color: #333;
+            /* Default color */
+        }
     </style>
+    <!-- Include jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endsection
 @section('content')
     <section class="page-header">
@@ -136,36 +153,30 @@
                 <div class="col-xl-3 col-lg-4">
                     <aside class="product__sidebar">
                         <div class="product__search-box product__sidebar__item">
-                            <form action="#" class="product__search">
-                                <input type="text" placeholder="search items" />
+                            <form action="#" class="product__search" id="product__search">
+                                <input type="text" placeholder="search items" value="{{ request('search') }}"
+                                    id="searchQuery" />
                                 <button type="submit" aria-label="search submit">
                                     <span class="icon-search"></span>
                                 </button>
                             </form><!-- /.product__search -->
+
                         </div><!-- /.search-widget -->
                         <div class="product__price-ranger product__sidebar__item">
-                            <h3 class="product__sidebar__title">Filter by price</h3>
+                            <h3 class="product__sidebar__title">Filter by Brand</h3>
                             <form action="#" class="price-ranger">
-                                <div id="slider-range"></div>
+                                <h3 class="product__sidebar__title">Filter by Price</h3>
+                                <input type="range" class="form-range" id="price-range" min="0" max="10000"
+                                    step="10" value="{{ request('max_price', 10000) }}">
                                 <div class="ranger-min-max-block">
-                                    <input type="text" readonly class="min">
-                                    <span>-</span>
-                                    <input type="text" readonly class="max">
+                                    <div><span id="min-price">0</span> - <span
+                                            id="max-price">{{ request('max_price', 10000) }}</span></div>
                                 </div>
                             </form>
+
+
                         </div><!-- /.price-slider -->
                         <div class="product__categories product__sidebar__item">
-                            {{-- <h3 class="product__sidebar__title product__categories__title">Categories</h3> --}}
-                            {{-- <ul class="list-unstyled">
-                                <li><a href="shop-right.html" data-text="Metal Tiles"><span>Metal Tiles</span></a></li>
-                                <li><a href="shop-right.html" data-text="Hexagonal Tiles"><span>Hexagonal Tiles</span></a>
-                                </li>
-                                <li><a href="shop-right.html" data-text="Penny Tiles"><span>Penny Tiles</span></a></li>
-                                <li><a href="shop-right.html" data-text="Patterned Tiles"><span>Patterned Tiles</span></a>
-                                </li>
-                                <li><a href="shop-right.html" data-text="Fish Scale Tilesr"><span>Fish Scale
-                                            Tiles</span></a></li>
-                            </ul> --}}
                             @foreach ($attributes as $attribute)
                                 @php
                                     // Retrieve and decode attribute values from request
@@ -189,13 +200,10 @@
                                         style="display: none;">
                                         @foreach ($attribute->values as $attributeValue)
                                             <div class="product__sidebar__value">
-                                                <input type="checkbox"
-                                                    id="attribute-{{ $attribute->id }}-value-{{ $attributeValue->id }}"
+                                                <input type="checkbox" id="attribute_value-{{ $attributeValue->id }}"
                                                     name="attribute[{{ $attribute->id }}][]"
-                                                    value="{{ $attributeValue->id }}" class="product__sidebar__checkbox"
-                                                    @if (in_array($attributeValue->id, $decodedValues)) checked @endif>
-                                                <label
-                                                    for="attribute-{{ $attribute->id }}-value-{{ $attributeValue->id }}"
+                                                    value="{{ $attributeValue->id }}" class="product__sidebar__checkbox">
+                                                <label for="attribute_value-{{ $attributeValue->id }}"
                                                     class="product__sidebar__label">
                                                     {{ $attributeValue->value }}
                                                 </label>
@@ -239,7 +247,7 @@
                     </aside><!-- /.shop-sidebar -->
                 </div><!-- /.col-xl-3 col-lg-4 -->
                 <div class="col-xl-9 col-lg-8">
-                    <div class="product__info-top">
+                    {{-- <div class="product__info-top">
                         <div class="product__showing-text-box">
                             <p class="product__showing-text">Showing 1–9 of 12 Results</p>
                         </div>
@@ -251,7 +259,21 @@
                                 <option value="3">Sort by ratings</option>
                             </select>
                         </div>
+                    </div> --}}
+                    <div class="product__info-top mb-4">
+                        <div class="product__showing-text-box">
+                            <div class="mt-4">
+                                <h3 class="product__sidebar__title">Filter by price</h3>
+                                <select name="brand" class="selectpicker" id="brand" aria-label="default shorting">
+                                    <option value="" selected disabled>Select Brand</option>
+                                    @foreach ($brands as $brand)
+                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
+
 
                     <div id="loader" class="loader" style="display: none;">
                         <div class="spinner"></div>
@@ -264,8 +286,6 @@
                     </div>
 
 
-
-
                 </div><!-- /.col-lxl9  col-lg-8-->
             </div><!-- /.row -->
         </div><!-- /.container -->
@@ -273,6 +293,7 @@
 @endsection
 @section('page-script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let urlParams = new URLSearchParams(window.location.search);
@@ -288,10 +309,11 @@
                     });
                 }
             });
+
+            checkQueryParams(urlParams);
         });
 
         $(document).ready(function() {
-            // Toggle attribute values on click
             $('.product__sidebar__title').on('click', function() {
                 let attributeId = $(this).data('attribute-id');
                 let valuesSection = $('#values-' + attributeId);
@@ -301,32 +323,25 @@
                 expandIcon.toggleClass('fa-plus fa-minus');
             });
 
-            // Function to update the URL without reloading the page
             function encryptValue(value) {
-                return btoa(value); // Base64 encode the value
+                return btoa(value);
             }
 
+
             function updateUrl() {
-                let selectedValues = {};
+                let selectedValues = [];
 
-                // Group selected values by attribute
                 $('.product__sidebar__checkbox:checked').each(function() {
-                    let attributeId = $(this).attr('name').match(/\d+/)[0]; // Extract attribute ID
                     let value = $(this).val();
-
-                    if (!selectedValues[attributeId]) {
-                        selectedValues[attributeId] = [];
-                    }
-                    selectedValues[attributeId].push(encryptValue(value)); // Encrypt values
+                    selectedValues.push(encryptValue(value));
                 });
 
                 let newUrl = window.location.origin + window.location.pathname;
 
-                if (Object.keys(selectedValues).length > 0) {
+                if (selectedValues.length > 0) {
                     let queryString = new URLSearchParams();
-                    for (let attr in selectedValues) {
-                        queryString.append(`attribute[${attr}]`, selectedValues[attr].join(','));
-                    }
+                    queryString.append('attribute', selectedValues.join(
+                        ','));
                     newUrl += '?' + queryString.toString();
                 }
 
@@ -335,25 +350,125 @@
                 }, '', newUrl);
             }
 
-
-            // Update URL when checkboxes are clicked
             $('.product__sidebar__checkbox').on('change', function() {
                 updateUrl();
-                checkQueryParams();
+                let urlParams = new URLSearchParams(window.location.search);
+                checkQueryParams(urlParams);
+            })
+            checkQueryParams(new URLSearchParams(window.location.search));
+
+
+
+            $('#product__search').on('submit', function(e) {
+                e.preventDefault();
+                var searchQuery = $('#searchQuery').val().trim();
+                let urlParams = new URLSearchParams(window.location.search);
+
+                urlParams.delete('search');
+
+                if (searchQuery) {
+                    urlParams.append('search', searchQuery);
+                }
+                var newUrl = window.location.pathname + '?' + urlParams
+                    .toString();
+
+                window.history.pushState({
+                    path: newUrl
+                }, '', newUrl);
+                checkQueryParams(new URLSearchParams(window.location.search));
             });
-            // Run on page load
-            checkQueryParams();
+            $('#brand').on('change', function() {
+                let urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('brand', $(this).val());
+                let newUrl = window.location.pathname + '?' + urlParams
+                    .toString();
+                window.history.pushState({
+                    path: newUrl
+                }, '', newUrl);
+                checkQueryParams(urlParams);
+            })
+
+
+            function decodeValue(value) {
+                return atob(value);
+            }
+
+            function checkAttributesOnPageLoad() {
+                let urlParams = new URLSearchParams(window.location.search);
+                let attributeValues = urlParams.get('attribute') ? urlParams.get('attribute').split(',') : [];
+
+                attributeValues.forEach(function(encodedValue) {
+                    let decodedValue = decodeValue(encodedValue);
+
+                    let checkbox = $('#attribute_value-' + decodedValue);
+                    if (checkbox.length) {
+                        checkbox.prop('checked', true);
+
+                        let attributeDiv = checkbox.closest('.product__sidebar__attribute');
+                        let valuesDiv = attributeDiv.find('.product__sidebar__values');
+                        let expandIcon = attributeDiv.find('.expand-icon i');
+
+                        attributeDiv.show();
+                        valuesDiv.show();
+                        expandIcon.removeClass('fa-plus').addClass('fa-minus');
+                    }
+                });
+            }
+            checkAttributesOnPageLoad();
+
+            let urlParams = new URLSearchParams(window.location.search);
+
+            // Set initial values
+            $("#min-price").text(0);
+            $("#max-price").text($("#price-range").val());
+
+            // Update max-price dynamically when slider moves
+            $("#price-range").on("input", function() {
+                $("#max-price").text($(this).val());
+            });
+
+            // Trigger AJAX only when mouse is released
+            $("#price-range").on("change", function() {
+                let maxPrice = $(this).val();
+
+                urlParams.set("min_price", 0);
+                urlParams.set("max_price", maxPrice);
+
+                let newUrl = window.location.pathname + "?" + urlParams.toString();
+                window.history.pushState(null, "", newUrl);
+
+                checkQueryParams(urlParams); // Call AJAX to reload products
+            });
+
+
+
+
+
+            $(document).on('click', '#pagination-wrapper a', function(e) {
+                e.preventDefault();
+                let url = $(this).attr('href');
+                if (url) {
+                    let urlParams = new URLSearchParams(new URL(url).search);
+                    checkQueryParams(urlParams);
+                }
+            });
         });
-        // Function to detect query parameters on page load
-        function checkQueryParams() {
+
+        function checkQueryParams(urlParams) {
+            // Convert URLSearchParams to a plain object
+            let paramsObject = {};
+            urlParams.forEach((value, key) => {
+                paramsObject[key] = value;
+            });
             $.ajax({
-                url: "{{ url()->current() }}", // Current URL
+                url: "{{ route('frontend.productsPage') }}", // Current URL
+                data: paramsObject, // Pass plain object as data
                 type: "GET",
                 beforeSend: function() {
                     $('#loader').show();
                 },
                 success: function(response) {
-                    $('#products').html(response.html);
+                    $('#products').html(response.html); // Update the product list with response
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -364,7 +479,6 @@
                     $('#loader').hide();
                 }
             });
-
         }
     </script>
 @endsection

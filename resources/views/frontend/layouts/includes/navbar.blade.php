@@ -52,11 +52,14 @@
                             <ul>
                                 @foreach (category_show() as $category)
                                     <li>
-                                        <a href="#">{{ $category->name }}</a>
+                                        <a
+                                            href="{{ route('frontend.productsPage', ['category' => $category->slug]) }}">{{ $category->name }}</a>
                                         @if ($category->children->count() > 0)
                                             <ul>
                                                 @foreach ($category->children as $childCategory)
-                                                    <li><a href="#">{{ $childCategory->name }}</a></li>
+                                                    <li><a
+                                                            href="{{ route('frontend.productsPage', [$childCategory->slug]) }}">{{ $childCategory->name }}</a>
+                                                    </li>
                                                 @endforeach
                                             </ul>
                                         @endif
@@ -76,7 +79,7 @@
                             <a href="#">About us</a>
                         </li>
                         <li>
-                            <a href="contact.html">Contact</a>
+                            <a href="{{ route('frontend.contact') }}">Contact</a>
                         </li>
                     </ul>
                 </nav><!-- /.main-header__nav -->
