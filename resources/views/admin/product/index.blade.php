@@ -99,31 +99,12 @@
                 ]
             });
 
-
-
-            $('body').on('click', '.delete-employee', function(e) {
-                e.preventDefault();
-                var id = $(this).attr('employee-id');
-                var title = "Are you sure?";
-                Swal.fire({
-                    icon: "warning",
-                    title: title,
-                    showDenyButton: false,
-                    showCancelButton: true,
-                    confirmButtonText: "Yes",
-                    cancelButtonText: "Cancel",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        localStorage.clear();
-                        window.location.href = "{{ url('admin/employee/delete') }}/" + id;
-                    }
-                });
-            });
         });
 
 
 
-        function confirmDelete(slug, deleteUrl) {
+        function confirmDelete(deleteUrl) {
+            console.log(deleteUrl);
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to undo this action!",
@@ -134,12 +115,12 @@
                 confirmButtonText: 'Yes, delete it!',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    deleteCategory(slug, deleteUrl);
+                    deleteCategory(deleteUrl);
                 }
             });
         }
 
-        function deleteCategory(slug, deleteUrl) {
+        function deleteCategory(deleteUrl) {
             $.ajax({
                 url: deleteUrl,
                 type: 'DELETE',
@@ -147,11 +128,11 @@
                     _token: $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function(response) {
-                    if (response.success) {
-                        Swal.fire('Deleted!', 'The category has been deleted.', 'success');
+                    if (response.status == 'success') {
+                        Swal.fire('Deleted!', 'The Product has been deleted.', 'success');
                         $('#dataTable').DataTable().ajax.reload();
                     } else {
-                        Swal.fire('Error!', 'There was a problem deleting the category.', 'error');
+                        Swal.fire('Error!', 'There was a problem deleting the product.', 'error');
                     }
                 },
                 error: function() {
