@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Enum\StatusEnum;
+use App\Helpers\ImageUploadHelper;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -52,6 +54,16 @@ class Product extends Model
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * The images that belong to this product.
+     *
+     * @return HasMany<ProductImage>
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class);
     }
 
     /**

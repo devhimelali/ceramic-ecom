@@ -17,14 +17,14 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Brand::orderBy('id', 'desc');
+            $data = Brand::query();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('image', function ($row) {
                     if ($row->image) {
                         return '<img src="' . asset($row->image) . '" class="rounded-circle header-profile-user">';
                     } else {
-                        return '<img src="' . asset('assets/placeholder-image.webp') . '" class="rounded-circle header-profile-user">';
+                        return '<img src="https://ui-avatars.com/api/?name='. urlencode($row->name) .  '" class="rounded-circle header-profile-user">';
                     }
                 })
                 ->addColumn('description', function ($row) {

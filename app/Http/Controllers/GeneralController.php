@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enum\StatusEnum;
+use App\Models\AttributeValue;
 use Illuminate\Http\Request;
 
 class GeneralController extends Controller
@@ -23,5 +24,13 @@ class GeneralController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => 'Invalid request.'], 400);
         }
+    }
+
+    public function getAttributeValues(Request $request)
+    {
+        $attributeValues = AttributeValue::where('attribute_id', $request->variation_id)
+            ->where('status', StatusEnum::ACTIVE)
+            ->get();
+        return response()->json($attributeValues);
     }
 }
