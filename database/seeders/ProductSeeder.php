@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enum\StatusEnum;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
@@ -22,7 +23,7 @@ class ProductSeeder extends Seeder
         $category = Category::firstOrCreate(['name' => 'Ceramic Tiles'], ['slug' => 'ceramic-tiles']);
 
         // Create a brand
-        $brand = Brand::firstOrCreate(['name' => 'Luxury Ceramics'], ['slug' => 'luxury-ceramics'], ['status' => 'active']);
+        $brand = Brand::firstOrCreate(['name' => 'Luxury Ceramics', 'slug' => 'luxury-ceramics'], ['status' => StatusEnum::ACTIVE]);
 
         // Product data
         $products = [
