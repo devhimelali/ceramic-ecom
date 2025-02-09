@@ -66,6 +66,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('contacts.index') }}"
+                        class="nav-link menu-link {{ $active == 'contacts' ? 'active' : '' }}" aria-expanded="false">
+                        <i class="ph ph-address-book"></i>
+                        <span data-key="t-dashboards">Contacts</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('settings.index') }}"
                         class="nav-link menu-link {{ $active == 'settings' ? 'active' : '' }}" aria-expanded="false">
                         <i class="ph-gear"></i>

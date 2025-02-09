@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AttributeValueController;
+use App\Http\Controllers\Admin\ContactController;
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -23,4 +24,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('products', ProductController::class);
     Route::get('get-attribute-values', [GeneralController::class, 'getAttributeValues'])->name('get.attribute.values');
     Route::post('delete-product-image', [ProductController::class, 'deleteProductImage'])->name('delete.product.image');
+    Route::resource('contacts', ContactController::class);
+    Route::post('/contact-us/{id}/reply', [ContactController::class, 'reply'])->name('contact.reply');
 });
