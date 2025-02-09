@@ -206,6 +206,7 @@
     <script src="{{ asset('frontend') }}/assets/vendors/slick/slick.min.js"></script>
     <!-- template js -->
     <script src="{{ asset('frontend') }}/assets/js/floens.js"></script>
+    @yield('page-script')
 </body>
 
 

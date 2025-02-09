@@ -70,7 +70,7 @@
                         </li>
 
                         <li class="{{ $active == 'products' ? 'current' : '' }}">
-                            <a href="{{ route('frontend.allProducts') }}">Products</a>
+                            <a href="{{ route('frontend.productsPage') }}">Products</a>
                         </li>
                         <li class="dropdown">
                             <a href="#">About us</a>
