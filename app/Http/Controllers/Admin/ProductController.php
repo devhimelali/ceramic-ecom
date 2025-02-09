@@ -41,10 +41,18 @@ class ProductController extends Controller
                 ->addColumn('brand', function ($row) {
                     return $row->brand->name;
                 })
-                ->addColumn('action', function ($row) {
-                    return '';
+                ->addColumn('status', function ($row) {
+                    return $row->status->value == 'active' ? '<span class="badge text-bg-success">Active</span>' : '<span class="badge text-bg-danger">Inactive</span>';
                 })
-                ->rawColumns(['image', 'action'])
+                ->addColumn('action', function ($row) {
+                    $html = '<div class="btn-group" role="group" aria-label="Basic example">';
+                    $html .= '<a href="' . route('products.edit', $row->id) . '" class="btn btn-sm btn-secondary"><i class="ph-pencil"></i> Edit</a>';
+                    $html .= '<a href="' . route('products.destroy', $row->id) . '" class="btn btn-sm btn-danger"><i class="ph-trash"></i> Delete</a>';
+                    $html .= '</div>';
+                    return $html;
+
+                })
+                ->rawColumns(['image', 'status', 'action'])
                 ->make(true);
         }
 

@@ -40,7 +40,7 @@
                                     <th>Category</th>
                                     <th>Brand</th>
                                     <th>Status</th>
-                                    <th style="width: 140px">Actions</th>
+                                    <th style="width: 130px">Actions</th>
                                 </tr>
                             </thead>
 
@@ -91,11 +91,11 @@
                         name: 'status',
                     },
                     {
-                        data: 'actions',
-                        name: 'actions',
+                        data: 'action',
+                        name: 'action',
                         orderable: false,
                         searchable: false
-                    },
+                    }
                 ]
             });
 
