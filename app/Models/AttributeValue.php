@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enum\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class AttributeValue extends Model
 {
@@ -16,6 +17,11 @@ class AttributeValue extends Model
     public function attribute()
     {
         return $this->belongsTo(Attribute::class);
+    }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_attribute_values', 'attribute_value_id', 'product_id');
     }
 
     protected function casts(): array

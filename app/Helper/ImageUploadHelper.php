@@ -66,4 +66,11 @@ class ImageUploadHelper
 
         return Storage::disk('public')->exists($path) ? asset("storage/{$path}") : asset('images/no-image.png');
     }
+
+    public static function deleteProductImage($filename, $folder = 'products')
+    {
+        Storage::disk('public')->delete("uploads/{$folder}/original/{$filename}");
+        Storage::disk('public')->delete("uploads/{$folder}/thumbnail/{$filename}");
+        Storage::disk('public')->delete("uploads/{$folder}/medium/{$filename}");
+    }
 }

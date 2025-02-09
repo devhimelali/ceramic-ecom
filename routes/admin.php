@@ -22,4 +22,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::resource('attribute-values', AttributeValueController::class);
     Route::resource('products', ProductController::class);
     Route::get('get-attribute-values', [GeneralController::class, 'getAttributeValues'])->name('get.attribute.values');
+    Route::post('delete-product-image', [ProductController::class, 'deleteProductImage'])->name('delete.product.image');
 });
