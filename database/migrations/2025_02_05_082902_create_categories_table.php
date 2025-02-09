@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('image')->nullable(); // Store image path
             $table->boolean('is_active')->default(0);
             $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
+            $table->boolean('front_show')->default(0);
             $table->timestamps();
         });
     }

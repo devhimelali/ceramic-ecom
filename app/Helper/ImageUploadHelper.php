@@ -58,7 +58,7 @@ class ImageUploadHelper
     public static function getProductImageUrl($filename, $folder = 'products', $type = 'thumbnail')
     {
         if (!$filename) {
-            return asset('images/no-image.png'); // Default placeholder image
+            return asset('frontend/assets/images/product-placeholder.png'); // Default placeholder image
         }
 
         // Define the image path based on type
