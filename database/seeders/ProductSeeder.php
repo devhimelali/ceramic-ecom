@@ -22,7 +22,7 @@ class ProductSeeder extends Seeder
         $category = Category::firstOrCreate(['name' => 'Ceramic Tiles'], ['slug' => 'ceramic-tiles']);
 
         // Create a brand
-        $brand = Brand::firstOrCreate(['name' => 'Luxury Ceramics'], ['slug' => 'luxury-ceramics'], ['status' => 'active']);
+        $brand = Brand::firstOrCreate(['name' => 'Luxury Ceramics', 'slug' => 'luxury-ceramics', 'status' => 'active']);
 
         // Product data
         $products = [

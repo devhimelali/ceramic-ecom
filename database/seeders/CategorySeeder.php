@@ -17,7 +17,7 @@ class CategorySeeder extends Seeder
         $categories = [
             [
                 'name' => 'Tiles',
-                'image' => 'categories/tiles.jpg',
+                'image' => null,
                 'is_active' => 1,
                 'children' => [
                     ['name' => 'Wall Tiles', 'image' => ''],
@@ -27,7 +27,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'name' => 'Sanitary Ware',
-                'image' => 'categories/sanitary_ware.jpg',
+                'image' => null,
                 'is_active' => 1,
                 'children' => [
                     ['name' => 'Wash Basins', 'image' => ''],
@@ -37,7 +37,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'name' => 'Bathroom Accessories',
-                'image' => 'categories/bathroom_accessories.jpg',
+                'image' => null,
                 'is_active' => 1,
                 'children' => [
                     ['name' => 'Soap Holders', 'image' => ''],
@@ -47,7 +47,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'name' => 'Kitchen Sinks',
-                'image' => 'categories/kitchen_sinks.jpg',
+                'image' => null,
                 'is_active' => 1,
                 'children' => [
                     ['name' => 'Single Bowl', 'image' => ''],
@@ -60,7 +60,7 @@ class CategorySeeder extends Seeder
         foreach ($categories as $categoryData) {
             $parent = Category::create([
                 'name' => $categoryData['name'],
-                'slug' => Str::slug($categoryData['name']),
+                'slug' => Str::slug($categoryData['name']) . uniqid(),
                 'image' => $categoryData['image'],
                 'is_active' => $categoryData['is_active'],
                 'parent_id' => null
@@ -70,7 +70,7 @@ class CategorySeeder extends Seeder
                 foreach ($categoryData['children'] as $childData) {
                     Category::create([
                         'name' => $childData['name'],
-                        'slug' => Str::slug($childData['name']),
+                        'slug' => Str::slug($childData['name']) . uniqid(),
                         'image' => $childData['image'],
                         'is_active' => 1,
                         'parent_id' => $parent->id
