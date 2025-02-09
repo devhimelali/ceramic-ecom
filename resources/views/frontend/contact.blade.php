@@ -1,4 +1,11 @@
 @extends('frontend.layouts.app')
+@section('page-style')
+    <style>
+        .form-one__group--grid {
+            grid-gap: 14px !important;
+        }
+    </style>
+@endsection
 @section('content')
     <section class="page-header">
         <div class="page-header__bg" style="background-image: url('assets/images/backgrounds/page-header-bg-1-1.png');"></div>
@@ -74,43 +81,47 @@
                     </div><!-- /.contact-one__content -->
                 </div><!-- /.col-xl-6 -->
                 <div class="col-lg-6">
-                    <form class="contact-one__form contact-form-validated form-one wow fadeInUp" data-wow-duration="1500ms"
-                        data-wow-delay="200ms" action="">
+                    <form class="contact-one__form form-one wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms"
+                        action="{{ route('frontend.contact') }}" method="post">
+                        @csrf
                         <div class="contact-one__form__bg"
                             style="background-image: url('assets/images/shapes/contact-info-form-bg.png');"></div>
-                        <!-- /.contact-one__form__bg -->
                         <div class="contact-one__form__top">
                             <h2 class="contact-one__form__title">Get In Touch With Us And Enjoy <br>
-                                Top-Notch Support</h2><!-- /.contact-one__form__title -->
-                        </div><!-- /.contact-one__form__top -->
+                                Top-Notch Support</h2>
+                        </div>
                         <div class="form-one__group form-one__group--grid">
                             <div class="form-one__control form-one__control--input form-one__control--full">
                                 <input type="text" name="name" placeholder="Your name">
-                            </div><!-- /.form-one__control form-one__control--full -->
+                            </div>
+                            @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                             <div class="form-one__control form-one__control--full">
                                 <input type="email" name="email" placeholder="your email">
-                            </div><!-- /.form-one__control form-one__control--full -->
+                            </div>
+                            @error('email')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                             <div class="form-one__control form-one__control--full">
-                                <select class="selectpicker" aria-label="Choose service">
-                                    <option selected>Choose service</option>
-                                    <option value="1">Tiling & concrete</option>
-                                    <option value="2">Industrial Flooring</option>
-                                    <option value="3">Vinyl Plank</option>
-                                    <option value="4">Carpets & rugs</option>
-                                    <option value="5">Oak Flooring</option>
-                                    <option value="6">Vein Patterns</option>
-                                </select>
-                            </div><!-- /.form-one__control form-one__control--full -->
+                                <input type="text" name="subject" placeholder="Enter subject">
+                            </div>
+                            @error('subject')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                             <div class="form-one__control form-one__control--mesgae form-one__control--full">
-                                <textarea name="message" placeholder="Write message"></textarea><!-- /# -->
-                            </div><!-- /.form-one__control -->
+                                <textarea name="message" placeholder="Write message"></textarea>
+                            </div>
+                            @error('message')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                             <div class="form-one__control form-one__control--full">
                                 <button type="submit" class="floens-btn">
                                     <span>send message</span>
                                     <i class="icon-right-arrow"></i>
                                 </button>
-                            </div><!-- /.form-one__control -->
-                        </div><!-- /.form-one__group -->
+                            </div>
+                        </div>
                     </form>
                 </div><!-- /.col-xl-6 -->
             </div><!-- /.row -->

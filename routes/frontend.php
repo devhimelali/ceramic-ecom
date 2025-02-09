@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\Frontend\ContactController;
 
 Route::get('/', [FrontendController::class, 'home'])->name('frontend.home');
 Route::get('/all-categories', [FrontendController::class, 'allCategories'])->name('frontend.allCategories');
 Route::get('/all-products', [FrontendController::class, 'productsPage'])->name('frontend.productsPage');
-Route::get('/contact', [FrontendController::class, 'contact'])->name('frontend.contact');
+Route::get('/contact', [ContactController::class, 'contact'])->name('frontend.contact');
+Route::post('/contact', [ContactController::class, 'store']);
