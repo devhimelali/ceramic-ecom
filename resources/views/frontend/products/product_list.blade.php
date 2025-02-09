@@ -1,9 +1,15 @@
+@php
+    use App\Helpers\ImageUploadHelper;
+@endphp
 <div class="row gutter-y-30">
     @forelse ($products as $product)
         <div class="col-xl-4 col-lg-6 col-md-6 ">
             <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                 <div class="product__item__image">
-                    <img src="{{ asset('frontend') }}/assets/images/products/product-1-1.jpg" alt="Natural Stone Tiles">
+                    @php
+                        $images = $product->images->where('type', 'thumbnail')->first();
+                    @endphp
+                    <img src="{{ ImageUploadHelper::getProductImageUrl($images?->image) }}" alt="Natural Stone Tiles">
                 </div><!-- /.product-image -->
                 <div class="product__item__content">
                     <h6 class="product__item__title"><a href="#">{{ Str::limit($product->name, 15) }}</a>
