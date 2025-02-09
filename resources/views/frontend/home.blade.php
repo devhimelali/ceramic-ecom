@@ -954,10 +954,18 @@
                                 </h4><!-- /.product-title -->
                                 <div class="product__item__price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
                                 <!-- /.product-price -->
+                                {{-- <div class="d-flex justify-content-between align-items-center"> --}}
+                                <a href="javascript:void(0);" class="floens-btn product__item__link mb-3 enquireBtn"
+                                    data-id="{{ $product->id }}">
+                                    <span>Enquire</span>
+                                    <i class="icon-right-arrow"></i>
+                                </a>
                                 <a href="cart.html" class="floens-btn product__item__link">
                                     <span>Add to Cart</span>
                                     <i class="icon-cart"></i>
                                 </a>
+                                {{-- </div> --}}
+
                             </div><!-- /.product-content -->
                         </div><!-- /.product-item -->
                     </div><!-- /.col-md-6 col-lg-4 -->
@@ -1104,4 +1112,103 @@
         </div><!-- /.container -->
     </div><!-- /.client-carousel -->
     <!-- client carousel end -->
+    <!-- Default Modals -->
+    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#myModal">Standard
+        Modal</button>
+    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Product Enquire</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <form action="" method="post" id="enquireForm">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" name="name" id="name"
+                                        placeholder="Enter your name">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email"
+                                        placeholder="Enter your email">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" class="form-control" name="phone" id="phone"
+                                        placeholder="Enter your phone">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea class="form-control" name="message" id="message" placeholder="Enter your message"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary enquireBtn">Submit</button>
+                    </div>
+                </form>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+@endsection
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            $('.enquireBtn').click(function() {
+                var productId = $(this).data('id');
+                console.log(productId);
+                $('#myModal').modal('show');
+            });
+
+            $('#enquireForm').submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('enquire') }}",
+                    method: 'POST',
+                    data: formData,
+                    beforeSend: function() {
+                        $('.enquireBtn').prop('disabled', true);
+                        $('.enquireBtn').html(
+                            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+                        );
+                    },
+                    success: function(response) {
+                        $('.enquireBtn').prop('disabled', false);
+                        $('.enquireBtn').html('Submit');
+                        if (response.status == 'success') {}
+                        notify(response.status, response.message);
+                        $('#myModal').modal('hide');
+                    },
+                    error: function(xhr, status, error) {
+                        $('.enquireBtn').prop('disabled', false);
+                        $('.enquireBtn').html('Submit');
+                        let errors = xhr.responseJSON.errors;
+                        if (errors) {
+                            $.each(errors, function(key, value) {
+                                let inputField = $('[name="' + key + '"]');
+                                inputField.addClass('is-invalid');
+                                notify('error', value[0]);
+                            });
+                        }
+                    }
+                });
+            })
+        });
+    </script>
 @endsection
