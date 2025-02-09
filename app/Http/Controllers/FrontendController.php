@@ -16,6 +16,7 @@ class FrontendController extends Controller
         $data = [
             'active' => 'home',
             'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->limit(15)->get(),
+            'products' => Product::where('status', StatusEnum::ACTIVE)->latest()->limit(4)->get(),
         ];
         return view('frontend.home', $data);
     }
