@@ -83,4 +83,15 @@ class FrontendController extends Controller
     {
         return array_map('base64_decode', explode(',', $encryptedValues));
     }
+
+    function productDetails($slug)
+    {
+        $product = Product::where('slug', $slug)->first();
+
+        $data = [
+            'active' => 'products',
+            'product' => $product
+        ];
+        return view('frontend.products.details', $data);
+    }
 }
