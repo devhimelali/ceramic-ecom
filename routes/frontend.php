@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Frontend\ContactController;
@@ -9,3 +10,4 @@ Route::get('/all-categories', [FrontendController::class, 'allCategories'])->nam
 Route::get('/all-products', [FrontendController::class, 'productsPage'])->name('frontend.productsPage');
 Route::get('/contact', [ContactController::class, 'contact'])->name('frontend.contact');
 Route::post('/contact', [ContactController::class, 'store']);
+Route::post('enquire', [OrderController::class, 'store'])->name('enquire');

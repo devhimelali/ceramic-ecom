@@ -52,7 +52,7 @@ class OrderController extends Controller
         return view('admin.order.index', $data);
     }
 
-    public function create(OrderRequest $request)
+    public function store(OrderRequest $request)
     {
         $order = ProductQuery::create([
             'name' => $request->name,
@@ -67,6 +67,9 @@ class OrderController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Order created successfully');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order created successfully'
+        ]);
     }
 }
