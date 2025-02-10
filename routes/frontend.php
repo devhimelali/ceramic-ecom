@@ -11,4 +11,6 @@ Route::get('/all-products', [FrontendController::class, 'productsPage'])->name('
 Route::get('/products/{slug}', [FrontendController::class, 'productDetails'])->name('product.details');
 Route::get('/contact', [ContactController::class, 'contact'])->name('frontend.contact');
 Route::post('/contact', [ContactController::class, 'store']);
+Route::get('enquire-form/{productId}', [OrderController::class, 'enquireForm'])->name('enquireForm');
 Route::post('enquire', [OrderController::class, 'store'])->name('enquire');
+Route::get('about-us', [FrontendController::class, 'aboutUs'])->name('frontend.aboutUs');

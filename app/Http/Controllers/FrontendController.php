@@ -86,12 +86,20 @@ class FrontendController extends Controller
 
     function productDetails($slug)
     {
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::with('attributes', 'attributeValues')->where('slug', $slug)->first();
 
         $data = [
             'active' => 'products',
             'product' => $product
         ];
         return view('frontend.products.details', $data);
+    }
+
+    function aboutUs()
+    {
+        $data = [
+            'active' => 'about-us'
+        ];
+        return view('frontend.about-us', $data);
     }
 }

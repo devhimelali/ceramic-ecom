@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductQuery;
 use Illuminate\Http\Request;
@@ -70,6 +71,18 @@ class OrderController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Order created successfully'
+        ]);
+    }
+
+    public function enquireForm($productId)
+    {
+        $product = Product::with('attributes', 'attributeValues')->find($productId);
+        $attributes = $product->attributes()->get();
+        // return $product->attributes;
+        $html = view('frontend.products.enquire-modal', compact('productId', 'product', 'attributes'))->render();
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
         ]);
     }
 }

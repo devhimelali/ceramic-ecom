@@ -27,6 +27,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('delete-product-image', [ProductController::class, 'deleteProductImage'])->name('delete.product.image');
     Route::resource('contacts', ContactController::class);
     Route::post('/contact-us/{id}/reply', [ContactController::class, 'reply'])->name('contact.reply');
-
     Route::resource('orders', OrderController::class);
 });
