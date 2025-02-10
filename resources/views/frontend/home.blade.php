@@ -1134,6 +1134,7 @@
                                         placeholder="Enter your name">
                                 </div>
                             </div>
+                            <input type="text" name="products[]" id="products">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="email">Email</label>
@@ -1158,7 +1159,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary enquireBtn">Submit</button>
+                        <button type="submit" class="btn btn-primary enquireSubmitBtn">Submit</button>
                     </div>
                 </form>
 
@@ -1171,33 +1172,37 @@
         $(document).ready(function() {
             $('.enquireBtn').click(function() {
                 var productId = $(this).data('id');
-                console.log(productId);
+                // console.log(productId);
+                $('#enquireForm').find('input[name="products[]"]').val(productId);
                 $('#myModal').modal('show');
             });
 
             $('#enquireForm').submit(function(e) {
                 e.preventDefault();
-                var formData = $(this).serialize();
+                var formData = $('#enquireForm').serialize();
+                // console.log(formData);
                 $.ajax({
                     url: "{{ route('enquire') }}",
                     method: 'POST',
                     data: formData,
                     beforeSend: function() {
-                        $('.enquireBtn').prop('disabled', true);
-                        $('.enquireBtn').html(
+                        $('.enquireSubmitBtn').prop('disabled', true);
+                        $('.enquireSubmitBtn').html(
                             '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
                         );
                     },
                     success: function(response) {
-                        $('.enquireBtn').prop('disabled', false);
-                        $('.enquireBtn').html('Submit');
-                        if (response.status == 'success') {}
-                        notify(response.status, response.message);
-                        $('#myModal').modal('hide');
+                        $('.enquireSubmitBtn').prop('disabled', false);
+                        $('.enquireSubmitBtn').html('Submit');
+                        if (response.status == 'success') {
+                            notify(response.status, response.message);
+                            $('#myModal').modal('hide');
+                        }
+
                     },
                     error: function(xhr, status, error) {
-                        $('.enquireBtn').prop('disabled', false);
-                        $('.enquireBtn').html('Submit');
+                        $('.enquireSubmitBtn').prop('disabled', false);
+                        $('.enquireSubmitBtn').html('Submit');
                         let errors = xhr.responseJSON.errors;
                         if (errors) {
                             $.each(errors, function(key, value) {
@@ -1208,7 +1213,8 @@
                         }
                     }
                 });
-            })
+            });
+
         });
     </script>
 @endsection

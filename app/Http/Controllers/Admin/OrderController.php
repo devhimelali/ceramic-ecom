@@ -61,7 +61,7 @@ class OrderController extends Controller
             'message' => $request->message,
             'status' => ProductQueryStatus::PENDING
         ]);
-        foreach ($request->product_id as $product_id) {
+        foreach ($request->products as $product_id) {
             $order->productQueryItems()->create([
                 'product_id' => $product_id
             ]);
