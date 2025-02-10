@@ -75,8 +75,8 @@
                         <li class="{{ $active == 'products' ? 'current' : '' }}">
                             <a href="{{ route('frontend.productsPage') }}">Products</a>
                         </li>
-                        <li class="dropdown">
-                            <a href="#">About us</a>
+                        <li class="{{ $active == 'about-us' ? 'current' : '' }}">
+                            <a href="{{ route('frontend.aboutUs') }}">About us</a>
                         </li>
                         <li class="{{ $active == 'contact' ? 'current' : '' }}">
                             <a href="{{ route('frontend.contact') }}">Contact</a>

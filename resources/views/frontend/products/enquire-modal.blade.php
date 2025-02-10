@@ -34,56 +34,71 @@
         background: #f6f3ef;
     }
 </style>
-<div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-    style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content p-4">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Product Enquire</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
-            </div>
-            <form action="" method="post" id="enquireForm">
-                @csrf
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="name">Your Name</label>
-                                <input type="text" id="name" name="name" placeholder="Enter your name">
+
+<form action="" method="post" id="enquireForm">
+    @csrf
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="name">Variant</label>
+                    <div class="col-lg-12 variationContainer">
+                        @foreach ($product->attributes as $key => $attribute)
+                            <div class="row" data-id="variation_{{ $key }}">
+                                <div class="col-lg-5">
+                                    <div class="mb-3">
+                                        <h6>{{ $attribute->name }}</h6>
+                                        @foreach ($attribute->values as $value)
+                                            @continue($value->id != $attribute->pivot->attribute_value_id)
+                                            <label for="variation_{{ $value->id }}" class="form-label">
+                                                <input type="radio" id="variation_{{ $value->id }}"
+                                                    name="variation_values[{{ $attribute->id }}]"
+                                                    value="{{ $value->id }}">
+                                                {{ $value->value }}
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <input type="hidden" name="products[]" id="products">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" id="email" placeholder="Enter your email">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input type="text" name="phone" id="phone" placeholder="Enter your phone">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea name="message" id="message" placeholder="Enter your message"></textarea>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded"
-                        data-bs-dismiss="modal"><span>Close</span>
-                    </button>
 
-                    <button type="submit"
-                        class="floens-btn product__item__link mb-3 p-3 rounded enquireSubmitBtn"><span>Submit</span>
-                    </button>
                 </div>
-            </form>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your name">
+                </div>
+            </div>
+            <input type="hidden" name="products[]" id="products">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Enter your email">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="text" name="phone" id="phone" placeholder="Enter your phone">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea name="message" id="message" placeholder="Enter your message"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded"
+            data-bs-dismiss="modal"><span>Close</span>
+        </button>
 
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        <button type="submit"
+            class="floens-btn product__item__link mb-3 p-3 rounded enquireSubmitBtn"><span>Submit</span>
+        </button>
+    </div>
+</form>

@@ -979,7 +979,8 @@
                                 <div class="d-flex align-items-center justify-content-center">
                                     <a href="javascript:void(0);"
                                         class="floens-btn product__item__link me-2 custom-button p-3 enquireBtn"
-                                        data-id="{{ $product->id }}" data-product="{{$product}}">Enquire</a>
+                                        data-id="{{ $product->id }}"
+                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                     <a href="javascript:void(0);" class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn" data-product="{{$product}}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
@@ -1113,8 +1114,74 @@
     </div><!-- /.client-carousel -->
     <!-- client carousel end -->
     <!-- Default Modals -->
-    @include('frontend.products.enquire-modal')
+    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content p-4">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Product Enquire</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <div id="enquireFormResponse"></div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 @section('page-script')
-    
+    <script>
+        $(document).ready(function() {
+            $('.enquireBtn').click(function() {
+                var productId = $(this).data('id');
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(response) {
+                        $('#enquireFormResponse').html(response.html);
+                        $('#myModal').modal('show');
+                    }
+                })
+            });
+
+            // $('#enquireForm').submit(function(e) {
+            //     e.preventDefault();
+            //     var formData = $('#enquireForm').serialize();
+            //     // console.log(formData);
+            //     $.ajax({
+            //         url: "{{ route('enquire') }}",
+            //         method: 'POST',
+            //         data: formData,
+            //         beforeSend: function() {
+            //             $('.enquireSubmitBtn').prop('disabled', true);
+            //             $('.enquireSubmitBtn').html(
+            //                 '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+            //             );
+            //         },
+            //         success: function(response) {
+            //             $('.enquireSubmitBtn').prop('disabled', false);
+            //             $('.enquireSubmitBtn').html('Submit');
+            //             if (response.status == 'success') {
+            //                 notify(response.status, response.message);
+            //                 $('#enquireForm')[0].reset();
+            //                 $('#myModal').modal('hide');
+            //             }
+
+            //         },
+            //         error: function(xhr, status, error) {
+            //             $('.enquireSubmitBtn').prop('disabled', false);
+            //             $('.enquireSubmitBtn').html('Submit');
+            //             let errors = xhr.responseJSON.errors;
+            //             if (errors) {
+            //                 $.each(errors, function(key, value) {
+            //                     let inputField = $('[name="' + key + '"]');
+            //                     inputField.addClass('is-invalid');
+            //                     notify('error', value[0]);
+            //                 });
+            //             }
+            //         }
+            //     });
+            // });
+        });
+    </script>
 @endsection
