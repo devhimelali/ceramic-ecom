@@ -15,7 +15,7 @@
     <link rel="manifest" href="{{ asset('frontend') }}/assets/images/favicons/site.webmanifest" />
     <meta name="description"
         content="Floens is a modern HTML Template for Beauty, Spa Centers, Hair, Nail, Spa Salons & Cosmetic shops. The template perfectly fits Beauty Spa, Salon, and Wellness Treatments websites and businesses." />
-
+        <script src="{{ asset('frontend') }}/assets/vendors/jquery/jquery-3.7.0.min.js"></script>
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -183,7 +183,7 @@
         <span class="scroll-to-top__wrapper"><span class="scroll-to-top__inner"></span></span>
     </a>
 
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery/jquery-3.7.0.min.js"></script>
+
     <script src="{{ asset('frontend') }}/assets/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('frontend') }}/assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
     <script src="{{ asset('frontend') }}/assets/vendors/jarallax/jarallax.min.js"></script>

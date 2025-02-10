@@ -979,9 +979,9 @@
                                 <div class="d-flex align-items-center justify-content-center">
                                     <a href="javascript:void(0);"
                                         class="floens-btn product__item__link me-2 custom-button p-3 enquireBtn"
-                                        data-id="{{ $product->id }}">Enquire</a>
+                                        data-id="{{ $product->id }}" data-product="{{$product}}">Enquire</a>
 
-                                    <a href="" class="floens-btn product__item__link me-2 custom-button p-4">
+                                    <a href="javascript:void(0);" class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn" data-product="{{$product}}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                 </div>
 
@@ -1116,60 +1116,5 @@
     @include('frontend.products.enquire-modal')
 @endsection
 @section('page-script')
-    <script>
-        $(document).ready(function() {
-            $('.enquireBtn').click(function() {
-                var productId = $(this).data('id');
-                // console.log(productId);
-                $('#enquireForm').find('input[name="products[]"]').val(productId);
-                $('#myModal').modal('show');
-            });
-
-            $('#enquireForm').submit(function(e) {
-                e.preventDefault();
-                var formData = $('#enquireForm').serialize();
-                // console.log(formData);
-                $.ajax({
-                    url: "{{ route('enquire') }}",
-                    method: 'POST',
-                    data: formData,
-                    beforeSend: function() {
-                        $('.enquireSubmitBtn').prop('disabled', true);
-                        $('.enquireSubmitBtn').html(
-                            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
-                        );
-                    },
-                    success: function(response) {
-                        $('.enquireSubmitBtn').prop('disabled', false);
-                        $('.enquireSubmitBtn').html('Submit');
-                        if (response.status == 'success') {
-                            notify(response.status, response.message);
-                            $('#enquireForm')[0].reset();
-                            $('#myModal').modal('hide');
-                        }
-
-                    },
-                    error: function(xhr, status, error) {
-                        $('.enquireSubmitBtn').prop('disabled', false);
-                        $('.enquireSubmitBtn').html('Submit');
-                        let errors = xhr.responseJSON.errors;
-                        if (errors) {
-                            $.each(errors, function(key, value) {
-                                let inputField = $('[name="' + key + '"]');
-                                inputField.addClass('is-invalid');
-                                notify('error', value[0]);
-                            });
-                        }
-                    }
-                });
-            });
-
-            $('.addCartItemBtn').click(function() {
-                var product = $(this).data('product');
-                console.log(product);
-                addItem(product.id, product.name, product.price, 1);
-                $('.totalCartItems').html(getTotalQuantity())
-            });
-        });
-    </script>
+    
 @endsection

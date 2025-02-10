@@ -90,7 +90,7 @@
                     <span></span>
                     <span></span>
                 </div><!-- /.mobile-nav__toggler -->
-                <a href="cart.html" class="main-header__cart">
+                <a href="javascript:void(0);" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="main-header__cart">
                     <i class="icon-cart" aria-hidden="true"></i>
                     <span class="sr-only">Cart</span>
                     <span class="totalCartItems"></span>
@@ -113,11 +113,9 @@
     </div><!-- /.container-fluid -->
 </header><!-- /.main-header -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const totalCartItems = document.querySelector('.totalCartItems');
-
-        totalCartItems.textContent = getTotalQuantity();
-    });
+    $(document).ready(function() {
+        $('.totalCartItems').html(getTotalQuantity())
+    })
 </script>
 <style>
     span.totalCartItems {
