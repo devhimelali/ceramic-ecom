@@ -8,7 +8,7 @@ function saveCart() {
 }
 
 // Add item to cart
-function addItem(id, name, price, quantity){
+function addItem(id, name, price, quantity = 1) {
     let existingItem = cart.find(item => item.id === id);
     if(existingItem) {
         existingItem.quantity += quantity;
@@ -52,6 +52,8 @@ function clearCart() {
     cart = [];
     saveCart();
 }
+
+getTotalQuantity = () => cart.reduce((total, item) => total + item.quantity, 0);
 
 // Initialize cart
 let cart = JSON.parse(localStorage.getItem("cart")) || [];

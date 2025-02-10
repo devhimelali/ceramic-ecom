@@ -93,6 +93,7 @@
                 <a href="cart.html" class="main-header__cart">
                     <i class="icon-cart" aria-hidden="true"></i>
                     <span class="sr-only">Cart</span>
+                    <span class="totalCartItems"></span>
                 </a><!-- /.shopping card -->
                 <a href="#" class="search-toggler main-header__search">
                     <i class="icon-search" aria-hidden="true"></i>
@@ -111,3 +112,37 @@
         </div><!-- /.main-header__inner -->
     </div><!-- /.container-fluid -->
 </header><!-- /.main-header -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const totalCartItems = document.querySelector('.totalCartItems');
+
+        totalCartItems.textContent = getTotalQuantity();
+    });
+</script>
+<style>
+    span.totalCartItems {
+        position: absolute;
+        right: -12px;
+        top: -13px;
+        background: #C7844F;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        text-align: center;
+        color: #fff;
+        font-size: 15px;
+    }
+
+    .icon-cart,
+    .icon-search {
+        font-size: 26px;
+    }
+    .icon-cart{
+        margin-right: 5px;
+    }
+
+    .main-header--two .main-menu .main-menu__list>li {
+        padding-top: 35px !important;
+        padding-bottom: 35px !important;
+    }
+</style>

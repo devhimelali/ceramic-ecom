@@ -998,7 +998,7 @@
                                     <span>Enquire</span>
                                     <i class="icon-right-arrow"></i>
                                 </a>
-                                <a href="cart.html" class="floens-btn product__item__link">
+                                <a href="javascript:void(0);" class="floens-btn product__item__link addCartItemBtn" data-product="{{ $product }}">
                                     <span>Add to Cart</span>
                                     <i class="icon-cart"></i>
                                 </a>
@@ -1268,6 +1268,12 @@
                 });
             });
 
+            $('.addCartItemBtn').click(function() {
+                var product = $(this).data('product');
+                console.log(product);
+                addItem(product.id, product.name, product.price, 1);
+                $('.totalCartItems').html(getTotalQuantity())
+            });
         });
     </script>
 @endsection

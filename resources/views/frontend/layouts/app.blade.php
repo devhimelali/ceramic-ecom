@@ -208,6 +208,7 @@
     <!-- template js -->
     <script src="{{ asset('frontend') }}/assets/js/floens.js"></script>
     <script src="{{ asset('assets/libs/toastr/toastr.min.js') }}"></script>
+    <script src="{{asset('frontend/assets/js/cart.js')}}"></script>
     {{-- Get withErrors --}}
     @if ($errors->any())
         @foreach ($errors->all() as $error)
