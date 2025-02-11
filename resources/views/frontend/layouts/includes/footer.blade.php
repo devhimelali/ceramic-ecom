@@ -24,11 +24,8 @@
                             <h2 class="footer-widget__title">Explore</h2><!-- /.footer-widget__title -->
                         </div><!-- /.footer-widget__top -->
                         <ul class="list-unstyled footer-widget__links">
-                            <li><a href="about.html">About Us</a></li>
-                            <li><a href="services.html">Our Services</a></li>
-                            <li><a href="team.html">Meet the Team</a></li>
-                            <li><a href="blog-grid-right.html">Recent News</a></li>
-                            <li><a href="contact.html">Contact</a></li>
+                            <li><a href="{{route('frontend.aboutUs')}}">About Us</a></li>
+                            <li><a href="{{route('frontend.contact')}}">Contact</a></li>
                         </ul><!-- /.list-unstyled footer-widget__links -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-2 col-lg-3 col-md-3 col-sm-6 -->
@@ -39,14 +36,14 @@
                             <h2 class="footer-widget__title">Get inTouch</h2><!-- /.footer-widget__title -->
                         </div><!-- /.footer-widget__top -->
                         <ul class="list-unstyled footer-widget__info">
-                            <li><a href="https://www.google.com/maps">85 Ketch Harbour Road Bensal PA
-                                    19020</a>
+                            <li><a href="javascript:void(0);">{{ app_setting('contact_address') }}</a>
                             </li>
                             <li><span class="icon-paper-plane"></span> <a
-                                    href="mailto:needhelp@company.com">needhelp@company.com</a></li>
-                            <li><span class="icon-phone-call"></span> <a href="tel:+9156980036420">+91 5698
-                                    0036
-                                    420</a></li>
+                                    href="mailto:{{ app_setting('contact_email') }}">{{ app_setting('contact_email') }}</a>
+                            </li>
+                            <li><span class="icon-phone-call"></span> <a
+                                    href="tel:{{ app_setting('contact_phone') }}">{{ app_setting('contact_phone') }}</a>
+                            </li>
                         </ul><!-- /.list-unstyled -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-3 col-lg-6 col-md-5 -->
@@ -59,19 +56,19 @@
                 <div class="row gutter-y-30 align-items-center">
                     <div class="col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="000ms">
                         <div class="main-footer__social floens-social">
-                            <a href="https://facebook.com/">
+                            <a href="{{ app_setting('facebook_link') }}">
                                 <i class="icon-facebook" aria-hidden="true"></i>
                                 <span class="sr-only">Facebook</span>
                             </a>
-                            <a href="https://twitter.com/">
+                            <a href="{{ app_setting('twitter_link') }}">
                                 <i class="icon-twitter" aria-hidden="true"></i>
                                 <span class="sr-only">Twitter</span>
                             </a>
-                            <a href="https://instagram.com/">
+                            <a href="{{ app_setting('instagram_link') }}">
                                 <i class="icon-instagram" aria-hidden="true"></i>
                                 <span class="sr-only">Instagram</span>
                             </a>
-                            <a href="https://youtube.com/">
+                            <a href="{{ app_setting('youtube_link') }}">
                                 <i class="icon-youtube" aria-hidden="true"></i>
                                 <span class="sr-only">Youtube</span>
                             </a>
@@ -80,7 +77,7 @@
                     <div class="col-md-7 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
                         <div class="main-footer__bottom__copyright">
                             <p class="main-footer__copyright">
-                                &copy; Copyright <span class="dynamic-year"></span> by Floens HTML Template.
+                                &copy; {{ app_setting('copy_right') }}
                             </p>
                         </div><!-- /.main-footer__bottom__copyright -->
                     </div><!-- /.col-md-7 -->
@@ -91,17 +88,18 @@
 </footer><!-- /.main-footer -->
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasRightLabel">Shopping cart</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    
-  </div>
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Shopping cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+
+    </div>
 </div>
 
 {{-- Common Modal --}}
-<div id="commonModal" class="modal fade show" tabindex="-1" aria-labelledby="myModalLabel" aria-modal="true" role="dialog">
+<div id="commonModal" class="modal fade show" tabindex="-1" aria-labelledby="myModalLabel" aria-modal="true"
+    role="dialog">
     <div class="modal-dialog">
         <div class="modal-content p-4">
             <div class="modal-header">
@@ -112,10 +110,12 @@
                 @csrf
                 <div class="contentWrapper p-3"></div>
                 <div class="modal-footer">
-                    <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded" data-bs-dismiss="modal"><span>Close</span>
+                    <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded"
+                        data-bs-dismiss="modal"><span>Close</span>
                     </button>
 
-                    <button type="submit" class="floens-btn product__item__link mb-3 p-3 rounded enquireSubmitBtn"><span>Submit</span>
+                    <button type="submit"
+                        class="floens-btn product__item__link mb-3 p-3 rounded enquireSubmitBtn"><span>Submit</span>
                     </button>
                 </div>
             </form>
@@ -124,64 +124,64 @@
     </div><!-- /.modal-dialog -->
 </div>
 <script>
-    $(document).ready(function() {
-        $('.enquireBtn').click(function() {
-            var productId = $(this).data('id');
-            var product = $(this).data('product');
-            console.log(product);
-            $('.modal-title').text(product.name);
-            $('.contentWrapper').html(`
-                <h4>$${product.price}</h4>
-            `)
-            // $('#enquireForm').find('input[name="products[]"]').val(productId);
-            // $('#myModal').append(product)
-            $('#commonModal').modal('show');
-        });
+    // $(document).ready(function() {
+    //     $('.enquireBtn').click(function() {
+    //         var productId = $(this).data('id');
+    //         var product = $(this).data('product');
+    //         console.log(product);
+    //         $('.modal-title').text(product.name);
+    //         $('.contentWrapper').html(`
+    //             <h4>$${product.price}</h4>
+    //         `)
+    //         // $('#enquireForm').find('input[name="products[]"]').val(productId);
+    //         // $('#myModal').append(product)
+    //         $('#commonModal').modal('show');
+    //     });
 
-        $('#enquireForm').submit(function(e) {
-            e.preventDefault();
-            var formData = $('#enquireForm').serialize();
-            // console.log(formData);
-            $.ajax({
-                url: "{{ route('enquire') }}",
-                method: 'POST',
-                data: formData,
-                beforeSend: function() {
-                    $('.enquireSubmitBtn').prop('disabled', true);
-                    $('.enquireSubmitBtn').html(
-                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
-                    );
-                },
-                success: function(response) {
-                    $('.enquireSubmitBtn').prop('disabled', false);
-                    $('.enquireSubmitBtn').html('Submit');
-                    if (response.status == 'success') {
-                        notify(response.status, response.message);
-                        $('#enquireForm')[0].reset();
-                        $('#myModal').modal('hide');
-                    }
+    //     $('#enquireForm').submit(function(e) {
+    //         e.preventDefault();
+    //         var formData = $('#enquireForm').serialize();
+    //         // console.log(formData);
+    //         $.ajax({
+    //             url: "{{ route('enquire') }}",
+    //             method: 'POST',
+    //             data: formData,
+    //             beforeSend: function() {
+    //                 $('.enquireSubmitBtn').prop('disabled', true);
+    //                 $('.enquireSubmitBtn').html(
+    //                     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+    //                 );
+    //             },
+    //             success: function(response) {
+    //                 $('.enquireSubmitBtn').prop('disabled', false);
+    //                 $('.enquireSubmitBtn').html('Submit');
+    //                 if (response.status == 'success') {
+    //                     notify(response.status, response.message);
+    //                     $('#enquireForm')[0].reset();
+    //                     $('#myModal').modal('hide');
+    //                 }
 
-                },
-                error: function(xhr, status, error) {
-                    $('.enquireSubmitBtn').prop('disabled', false);
-                    $('.enquireSubmitBtn').html('Submit');
-                    let errors = xhr.responseJSON.errors;
-                    if (errors) {
-                        $.each(errors, function(key, value) {
-                            let inputField = $('[name="' + key + '"]');
-                            inputField.addClass('is-invalid');
-                            notify('error', value[0]);
-                        });
-                    }
-                }
-            });
-        });
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 $('.enquireSubmitBtn').prop('disabled', false);
+    //                 $('.enquireSubmitBtn').html('Submit');
+    //                 let errors = xhr.responseJSON.errors;
+    //                 if (errors) {
+    //                     $.each(errors, function(key, value) {
+    //                         let inputField = $('[name="' + key + '"]');
+    //                         inputField.addClass('is-invalid');
+    //                         notify('error', value[0]);
+    //                     });
+    //                 }
+    //             }
+    //         });
+    //     });
 
-        $('.addCartItemBtn').click(function() {
-            var product = $(this).data('product');
-            console.log(product);
-            addItem(product.id, product.name, product.price, 1);
-            $('.totalCartItems').html(getTotalQuantity())
-        });
-    });
+    //     $('.addCartItemBtn').click(function() {
+    //         var product = $(this).data('product');
+    //         console.log(product);
+    //         addItem(product.id, product.name, product.price, 1);
+    //         $('.totalCartItems').html(getTotalQuantity())
+    //     });
+    // });
 </script>

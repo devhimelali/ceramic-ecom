@@ -86,27 +86,27 @@
             <ul class="mobile-nav__contact list-unstyled">
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="mailto:needhelp@floens.com">needhelp@floens.com</a>
+                    <a href="mailto:{{ app_setting('contact_email') }}">{{ app_setting('contact_email') }}</a>
                 </li>
                 <li>
                     <i class="fa fa-phone-alt"></i>
-                    <a href="tel:+9156980036420">+91 5698 0036 420</a>
+                    <a href="tel:{{app_setting('contact_phone')}}">{{app_setting('contact_phone')}}</a>
                 </li>
             </ul><!-- /.mobile-nav__contact -->
             <div class="mobile-nav__social">
-                <a href="https://facebook.com/">
+                <a href="{{ app_setting('facebook_link') }}">
                     <i class="icon-facebook" aria-hidden="true"></i>
                     <span class="sr-only">Facebook</span>
                 </a>
-                <a href="https://twitter.com/">
+                <a href="{{ app_setting('twitter_link') }}">
                     <i class="icon-twitter" aria-hidden="true"></i>
                     <span class="sr-only">Twitter</span>
                 </a>
-                <a href="https://instagram.com/">
+                <a href="{{ app_setting('instagram_link') }}">
                     <i class="icon-instagram" aria-hidden="true"></i>
                     <span class="sr-only">Instagram</span>
                 </a>
-                <a href="https://youtube.com/">
+                <a href="{{ app_setting('youtube_link') }}">
                     <i class="icon-youtube" aria-hidden="true"></i>
                     <span class="sr-only">Youtube</span>
                 </a>
@@ -156,25 +156,23 @@
                 </ul><!-- /.sidebar-one__info__list -->
             </div><!-- /.sidebar-one__info -->
             <div class="sidebar-one__social floens-social sidebar-one__item">
-                <a href="https://facebook.com/">
+                <a href="{{ app_setting('facebook_link') }}">
                     <i class="icon-facebook" aria-hidden="true"></i>
                     <span class="sr-only">Facebook</span>
                 </a>
-                <a href="https://twitter.com/">
+                <a href="{{ app_setting('twitter_link') }}">
                     <i class="icon-twitter" aria-hidden="true"></i>
                     <span class="sr-only">Twitter</span>
                 </a>
+                <a href="{{ app_setting('instagram_link') }}">
+                    <i class="icon-instagram" aria-hidden="true"></i>
+                    <span class="sr-only">Instagram</span>
+                </a>
+                <a href="{{ app_setting('youtube_link') }}">
+                    <i class="icon-youtube" aria-hidden="true"></i>
+                    <span class="sr-only">Youtube</span>
+                </a>
             </div><!-- /sidebar-one__social -->
-            {{-- <div class="sidebar-one__newsletter sidebar-one__item">
-                <label class="sidebar-one__title" for="sidebar-email">Newsletter Subscribe</label>
-                <form action="#" class="sidebar-one__newsletter__inner mc-form" data-url="MAILCHIMP_FORM_URL">
-                    <input type="email" name="sidebar-email" id="sidebar-email"
-                        class="sidebar-one__newsletter__input" placeholder="Email Address">
-                    <button type="submit" class="sidebar-one__newsletter__btn"><span class="icon-email"
-                            aria-hidden="true"></span></button>
-                </form>
-                <div class="mc-form__response"></div><!-- /.mc-form__response -->
-            </div><!-- /.sidebar-one__form --> --}}
         </div><!-- /.sidebar__content -->
     </aside><!-- /.sidebar-one -->
 

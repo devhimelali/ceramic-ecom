@@ -33,6 +33,15 @@
         height: 80px;
         background: #f6f3ef;
     }
+    .attribute_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
 </style>
 
 <form action="" method="post" id="enquireForm">
@@ -48,15 +57,25 @@
                                 <div class="col-lg-5">
                                     <div class="mb-3">
                                         <h6>{{ $attribute->name }}</h6>
-                                        @foreach ($attribute->values as $value)
-                                            @continue($value->id != $attribute->pivot->attribute_value_id)
-                                            <label for="variation_{{ $value->id }}" class="form-label">
-                                                <input type="radio" id="variation_{{ $value->id }}"
-                                                    name="variation_values[{{ $attribute->id }}]"
-                                                    value="{{ $value->id }}">
-                                                {{ $value->value }}
-                                            </label>
-                                        @endforeach
+                                        <ul class="attribute_list">
+                                            @foreach ($attribute->values as $value)
+                                                @continue($value->id != $attribute->pivot->attribute_value_id)
+                                                <li class="attribute_list_item">
+                                                    <input type="hidden" id="variation_{{ $value->id }}"
+                                                        name="variation_values[{{ $attribute->id }}]"
+                                                        value="{{ $value->id }}">
+                                                    @if (strtolower($attribute->name) == 'color')
+                                                        <span class="variation_{{ $value->id }}"
+                                                            style="background-color: {{ strtolower($value->value) }}; height: 25px; width: 25px; border-radius: 50%; display: inline-block"></span>
+                                                    @else
+                                                        <span
+                                                            class="variation_{{ $value->id }}">{{ $value->value }}</span>
+                                                    @endif
+
+                                                </li>
+                                            @endforeach
+                                        </ul>
+
                                     </div>
                                 </div>
                             </div>

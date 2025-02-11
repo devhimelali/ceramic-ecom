@@ -17,13 +17,21 @@
             </ul><!-- /.list-unstyled topbar-one__info -->
             <div class="topbar-one__right">
                 <div class="topbar-one__social">
-                    <a href="https://facebook.com/">
+                    <a href="{{app_setting('facebook_link')}}">
                         <i class="icon-facebook" aria-hidden="true"></i>
                         <span class="sr-only">Facebook</span>
                     </a>
-                    <a href="https://twitter.com/">
+                    <a href="{{app_setting('twitter_link')}}">
                         <i class="icon-twitter" aria-hidden="true"></i>
                         <span class="sr-only">Twitter</span>
+                    </a>
+                    <a href="{{app_setting('instagram_link')}}">
+                        <i class="icon-instagram" aria-hidden="true"></i>
+                        <span class="sr-only">Instagram</span>
+                    </a>
+                    <a href="{{app_setting('youtube_link')}}">
+                        <i class="icon-youtube" aria-hidden="true"></i>
+                        <span class="sr-only">Youtube</span>
                     </a>
                 </div><!-- /.topbar-one__social -->
             </div><!-- /.topbar-one__right -->
