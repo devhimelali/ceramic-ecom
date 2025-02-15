@@ -1,4 +1,56 @@
 @extends('frontend.layouts.app')
+@section('page-style')
+    <style>
+        .sec_1_prev_3 {
+            width: 270px;
+            height: 617px !important;
+        }
+
+        .sec_1_prev_2 {
+            width: 240px;
+            height: 347px
+        }
+
+        .sec_1_prev_1 {
+            width: 240px;
+            height: 240px
+        }
+
+        .sec_2_prev_1 {
+            width: 338px;
+            height: 449px;
+        }
+
+        .sec_2_prev_2 {
+            width: 276px;
+            height: 463px;
+        }
+
+        @media screen and (max-width: 480px) {
+            .sec_1_prev_3 {
+                height: 324px !important;
+            }
+
+            .sec_1_prev_2 {
+                height: 195px;
+            }
+
+            .sec_1_prev_1 {
+                height: 190px;
+            }
+
+            .sec_2_prev_1 {
+                height: 346px;
+            }
+
+            .sec_2_prev_2 {
+                height: 346px;
+            }
+
+
+        }
+    </style>
+@endsection
 
 @section('content')
     <section class="page-header">
@@ -20,14 +72,14 @@
                 <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <div class="about-one__image-grid">
                         <div class="about-one__image">
-                            <img src="{{ asset('frontend') }}/assets/images/about/about-1-3.png" alt="about"
-                                class="about-one__image__one">
-                            <img src="{{ asset('frontend') }}/assets/images/about/about-1-2.jpg" alt="about"
-                                class="about-one__image__two">
+                            <img src="{{ app_setting('about_one__image__one') ? app_setting('about_one__image__one') : asset('frontend/assets/images/about/about-1-3.png') }}"
+                                alt="about" class="about-one__image__one sec_1_prev_1">
+                            <img src="{{ app_setting('about_one__image__two') ? app_setting('about_one__image__two') : asset('frontend/assets/images/about/about-1-2.jpg') }}"
+                                alt="about" class="about-one__image__two sec_1_prev_2">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__image">
-                            <img src="{{ asset('frontend') }}/assets/images/about/about-1-1.jpg" alt="about"
-                                class="about-one__image__three">
+                            <img src="{{ app_setting('about_one__image__three') ? app_setting('about_one__image__three') : asset('frontend/assets/images/about/about-1-1.jpg') }}"
+                                alt="about" class="about-one__image__three sec_1_prev_3">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__circle-text">
                             <div class="about-one__circle-text__bg"
@@ -39,9 +91,9 @@
                                 <!-- curved-circle start-->
                                 <div class="about-one__curved-circle__item curved-circle__item"
                                     data-circle-text-options='{
-                 "radius": 84,
-                 "forceWidth": true,
-                 "forceHeight": true}'>
+                                    "radius": 84,
+                                    "forceWidth": true,
+                                    "forceHeight": true}'>
                                     award winning flooring company
                                 </div>
                             </div><!-- curved-circle end-->
@@ -50,57 +102,62 @@
                 </div><!-- /.col-lg-6 -->
                 <div class="col-lg-6">
                     <div class="about-one__content">
-                        <div class="sec-title sec-title--border">
+                        @if (app_setting('about_sec_1'))
+                            {!! app_setting('about_sec_1') !!}
+                        @else
+                            <div class="sec-title sec-title--border">
 
-                            <h6 class="sec-title__tagline">about us</h6><!-- /.sec-title__tagline -->
+                                <h6 class="sec-title__tagline">about us</h6><!-- /.sec-title__tagline -->
 
-                            <h3 class="sec-title__title">Explore Modern Tiles Stone & Agency</h3>
-                            <!-- /.sec-title__title -->
-                        </div><!-- /.sec-title -->
+                                <h3 class="sec-title__title">Explore Modern Tiles Stone & Agency</h3>
+                                <!-- /.sec-title__title -->
+                            </div><!-- /.sec-title -->
 
 
-                        <div class="about-one__content__text wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                            <h5 class="about-one__text-title">We’re providing the best quality tiles in town.</h5>
-                            <!-- /.about-one__text-title -->
-                            <p class="about-one__text">Tiles company, also known as a tile manufacturer or distributor,
-                                specializes in the production and distribution of various types of tiles used for a wide
-                                range of applications. These companies play a crucial role in the construn and interior
-                                design industries by providing tiles for residential.</p><!-- /.about-one__text -->
-                        </div><!-- /.about-one__content__text -->
-                        <div class="row about-one__inner-row gutter-y-40">
-                            <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                                <div class="about-one__service about-one__service--one">
-                                    <div class="about-one__service__icon">
-                                        <span class="icon-toilet"></span>
-                                    </div><!-- /.about-one__service__icon -->
-                                    <div class="about-one__service__content">
-                                        <h4 class="about-one__service__title">Tiles & Toilet</h4>
-                                        <!-- /.about-one__service__title -->
-                                        <p class="about-one__service__text">Tiles company, also known as a tile</p>
-                                        <!-- /.about-one__service__text -->
-                                    </div><!-- /.about-one__service__content -->
-                                </div><!-- /.about-one__service -->
-                            </div><!-- /.col-xl-6 -->
-                            <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
-                                <div class="about-one__service about-one__service--two">
-                                    <div class="about-one__service__icon">
-                                        <span class="icon-kitchen"></span>
-                                    </div><!-- /.about-one__service__icon -->
-                                    <div class="about-one__service__content">
-                                        <h4 class="about-one__service__title">design Kitchen in 3D</h4>
-                                        <!-- /.about-one__service__title -->
-                                        <p class="about-one__service__text">Tiles company, also known as a tile</p>
-                                        <!-- /.about-one__service__text -->
-                                    </div><!-- /.about-one__service__content -->
-                                </div><!-- /.about-one__service -->
-                            </div><!-- /.col-xl-6 -->
-                        </div><!-- /.row -->
-                        <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                            <a href="contact.html" class="floens-btn">
-                                <span>get in touch</span>
-                                <i class="icon-right-arrow"></i>
-                            </a><!-- /.floens-btn -->
-                        </div><!-- /.about-one__button -->
+                            <div class="about-one__content__text wow fadeInUp" data-wow-duration="1500ms"
+                                data-wow-delay="00ms">
+                                <h5 class="about-one__text-title">We’re providing the best quality tiles in town.</h5>
+                                <!-- /.about-one__text-title -->
+                                <p class="about-one__text">Tiles company, also known as a tile manufacturer or distributor,
+                                    specializes in the production and distribution of various types of tiles used for a wide
+                                    range of applications. These companies play a crucial role in the construn and interior
+                                    design industries by providing tiles for residential.</p><!-- /.about-one__text -->
+                            </div><!-- /.about-one__content__text -->
+                            <div class="row about-one__inner-row gutter-y-40">
+                                <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                                    <div class="about-one__service about-one__service--one">
+                                        <div class="about-one__service__icon">
+                                            <span class="icon-toilet"></span>
+                                        </div><!-- /.about-one__service__icon -->
+                                        <div class="about-one__service__content">
+                                            <h4 class="about-one__service__title">Tiles & Toilet</h4>
+                                            <!-- /.about-one__service__title -->
+                                            <p class="about-one__service__text">Tiles company, also known as a tile</p>
+                                            <!-- /.about-one__service__text -->
+                                        </div><!-- /.about-one__service__content -->
+                                    </div><!-- /.about-one__service -->
+                                </div><!-- /.col-xl-6 -->
+                                <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
+                                    <div class="about-one__service about-one__service--two">
+                                        <div class="about-one__service__icon">
+                                            <span class="icon-kitchen"></span>
+                                        </div><!-- /.about-one__service__icon -->
+                                        <div class="about-one__service__content">
+                                            <h4 class="about-one__service__title">design Kitchen in 3D</h4>
+                                            <!-- /.about-one__service__title -->
+                                            <p class="about-one__service__text">Tiles company, also known as a tile</p>
+                                            <!-- /.about-one__service__text -->
+                                        </div><!-- /.about-one__service__content -->
+                                    </div><!-- /.about-one__service -->
+                                </div><!-- /.col-xl-6 -->
+                            </div><!-- /.row -->
+                            <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                                <a href="{{ route('frontend.contact') }}" class="floens-btn">
+                                    <span>get in touch</span>
+                                    <i class="icon-right-arrow"></i>
+                                </a><!-- /.floens-btn -->
+                            </div><!-- /.about-one__button -->
+                        @endif
                     </div><!-- /.about-one__content -->
                 </div><!-- /.col-lg-6 -->
             </div><!-- /.row -->
@@ -124,8 +181,8 @@
                             <div class="reliable-one__image__inner">
                                 <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-2-2.jpg" alt="reliable"
                                     class="reliable-one__image__two">
-                                <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-2-3.png" alt="reliable"
-                                    class="reliable-one__image__three">
+                                {{-- <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-2-3.png" alt="reliable"
+                                    class="reliable-one__image__three"> --}}
                             </div><!-- /.reliable-one__image__inner -->
                             <div class="experience reliable-one__experience">
                                 <div class="experience__inner">
@@ -143,21 +200,35 @@
                 </div><!-- /.col-lg-6 -->
                 <div class="col-lg-6">
                     <div class="reliable-one__content">
-                        <div class="sec-title sec-title--border">
 
-                            <h6 class="sec-title__tagline">reliable</h6><!-- /.sec-title__tagline -->
+                        @if (app_setting('about_sec_2'))
+                            {!! app_setting('about_sec_2') !!}
+                        @else
+                            <div class="sec-title sec-title--border">
 
-                            <h3 class="sec-title__title">We Provide Reliable Flooring Services</h3>
-                            <!-- /.sec-title__title -->
-                        </div><!-- /.sec-title -->
+                                <h6 class="sec-title__tagline">reliable</h6><!-- /.sec-title__tagline -->
+
+                                <h3 class="sec-title__title">We Provide Reliable Flooring Services</h3>
+                                <!-- /.sec-title__title -->
+                            </div><!-- /.sec-title -->
+                            <p class="reliable-one__text">Our vision is to provide innovative, independent flooring
+                                solutions
+                                that problems for homes, industries, and workspaces, as well as flooring we would like in
+                                our own residences, work spaces,
+                            </p>
+                        @endif
 
 
-                        <p class="reliable-one__text">Our vision is to provide innovative, independent flooring solutions
-                            that problems for homes, industries, and workspaces, as well as flooring we would like in
-                            our own residences, work spaces,</p><!-- /.reliable-one__text -->
                     </div><!-- /.reliable-one__content -->
                 </div><!-- /.col-lg-6 -->
             </div><!-- /.row -->
         </div><!-- /.container -->
     </section><!-- /.reliable-one section-space-bottom -->
+@endsection
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            $('[contenteditable="true"]').removeAttr('contenteditable');
+        });
+    </script>
 @endsection

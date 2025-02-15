@@ -86,7 +86,7 @@
                                 project into a masterpiece. Whether you’re updating a single room, renovating your entire
                                 house, or working on a large-scale construction project. </p>
                             <!-- /.main-slider__text -->
-                            <a href="about.html" class="main-slider__btn floens-btn">
+                            <a href="{{ route('frontend.aboutUs') }}" class="main-slider__btn floens-btn">
                                 <span>discover more</span>
                                 <i class="icon-right-arrow"></i>
                             </a><!-- /.main-slider__btn floens-btn -->
@@ -100,12 +100,12 @@
                             </div><!-- /.main-slider__image__inner -->
                             <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
                                 class="main-slider__image__two">
-                            <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
+                            {{-- <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
                                 class="main-slider__video video-button video-button--large  video-popup"
                                 style="background-image: url({{ asset('frontend') }}/assets/images/resources/slider-video-bg.png);">
                                 <span class="icon-play"></span>
                                 <i class="video-button__ripple"></i>
-                            </a>
+                            </a> --}}
                         </div><!-- /.main-slider__image -->
                     </div><!-- /.main-slider__right -->
                 </div><!-- /.main-slider__wrapper .container-fluid -->
@@ -144,12 +144,12 @@
                             </div><!-- /.main-slider__image__inner -->
                             <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
                                 class="main-slider__image__two">
-                            <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
+                            {{-- <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
                                 class="main-slider__video video-button video-button--large  video-popup"
                                 style="background-image: url({{ asset('frontend') }}/assets/images/resources/slider-video-bg.png);">
                                 <span class="icon-play"></span>
                                 <i class="video-button__ripple"></i>
-                            </a>
+                            </a> --}}
                         </div><!-- /.main-slider__image -->
                     </div><!-- /.main-slider__right -->
                 </div><!-- /.main-slider__wrapper .container-fluid -->
@@ -188,12 +188,12 @@
                             </div><!-- /.main-slider__image__inner -->
                             <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
                                 class="main-slider__image__two">
-                            <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
+                            {{-- <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
                                 class="main-slider__video video-button video-button--large  video-popup"
                                 style="background-image: url({{ asset('frontend') }}/assets/images/resources/slider-video-bg.png);">
                                 <span class="icon-play"></span>
                                 <i class="video-button__ripple"></i>
-                            </a>
+                            </a> --}}
                         </div><!-- /.main-slider__image -->
                     </div><!-- /.main-slider__right -->
                 </div><!-- /.main-slider__wrapper .container-fluid -->
@@ -230,12 +230,12 @@
                             </div><!-- /.main-slider__image__inner -->
                             <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
                                 class="main-slider__image__two">
-                            <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
+                            {{-- <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
                                 class="main-slider__video video-button video-button--large  video-popup"
                                 style="background-image: url({{ asset('frontend') }}/assets/images/resources/slider-video-bg.png);">
                                 <span class="icon-play"></span>
                                 <i class="video-button__ripple"></i>
-                            </a>
+                            </a> --}}
                         </div><!-- /.main-slider__image -->
                     </div><!-- /.main-slider__right -->
                 </div><!-- /.main-slider__wrapper .container-fluid -->
@@ -272,12 +272,12 @@
                             </div><!-- /.main-slider__image__inner -->
                             <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
                                 class="main-slider__image__two">
-                            <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
+                            {{-- <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
                                 class="main-slider__video video-button video-button--large  video-popup"
                                 style="background-image: url({{ asset('frontend') }}/assets/images/resources/slider-video-bg.png);">
                                 <span class="icon-play"></span>
                                 <i class="video-button__ripple"></i>
-                            </a>
+                            </a> --}}
                         </div><!-- /.main-slider__image -->
                     </div><!-- /.main-slider__right -->
                 </div><!-- /.main-slider__wrapper .container-fluid -->
@@ -314,12 +314,12 @@
                             </div><!-- /.main-slider__image__inner -->
                             <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
                                 class="main-slider__image__two">
-                            <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
+                            {{-- <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
                                 class="main-slider__video video-button video-button--large  video-popup"
                                 style="background-image: url({{ asset('frontend') }}/assets/images/resources/slider-video-bg.png);">
                                 <span class="icon-play"></span>
                                 <i class="video-button__ripple"></i>
-                            </a>
+                            </a> --}}
                         </div><!-- /.main-slider__image -->
                     </div><!-- /.main-slider__right -->
                 </div><!-- /.main-slider__wrapper .container-fluid -->
@@ -453,7 +453,7 @@
                             </div><!-- /.col-xl-6 -->
                         </div><!-- /.row -->
                         <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                            <a href="contact.html" class="floens-btn">
+                            <a href="{{ route('frontend.contact') }}" class="floens-btn">
                                 <span>get in touch</span>
                                 <i class="icon-right-arrow"></i>
                             </a><!-- /.floens-btn -->
@@ -765,12 +765,12 @@
                         <div class="project-card__content">
                             <h3 class="project-card__tagline">Tile Care</h3><!-- /.project-card__tagline -->
                             <div class="project-card__links">
-                                <div class="project-card__links__inner">
+                                {{-- <div class="project-card__links__inner">
                                     <h3 class="project-card__title"><a href="work-details.html">Modern Tiles</a>
                                     </h3><!-- /.project-card__title -->
                                     <a href="work-details.html" class="project-card__link floens-btn"><span
                                             class="icon-right-arrow"></span></a><!-- /.project-card__link -->
-                                </div><!-- /.project-card__links__inner -->
+                                </div><!-- /.project-card__links__inner --> --}}
                             </div><!-- /.project-card__links -->
                         </div><!-- /.project-card__content -->
                     </div><!-- /.project-card -->
@@ -783,12 +783,12 @@
                         <div class="project-card__content">
                             <h3 class="project-card__tagline">Tile Care</h3><!-- /.project-card__tagline -->
                             <div class="project-card__links">
-                                <div class="project-card__links__inner">
+                                {{-- <div class="project-card__links__inner">
                                     <h3 class="project-card__title"><a href="work-details.html">Modern Tiles</a>
                                     </h3><!-- /.project-card__title -->
                                     <a href="work-details.html" class="project-card__link floens-btn"><span
                                             class="icon-right-arrow"></span></a><!-- /.project-card__link -->
-                                </div><!-- /.project-card__links__inner -->
+                                </div><!-- /.project-card__links__inner --> --}}
                             </div><!-- /.project-card__links -->
                         </div><!-- /.project-card__content -->
                     </div><!-- /.project-card -->
@@ -801,12 +801,12 @@
                         <div class="project-card__content">
                             <h3 class="project-card__tagline">Tile Care</h3><!-- /.project-card__tagline -->
                             <div class="project-card__links">
-                                <div class="project-card__links__inner">
+                                {{-- <div class="project-card__links__inner">
                                     <h3 class="project-card__title"><a href="work-details.html">Modern Tiles</a>
                                     </h3><!-- /.project-card__title -->
                                     <a href="work-details.html" class="project-card__link floens-btn"><span
                                             class="icon-right-arrow"></span></a><!-- /.project-card__link -->
-                                </div><!-- /.project-card__links__inner -->
+                                </div><!-- /.project-card__links__inner --> --}}
                             </div><!-- /.project-card__links -->
                         </div><!-- /.project-card__content -->
                     </div><!-- /.project-card -->
@@ -819,12 +819,12 @@
                         <div class="project-card__content">
                             <h3 class="project-card__tagline">Tile Care</h3><!-- /.project-card__tagline -->
                             <div class="project-card__links">
-                                <div class="project-card__links__inner">
+                                {{-- <div class="project-card__links__inner">
                                     <h3 class="project-card__title"><a href="work-details.html">Modern Tiles</a>
                                     </h3><!-- /.project-card__title -->
                                     <a href="work-details.html" class="project-card__link floens-btn"><span
                                             class="icon-right-arrow"></span></a><!-- /.project-card__link -->
-                                </div><!-- /.project-card__links__inner -->
+                                </div><!-- /.project-card__links__inner --> --}}
                             </div><!-- /.project-card__links -->
                         </div><!-- /.project-card__content -->
                     </div><!-- /.project-card -->
@@ -846,12 +846,12 @@
                             specializes in the production and distribution of various types of tiles used for a wide
                             range
                             of applications. These companies</p><!-- /.projects-one__text -->
-                        <div class="projects-one__button">
+                        {{-- <div class="projects-one__button">
                             <a href="work.html" class="projects-one__btn floens-btn floens-btn--border">
                                 <span>view all</span>
                                 <i class="icon-right-arrow"></i>
                             </a><!-- /.projects-one__btn floens-btn -->
-                        </div><!-- /.projects-one__button -->
+                        </div><!-- /.projects-one__button --> --}}
                     </div><!-- /.projects-one__content -->
                 </div><!-- /.col-xl-6 col-lg-7 -->
             </div><!-- /.row -->
@@ -909,7 +909,7 @@
                                 </div><!-- /.reliable-one__info -->
                             </div><!-- /.col-xl-6 col-lg-12 col-md-5 col-sm-6 -->
                         </div><!-- /.row -->
-                        <a href="contact.html" class="floens-btn reliable-one__btn">
+                        <a href="{{ route('frontend.contact') }}" class="floens-btn reliable-one__btn">
                             <span>get in touch</span>
                             <i class="icon-right-arrow"></i>
                         </a><!-- /.floens-btn reliable-one__btn -->

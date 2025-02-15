@@ -85,6 +85,11 @@
                         <i class="ph-gear"></i>
                         <span data-key="t-dashboards">Settings</span>
                     </a>
+                    <a href="{{ route('settings.aboutPage') }}"
+                        class="nav-link menu-link {{ $active == 'settings' ? 'active' : '' }}" aria-expanded="false">
+                        <i class="ph-gear"></i>
+                        <span data-key="t-dashboards">About Page</span>
+                    </a>
                 </li>
             </ul>
         </div>

@@ -4,6 +4,13 @@
         .form-one__group--grid {
             grid-gap: 14px !important;
         }
+
+        @media (max-width: 575px) {
+            .contact-one__info__item__inner {
+                flex-direction: row !important;
+                align-items: flex-start;
+            }
+        }
     </style>
 @endsection
 @section('content')

@@ -47,7 +47,7 @@
         <div class="main-header__inner">
             <div class="main-header__left">
                 <div class="main-header__logo">
-                    <a href="index.html">
+                    <a href="{{ route('frontend.home') }}">
                         <img src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}"
                             alt="logo" width="125">
                     </a>
@@ -111,10 +111,10 @@
                     <i class="icon-search" aria-hidden="true"></i>
                     <span class="sr-only">Search</span>
                 </a><!-- /.search-toggler -->
-                <a href="#" class="floens-btn main-header__btn">
+                {{-- <a href="#" class="floens-btn main-header__btn">
                     <span>get a quote</span>
                     <i class="icon-right-arrow"></i>
-                </a><!-- /.thm-btn main-header__btn -->
+                </a><!-- /.thm-btn main-header__btn --> --}}
                 <button class="main-header__sidebar-btn sidebar-btn__toggler">
                     <span class="main-header__sidebar-btn__box"></span><!-- /.main-header__sidebar-btn__box -->
                     <span class="main-header__sidebar-btn__box"></span><!-- /.main-header__sidebar-btn__box -->

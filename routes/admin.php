@@ -19,7 +19,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('categories/front-show/{id}', [CategoryController::class, 'frontShow'])->name('category.frontShow');
 
     Route::resource('brands', BrandController::class);
-    Route::resource('settings', SettingController::class);
+    // Route::resource('settings', SettingController::class);
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
+
+    Route::get('settings/about-page', [SettingController::class, 'aboutPage'])->name('settings.aboutPage');
+    Route::post('settings/about-page', [SettingController::class, 'aboutPageChange'])->name('settings.aboutPageChange');
+
+
     Route::resource('attributes', AttributeController::class);
     Route::resource('attribute-values', AttributeValueController::class);
     Route::resource('products', ProductController::class);
