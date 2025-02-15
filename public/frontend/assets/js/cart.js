@@ -8,7 +8,7 @@ function saveCart() {
 }
 
 // Add item to cart
-function addItem(id, name, price, quantity = 1) {
+function addItem(id, name, price, quantity = 1, variation = []) {
     let existingItem = cart.find(item => item.id === id);
     if(existingItem) {
         existingItem.quantity += quantity;

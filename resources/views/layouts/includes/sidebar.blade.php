@@ -76,6 +76,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('product.queries') }}"
+                        class="nav-link menu-link {{ $active == 'product_query' ? 'active' : '' }}" aria-expanded="false">
+                        <i class="ph ph-address-book"></i>
+                        <span data-key="t-dashboards">Product Queries</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('contacts.index') }}"
                         class="nav-link menu-link {{ $active == 'contacts' ? 'active' : '' }}" aria-expanded="false">
                         <i class="ph ph-address-book"></i>

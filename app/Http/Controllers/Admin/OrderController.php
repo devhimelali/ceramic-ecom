@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Attribute;
 use App\Models\ProductQuery;
 use Illuminate\Http\Request;
+use App\Models\AttributeValue;
 use App\Models\ProductVairants;
 use App\Enum\ProductQueryStatus;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ProductQuerySubmittedMail;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Frontend\OrderRequest;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
+use App\Mail\AdminProductQueryNotificationMail;
+use App\Mail\ProductQuerySubmittedMailForAdmin;
 
 class OrderController extends Controller
 {
@@ -126,46 +130,7 @@ class OrderController extends Controller
         ]);
     }
 
-    // public function storeSingleProductQuery(Request $request, $id)
-    // {
-    //     $product = Product::findOrFail($id);
-    //     $productQuery = ProductQuery::create([
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'phone' => $request->phone,
-    //         'message' => $request->message,
-    //         'status' => ProductQueryStatus::PENDING
-    //     ]);
 
-    //     $productQuery->items()->create([
-    //         'product_id' => $product->id
-    //     ]);
-
-    //     $filteredVariations = array_filter($request->variation_values, function ($value) {
-    //         return !is_null($value);
-    //     });
-    //     $selectedVariations = [];
-
-    //     foreach ($filteredVariations as $key => $variation) {
-    //         $attribute = Attribute::where('name', $key)->first();
-    //         $attributeValue = AttributeValue::where('value', $variation)->first();
-
-    //         if ($attribute && $attributeValue) {
-    //             $selectedVariations[] = [
-    //                 'product_id' => $product->id,
-    //                 'attribute_id' => $attribute->id,
-    //                 'attribute_value_id' => $attributeValue->id,
-    //             ];
-    //         }
-    //     }
-
-    //     $productQuery->items()->variations()->sync($selectedVariations);
-
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'message' => 'Query submitted successfully'
-    //     ]);
-    // }
     public function storeSingleProductQuery(Request $request, $id)
     {
         $request->validate([
@@ -175,7 +140,7 @@ class OrderController extends Controller
             'message' => 'required|string|max:255',
             'variation_values' => 'required|array',
         ]);
-        
+
         $product = Product::findOrFail($id);
 
         $productQuery = ProductQuery::create([
@@ -214,9 +179,85 @@ class OrderController extends Controller
             $productQueryItem->variations()->attach($product->id, $variation);
         }
 
+        Mail::to($request->email)->send(new ProductQuerySubmittedMail([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'product_name' => $product->name,
+            'variations' => $filteredVariations
+        ]));
+
+        Mail::to($request->email)->send(new AdminProductQueryNotificationMail([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'product_name' => $product->name,
+            'variations' => $filteredVariations
+        ]));
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Query submitted successfully'
+            'message' => 'Query submitted successfully. A confirmation email has been sent.'
+        ]);
+    }
+
+    public function productQueries(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = ProductQuery::query();
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('name', function ($row) {
+                    return $row->name ?? 'N/A';
+                })
+                ->addColumn('email', function ($row) {
+                    return $row->email ?? 'N/A';
+                })
+                ->addColumn('phone', function ($row) {
+                    return $row->phone ?? 'N/A';
+                })
+                ->addColumn('message', function ($row) {
+                    return $row->message ?? 'N/A';
+                })
+                ->addColumn('status', function ($row) {
+                    return $row->status->value == 'completed' ? '<span class="badge text-bg-success">Completed</span>' : ($row->status->value == 'pending' ? '<span class="badge text-bg-warning">Pending</span>' : '<span class="badge text-bg-danger">Cancelled</span>');
+                })
+                ->addColumn('action', function ($row) {
+                    return '
+                    <div class="btn-group">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-primary change-status" data-id="' . $row->id . '" data-status="' . $row->status->value . '">
+                            <i class="bi bi-pencil me-2"></i>Change Status
+                        </a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-secondary viewDetails" data-id="' . $row->id . '">
+                            <i class="bi bi-eye me-2"></i>View
+                        </a>
+                    </div>
+                ';
+                })
+                ->rawColumns(['status', 'action'])
+                ->make(true);
+        }
+        $data = [
+            'active' => 'product_query',
+            'statuses' => ProductQueryStatus::cases()
+        ];
+        return view('admin.product_query.index', $data);
+    }
+    public function viewProductQuery($id)
+    {
+        $productQuery = ProductQuery::with('items')->findOrFail($id);
+        return view('admin.product_query.view', compact('productQuery'));
+    }
+    public function changeProductQueryStatus(Request $request, $id)
+    {
+        $productQuery = ProductQuery::findOrFail($id);
+        $productQuery->status = $request->status;
+        $productQuery->save();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Status changed successfully'
         ]);
     }
 }
