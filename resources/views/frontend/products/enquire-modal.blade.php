@@ -33,6 +33,7 @@
         height: 80px;
         background: #f6f3ef;
     }
+
     .attribute_list {
         list-style: none;
         padding: 0;
@@ -52,26 +53,34 @@
                 <div class="form-group">
                     <label for="name">Variant</label>
                     <div class="col-lg-12 variationContainer">
-                        @foreach ($product->attributes as $key => $attribute)
+                        {{-- @foreach ($product->attributes as $key => $attribute)
                             <div class="row" data-id="variation_{{ $key }}">
                                 <div class="col-lg-5">
                                     <div class="mb-3">
-                                        <h6>{{ $attribute->name }}</h6>
+                                        <h6>{{ $attribute->name }} : <span
+                                                class="selectedValue-{{ $key }}"></span> </h6>
                                         <ul class="attribute_list">
                                             @foreach ($attribute->values as $value)
                                                 @continue($value->id != $attribute->pivot->attribute_value_id)
+
                                                 <li class="attribute_list_item">
                                                     <input type="hidden" id="variation_{{ $value->id }}"
-                                                        name="variation_values[{{ $attribute->id }}]"
-                                                        value="{{ $value->id }}">
+                                                        name="variation_values[]" data-id="{{ $value->id }}"
+                                                        value="">
                                                     @if (strtolower($attribute->name) == 'color')
-                                                        <span class="variation_{{ $value->id }}"
-                                                            style="background-color: {{ strtolower($value->value) }}; height: 25px; width: 25px; border-radius: 50%; display: inline-block"></span>
+                                                        <span
+                                                            class="variation_{{ $value->id }} variation_value_pointer"
+                                                            data-id="{{ $value->id }}" data-key="{{ $key }}"
+                                                            data-value="{{ $value->value }}"
+                                                            style="background-color: {{ strtolower($value->value) }}; height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
                                                     @else
                                                         <span
-                                                            class="variation_{{ $value->id }}">{{ $value->value }}</span>
+                                                            class="variation_{{ $value->id }} variation_value_pointer"
+                                                            data-id="{{ $value->id }}"
+                                                            data-key="{{ $key }}"
+                                                            data-value="{{ $value->value }}"
+                                                            style="cursor: pointer;">{{ $value->value }}</span>
                                                     @endif
-
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -79,7 +88,39 @@
                                     </div>
                                 </div>
                             </div>
+                        @endforeach --}}
+                        @foreach ($product->attributes->groupBy('pivot.attribute_value_id') as $attributeValueId => $groupedAttributes)
+                            <div class="row" data-id="variation_{{ $attributeValueId }}">
+                                <div class="col-lg-5">
+                                    <div class="mb-3">
+                                        <h6>{{ $groupedAttributes->first()->name }} : <span
+                                                class="selectedValue-{{ $attributeValueId }}"></span></h6>
+                                        <ul class="attribute_list">
+                                            @foreach ($groupedAttributes as $attribute)
+                                                @foreach ($attribute->values as $value)
+                                                    @if ($value->id == $attribute->pivot->attribute_value_id)
+                                                        <li class="attribute_list_item">
+                                                            <input type="hidden" id="variation_{{ $value->id }}"
+                                                                name="variation_values[]" data-id="{{ $value->id }}"
+                                                                value="">
+                                                            <span
+                                                                class="variation_{{ $value->id }} variation_value_pointer"
+                                                                data-id="{{ $value->id }}"
+                                                                data-key="{{ $attributeValueId }}"
+                                                                data-value="{{ $value->value }}"
+                                                                style="cursor: pointer;">
+                                                                {{ $value->value }}
+                                                            </span>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
+
                     </div>
 
                 </div>
@@ -121,3 +162,12 @@
         </button>
     </div>
 </form>
+<script>
+    $('.variation_value_pointer').on('click', function() {
+        var id = $(this).attr('data-id');
+        var key = $(this).attr('data-key');
+        var value = $(this).attr('data-value');
+        $('#variation_' + id).val(id);
+        $('.selectedValue-' + key).text(value);
+    })
+</script>

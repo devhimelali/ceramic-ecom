@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductQuery;
 use Illuminate\Http\Request;
+use App\Models\ProductVairants;
 use App\Enum\ProductQueryStatus;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Frontend\OrderRequest;
@@ -74,15 +77,61 @@ class OrderController extends Controller
         ]);
     }
 
+    // public function enquireForm($productId)
+    // {
+    //     $product = Product::with('attributes.values')->find(1);
+
+
+    //     foreach ($product->attributes as $attribute) {
+    //         echo $attribute->name . ': ' . $attribute->pivot->attributeValue->value . PHP_EOL;
+    //     }
+    //     // $attributes = $product->attributes()->get();
+    //     // // return $product->attributes;
+    //     // $html = view('frontend.products.enquire-modal', compact('productId', 'product', 'attributes'))->render();
+    //     // return response()->json([
+    //     //     'status' => 'success',
+    //     //     'html' => $html
+    //     // ]);
+    // }
     public function enquireForm($productId)
     {
-        $product = Product::with('attributes', 'attributeValues')->find($productId);
-        $attributes = $product->attributes()->get();
-        // return $product->attributes;
-        $html = view('frontend.products.enquire-modal', compact('productId', 'product', 'attributes'))->render();
-        return response()->json([
-            'status' => 'success',
-            'html' => $html
-        ]);
+        // Load the product with attributes and their values
+        $product = Product::with(['attributes' => function ($query) {
+            $query->distinct()->with(['values']);
+        }])->find($productId);
+
+        if (!$product) {
+            return "Product not found.";
+        }
+
+        // Loop through the attributes and their values
+        foreach ($product->attributes as $attribute) {
+            // Get the attribute value from the pivot table
+            // $attributeValue = $product->attributeValues
+            //     ->where('pivot.attribute_id', $attribute->id)
+            //     ->first();
+            //     return $attributeValue;
+            echo $attribute .PHP_EOL;
+        }
+        // Prepare the result
+    $result = [];
+// return $product->attributes;
+    // Loop through the attributeValues and associate them with their attributes
+    // foreach ($product->attributeValues as $attributeValue) {
+    //     $attribute = $product->attributes
+    //         ->where('id', $attributeValue->pivot->attribute_id)
+    //         ->first();
+
+        // if ($attribute) {
+        //     $result[] = [
+        //         'attribute' => $attribute->name,
+        //         'value' => $attributeValue->value,
+        //     ];
+        // }
+    // }
+
+    // return $result;
+
+        // return $product->attributeValues;
     }
 }

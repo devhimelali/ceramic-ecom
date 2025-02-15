@@ -66,22 +66,28 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    /**
-     * Get the attributes that belong to this product.
-     *
-     * @return BelongsToMany<Attribute>
-     */
-    public function attributes(): BelongsToMany
+
+    // public function attributes()
+    // {
+    //     return $this->belongsToMany(Attribute::class, 'product_attribute_values')
+    //                 ->withPivot('attribute_value_id');
+    // }
+
+    public function attributes()
     {
         return $this->belongsToMany(Attribute::class, 'product_attribute_values')
-            ->withPivot('attribute_value_id')
-            ->withTimestamps();
+                    ->withPivot('attribute_value_id');
     }
+    
 
     public function attributeValues()
     {
         return $this->belongsToMany(AttributeValue::class, 'product_attribute_values', 'product_id', 'attribute_value_id');
     }
+    // public function attributeValues()
+    // {
+    //     return $this->belongsToMany(AttributeValue::class, 'product_attribute_values', 'product_id', 'attribute_value_id');
+    // }
 
     public function productQueryItems(): HasMany
     {
