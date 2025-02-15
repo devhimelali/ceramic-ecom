@@ -28,7 +28,7 @@ class ProductQuery extends Model
         ];
     }
 
-    public function productQueryItems(): HasMany
+    public function items(): HasMany
     {
         return $this->hasMany(ProductQueryItem::class);
     }

@@ -40,7 +40,7 @@
         margin: 0;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        gap: 15px;
         align-items: center;
     }
 </style>
@@ -53,74 +53,40 @@
                 <div class="form-group">
                     <label for="name">Variant</label>
                     <div class="col-lg-12 variationContainer">
-                        {{-- @foreach ($product->attributes as $key => $attribute)
-                            <div class="row" data-id="variation_{{ $key }}">
+                        @foreach ($result as $group)
+                            <div class="row" data-id="variation_{{ Str::slug($group['attribute']) }}">
                                 <div class="col-lg-5">
                                     <div class="mb-3">
-                                        <h6>{{ $attribute->name }} : <span
-                                                class="selectedValue-{{ $key }}"></span> </h6>
+                                        <h6>{{ $group['attribute'] }}: <span
+                                                class="selectedValue-{{ Str::slug($group['attribute']) }}"></span></h6>
                                         <ul class="attribute_list">
-                                            @foreach ($attribute->values as $value)
-                                                @continue($value->id != $attribute->pivot->attribute_value_id)
-
+                                            @foreach ($group['values'] as $value)
                                                 <li class="attribute_list_item">
-                                                    <input type="hidden" id="variation_{{ $value->id }}"
-                                                        name="variation_values[]" data-id="{{ $value->id }}"
-                                                        value="">
-                                                    @if (strtolower($attribute->name) == 'color')
+                                                    {{-- <input type="hidden" name="variation_values[]"
+                                                        data-id="{{ Str::slug($value) }}" value=""> --}}
+                                                    @if (Str::slug($group['attribute']) == 'color')
                                                         <span
-                                                            class="variation_{{ $value->id }} variation_value_pointer"
-                                                            data-id="{{ $value->id }}" data-key="{{ $key }}"
-                                                            data-value="{{ $value->value }}"
-                                                            style="background-color: {{ strtolower($value->value) }}; height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
+                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer"
+                                                            data-id="{{ Str::slug($value) }}"
+                                                            data-key="{{ Str::slug($group['attribute']) }}"
+                                                            data-value="{{ $value }}"
+                                                            style="background-color: {{ strtolower($value) }}; height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
                                                     @else
                                                         <span
-                                                            class="variation_{{ $value->id }} variation_value_pointer"
-                                                            data-id="{{ $value->id }}"
-                                                            data-key="{{ $key }}"
-                                                            data-value="{{ $value->value }}"
-                                                            style="cursor: pointer;">{{ $value->value }}</span>
+                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer"
+                                                            data-id="{{ Str::slug($value) }}"
+                                                            data-key="{{ Str::slug($group['attribute']) }}"
+                                                            data-value="{{ $value }}" style="cursor: pointer;">
+                                                            {{ $value }}
+                                                        </span>
                                                     @endif
                                                 </li>
-                                            @endforeach
-                                        </ul>
-
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach --}}
-                        @foreach ($product->attributes->groupBy('pivot.attribute_value_id') as $attributeValueId => $groupedAttributes)
-                            <div class="row" data-id="variation_{{ $attributeValueId }}">
-                                <div class="col-lg-5">
-                                    <div class="mb-3">
-                                        <h6>{{ $groupedAttributes->first()->name }} : <span
-                                                class="selectedValue-{{ $attributeValueId }}"></span></h6>
-                                        <ul class="attribute_list">
-                                            @foreach ($groupedAttributes as $attribute)
-                                                @foreach ($attribute->values as $value)
-                                                    @if ($value->id == $attribute->pivot->attribute_value_id)
-                                                        <li class="attribute_list_item">
-                                                            <input type="hidden" id="variation_{{ $value->id }}"
-                                                                name="variation_values[]" data-id="{{ $value->id }}"
-                                                                value="">
-                                                            <span
-                                                                class="variation_{{ $value->id }} variation_value_pointer"
-                                                                data-id="{{ $value->id }}"
-                                                                data-key="{{ $attributeValueId }}"
-                                                                data-value="{{ $value->value }}"
-                                                                style="cursor: pointer;">
-                                                                {{ $value->value }}
-                                                            </span>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
                                             @endforeach
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-
                     </div>
 
                 </div>
@@ -131,7 +97,7 @@
                     <input type="text" id="name" name="name" placeholder="Enter your name">
                 </div>
             </div>
-            <input type="hidden" name="products[]" id="products">
+            <input type="hidden" name="product_id" id="products_id" value="{{ $product->id }}">
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -167,7 +133,66 @@
         var id = $(this).attr('data-id');
         var key = $(this).attr('data-key');
         var value = $(this).attr('data-value');
-        $('#variation_' + id).val(id);
+
+        // Remove previously selected input for this key
+        $('input[name="variation_values[' + key + ']"]').remove();
+
+        // Create a new hidden input field for the selected variant
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'variation_values[' + key + ']',
+            value: value
+        }).appendTo('#enquireForm');
+
+        // Update the UI to show the selected variant
         $('.selectedValue-' + key).text(value);
-    })
+
+        // Highlight the selected variant
+        $('.variation_value_pointer[data-key="' + key + '"]').removeClass('selected');
+        $(this).addClass('selected');
+    });
+
+    // On form submit, get selected values
+    $('#enquireForm').on('submit', function(e) {
+        e.preventDefault(); // Prevent default submission for testing
+
+        var selectedVariants = {};
+
+        $('input[name^="variation_values"]').each(function() {
+            var match = $(this).attr('name').match(
+                /\[([^\]]+)\]/); // Extract text inside square brackets
+            if (match) {
+                var key = match[1]; // Get the extracted key
+                var value = $(this).val();
+                selectedVariants[key] = value;
+            }
+        });
+
+        console.log('Selected Variants:', selectedVariants);
+        var id = $('#products_id').val();
+        var formData = new FormData(document.getElementById('enquireForm'));
+        var actionUrl = "{{ route('submit.single.product.query', $product->id) }}";
+        $.ajax({
+            url: actionUrl,
+            method: 'POST',
+            data: formData,
+            contentType: false, // Ensure that contentType is false when sending FormData
+            processData: false, // Do not process the data as a query string
+            beforeSend: function() {
+                $('.enquireSubmitBtn').prop('disabled', true);
+                $('.enquireSubmitBtn').html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+                );
+            },
+            success: function(response) {
+                $('.enquireSubmitBtn').prop('disabled', false);
+                $('.enquireSubmitBtn').html('Submit');
+                if (response.status == 'success') {
+                    notify(response.status, response.message);
+                    $('#enquireForm')[0].reset();
+                    $('#myModal').modal('hide');
+                }
+            }
+        });
+    });
 </script>

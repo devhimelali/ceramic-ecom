@@ -89,8 +89,11 @@ class Product extends Model
     //     return $this->belongsToMany(AttributeValue::class, 'product_attribute_values', 'product_id', 'attribute_value_id');
     // }
 
-    public function productQueryItems(): HasMany
+
+    public function productQueryItems()
     {
-        return $this->hasMany(ProductQueryItem::class);
+        return $this->belongsToMany(ProductQueryItem::class, 'product_query_item_variation')
+                    ->withPivot('attribute_id', 'attribute_value_id')
+                    ->withTimestamps();
     }
 }
