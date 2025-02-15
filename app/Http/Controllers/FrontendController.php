@@ -39,15 +39,36 @@ class FrontendController extends Controller
     {
         $attributes = [];
         $query = Product::query();
+        // if ($request->has('attribute')) {
+        //     $decryptedValues = array_map(function ($value) {
+        //         return base64_decode($value, true);
+        //     }, explode(',', $request->input('attribute')));
+        //     $attributes = $decryptedValues;
+        //     $query->whereHas('attributes', function ($query) use ($attributes) {
+        //         $query->whereIn('product_attribute_values.attribute_value_id', $attributes);
+        //     });
+        // }
+
+
         if ($request->has('attribute')) {
-            $decryptedValues = array_map(function ($value) {
-                return base64_decode($value, true);
-            }, explode(',', $request->input('attribute')));
-            $attributes = $decryptedValues;
-            $query->whereHas('attributes', function ($query) use ($attributes) {
-                $query->whereIn('product_attribute_values.attribute_value_id', $attributes);
-            });
+            $decryptedValues = array_filter(array_map(function ($value) {
+                $decoded = base64_decode($value, true);
+                return $decoded !== false ? $decoded : null;
+            }, explode(',', $request->input('attribute'))));
+            // dd($decryptedValues);
+            if (!empty($decryptedValues)) {
+                $attributes = $decryptedValues;
+                // dd($attributes);
+                foreach ($attributes as $key => $value) {
+                    // dd($value);
+                    $query->whereHas('attributes', function ($query) use ($value) {
+                        $query->where('product_attribute_values.attribute_value_id', $value);
+                    });
+                }
+            }
         }
+
+
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
