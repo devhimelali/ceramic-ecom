@@ -49,7 +49,7 @@
                                             <span class="icon-phone-call"></span>
                                         </div><!-- /.contact-one__info__icon -->
                                         <p class="contact-one__info__text"><a
-                                                href="tel:{{ app_setting('contact_phone') }}">{{ app_setting('contact_phone') }}</a>
+                                                href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                                         </p><!-- /.contact-one__info__text -->
                                     </div><!-- /.contact-one__info__item__inner -->
                                 </div><!-- /.contact-one__info__item -->
@@ -59,7 +59,7 @@
                                             <span class="icon-paper-plane"></span>
                                         </div><!-- /.contact-one__info__icon -->
                                         <p class="contact-one__info__text"><a
-                                                href="mailto:{{ app_setting('contact_email') }}">{{ app_setting('contact_email') }}</a>
+                                                href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
                                         </p>
                                         <!-- /.contact-one__info__text -->
                                     </div><!-- /.contact-one__info__item__inner -->
@@ -70,7 +70,7 @@
                                             <span class="icon-location"></span>
                                         </div><!-- /.contact-one__info__icon -->
                                         <address class="contact-one__info__text"><a
-                                                href="#">{{ app_setting('contact_address') }}</a></address>
+                                                href="#">{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a></address>
                                         <!-- /.contact-one__info__text -->
                                     </div><!-- /.contact-one__info__item__inner -->
                                 </div><!-- /.contact-one__info__item -->

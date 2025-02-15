@@ -498,8 +498,8 @@
                                 <div class="services-one__info__icon">
                                     <span class="icon-telephone"></span>
                                 </div><!-- /.services-one__info__icon -->
-                                <a href="tel:{{ app_setting('contact_phone') }}"
-                                    class="services-one__info__number">{{ app_setting('contact_phone') }}</a>
+                                <a href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}"
+                                    class="services-one__info__number">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                                 <!-- /.services-one__info__number -->
                             </div><!-- /.services-one__info__right__inner -->
                         </div><!-- /.services-one__info__right -->
@@ -982,7 +982,9 @@
                                         data-id="{{ $product->id }}"
                                         data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
-                                    <a href="javascript:void(0);" class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn" data-product="{{$product}}">
+                                    <a href="javascript:void(0);"
+                                        class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn"
+                                        data-product="{{ $product }}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                 </div>
 
@@ -1127,6 +1129,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
 @endsection
 @section('page-script')
     <script>

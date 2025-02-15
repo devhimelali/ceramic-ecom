@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@yield('title') - {{app_setting('site_name')}}</title>
+    <title>@yield('title') - {{ $settings->where('key', 'site_name')->first()->value ?? 'Laravel' }}</title>
     <!-- favicons Icons -->
     <link rel="apple-touch-icon" sizes="180x180"
         href="{{ asset('frontend') }}/assets/images/favicons/apple-touch-icon.png" />
@@ -86,27 +86,27 @@
             <ul class="mobile-nav__contact list-unstyled">
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="mailto:{{ app_setting('contact_email') }}">{{ app_setting('contact_email') }}</a>
+                    <a href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
                 </li>
                 <li>
                     <i class="fa fa-phone-alt"></i>
-                    <a href="tel:{{app_setting('contact_phone')}}">{{app_setting('contact_phone')}}</a>
+                    <a href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                 </li>
             </ul><!-- /.mobile-nav__contact -->
             <div class="mobile-nav__social">
-                <a href="{{ app_setting('facebook_link') }}">
+                <a href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
                     <i class="icon-facebook" aria-hidden="true"></i>
                     <span class="sr-only">Facebook</span>
                 </a>
-                <a href="{{ app_setting('twitter_link') }}">
+                <a href="{{ $settings->where('key', 'twitter_link')->first()->value ?? '#' }}">
                     <i class="icon-twitter" aria-hidden="true"></i>
                     <span class="sr-only">Twitter</span>
                 </a>
-                <a href="{{ app_setting('instagram_link') }}">
+                <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                     <i class="icon-instagram" aria-hidden="true"></i>
                     <span class="sr-only">Instagram</span>
                 </a>
-                <a href="{{ app_setting('youtube_link') }}">
+                <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}">
                     <i class="icon-youtube" aria-hidden="true"></i>
                     <span class="sr-only">Youtube</span>
                 </a>
@@ -135,40 +135,40 @@
             <span class="sidebar-one__close sidebar-btn__toggler"><i class="fa fa-times"></i></span>
             <div class="sidebar-one__logo sidebar-one__item">
                 <a href="index.html" aria-label="logo image"><img
-                        src="{{ app_setting('dark_logo') ?? app_setting('light_logo') }}" width="123"
-                        alt="logo-dark" /></a>
+                        src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}" width="123"
+                        alt="logo" /></a>
             </div><!-- /.sidebar-one__logo -->
             <div class="sidebar-one__about sidebar-one__item">
-                <p class="sidebar-one__about__text">{{ app_setting('about_description') }}</p>
+                <p class="sidebar-one__about__text">{{ $settings->where('key', 'about_description')->first()->value ?? 'N/A' }}</p>
             </div><!-- /.sidebar-one__about -->
             <div class="sidebar-one__info sidebar-one__item">
                 <h4 class="sidebar-one__title">Information</h4>
                 <ul class="sidebar-one__info__list">
                     <li><span class="icon-location-2"></span>
-                        <address>{{ app_setting('contact_address') }}</address>
+                        <address>{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</address>
                     </li>
                     <li><span class="icon-paper-plane"></span> <a
-                            href="mailto:{{ app_setting('contact_email') }}">{{ app_setting('contact_email') }}</a>
+                            href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
                     </li>
                     <li><span class="icon-phone-call"></span> <a
-                            href="tel:{{ app_setting('contact_phone') }}">{{ app_setting('contact_phone') }}</a>
+                            href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                     </li>
                 </ul><!-- /.sidebar-one__info__list -->
             </div><!-- /.sidebar-one__info -->
             <div class="sidebar-one__social floens-social sidebar-one__item">
-                <a href="{{ app_setting('facebook_link') }}">
+                <a href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
                     <i class="icon-facebook" aria-hidden="true"></i>
                     <span class="sr-only">Facebook</span>
                 </a>
-                <a href="{{ app_setting('twitter_link') }}">
+                <a href="{{ $settings->where('key', 'twitter_link')->first()->value ?? '#' }}">
                     <i class="icon-twitter" aria-hidden="true"></i>
                     <span class="sr-only">Twitter</span>
                 </a>
-                <a href="{{ app_setting('instagram_link') }}">
+                <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                     <i class="icon-instagram" aria-hidden="true"></i>
                     <span class="sr-only">Instagram</span>
                 </a>
-                <a href="{{ app_setting('youtube_link') }}">
+                <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}">
                     <i class="icon-youtube" aria-hidden="true"></i>
                     <span class="sr-only">Youtube</span>
                 </a>

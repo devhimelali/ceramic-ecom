@@ -4,33 +4,36 @@
             <ul class="list-unstyled topbar-one__info">
                 <li class="topbar-one__info__item">
                     <span class="icon-paper-plane"></span>
-                    <a href="mailto:{{ app_setting('contact_email') }}">{{ app_setting('contact_email') }}</a>
+                    <a
+                        href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
                 </li>
                 <li class="topbar-one__info__item">
                     <span class="icon-phone-call"></span>
-                    <a href="tel:{{ app_setting('contact_phone') }}">{{ app_setting('contact_phone') }}</a>
+                    <a
+                        href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                 </li>
                 <li class="topbar-one__info__item">
                     <span class="icon-location"></span>
-                    <address>{{ app_setting('contact_address') }}</address>
+                    <address>{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</address>
                 </li>
             </ul><!-- /.list-unstyled topbar-one__info -->
             <div class="topbar-one__right">
                 <div class="topbar-one__social">
-                    <a href="{{app_setting('facebook_link')}}">
+                    <a href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
                         <i class="icon-facebook" aria-hidden="true"></i>
                         <span class="sr-only">Facebook</span>
                     </a>
-                    <a href="{{app_setting('twitter_link')}}">
+                    <a href="{{ $settings->where('key', 'twitter_link')->first()->value ?? '#' }}">
                         <i class="icon-twitter" aria-hidden="true"></i>
                         <span class="sr-only">Twitter</span>
                     </a>
-                    <a href="{{app_setting('instagram_link')}}">
+                    <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                         <i class="icon-instagram" aria-hidden="true"></i>
                         <span class="sr-only">Instagram</span>
                     </a>
-                    <a href="{{app_setting('youtube_link')}}">
-                        <i class="icon-youtube" aria-hidden="true"></i>
+                    <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}
+                        <i class="icon-youtube"
+                        aria-hidden="true"></i>
                         <span class="sr-only">Youtube</span>
                     </a>
                 </div><!-- /.topbar-one__social -->
@@ -45,8 +48,8 @@
             <div class="main-header__left">
                 <div class="main-header__logo">
                     <a href="index.html">
-                        <img src="{{ app_setting('dark_logo') ?? app_setting('light_logo') }}" alt="Floens HTML"
-                            width="125">
+                        <img src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}"
+                            alt="logo" width="125">
                     </a>
                 </div><!-- /.main-header__logo -->
                 <nav class="main-header__nav main-menu">
@@ -98,7 +101,8 @@
                     <span></span>
                     <span></span>
                 </div><!-- /.mobile-nav__toggler -->
-                <a href="javascript:void(0);" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="main-header__cart">
+                <a href="javascript:void(0);" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                    aria-controls="offcanvasRight" class="main-header__cart">
                     <i class="icon-cart" aria-hidden="true"></i>
                     <span class="sr-only">Cart</span>
                     <span class="totalCartItems"></span>
@@ -143,7 +147,8 @@
     .icon-search {
         font-size: 26px;
     }
-    .icon-cart{
+
+    .icon-cart {
         margin-right: 5px;
     }
 
