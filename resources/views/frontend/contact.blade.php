@@ -1,4 +1,5 @@
 @extends('frontend.layouts.app')
+@section('title', 'Contact')
 @section('page-style')
     <style>
         .form-one__group--grid {
