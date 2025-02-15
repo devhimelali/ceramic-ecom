@@ -3,7 +3,7 @@
     <style>
         .sec_1_prev_3 {
             width: 270px;
-            height: 617px
+            height: 617px !important;
         }
 
         .sec_1_prev_2 {
@@ -16,9 +16,19 @@
             height: 240px
         }
 
-        @media (max-width: 991px) {
+        .sec_2_prev_1 {
+            width: 338px;
+            height: 449px;
+        }
+
+        .sec_2_prev_2 {
+            width: 276px;
+            height: 463px;
+        }
+
+        @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
-                height: 400px;
+                height: 324px !important;
             }
 
             .sec_1_prev_2 {
@@ -28,6 +38,16 @@
             .sec_1_prev_1 {
                 height: 190px;
             }
+
+            .sec_2_prev_1 {
+                height: 346px;
+            }
+
+            .sec_2_prev_2 {
+                height: 346px;
+            }
+
+
         }
     </style>
 @endsection
@@ -132,7 +152,7 @@
                                 </div><!-- /.col-xl-6 -->
                             </div><!-- /.row -->
                             <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                                <a href="contact.html" class="floens-btn">
+                                <a href="{{ route('frontend.contact') }}" class="floens-btn">
                                     <span>get in touch</span>
                                     <i class="icon-right-arrow"></i>
                                 </a><!-- /.floens-btn -->
@@ -180,18 +200,25 @@
                 </div><!-- /.col-lg-6 -->
                 <div class="col-lg-6">
                     <div class="reliable-one__content">
-                        <div class="sec-title sec-title--border">
 
-                            <h6 class="sec-title__tagline">reliable</h6><!-- /.sec-title__tagline -->
+                        @if (app_setting('about_sec_2'))
+                            {!! app_setting('about_sec_2') !!}
+                        @else
+                            <div class="sec-title sec-title--border">
 
-                            <h3 class="sec-title__title">We Provide Reliable Flooring Services</h3>
-                            <!-- /.sec-title__title -->
-                        </div><!-- /.sec-title -->
+                                <h6 class="sec-title__tagline">reliable</h6><!-- /.sec-title__tagline -->
+
+                                <h3 class="sec-title__title">We Provide Reliable Flooring Services</h3>
+                                <!-- /.sec-title__title -->
+                            </div><!-- /.sec-title -->
+                            <p class="reliable-one__text">Our vision is to provide innovative, independent flooring
+                                solutions
+                                that problems for homes, industries, and workspaces, as well as flooring we would like in
+                                our own residences, work spaces,
+                            </p>
+                        @endif
 
 
-                        <p class="reliable-one__text">Our vision is to provide innovative, independent flooring solutions
-                            that problems for homes, industries, and workspaces, as well as flooring we would like in
-                            our own residences, work spaces,</p><!-- /.reliable-one__text -->
                     </div><!-- /.reliable-one__content -->
                 </div><!-- /.col-lg-6 -->
             </div><!-- /.row -->

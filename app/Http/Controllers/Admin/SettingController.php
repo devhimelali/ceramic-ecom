@@ -53,7 +53,7 @@ class SettingController extends Controller
     }
     public function aboutPageChange(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         // Handle about_one__image__one upload
         if ($request->hasFile('about_one__image__one')) {
             $file = $request->file('about_one__image__one');
