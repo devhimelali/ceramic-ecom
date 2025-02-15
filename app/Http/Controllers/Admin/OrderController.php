@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Attribute;
 use App\Models\ProductQuery;
 use Illuminate\Http\Request;
+use App\Models\AttributeValue;
 use App\Models\ProductVairants;
 use App\Enum\ProductQueryStatus;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ProductQuerySubmittedMail;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Frontend\OrderRequest;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
+use App\Mail\AdminProductQueryNotificationMail;
+use App\Mail\ProductQuerySubmittedMailForAdmin;
 
 class OrderController extends Controller
 {
@@ -214,9 +218,27 @@ class OrderController extends Controller
             $productQueryItem->variations()->attach($product->id, $variation);
         }
 
+        Mail::to($request->email)->send(new ProductQuerySubmittedMail([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'product_name' => $product->name,
+            'variations' => $filteredVariations
+        ]));
+
+        Mail::to($request->email)->send(new AdminProductQueryNotificationMail([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'product_name' => $product->name,
+            'variations' => $filteredVariations
+        ]));
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Query submitted successfully'
+            'message' => 'Query submitted successfully. A confirmation email has been sent.'
         ]);
     }
 }

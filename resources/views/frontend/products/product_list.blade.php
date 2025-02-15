@@ -64,7 +64,7 @@
         {{ $products->links('pagination::bootstrap-4') }}
     </div>
 </div>
-@include('frontend.products.enquire-modal')
+{{-- @include('frontend.products.enquire-modal') --}}
 <script>
     $(document).ready(function() {
         $('.enquireBtn').click(function() {
