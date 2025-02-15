@@ -263,7 +263,7 @@
                     <div class="product__info-top mb-4">
                         <div class="product__showing-text-box">
                             <div class="mt-4">
-                                <h3 class="product__sidebar__title">Filter by price</h3>
+                                <h3 class="product__sidebar__title">Filter by Brand</h3>
                                 <select name="brand" class="selectpicker" id="brand" aria-label="default shorting">
                                     <option value="" selected disabled>Select Brand</option>
                                     @foreach ($brands as $brand)

@@ -16,6 +16,9 @@
     <meta name="description"
         content="Floens is a modern HTML Template for Beauty, Spa Centers, Hair, Nail, Spa Salons & Cosmetic shops. The template perfectly fits Beauty Spa, Salon, and Wellness Treatments websites and businesses." />
 
+    {{-- csrf --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -48,6 +51,23 @@
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/floens.css" />
     <link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.min.css') }}">
     @yield('page-style')
+    <style>
+        :root {
+            --floens-base: #2a4e72 !important;
+            --floens-black2: #e28245 !important;
+            --floens-text-gray: #ffffff !important;
+        }
+
+        .icon-paper-plane,
+        .icon-instagram,
+        .icon-youtube,
+        .icon-phone-call,
+        .icon-location,
+        .icon-facebook,
+        .icon-twitter {
+            color: rgb(255, 255, 255) !important;
+        }
+    </style>
 </head>
 
 <body class="custom-cursor">
@@ -75,8 +95,8 @@
             <span class="mobile-nav__close mobile-nav__toggler"><i class="fa fa-times"></i></span>
 
             <div class="logo-box">
-                <a href="index.html" aria-label="logo image"><img
-                        src="{{ asset('frontend') }}/assets/images/logo-light.png" width="155"
+                <a href="{{ route('frontend.home') }}" aria-label="logo image"><img
+                        src="{{ app_setting('dark_logo') ?? app_setting('light_logo') }}" width="155"
                         alt="logo-light" /></a>
             </div>
             <!-- /.logo-box -->
