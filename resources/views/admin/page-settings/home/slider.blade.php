@@ -45,14 +45,15 @@
         <form id="uploadForm" enctype="multipart/form-data">
             <div id="uploadFields">
                 @foreach ($sliders as $key => $slider)
+                    {{-- @dd($slider) --}}
                     <div class="upload-container" id="uploadField-{{ $key + 1 }}">
                         <div class="mb-2">
                             <input type="text" class="form-control title" name="fields[{{ $key + 1 }}][title]"
-                                value="{{ old($slider->title) }}" placeholder="Enter Title">
+                                value="{{ $slider->title }}" placeholder="Enter Title">
                         </div>
                         <div class="mb-2">
                             <textarea class="form-control description" name="fields[{{ $key + 1 }}][description]"
-                                placeholder="Enter Description">{{ old('fields.' . ($key + 1) . '.description', $slider->description) }}</textarea>
+                                placeholder="Enter Description">{{ $slider->description }}</textarea>
                         </div>
                         <div class="d-flex justify-content-between">
                             <input type="file" class="form-control d-none file-input"
@@ -66,8 +67,7 @@
                             <button class="remove-btn ms-2" data-id="{{ $key + 1 }}">✖</button>
                         </div>
                         <div class="file-preview d-none mt-2" id="previewContainer-{{ $key + 1 }}">
-                            <img id="previewImage-{{ $key + 1 }}" src="{{ asset('storage/' . $slider->file_path) }}"
-                                alt="Preview">
+                            <img id="previewImage-{{ $key + 1 }}" src="{{ asset($slider->image) }}" alt="Preview">
                             <div>
                                 <p class="mb-1 file-name" id="fileName-{{ $key + 1 }}">
                                     {{ $slider->file_name ?? 'No file selected' }}</p>
