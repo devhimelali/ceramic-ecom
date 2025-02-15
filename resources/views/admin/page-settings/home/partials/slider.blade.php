@@ -30,45 +30,43 @@
             "nextArrow": "<button class=\"hero-slider__slick-button hero-slider__slick-button--next\">Next <i class=\"icon-right-arrow\"></i></button>"
 
         }'>
-        <div class="main-slider__item">
-            <div class="main-slider__wrapper container-fluid">
-                <div class="main-slider__left">
-                    <div class="main-slider__content">
-                        <div class="sec-title sec-title--center">
+        @foreach ($sliders as $slider)
+            <div class="main-slider__item">
+                <div class="main-slider__wrapper container-fluid">
+                    <div class="main-slider__left">
+                        <div class="main-slider__content">
+                            <div class="sec-title sec-title--center">
 
-                            <h6 class="sec-title__tagline">Precision Tile & Flooring Solutions</h6>
-                            <!-- /.sec-title__tagline -->
+                                {{-- <h6 class="sec-title__tagline">Precision Tile & Flooring Solutions</h6> --}}
+                                <!-- /.sec-title__tagline -->
 
-                            <h3 class="sec-title__title">Let us Make Your <br> Home Better 1</h3>
-                            <!-- /.sec-title__title -->
-                        </div><!-- /.sec-title -->
+                                <h3 class="sec-title__title">{{ $slider->title }}</h3>
+                                <!-- /.sec-title__title -->
+                            </div><!-- /.sec-title -->
 
 
-                        <p class="main-slider__text">Welcome to Melbourne Building Products, your one-stop destination
-                            for high-quality building and renovation supplies in Melton, Victoria.
-                            At Melbourne Building Products, we’re dedicated to helping you transform your home or
-                            project into a masterpiece. Whether you’re updating a single room, renovating your entire
-                            house, or working on a large-scale construction project. </p>
-                        <!-- /.main-slider__text -->
-                        <a href="{{ route('frontend.aboutUs') }}" class="main-slider__btn floens-btn">
-                            <span>discover more</span>
-                            <i class="icon-right-arrow"></i>
-                        </a><!-- /.main-slider__btn floens-btn -->
-                    </div><!-- /.main-slider__content -->
-                </div><!-- /.main-slider__left -->
-                <div class="main-slider__right">
-                    <div class="main-slider__image">
-                        <div class="main-slider__image__inner">
-                            <img src="{{ asset('frontend') }}/assets/images/slider/slider-1-1.jpg" alt="slider"
-                                class="main-slider__image__one">
-                        </div><!-- /.main-slider__image__inner -->
-                        <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
-                            class="main-slider__image__two">
-                    </div><!-- /.main-slider__image -->
-                </div><!-- /.main-slider__right -->
-            </div><!-- /.main-slider__wrapper .container-fluid -->
-        </div><!-- /.main-slider__item -->
-        <div class="main-slider__item">
+                            <p class="main-slider__text">{{ $slider->description }} </p>
+                            <!-- /.main-slider__text -->
+                            <a href="{{ route('frontend.aboutUs') }}" class="main-slider__btn floens-btn">
+                                <span>discover more</span>
+                                <i class="icon-right-arrow"></i>
+                            </a><!-- /.main-slider__btn floens-btn -->
+                        </div><!-- /.main-slider__content -->
+                    </div><!-- /.main-slider__left -->
+                    <div class="main-slider__right">
+                        <div class="main-slider__image">
+                            <div class="main-slider__image__inner">
+                                <img src="{{ $slider->image ?? asset('frontend/assets/images/slider/slider-thumbs-1-1.jpg') }}"
+                                    alt="slider" class="main-slider__image__one">
+                            </div><!-- /.main-slider__image__inner -->
+                            <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
+                                class="main-slider__image__two">
+                        </div><!-- /.main-slider__image -->
+                    </div><!-- /.main-slider__right -->
+                </div><!-- /.main-slider__wrapper .container-fluid -->
+            </div><!-- /.main-slider__item -->
+        @endforeach
+        {{-- <div class="main-slider__item">
             <div class="main-slider__wrapper container-fluid">
                 <div class="main-slider__left">
                     <div class="main-slider__content">
@@ -251,7 +249,7 @@
                     </div><!-- /.main-slider__image -->
                 </div><!-- /.main-slider__right -->
             </div><!-- /.main-slider__wrapper .container-fluid -->
-        </div><!-- /.main-slider__item -->
+        </div><!-- /.main-slider__item --> --}}
     </div><!-- /.main-slider__carousel -->
     <ul class="main-slider__carousel-thumbs floens-slick__carousel"
         data-slick-options='{
@@ -266,10 +264,13 @@
             "dots": false,
             "arrows": false
             }'>
-        <li>
-            <img src="{{ asset('frontend') }}/assets/images/slider/slider-thumbs-1-1.jpg" alt="slider-thumbs">
-        </li>
-        <li>
+        @foreach ($sliders as $slider)
+            <li>
+                <img src="{{ $slider->image ?? asset('frontend/assets/images/slider/slider-thumbs-1-1.jpg') }}"
+                    alt="slider-thumbs">
+            </li>
+        @endforeach
+        {{-- <li>
             <img src="{{ asset('frontend') }}/assets/images/slider/slider-thumbs-1-2.jpg" alt="slider-thumbs">
         </li>
         <li>
@@ -283,6 +284,6 @@
         </li>
         <li>
             <img src="{{ asset('frontend') }}/assets/images/slider/slider-thumbs-1-6.jpg" alt="slider-thumbs">
-        </li>
+        </li> --}}
     </ul><!--/.main-slider__carousel-thumbs -->
 </section><!-- /.main-slider -->

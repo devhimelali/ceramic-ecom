@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Slider;
 use App\Models\Product;
 use App\Models\Setting;
 use App\Enum\StatusEnum;
@@ -16,6 +17,7 @@ class FrontendController extends Controller
     {
         $data = [
             'active' => 'home',
+            'sliders' => Slider::get(),
             'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->limit(15)->get(),
             'products' => Product::with('images', 'attributes', 'attributeValues')->where('status', StatusEnum::ACTIVE)->latest()->limit(4)->get(),
         ];
@@ -64,6 +66,7 @@ class FrontendController extends Controller
                 'status' => 'success',
                 'html'   => $html,
                 'pagination' => $pagination,
+                'result' => [],
                 'message' => 'Products updated successfully!',
             ]);
         }
