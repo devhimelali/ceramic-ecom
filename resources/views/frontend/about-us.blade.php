@@ -1,4 +1,5 @@
 @extends('frontend.layouts.app')
+@section('title', 'About us')
 @section('page-style')
     <style>
         .sec_1_prev_3 {
@@ -72,13 +73,13 @@
                 <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <div class="about-one__image-grid">
                         <div class="about-one__image">
-                            <img src="{{ app_setting('about_one__image__one') ? app_setting('about_one__image__one') : asset('frontend/assets/images/about/about-1-3.png') }}"
+                            <img src="{{ $settings->where('key', 'about_one__image__one')->first()->value ?? asset('frontend/assets/images/about/about-1-3.png') }}"
                                 alt="about" class="about-one__image__one sec_1_prev_1">
-                            <img src="{{ app_setting('about_one__image__two') ? app_setting('about_one__image__two') : asset('frontend/assets/images/about/about-1-2.jpg') }}"
+                            <img src="{{ $settings->where('key', 'about_one__image__two')->first()->value ?? asset('frontend/assets/images/about/about-1-2.jpg') }}"
                                 alt="about" class="about-one__image__two sec_1_prev_2">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__image">
-                            <img src="{{ app_setting('about_one__image__three') ? app_setting('about_one__image__three') : asset('frontend/assets/images/about/about-1-1.jpg') }}"
+                            <img src="{{ $settings->where('key', 'about_one__image__three')->first()->value ?? asset('frontend/assets/images/about/about-1-1.jpg') }}"
                                 alt="about" class="about-one__image__three sec_1_prev_3">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__circle-text">
@@ -102,8 +103,8 @@
                 </div><!-- /.col-lg-6 -->
                 <div class="col-lg-6">
                     <div class="about-one__content">
-                        @if (app_setting('about_sec_1'))
-                            {!! app_setting('about_sec_1') !!}
+                        @if ($settings->where('key', 'about_sec_1')->first())
+                            {!! $settings->where('key', 'about_sec_1')->first()->value !!}
                         @else
                             <div class="sec-title sec-title--border">
 
@@ -201,8 +202,8 @@
                 <div class="col-lg-6">
                     <div class="reliable-one__content">
 
-                        @if (app_setting('about_sec_2'))
-                            {!! app_setting('about_sec_2') !!}
+                        @if ($settings->where('key', 'about_sec_2')->first())
+                            {!! $settings->where('key', 'about_sec_2')->first()->value !!}
                         @else
                             <div class="sec-title sec-title--border">
 

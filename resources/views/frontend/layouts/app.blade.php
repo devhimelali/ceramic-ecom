@@ -15,7 +15,7 @@
     <link rel="manifest" href="{{ asset('frontend') }}/assets/images/favicons/site.webmanifest" />
     <meta name="description"
         content="Floens is a modern HTML Template for Beauty, Spa Centers, Hair, Nail, Spa Salons & Cosmetic shops. The template perfectly fits Beauty Spa, Salon, and Wellness Treatments websites and businesses." />
-        <script src="{{ asset('frontend') }}/assets/vendors/jquery/jquery-3.7.0.min.js"></script>
+    <script src="{{ asset('frontend') }}/assets/vendors/jquery/jquery-3.7.0.min.js"></script>
     {{-- csrf --}}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
@@ -96,8 +96,8 @@
 
             <div class="logo-box">
                 <a href="{{ route('frontend.home') }}" aria-label="logo image"><img
-                        src="{{ app_setting('dark_logo') ?? app_setting('light_logo') }}" width="155"
-                        alt="logo-light" /></a>
+                        src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}" width="155"
+                        alt="logo" /></a>
             </div>
             <!-- /.logo-box -->
             <div class="mobile-nav__container"></div>
@@ -106,11 +106,13 @@
             <ul class="mobile-nav__contact list-unstyled">
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
+                    <a
+                        href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
                 </li>
                 <li>
                     <i class="fa fa-phone-alt"></i>
-                    <a href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
+                    <a
+                        href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                 </li>
             </ul><!-- /.mobile-nav__contact -->
             <div class="mobile-nav__social">
@@ -159,7 +161,8 @@
                         alt="logo" /></a>
             </div><!-- /.sidebar-one__logo -->
             <div class="sidebar-one__about sidebar-one__item">
-                <p class="sidebar-one__about__text">{{ $settings->where('key', 'about_description')->first()->value ?? 'N/A' }}</p>
+                <p class="sidebar-one__about__text">
+                    {{ $settings->where('key', 'about_description')->first()->value ?? 'N/A' }}</p>
             </div><!-- /.sidebar-one__about -->
             <div class="sidebar-one__info sidebar-one__item">
                 <h4 class="sidebar-one__title">Information</h4>
@@ -226,7 +229,7 @@
     <!-- template js -->
     <script src="{{ asset('frontend') }}/assets/js/floens.js"></script>
     <script src="{{ asset('assets/libs/toastr/toastr.min.js') }}"></script>
-    <script src="{{asset('frontend/assets/js/cart.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/cart.js') }}"></script>
     {{-- Get withErrors --}}
     @if ($errors->any())
         @foreach ($errors->all() as $error)

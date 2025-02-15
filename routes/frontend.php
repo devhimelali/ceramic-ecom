@@ -14,3 +14,4 @@ Route::post('/contact', [ContactController::class, 'store']);
 Route::get('enquire-form/{productId}', [OrderController::class, 'enquireForm'])->name('enquireForm');
 Route::post('enquire', [OrderController::class, 'store'])->name('enquire');
 Route::get('about-us', [FrontendController::class, 'aboutUs'])->name('frontend.aboutUs');
+Route::post('submit-single-product-query/{id}', [OrderController::class, 'storeSingleProductQuery'])->name('submit.single.product.query');

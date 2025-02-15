@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Frontend\OrderRequest;
+use App\Models\Attribute;
+use App\Models\AttributeValue;
 
 class OrderController extends Controller
 {
@@ -77,61 +79,144 @@ class OrderController extends Controller
         ]);
     }
 
-    // public function enquireForm($productId)
-    // {
-    //     $product = Product::with('attributes.values')->find(1);
-
-
-    //     foreach ($product->attributes as $attribute) {
-    //         echo $attribute->name . ': ' . $attribute->pivot->attributeValue->value . PHP_EOL;
-    //     }
-    //     // $attributes = $product->attributes()->get();
-    //     // // return $product->attributes;
-    //     // $html = view('frontend.products.enquire-modal', compact('productId', 'product', 'attributes'))->render();
-    //     // return response()->json([
-    //     //     'status' => 'success',
-    //     //     'html' => $html
-    //     // ]);
-    // }
     public function enquireForm($productId)
     {
-        // Load the product with attributes and their values
+        // Load the product with attributes and their values, and also the pivot data (attribute_value_id)
         $product = Product::with(['attributes' => function ($query) {
-            $query->distinct()->with(['values']);
+            $query->withPivot('attribute_value_id'); // Load the pivot column
         }])->find($productId);
 
         if (!$product) {
-            return "Product not found.";
+            return response()->json(['message' => 'Product not found.'], 404);
         }
 
-        // Loop through the attributes and their values
+        $result = [];
+
+        // Iterate over the product's attributes
         foreach ($product->attributes as $attribute) {
-            // Get the attribute value from the pivot table
-            // $attributeValue = $product->attributeValues
-            //     ->where('pivot.attribute_id', $attribute->id)
-            //     ->first();
-            //     return $attributeValue;
-            echo $attribute .PHP_EOL;
+            // Get the attribute name
+            $attributeName = $attribute->name;
+
+            // Get the value from the pivot table
+            $pivotValueId = $attribute->pivot->attribute_value_id; // This will now be available
+
+            // Find the corresponding value from the attribute values
+            $selectedValue = $attribute->values->firstWhere('id', $pivotValueId);
+
+            if ($selectedValue) {
+                if (!isset($result[$attributeName])) {
+                    $result[$attributeName] = [
+                        'attribute' => $attributeName,
+                        'values' => [],
+                    ];
+                }
+
+                // Append the value if not already added
+                if (!in_array($selectedValue->value, $result[$attributeName]['values'])) {
+                    $result[$attributeName]['values'][] = $selectedValue->value;
+                }
+            }
         }
-        // Prepare the result
-    $result = [];
-// return $product->attributes;
-    // Loop through the attributeValues and associate them with their attributes
-    // foreach ($product->attributeValues as $attributeValue) {
-    //     $attribute = $product->attributes
-    //         ->where('id', $attributeValue->pivot->attribute_id)
-    //         ->first();
+        // Render the view with the result
+        $html = view('frontend.products.enquire-modal', compact('productId', 'product', 'result'))->render();
 
-        // if ($attribute) {
-        //     $result[] = [
-        //         'attribute' => $attribute->name,
-        //         'value' => $attributeValue->value,
-        //     ];
-        // }
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
+    }
+
+    // public function storeSingleProductQuery(Request $request, $id)
+    // {
+    //     $product = Product::findOrFail($id);
+    //     $productQuery = ProductQuery::create([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'message' => $request->message,
+    //         'status' => ProductQueryStatus::PENDING
+    //     ]);
+
+    //     $productQuery->items()->create([
+    //         'product_id' => $product->id
+    //     ]);
+
+    //     $filteredVariations = array_filter($request->variation_values, function ($value) {
+    //         return !is_null($value);
+    //     });
+    //     $selectedVariations = [];
+
+    //     foreach ($filteredVariations as $key => $variation) {
+    //         $attribute = Attribute::where('name', $key)->first();
+    //         $attributeValue = AttributeValue::where('value', $variation)->first();
+
+    //         if ($attribute && $attributeValue) {
+    //             $selectedVariations[] = [
+    //                 'product_id' => $product->id,
+    //                 'attribute_id' => $attribute->id,
+    //                 'attribute_value_id' => $attributeValue->id,
+    //             ];
+    //         }
+    //     }
+
+    //     $productQuery->items()->variations()->sync($selectedVariations);
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'Query submitted successfully'
+    //     ]);
     // }
+    public function storeSingleProductQuery(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:255',
+            'message' => 'required|string|max:255',
+            'variation_values' => 'required|array',
+        ]);
+        
+        $product = Product::findOrFail($id);
 
-    // return $result;
+        $productQuery = ProductQuery::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'status' => ProductQueryStatus::PENDING
+        ]);
 
-        // return $product->attributeValues;
+        $productQueryItem = $productQuery->items()->create([
+            'product_id' => $product->id
+        ]);
+
+        // Remove null values from variation_values
+        $filteredVariations = array_filter($request->variation_values, function ($value) {
+            return !is_null($value);
+        });
+
+        $selectedVariations = [];
+
+        foreach ($filteredVariations as $key => $variation) {
+            $attribute = Attribute::where('name', $key)->first();
+            $attributeValue = AttributeValue::where('value', $variation)->first();
+
+            if ($attribute && $attributeValue) {
+                $selectedVariations[] = [
+                    'attribute_id' => $attribute->id,
+                    'attribute_value_id' => $attributeValue->id
+                ];
+            }
+        }
+
+        // Attach variations to the ProductQueryItem
+        foreach ($selectedVariations as $variation) {
+            $productQueryItem->variations()->attach($product->id, $variation);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Query submitted successfully'
+        ]);
     }
 }

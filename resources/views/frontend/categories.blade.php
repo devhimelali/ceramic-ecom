@@ -1,4 +1,5 @@
 @extends('frontend.layouts.app')
+@section('title', 'Categories')
 @section('page-style')
     <style>
         .pagination .page-item.active .page-link {

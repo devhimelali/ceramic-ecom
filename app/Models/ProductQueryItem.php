@@ -13,13 +13,21 @@ class ProductQueryItem extends Model
     ];
 
 
-    public function productQuery(): BelongsTo
+    public function productQuery()
     {
         return $this->belongsTo(ProductQuery::class);
     }
 
-    public function product(): BelongsTo
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function variations()
+    {
+        return $this->belongsToMany(Product::class, 'product_query_item_variation')
+                    ->withPivot('attribute_id', 'attribute_value_id')
+                    ->withTimestamps();
+    }
+
 }

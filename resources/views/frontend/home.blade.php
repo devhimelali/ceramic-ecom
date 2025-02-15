@@ -2,6 +2,7 @@
     use App\Helpers\ImageUploadHelper;
 @endphp
 @extends('frontend.layouts.app')
+@section('title', 'Home')
 @section('page-style')
     <style>
         /* Style the submit button */
