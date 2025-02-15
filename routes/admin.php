@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
@@ -25,6 +26,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::get('settings/about-page', [SettingController::class, 'aboutPage'])->name('settings.aboutPage');
     Route::post('settings/about-page', [SettingController::class, 'aboutPageChange'])->name('settings.aboutPageChange');
+
+
+    Route::get('settings/home-page', [SettingController::class, 'homePage'])->name('settings.aboutPage');
+    // Route::post('settings/about-page', [SettingController::class, 'aboutPageChange'])->name('settings.aboutPageChange');
+
+    Route::resource('sliders', SliderController::class);
 
 
     Route::resource('attributes', AttributeController::class);
