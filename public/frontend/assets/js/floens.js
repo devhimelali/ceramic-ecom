@@ -691,11 +691,11 @@
           if (st > lastScrollTop) {
             // downscroll code
             $targetMenu.removeClass($toggleClass);
-            console.log("down");
+            // console.log("down");
           } else {
             // upscroll code
             $targetMenu.addClass($toggleClass);
-            console.log("up");
+            // console.log("up");
           }
         } else {
           $targetMenu.removeClass($toggleClass);

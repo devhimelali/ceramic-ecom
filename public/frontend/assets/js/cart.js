@@ -59,19 +59,81 @@ getTotalQuantity = () => cart.reduce((total, item) => total + item.quantity, 0);
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 // Display cart items
+// function displayCartItems() {
+//     let cartItemsContainer = document.getElementById("cart-items");
+//     if (!cartItemsContainer) return;
+
+//     cartItemsContainer.innerHTML = "";
+//     cart.forEach(item => {
+//         let cartItem = document.createElement("div");
+//         cartItem.classList.add("cart-item");
+//         cartItem.innerHTML = `
+//             <div class="cart-item__name">${item.name}</div>
+//             <div class="cart-item__quantity">${item.quantity}</div>
+//             <div class="cart-item__price">$${item.price.toFixed(2)}</div>
+//         `;
+//         cartItemsContainer.appendChild(cartItem);
+//     });
+// }
+
 function displayCartItems() {
-    let cartItemsContainer = document.getElementById("cart-items");
-    if (!cartItemsContainer) return;
+    let cartItemsContainer = document.querySelector(".offcanvas__cart-products");
+    let subtotalContainer = document.querySelector(".offcanvas__total-price");
+    
+    if (!cartItemsContainer || !subtotalContainer) return;
 
     cartItemsContainer.innerHTML = "";
+    let subtotal = 0;
+
     cart.forEach(item => {
         let cartItem = document.createElement("div");
-        cartItem.classList.add("cart-item");
+        cartItem.classList.add("offcanvas__cart-product");
         cartItem.innerHTML = `
-            <div class="cart-item__name">${item.name}</div>
-            <div class="cart-item__quantity">${item.quantity}</div>
-            <div class="cart-item__price">$${item.price.toFixed(2)}</div>
+            <div class="offcanvas__cart-product__content__wrapper">
+                <div class="offcanvas__cart-product__image">
+                    <img src="${item.image}" alt="${item.name}">
+                </div>
+                <div class="offcanvas__cart-product__content">
+                    <h3 class="offcanvas__cart-product__title">
+                        <a href="product-details.html">${item.name}</a>
+                    </h3>
+                    <span class="offcanvas__cart-product__variation">${item.variation || 'Default'}</span>
+                </div>
+            </div>
+            <div class="offcanvas__cart-product__remove">
+                <a href="javascript:void(0);" class="offcanvas__cart-product__remove remove-item" data-id="${item.id}">
+                    <i class="fas fa-times"></i>
+                </a>
+                <span class="offcanvas__cart-product__quantity">${item.quantity} x $${parseFloat(item.price).toFixed(2)}</span>
+            </div>
         `;
         cartItemsContainer.appendChild(cartItem);
+        subtotal += item.quantity * parseFloat(item.price);
     });
+
+    subtotalContainer.textContent = `$${subtotal.toFixed(2)}`;
+    
+    // Attach event listeners to remove buttons
+    document.querySelectorAll(".remove-item").forEach(button => {
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
+            removeCartItem(this.dataset.id);
+        });
+    });
+}
+
+function removeCartItem(itemId) {
+    // Find the index of the item to remove
+    let itemIndex = cart.findIndex(item => item.id == itemId);
+
+    if (itemIndex !== -1) {
+        // Remove item from the cart array
+        cart.splice(itemIndex, 1);
+        
+        // Update local storage if you're using it
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // Refresh the cart display
+        displayCartItems();
+    }
 }

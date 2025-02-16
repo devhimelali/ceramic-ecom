@@ -314,8 +314,7 @@
                                         data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                     <a href="javascript:void(0);"
-                                        class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn"
-                                        data-product="{{ $product }}">
+                                        class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn" data-product="{{ $product }}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                 </div>
 
@@ -476,6 +475,14 @@
                         $('#myModal').modal('show');
                     }
                 })
+            });
+
+            $('.addCartItemBtn').click(function() {
+                var product = $(this).data('product');
+                console.log(product);
+                addItem(product.id, product.name, product.price, 1);
+                $('.totalCartItems').html(getTotalQuantity())
+                displayCartItems();
             });
 
             // $('#enquireForm').submit(function(e) {

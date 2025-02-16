@@ -12,7 +12,8 @@
                             <img src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}" width="123"
                                 alt="Logo">
                         </a>
-                        <p class="footer-widget__about-text">{{ $settings->where('key', 'about_description')->first()->value ?? 'N/A' }}</p>
+                        <p class="footer-widget__about-text">
+                            {{ $settings->where('key', 'about_description')->first()->value ?? 'N/A' }}</p>
                         <div class="mc-form__response"></div><!-- /.mc-form__response -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-4 col-lg-6 -->
@@ -24,8 +25,8 @@
                             <h2 class="footer-widget__title">Explore</h2><!-- /.footer-widget__title -->
                         </div><!-- /.footer-widget__top -->
                         <ul class="list-unstyled footer-widget__links">
-                            <li><a href="{{route('frontend.aboutUs')}}">About Us</a></li>
-                            <li><a href="{{route('frontend.contact')}}">Contact</a></li>
+                            <li><a href="{{ route('frontend.aboutUs') }}">About Us</a></li>
+                            <li><a href="{{ route('frontend.contact') }}">Contact</a></li>
                         </ul><!-- /.list-unstyled footer-widget__links -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-2 col-lg-3 col-md-3 col-sm-6 -->
@@ -36,7 +37,8 @@
                             <h2 class="footer-widget__title">Get inTouch</h2><!-- /.footer-widget__title -->
                         </div><!-- /.footer-widget__top -->
                         <ul class="list-unstyled footer-widget__info">
-                            <li><a href="javascript:void(0);">{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a>
+                            <li><a
+                                    href="javascript:void(0);">{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a>
                             </li>
                             <li><span class="icon-paper-plane"></span> <a
                                     href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
@@ -92,11 +94,124 @@
         <h5 class="offcanvas-title" id="offcanvasRightLabel">Shopping cart</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body">
-
+    <div class="offcanvas-body d-flex flex-column">
+        <div class="offcanvas__top flex-grow-1">
+            <div class="offcanvas__cart-products">
+                <div class="offcanvas__cart-product">
+                    <div class="offcanvas__cart-product__content__wrapper">
+                        <div class="offcanvas__cart-product__image">
+                            <img src="{{ asset('frontend') }}/assets/images/products/product-1-1.jpg"
+                                alt="Natural Stone Tiles">
+                        </div>
+                        <div class="offcanvas__cart-product__content">
+                            <h3 class="offcanvas__cart-product__title"><a href="product-details.html">Natural Stone
+                                    Tiles</a>
+                            </h3>
+                            <span class="offcanvas__cart-product__variation">Red/White/20x20</span>
+                        </div>
+                    </div>
+                    <div class="offcanvas__cart-product__remove">
+                        <a class="offcanvas__cart-product__remove" href="#"><i class="fas fa-times"></i>
+                            Remove</a>
+                        <span class="offcanvas__cart-product__quantity">1 x $50.00</span>
+                    </div>
+                </div>
+                <div class="offcanvas__cart-product">
+                    <div class="offcanvas__cart-product__content__wrapper">
+                        <div class="offcanvas__cart-product__image">
+                            <img src="{{ asset('frontend') }}/assets/images/products/product-1-1.jpg"
+                                alt="Natural Stone Tiles">
+                        </div>
+                        <div class="offcanvas__cart-product__content">
+                            <h3 class="offcanvas__cart-product__title"><a href="product-details.html">Natural Stone
+                                    Tiles</a>
+                            </h3>
+                            <span class="offcanvas__cart-product__variation">Red/White/20x20</span>
+                        </div>
+                    </div>
+                    <div class="offcanvas__cart-product__remove">
+                        <a class="offcanvas__cart-product__remove" href="#"><i class="fas fa-times"></i>
+                            Remove</a>
+                        <span class="offcanvas__cart-product__quantity">1 x $50.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offcanvas__bottom">
+            <div class="offcanvas__total">
+                <span class="offcanvas__total-text">Subtotal:</span>
+                <span class="offcanvas__total-price">$100.00</span>
+            </div>
+            <a href="checkout.html" class="floens-btn cart-page__checkout-btn">Procced to checkout <i
+                    class="icon-right-arrow"></i></a>
+        </div>
     </div>
 </div>
+<style>
+    .offcanvas__cart-product {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
 
+    .offcanvas__cart-product__content__wrapper {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .offcanvas__cart-product__image {
+        max-width: 80px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .offcanvas__cart-product__image img {
+        width: 100%;
+    }
+
+    h3.offcanvas__cart-product__title {
+        font-size: 16px;
+    }
+
+    span.offcanvas__cart-product__variation {
+        font-size: 12px;
+    }
+
+    span.offcanvas__cart-product__quantity {
+        font-size: 14px;
+    }
+
+    a.offcanvas__cart-product__remove {
+        display: block;
+        font-size: 16px;
+        color: red;
+        text-align: right;
+    }
+
+    .offcanvas__total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    span.offcanvas__total-text,
+    span.offcanvas__total-price {
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    a.thm-btn.offcanvas__btn.w-100 {
+        display: block;
+        text-align: center;
+        background: var(--floens-base);
+        color: #fff;
+        padding: 10px 0;
+    }
+</style>
 {{-- Common Modal --}}
 <div id="commonModal" class="modal fade show" tabindex="-1" aria-labelledby="myModalLabel" aria-modal="true"
     role="dialog">
@@ -123,4 +238,8 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-
+<script>
+    $(document).ready(function() {
+        displayCartItems();
+    });
+</script>
