@@ -1,4 +1,3 @@
-
 // Initialize cart from localStorage
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -12,8 +11,8 @@ function saveCart() {
 }
 
 // Add item to cart
-function addItem(id, name, price, quantity = 1, image = '', variation = {}) {
-    let existingItem = cart.find(item => item.id === id);
+function addItem(id, name, price, quantity = 1, image = "", variation = {}) {
+    let existingItem = cart.find((item) => item.id === id);
     if (existingItem) {
         existingItem.quantity += Number(quantity);
     } else {
@@ -23,7 +22,7 @@ function addItem(id, name, price, quantity = 1, image = '', variation = {}) {
             price: parseFloat(price),
             quantity: Number(quantity),
             image: image,
-            variation: variation
+            variation: variation,
         });
     }
     saveCart();
@@ -31,14 +30,14 @@ function addItem(id, name, price, quantity = 1, image = '', variation = {}) {
 
 // Remove item from cart
 function removeCartItem(id) {
-    cart = cart.filter(item => item.id !== id);
+    cart = cart.filter((item) => item.id !== id);
     saveCart();
     displayCartItems();
 }
 
 // Update item quantity
 function updateQuantity(id, quantity) {
-    let existingItem = cart.find(item => item.id === id);
+    let existingItem = cart.find((item) => item.id === id);
 
     if (existingItem) {
         let newQuantity = existingItem.quantity + Number(quantity);
@@ -86,10 +85,14 @@ function displayCartItems() {
     cartItemsContainer.innerHTML = "";
     let subtotal = 0;
 
-    cart.forEach(item => {
-        let variationHTML = Object.entries(item.variation)
-            .map(([key, value]) => `<span class="variation-item">${key}: ${value}</span>`)
-            .join(" / ") || "Default";
+    cart.forEach((item) => {
+        let variationHTML =
+            Object.entries(item.variation)
+                .map(
+                    ([key, value]) =>
+                        `<span class="variation-item">${key}: ${value}</span>`
+                )
+                .join(" / ") || "Default";
 
         let cartItem = document.createElement("div");
         cartItem.classList.add("offcanvas__cart-product");
@@ -122,7 +125,7 @@ function displayCartItems() {
 
     subtotalContainer.textContent = `$${subtotal.toFixed(2)}`;
 
-    document.querySelectorAll(".remove-item").forEach(button => {
+    document.querySelectorAll(".remove-item").forEach((button) => {
         button.addEventListener("click", function (e) {
             e.preventDefault();
             removeCartItem(this.dataset.id);
