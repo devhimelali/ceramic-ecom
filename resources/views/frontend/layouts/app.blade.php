@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/owl-carousel/css/owl.carousel.min.css" />
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/owl-carousel/css/owl.theme.default.min.css" />
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/slick/slick.css" />
-
+    <script src="{{ asset('frontend/assets/js/cart.js') }}"></script>
     <!-- template styles -->
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/floens.css" />
     <link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.min.css') }}">
@@ -229,7 +229,7 @@
     <!-- template js -->
     <script src="{{ asset('frontend') }}/assets/js/floens.js"></script>
     <script src="{{ asset('assets/libs/toastr/toastr.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/cart.js') }}"></script>
+
     {{-- Get withErrors --}}
     @if ($errors->any())
         @foreach ($errors->all() as $error)

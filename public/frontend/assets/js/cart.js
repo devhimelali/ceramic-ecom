@@ -1,4 +1,7 @@
-// Save cart to localStorage (debounced)
+// Initialize cart from localStorage
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// Save cart to localStorage
 function saveCart() {
     if (cart.length > 0) {
         localStorage.setItem("cart", JSON.stringify(cart));
@@ -8,16 +11,16 @@ function saveCart() {
 }
 
 // Add item to cart
-function addItem(id, name, price, quantity = 1, image, variation = []) {
+function addItem(id, name, price, quantity = 1, image = "", variation = {}) {
     let existingItem = cart.find((item) => item.id === id);
     if (existingItem) {
-        existingItem.quantity += quantity;
+        existingItem.quantity += Number(quantity);
     } else {
         cart.push({
             id: id,
             name: name,
-            price: price,
-            quantity: quantity,
+            price: parseFloat(price),
+            quantity: Number(quantity),
             image: image,
             variation: variation,
         });
@@ -25,20 +28,24 @@ function addItem(id, name, price, quantity = 1, image, variation = []) {
     saveCart();
 }
 
-// Remove item form cart
-function removeItem(id) {
+// Remove item from cart
+function removeCartItem(id) {
     cart = cart.filter((item) => item.id !== id);
     saveCart();
+    displayCartItems();
 }
 
 // Update item quantity
 function updateQuantity(id, quantity) {
-    if (quantity < 1) {
-        removeItem(id); // If quantity is zero or negative, remove item
-    } else {
-        let existingItem = cart.find((item) => item.id === id);
-        if (existingItem) {
-            existingItem.quantity = quantity;
+    let existingItem = cart.find((item) => item.id === id);
+
+    if (existingItem) {
+        let newQuantity = existingItem.quantity + Number(quantity);
+
+        if (newQuantity < 1) {
+            removeCartItem(id);
+        } else {
+            existingItem.quantity = newQuantity;
         }
     }
     saveCart();
@@ -47,6 +54,11 @@ function updateQuantity(id, quantity) {
 // Get total price
 function getTotalPrice() {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+}
+
+// Get total quantity
+function getTotalQuantity() {
+    return cart.reduce((total, item) => total + Number(item.quantity), 0);
 }
 
 // Get cart items
@@ -60,29 +72,7 @@ function clearCart() {
     saveCart();
 }
 
-getTotalQuantity = () => cart.reduce((total, item) => total + item.quantity, 0);
-
-// Initialize cart
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
 // Display cart items
-// function displayCartItems() {
-//     let cartItemsContainer = document.getElementById("cart-items");
-//     if (!cartItemsContainer) return;
-
-//     cartItemsContainer.innerHTML = "";
-//     cart.forEach(item => {
-//         let cartItem = document.createElement("div");
-//         cartItem.classList.add("cart-item");
-//         cartItem.innerHTML = `
-//             <div class="cart-item__name">${item.name}</div>
-//             <div class="cart-item__quantity">${item.quantity}</div>
-//             <div class="cart-item__price">$${item.price.toFixed(2)}</div>
-//         `;
-//         cartItemsContainer.appendChild(cartItem);
-//     });
-// }
-
 function displayCartItems() {
     let cartItemsContainer = document.querySelector(
         ".offcanvas__cart-products"
@@ -95,6 +85,14 @@ function displayCartItems() {
     let subtotal = 0;
 
     cart.forEach((item) => {
+        let variationHTML =
+            Object.entries(item.variation)
+                .map(
+                    ([key, value]) =>
+                        `<span class="variation-item">${key}: ${value}</span>`
+                )
+                .join(" / ") || "Default";
+
         let cartItem = document.createElement("div");
         cartItem.classList.add("offcanvas__cart-product");
         cartItem.innerHTML = `
@@ -104,11 +102,9 @@ function displayCartItems() {
                 </div>
                 <div class="offcanvas__cart-product__content">
                     <h3 class="offcanvas__cart-product__title">
-                        <a href="product-details.html">${item.name}</a>
+                        <a href="javascript:void(0);">${item.name}</a>
                     </h3>
-                    <span class="offcanvas__cart-product__variation">${
-                        item.variation || "Default"
-                    }</span>
+                    <div class="offcanvas__cart-product__variation">${variationHTML}</div>
                 </div>
             </div>
             <div class="offcanvas__cart-product__remove">
@@ -128,7 +124,6 @@ function displayCartItems() {
 
     subtotalContainer.textContent = `$${subtotal.toFixed(2)}`;
 
-    // Attach event listeners to remove buttons
     document.querySelectorAll(".remove-item").forEach((button) => {
         button.addEventListener("click", function (e) {
             e.preventDefault();
@@ -137,18 +132,5 @@ function displayCartItems() {
     });
 }
 
-function removeCartItem(itemId) {
-    // Find the index of the item to remove
-    let itemIndex = cart.findIndex((item) => item.id == itemId);
-
-    if (itemIndex !== -1) {
-        // Remove item from the cart array
-        cart.splice(itemIndex, 1);
-
-        // Update local storage if you're using it
-        localStorage.setItem("cart", JSON.stringify(cart));
-
-        // Refresh the cart display
-        displayCartItems();
-    }
-}
+// Load cart on page load
+displayCartItems();
