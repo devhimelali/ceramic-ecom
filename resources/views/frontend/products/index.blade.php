@@ -163,7 +163,7 @@
 
                         </div><!-- /.search-widget -->
                         <div class="product__price-ranger product__sidebar__item">
-                            <h3 class="product__sidebar__title">Filter by Brand</h3>
+                            {{-- <h3 class="product__sidebar__title">Filter by Price</h3> --}}
                             <form action="#" class="price-ranger">
                                 <h3 class="product__sidebar__title">Filter by Price</h3>
                                 <input type="range" class="form-range" id="price-range" min="0" max="10000"

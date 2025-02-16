@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Brand;
+use App\Models\Slider;
+use App\Models\Product;
 use App\Models\Setting;
+use App\Enum\StatusEnum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -49,7 +53,7 @@ class SettingController extends Controller
         $data = [
             'active' => 'settings'
         ];
-        return view('admin.page-settings.about-page', $data);
+        return view('admin.page-settings.about.about-page', $data);
     }
     public function aboutPageChange(Request $request)
     {
@@ -151,4 +155,24 @@ class SettingController extends Controller
         }
         return response()->json(['status' => 'success', 'message' => 'Page updated successfully!']);
     }
+
+    public function homePage()
+    {
+        $data = [
+            'active' => 'home',
+            'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->limit(15)->get(),
+            'products' => Product::with('images', 'attributes', 'attributeValues')->where('status', StatusEnum::ACTIVE)->latest()->limit(4)->get(),
+        ];
+        return view('admin.page-settings.home.home', $data);
+    }
+
+    // public function homeSlider()
+    // {
+    //     $data = [
+    //         'sliders' => Slider::orderBy('order')->get(),
+    //         'active' => 'home',
+    //     ];
+    //     // resources/views/admin/page-settings/home
+    //     return view('admin.page-settings.home.slider', $data);
+    // }
 }

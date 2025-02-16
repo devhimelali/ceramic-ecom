@@ -1,20 +1,23 @@
 <div class="app-menu navbar-menu">
+    @php
+        $logo = $settings->where('key', 'dark_logo')->first()->value ?? '#';
+    @endphp
     <!-- LOGO -->
     <div class="navbar-brand-box">
-        <a href="index.html" class="logo logo-dark">
+        <a href="{{ route('admin.dashboard') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="assets/images/logo.png" alt="" height="36">
+                <img src="{{ asset('assets/images/settings/' . $logo) }}" alt="" height="36">
             </span>
             <span class="logo-lg">
-                <img src="assets/images/logo.png" alt="" height="36">
+                <img src="{{ asset('assets/images/settings/' . $logo) }}" alt="" height="36">
             </span>
         </a>
-        <a href="index.html" class="logo logo-light">
+        <a href="{{ route('admin.dashboard') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="assets/images/logo.png" alt="" height="22">
+                <img src="{{ asset('assets/images/settings/' . $logo) }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="assets/images/logo.png" alt="" height="22">
+                <img src="{{ asset('assets/images/settings/' . $logo) }}" alt="" height="48">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-3xl header-item float-end btn-vertical-sm-hover"
