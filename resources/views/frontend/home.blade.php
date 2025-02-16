@@ -392,7 +392,7 @@
                             </div><!-- /.product-image -->
                             <div class="product__item__content">
                                 <h4 class="product__item__title"><a
-                                        href="#">{{ Str::limit($product->name, 15) }}</a>
+                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
                                 </h4><!-- /.product-title -->
                                 <div class="product__item__price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
 
@@ -416,75 +416,6 @@
         </div><!-- /.container -->
     </section><!-- /.product-home -->
     <!-- shop end -->
-
-    <!-- gallery instagram start -->
-    <section class="gallery-instagram @@extraClassName section-space-bottom">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
-                    data-wow-delay="00ms">
-                    <div class="gallery-instagram__image">
-                        <img src="{{ asset('frontend') }}/assets/images/gallery/gallery-instagram-1-1.jpg"
-                            alt="gallery-instagram">
-                        <a href="https://www.instagram.com/" class="gallery-instagram__image__link">
-                            <span class="icon-instagram"></span>
-                        </a><!-- /.gallery-instagram__image__link -->
-                    </div><!-- /.gallery-instagram__image -->
-                </div><!-- /.col-xl-2 col-lg-3 col-md-4 col-sm-6 -->
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
-                    data-wow-delay="200ms">
-                    <div class="gallery-instagram__image">
-                        <img src="{{ asset('frontend') }}/assets/images/gallery/gallery-instagram-1-2.jpg"
-                            alt="gallery-instagram">
-                        <a href="https://www.instagram.com/" class="gallery-instagram__image__link">
-                            <span class="icon-instagram"></span>
-                        </a><!-- /.gallery-instagram__image__link -->
-                    </div><!-- /.gallery-instagram__image -->
-                </div><!-- /.col-xl-2 col-lg-3 col-md-4 col-sm-6 -->
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
-                    data-wow-delay="400ms">
-                    <div class="gallery-instagram__image">
-                        <img src="{{ asset('frontend') }}/assets/images/gallery/gallery-instagram-1-3.jpg"
-                            alt="gallery-instagram">
-                        <a href="https://www.instagram.com/" class="gallery-instagram__image__link">
-                            <span class="icon-instagram"></span>
-                        </a><!-- /.gallery-instagram__image__link -->
-                    </div><!-- /.gallery-instagram__image -->
-                </div><!-- /.col-xl-2 col-lg-3 col-md-4 col-sm-6 -->
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
-                    data-wow-delay="600ms">
-                    <div class="gallery-instagram__image">
-                        <img src="{{ asset('frontend') }}/assets/images/gallery/gallery-instagram-1-4.jpg"
-                            alt="gallery-instagram">
-                        <a href="https://www.instagram.com/" class="gallery-instagram__image__link">
-                            <span class="icon-instagram"></span>
-                        </a><!-- /.gallery-instagram__image__link -->
-                    </div><!-- /.gallery-instagram__image -->
-                </div><!-- /.col-xl-2 col-lg-3 col-md-4 col-sm-6 -->
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
-                    data-wow-delay="800ms">
-                    <div class="gallery-instagram__image">
-                        <img src="{{ asset('frontend') }}/assets/images/gallery/gallery-instagram-1-5.jpg"
-                            alt="gallery-instagram">
-                        <a href="https://www.instagram.com/" class="gallery-instagram__image__link">
-                            <span class="icon-instagram"></span>
-                        </a><!-- /.gallery-instagram__image__link -->
-                    </div><!-- /.gallery-instagram__image -->
-                </div><!-- /.col-xl-2 col-lg-3 col-md-4 col-sm-6 -->
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
-                    data-wow-delay="1000ms">
-                    <div class="gallery-instagram__image">
-                        <img src="{{ asset('frontend') }}/assets/images/gallery/gallery-instagram-1-6.jpg"
-                            alt="gallery-instagram">
-                        <a href="https://www.instagram.com/" class="gallery-instagram__image__link">
-                            <span class="icon-instagram"></span>
-                        </a><!-- /.gallery-instagram__image__link -->
-                    </div><!-- /.gallery-instagram__image -->
-                </div><!-- /.col-xl-2 col-lg-3 col-md-4 col-sm-6 -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </section><!-- /.gallery-instagram section-space-bottom -->
-    <!-- gallery instagram end -->
 
 
     <!-- client carousel start -->

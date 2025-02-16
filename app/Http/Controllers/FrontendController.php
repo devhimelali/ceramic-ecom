@@ -114,9 +114,37 @@ class FrontendController extends Controller
     {
         $product = Product::with('attributes', 'attributeValues')->where('slug', $slug)->first();
 
+        $result = [];
+
+        // Iterate over the product's attributes
+        foreach ($product->attributes as $attribute) {
+            // Get the attribute name
+            $attributeName = $attribute->name;
+
+            // Get the value from the pivot table
+            $pivotValueId = $attribute->pivot->attribute_value_id; // This will now be available
+
+            // Find the corresponding value from the attribute values
+            $selectedValue = $attribute->values->firstWhere('id', $pivotValueId);
+
+            if ($selectedValue) {
+                if (!isset($result[$attributeName])) {
+                    $result[$attributeName] = [
+                        'attribute' => $attributeName,
+                        'values' => [],
+                    ];
+                }
+
+                // Append the value if not already added
+                if (!in_array($selectedValue->value, $result[$attributeName]['values'])) {
+                    $result[$attributeName]['values'][] = $selectedValue->value;
+                }
+            }
+        }
         $data = [
             'active' => 'products',
-            'product' => $product
+            'product' => $product,
+            'attributes' => $result
         ];
         return view('frontend.products.details', $data);
     }
