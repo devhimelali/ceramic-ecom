@@ -10,6 +10,7 @@ class ProductQueryItem extends Model
     protected $fillable = [
         'product_query_id',
         'product_id',
+        'quantity',
     ];
 
 

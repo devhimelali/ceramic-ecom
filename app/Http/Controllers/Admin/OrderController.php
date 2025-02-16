@@ -18,7 +18,9 @@ use App\Mail\ProductQuerySubmittedMail;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Frontend\OrderRequest;
 use App\Mail\AdminProductQueryNotificationMail;
+use App\Mail\MultipleProductQuerySubmittedMail;
 use App\Mail\ProductQuerySubmittedMailForAdmin;
+use App\Mail\AdminMultipleProductQueryNotificationMail;
 
 class OrderController extends Controller
 {
@@ -181,7 +183,7 @@ class OrderController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'phone' => 'required|string|max:255',
             'message' => 'required|string|max:255',
             'variation_values' => 'required|array',
@@ -198,7 +200,8 @@ class OrderController extends Controller
         ]);
 
         $productQueryItem = $productQuery->items()->create([
-            'product_id' => $product->id
+            'product_id' => $product->id,
+            'quantity' => 1
         ]);
 
         // Remove null values from variation_values
@@ -304,6 +307,83 @@ class OrderController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Status changed successfully'
+        ]);
+    }
+
+    public function submitCart(Request $request)
+    {
+        $cartItems = json_decode($request->cartItems, true);
+
+        $request->merge(['cartItems' => $cartItems]);
+        // dd($request->all());
+        $request->validate([
+            'cartItems' => 'required|array',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'required|string|max:255',
+            'message' => 'required|string|max:255',
+        ]);
+
+        foreach ($request->cartItems as $item) {
+            // dd($item);
+            $product = Product::findOrFail($item['id']);
+
+            $productQuery = ProductQuery::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'message' => $request->message,
+                'status' => ProductQueryStatus::PENDING
+            ]);
+
+            $productQueryItem = $productQuery->items()->create([
+                'product_id' => $product->id,
+                'quantity' => $item['quantity']
+            ]);
+
+            $filteredVariations = array_filter($item['variation'], function ($value) {
+                return !is_null($value);
+            });
+
+            $selectedVariations = [];
+
+            foreach ($filteredVariations as $key => $variation) {
+                $attribute = Attribute::where('name', $key)->first();
+                $attributeValue = AttributeValue::where('value', $variation)->first();
+
+                if ($attribute && $attributeValue) {
+                    $selectedVariations[] = [
+                        'attribute_id' => $attribute->id,
+                        'attribute_value_id' => $attributeValue->id
+                    ];
+                }
+            }
+
+            // Attach variations to the ProductQueryItem
+            foreach ($selectedVariations as $variation) {
+                $productQueryItem->variations()->attach($product->id, $variation);
+            }
+        }
+
+        Mail::to($request->email)->send(new MultipleProductQuerySubmittedMail([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'cartItems' => $request->cartItems,
+        ]));
+
+        Mail::to($request->email)->send(new AdminMultipleProductQueryNotificationMail([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'cartItems' => $request->cartItems,
+        ]));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Query submitted successfully. A confirmation email has been sent.'
         ]);
     }
 }

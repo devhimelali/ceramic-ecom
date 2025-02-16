@@ -48,7 +48,7 @@
     }
 </style>
 
-<form action="" method="post" id="enquireForm">
+<form action="" method="post" id="cartForm">
     @csrf
     <div class="modal-body">
         <div class="row">
@@ -151,7 +151,7 @@
             type: 'hidden',
             name: 'variation_values[' + key + ']',
             value: value
-        }).appendTo('#enquireForm');
+        }).appendTo('#cartForm');
 
         // Update the UI to show the selected variant
         $('.selectedValue-' + key).text(value);
@@ -162,7 +162,7 @@
     });
 
     // On form submit, get selected values
-    $('#enquireForm').on('submit', function(e) {
+    $('#cartForm').on('submit', function(e) {
         e.preventDefault(); // Prevent default submission for testing
 
         var selectedVariants = {};
@@ -185,7 +185,7 @@
 
         addItem(productId, productName, productPrice, productQuality, productImage, selectedVariants);
         notify('success', 'Product added to cart.');
-        $('#enquireForm')[0].reset();
+        $('#cartForm')[0].reset();
         $('#addToCartModal').modal('hide');
         displayCartItems();
         $('.totalCartItems').html(getTotalQuantity())

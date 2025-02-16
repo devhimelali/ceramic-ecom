@@ -90,9 +90,9 @@ function displayCartItems() {
             Object.entries(item.variation)
                 .map(
                     ([key, value]) =>
-                        `<span class="variation-item">${key}: ${value}</span>`
+                        `<span class="variation-item">${value}</span>`
                 )
-                .join(" / ") || "Default";
+                .join("/") || "Default";
 
         let cartItem = document.createElement("div");
         cartItem.classList.add("offcanvas__cart-product");

@@ -142,8 +142,9 @@
                 <span class="offcanvas__total-text">Subtotal:</span>
                 <span class="offcanvas__total-price">$100.00</span>
             </div>
-            <a href="checkout.html" class="floens-btn cart-page__checkout-btn">Procced to checkout <i
-                    class="icon-right-arrow"></i></a>
+            <a href="javascript:void(0);" class="floens-btn cart-page__checkout-btn checkoutBtn"
+                data-bs-dismiss="offcanvas" aria-label="Close">Procced to checkout
+                <i class="icon-right-arrow"></i></a>
         </div>
     </div>
 </div>
@@ -258,3 +259,144 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div id="checkoutModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content p-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="checkoutModalLabel">Products Enquire Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <form action="" method="post" id="checkoutForm">
+                @csrf
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your name">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" placeholder="Enter your email">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" name="phone" id="phone" placeholder="Enter your phone">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea name="message" id="message" placeholder="Enter your message"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded"
+                        data-bs-dismiss="modal"><span>Close</span>
+                    </button>
+
+                    <button type="submit"
+                        class="floens-btn product__item__link mb-3 p-3 rounded checkoutSubmitBtn"><span>Submit</span>
+                    </button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    $(document).ready(function() {
+        $('.checkoutBtn').click(function() {
+            $('#checkoutModal').modal('show');
+        });
+
+        $('#checkoutForm').submit(function(e) {
+            e.preventDefault();
+
+            var formData = new FormData($('#checkoutForm')[0]); // ✅ Use FormData
+            var cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+
+            formData.append('cartItems', JSON.stringify(cartItems)); // ✅ Append JSON
+
+            $.ajax({
+                url: "{{ route('submit.cart') }}",
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                    $('.checkoutSubmitBtn').prop('disabled', true).html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+                    );
+                },
+                success: function(response) {
+                    $('.checkoutSubmitBtn').prop('disabled', false).html('Submit');
+                    if (response.status == 'success') {
+                        notify('success', response.message);
+                        $('#checkoutModal').modal('hide');
+                        localStorage.removeItem('cart');
+                        location.reload();
+                    }
+                },
+                error: function(xhr) {
+                    $('.checkoutSubmitBtn').prop('disabled', false).html('Submit');
+                    console.log(xhr.responseText);
+                    notify('error', 'Something went wrong. Please try again.');
+                }
+            });
+        });
+
+    });
+</script>
+<style>
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    /* Style the labels */
+    .form-group label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Style the input fields */
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: none;
+        border-bottom: 2px solid #b2835e;
+        outline: none;
+        background: transparent;
+        color: #333;
+    }
+
+    /* Style the textarea separately */
+    .form-group textarea {
+        resize: none;
+        height: 80px;
+        background: #f6f3ef;
+    }
+
+    .attribute_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+    }
+</style>
