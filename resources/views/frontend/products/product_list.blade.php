@@ -48,7 +48,10 @@
                             data-id="{{ $product->id }}"
                             data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
-                        <a href="javascript:void(0);" class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn addToCartBtn" data-product-id="{{ $product->id }}" data-url="{{ route('add.to.cart.form', $product->id) }}">
+                        <a href="javascript:void(0);"
+                            class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn addToCartBtn"
+                            data-product-id="{{ $product->id }}"
+                            data-url="{{ route('add.to.cart.form', $product->id) }}">
                             <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                     </div>
                 </div><!-- /.product-content -->
@@ -66,51 +69,72 @@
     </div>
 </div>
 <script>
-    // $(document).ready(function() {
-    //     $('.enquireBtn').click(function() {
-    //         var productId = $(this).data('id');
-    //         // console.log(productId);
-    //         $('#enquireForm').find('input[name="products[]"]').val(productId);
-    //         $('#myModal').modal('show');
-    //     });
+    $(document).ready(function() {
+        displayCartItems();
+        $('.enquireBtn').click(function() {
+            console.log('clicked');
+            var productId = $(this).data('id');
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('#enquireFormResponse').html(response.html);
+                    $('#myModal').modal('show');
+                }
+            })
+        });
 
-    //     $('#enquireForm').submit(function(e) {
-    //         e.preventDefault();
-    //         var formData = $('#enquireForm').serialize();
-    //         // console.log(formData);
-    //         $.ajax({
-    //             url: "{{ route('enquire') }}",
-    //             method: 'POST',
-    //             data: formData,
-    //             beforeSend: function() {
-    //                 $('.enquireSubmitBtn').prop('disabled', true);
-    //                 $('.enquireSubmitBtn').html(
-    //                     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
-    //                 );
-    //             },
-    //             success: function(response) {
-    //                 $('.enquireSubmitBtn').prop('disabled', false);
-    //                 $('.enquireSubmitBtn').html('Submit');
-    //                 if (response.status == 'success') {
-    //                     notify(response.status, response.message);
-    //                     $('#enquireForm')[0].reset();
-    //                     $('#myModal').modal('hide');
-    //                 }
+        $('.addToCartBtn').click(function() {
+            var productId = $(this).data('product-id');
+            var url = $(this).data('url');
+            // $('#addToCartModal').modal('show');
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('#addToCartResponse').html(response.html);
+                    $('#addToCartModal').modal('show');
+                }
+            })
+        });
 
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 $('.enquireSubmitBtn').prop('disabled', false);
-    //                 $('.enquireSubmitBtn').html('Submit');
-    //                 let errors = xhr.responseJSON.errors;
-    //                 if (errors) {
-    //                     $.each(errors, function(key, value) {
-    //                         let inputField = $('[name="' + key + '"]');
-    //                         inputField.addClass('is-invalid');
-    //                         notify('error', value[0]);
-    //                     });
-    //                 }
-    //             }
-    //         });
-    //     });
-    // });
+        $('#enquireForm').submit(function(e) {
+            e.preventDefault();
+            var formData = $('#enquireForm').serialize();
+            $.ajax({
+                url: "{{ route('enquire') }}",
+                method: 'POST',
+                data: formData,
+                beforeSend: function() {
+                    $('.enquireSubmitBtn').prop('disabled', true);
+                    $('.enquireSubmitBtn').html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+                    );
+                },
+                success: function(response) {
+                    $('.enquireSubmitBtn').prop('disabled', false);
+                    $('.enquireSubmitBtn').html('Submit');
+                    if (response.status == 'success') {
+                        notify(response.status, response.message);
+                        $('#enquireForm')[0].reset();
+                        $('#myModal').modal('hide');
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    $('.enquireSubmitBtn').prop('disabled', false);
+                    $('.enquireSubmitBtn').html('Submit');
+                    let errors = xhr.responseJSON.errors;
+                    if (errors) {
+                        $.each(errors, function(key, value) {
+                            let inputField = $('[name="' + key + '"]');
+                            inputField.addClass('is-invalid');
+                            notify('error', value[0]);
+                        });
+                    }
+                }
+            });
+        });
+    });
 </script>
