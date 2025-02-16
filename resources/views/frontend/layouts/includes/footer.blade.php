@@ -262,6 +262,7 @@
     $(document).ready(function() {
         displayCartItems();
         $('.enquireBtn').click(function() {
+            console.log('clicked');
             var productId = $(this).data('id');
             var url = $(this).data('url');
             $.ajax({
