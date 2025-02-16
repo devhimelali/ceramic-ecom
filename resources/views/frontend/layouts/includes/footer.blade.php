@@ -232,34 +232,98 @@
         }
     }
 </style>
-{{-- Common Modal --}}
-<div id="commonModal" class="modal fade show" tabindex="-1" aria-labelledby="myModalLabel" aria-modal="true"
-    role="dialog">
+
+<!-- Default Modals -->
+<div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content p-4">
             <div class="modal-header">
-                <h5 class="modal-title">Product Enquire</h5>
+                <h5 class="modal-title" id="myModalLabel">Product Enquire</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
-            <form action="" method="post" id="modalForm">
-                @csrf
-                <div class="contentWrapper p-3"></div>
-                <div class="modal-footer">
-                    <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded"
-                        data-bs-dismiss="modal"><span>Close</span>
-                    </button>
-
-                    <button type="submit"
-                        class="floens-btn product__item__link mb-3 p-3 rounded enquireSubmitBtn"><span>Submit</span>
-                    </button>
-                </div>
-            </form>
-
+            <div id="enquireFormResponse"></div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div>
+</div><!-- /.modal -->
+<div id="addToCartModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content p-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Add To Card</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div id="addToCartResponse"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script>
     $(document).ready(function() {
         displayCartItems();
+        $('.enquireBtn').click(function() {
+            var productId = $(this).data('id');
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('#enquireFormResponse').html(response.html);
+                    $('#myModal').modal('show');
+                }
+            })
+        });
+
+        $('.addToCartBtn').click(function() {
+            var productId = $(this).data('product-id');
+            var url = $(this).data('url');
+            // $('#addToCartModal').modal('show');
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('#addToCartResponse').html(response.html);
+                    $('#addToCartModal').modal('show');
+                }
+            })
+        });
+
+        $('#enquireForm').submit(function(e) {
+            e.preventDefault();
+            var formData = $('#enquireForm').serialize();
+            $.ajax({
+                url: "{{ route('enquire') }}",
+                method: 'POST',
+                data: formData,
+                beforeSend: function() {
+                    $('.enquireSubmitBtn').prop('disabled', true);
+                    $('.enquireSubmitBtn').html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+                    );
+                },
+                success: function(response) {
+                    $('.enquireSubmitBtn').prop('disabled', false);
+                    $('.enquireSubmitBtn').html('Submit');
+                    if (response.status == 'success') {
+                        notify(response.status, response.message);
+                        $('#enquireForm')[0].reset();
+                        $('#myModal').modal('hide');
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    $('.enquireSubmitBtn').prop('disabled', false);
+                    $('.enquireSubmitBtn').html('Submit');
+                    let errors = xhr.responseJSON.errors;
+                    if (errors) {
+                        $.each(errors, function(key, value) {
+                            let inputField = $('[name="' + key + '"]');
+                            inputField.addClass('is-invalid');
+                            notify('error', value[0]);
+                        });
+                    }
+                }
+            });
+        });
     });
 </script>

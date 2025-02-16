@@ -431,109 +431,11 @@
         </div><!-- /.container -->
     </div><!-- /.client-carousel -->
     <!-- client carousel end -->
-    <!-- Default Modals -->
-    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content p-4">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Product Enquire</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
-                </div>
-                <div id="enquireFormResponse"></div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <div id="addToCartModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content p-4">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Add To Card</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
-                </div>
-                <div id="addToCartResponse"></div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+
 
 @endsection
 @section('page-script')
     <script>
-        $(document).ready(function() {
-            $('.enquireBtn').click(function() {
-                var productId = $(this).data('id');
-                var url = $(this).data('url');
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function(response) {
-                        $('#enquireFormResponse').html(response.html);
-                        $('#myModal').modal('show');
-                    }
-                })
-            });
-
-            // $('.addCartItemBtn').click(function() {
-            //     var image = $(this).data('image');
-            //     var product = $(this).data('product');
-            //     addItem(product.id, product.name, product.price, 1, image);
-            //     $('.totalCartItems').html(getTotalQuantity())
-            //     displayCartItems();
-            // });
-
-            $('.addToCartBtn').click(function() {
-                var productId = $(this).data('product-id');
-                var url = $(this).data('url');
-                // $('#addToCartModal').modal('show');
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function(response) {
-                        $('#addToCartResponse').html(response.html);
-                        $('#addToCartModal').modal('show');
-                    }
-                })
-            });
-
-            $('#enquireForm').submit(function(e) {
-                e.preventDefault();
-                var formData = $('#enquireForm').serialize();
-                // console.log(formData);
-                $.ajax({
-                    url: "{{ route('enquire') }}",
-                    method: 'POST',
-                    data: formData,
-                    beforeSend: function() {
-                        $('.enquireSubmitBtn').prop('disabled', true);
-                        $('.enquireSubmitBtn').html(
-                            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
-                        );
-                    },
-                    success: function(response) {
-                        $('.enquireSubmitBtn').prop('disabled', false);
-                        $('.enquireSubmitBtn').html('Submit');
-                        if (response.status == 'success') {
-                            notify(response.status, response.message);
-                            $('#enquireForm')[0].reset();
-                            $('#myModal').modal('hide');
-                        }
-
-                    },
-                    error: function(xhr, status, error) {
-                        $('.enquireSubmitBtn').prop('disabled', false);
-                        $('.enquireSubmitBtn').html('Submit');
-                        let errors = xhr.responseJSON.errors;
-                        if (errors) {
-                            $.each(errors, function(key, value) {
-                                let inputField = $('[name="' + key + '"]');
-                                inputField.addClass('is-invalid');
-                                notify('error', value[0]);
-                            });
-                        }
-                    }
-                });
-            });
-        });
+        
     </script>
 @endsection
