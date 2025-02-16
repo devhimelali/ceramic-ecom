@@ -8,12 +8,12 @@ function saveCart() {
 }
 
 // Add item to cart
-function addItem(id, name, price, quantity = 1, variation = []) {
+function addItem(id, name, price, quantity = 1, image = '', variation = []) {
     let existingItem = cart.find(item => item.id === id);
     if(existingItem) {
         existingItem.quantity += quantity;
     } else {
-        cart.push({id: id, name: name, price: price, quantity: quantity});
+        cart.push({id: id, name: name, price: price, quantity: quantity, image: image, variation: variation});
     }
     saveCart();
 }
@@ -58,23 +58,6 @@ getTotalQuantity = () => cart.reduce((total, item) => total + item.quantity, 0);
 // Initialize cart
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Display cart items
-// function displayCartItems() {
-//     let cartItemsContainer = document.getElementById("cart-items");
-//     if (!cartItemsContainer) return;
-
-//     cartItemsContainer.innerHTML = "";
-//     cart.forEach(item => {
-//         let cartItem = document.createElement("div");
-//         cartItem.classList.add("cart-item");
-//         cartItem.innerHTML = `
-//             <div class="cart-item__name">${item.name}</div>
-//             <div class="cart-item__quantity">${item.quantity}</div>
-//             <div class="cart-item__price">$${item.price.toFixed(2)}</div>
-//         `;
-//         cartItemsContainer.appendChild(cartItem);
-//     });
-// }
 
 function displayCartItems() {
     let cartItemsContainer = document.querySelector(".offcanvas__cart-products");
