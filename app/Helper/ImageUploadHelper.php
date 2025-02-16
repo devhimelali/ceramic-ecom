@@ -16,7 +16,7 @@ class ImageUploadHelper
     public static function uploadImage($file, $folder = 'images')
     {
         $image = $file;
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $imageName = uniqid() . time() . '.' . $image->getClientOriginalExtension();
         $path = $image->storeAs($folder, $imageName, 'public');
 
         // Return the path to the uploaded image

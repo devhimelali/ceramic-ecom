@@ -9,9 +9,9 @@
                         <div class="about-one__image">
                             <div class="image-container">
                                 @php
-                                    $images = $settings->where('key', 'home_one__image__one')->first();
+                                    $home_one__image__one = $settings->where('key', 'home_one__image__one')->first();
                                 @endphp
-                                <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/about/about-1-3.png') }}"
+                                <img src="{{ $home_one__image__one ? asset($home_one__image__one->value) : asset('frontend/assets/images/about/about-1-3.png') }}"
                                     alt="about" class="about-one__image__one sec_1_prev_1">
                                 <input type="file" class="image-upload home_sec_1_img_1 d-none"
                                     data-target="about-one__image__one" name="home_one__image__one">
@@ -85,7 +85,7 @@
                             $home_about_sec_1 = $settings->where('key', 'home_about_sec_1')->first();
                         @endphp
                         @if ($home_about_sec_1 != null)
-                            {!! app_setting('home_about_sec_1') !!}
+                            {!! $home_about_sec_1->value !!}
                         @else
                             <div class="sec-title sec-title--border">
 

@@ -10,7 +10,7 @@
                             $home_reliable_one_content = $settings->where('key', 'home_reliable_one_content')->first();
                         @endphp
                         @if ($home_reliable_one_content != null)
-                            {!! app_setting('home_reliable_one_content') !!}
+                            {!! $home_reliable_one_content->value !!}
                         @else
                             <div class="sec-title sec-title--border">
 
@@ -71,9 +71,9 @@
                     <div class="reliable-one__images">
                         <div class="reliable-one__image">
                             @php
-                                $images = $settings->where('key', 'home_two__image__one')->first();
+                                $home_two__image__one = $settings->where('key', 'home_two__image__one')->first();
                             @endphp
-                            <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
+                            <img src="{{ $home_two__image__one ? asset($home_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
                                 alt="reliable" class="reliable-one__image__one sec_2_prev_1">
 
                             <input type="file" class="image-upload home_sec_2_img_1 d-none"

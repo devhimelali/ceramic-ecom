@@ -8,12 +8,15 @@
                 <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1500ms">
                     <div class="reliable-one__images">
                         <div class="reliable-one__image">
-                            <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-2-1.jpg" alt="reliable"
-                                class="reliable-one__image__one sec_2_prev_1">
+                            @php
+                                $about_two__image__one = $settings->where('key', 'about_two__image__one')->first();
+                            @endphp
+                            <img src="{{ $about_two__image__one ? asset($about_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-2-1.jpg') }}"
+                                alt="reliable" class="reliable-one__image__one sec_2_prev_1">
 
 
                             <input type="file" class="image-upload sec_2_img_1 d-none"
-                                data-target="reliable-one__image__one" name="about_one__image__one">
+                                data-target="reliable-one__image__one" name="about_two__image__one">
                             <label class="upload-btn"
                                 onclick="setupImagePreview('.sec_2_img_1', '.sec_2_prev_1', '338', '338')">
                                 338 × 338 px <br>
@@ -22,11 +25,14 @@
 
 
                             <div class="reliable-one__image__inner">
-                                <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-2-2.jpg"
+                                @php
+                                    $about_two__image__two = $settings->where('key', 'about_two__image__two')->first();
+                                @endphp
+                                <img src="{{ $about_two__image__two ? asset($about_two__image__two->value) : asset('frontend/assets/images/reliable/reliable-2-2.jpg') }}"
                                     alt="reliable" class="reliable-one__image__two sec_2_prev_2">
 
                                 <input type="file" class="image-upload sec_2_img_2 d-none"
-                                    data-target="reliable-one__image__two" name="about_one__image__one">
+                                    data-target="reliable-one__image__two" name="about_two__image__two">
                                 <label class="upload-btn"
                                     onclick="setupImagePreview('.sec_2_img_2', '.sec_2_prev_2', '338', '338')">
                                     338 × 338 px <br>

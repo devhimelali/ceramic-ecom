@@ -23,6 +23,79 @@
         .enquireBtn {
             width: 70%;
         }
+
+
+        /* Style the submit button */
+        .custom-button {
+            /* width: 100%; */
+            padding: 10px;
+            border: none;
+            background: var(--floens-base, #C7844F);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .custom-button:hover {
+            background: #9a6e4b;
+        }
+
+        .enquireBtn {
+            width: 70%;
+        }
+
+        .sec_1_prev_3 {
+            width: 270px;
+            height: 617px !important;
+        }
+
+        .sec_1_prev_2 {
+            width: 240px;
+            height: 347px
+        }
+
+        .sec_1_prev_1 {
+            width: 240px;
+            height: 240px
+        }
+
+        .sec_2_prev_1 {
+            width: 338px;
+            height: 463px
+        }
+
+        .sec_2_prev_2 {
+            width: 276px;
+            height: 463px
+        }
+
+        @media screen and (max-width: 480px) {
+            .sec_1_prev_3 {
+                height: 364px !important;
+                width: auto !important;
+            }
+
+            .sec_1_prev_2 {
+                height: 186px;
+                width: auto !important;
+            }
+
+            .sec_1_prev_1 {
+                height: 170px;
+                width: auto !important;
+            }
+
+            img.reliable-one__image__two.sec_2_prev_2 {
+                height: 300px;
+                width: auto !important;
+
+            }
+
+            img.reliable-one__image__one.sec_2_prev_1 {
+                height: 300px;
+                width: auto !important;
+            }
+        }
     </style>
 @endsection
 @section('content')
@@ -37,14 +110,24 @@
                 <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <div class="about-one__image-grid">
                         <div class="about-one__image">
-                            <img src="{{ asset('frontend') }}/assets/images/about/about-1-3.png" alt="about"
-                                class="about-one__image__one">
-                            <img src="{{ asset('frontend') }}/assets/images/about/about-1-2.jpg" alt="about"
-                                class="about-one__image__two">
+                            @php
+                                $home_one__image__one = $settings->where('key', 'home_one__image__one')->first();
+                            @endphp
+                            <img src="{{ $home_one__image__one ? asset($home_one__image__one->value) : asset('frontend/assets/images/about/about-1-3.png') }}"
+                                alt="about" class="about-one__image__one sec_1_prev_1">
+                            @php
+                                $home_one__image__two = $settings->where('key', 'home_one__image__two')->first();
+                            @endphp
+                            <img src="{{ $home_one__image__two ? asset($home_one__image__two->value) : asset('frontend/assets/images/about/about-1-2.jpg') }}"
+                                alt="about" class="about-one__image__two sec_1_prev_2">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__image">
-                            <img src="{{ asset('frontend') }}/assets/images/about/about-1-1.jpg" alt="about"
-                                class="about-one__image__three">
+                            @php
+                                $home_one__image__three = $settings->where('key', 'home_one__image__three')->first();
+                            @endphp
+
+                            <img src="{{ $home_one__image__three ? asset($home_one__image__three->value) : asset('frontend/assets/images/about/about-1-1.jpg') }}"
+                                alt="about" class="about-one__image__three sec_1_prev_3">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__circle-text">
                             <div class="about-one__circle-text__bg"
@@ -249,11 +332,17 @@
                 <div class="col-lg-6 wow fadeInRight" data-wow-duration="1500ms">
                     <div class="reliable-one__images">
                         <div class="reliable-one__image">
-                            <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-1-1.jpg" alt="reliable"
-                                class="reliable-one__image__one">
+                            @php
+                                $home_two__image__one = $settings->where('key', 'home_two__image__one')->first();
+                            @endphp
+                            <img src="{{ $home_two__image__one ? asset($home_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
+                                alt="reliable" class="reliable-one__image__one sec_2_prev_1">
                             <div class="reliable-one__image__inner">
-                                <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-1-2.jpg" alt="reliable"
-                                    class="reliable-one__image__two">
+                                @php
+                                    $images = $settings->where('key', 'home_two__image__two')->first();
+                                @endphp
+                                <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/reliable/reliable-1-2.jpg') }}"
+                                    alt="reliable" class="reliable-one__image__two sec_2_prev_2">
                             </div><!-- /.reliable-one__image__inner -->
                             <div class="experience reliable-one__experience">
                                 <div class="experience__inner">

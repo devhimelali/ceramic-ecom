@@ -109,13 +109,15 @@ class SettingController extends Controller
     //     // Handle about_one__image__three upload
     //     if ($request->hasFile('about_one__image__three')) {
     //         $file = $request->file('about_one__image__three');
-    //         $filename = 'setting_' . 'about_one__image__three' . time() . '.'  . $file->getClientOriginalExtension();
-    //         $file->move(public_path('assets/images/settings/'), $filename);
-
+    //         // $filename = 'setting_' . 'about_one__image__three' . time() . '.'  . $file->getClientOriginalExtension();
+    //         // $file->move(public_path('assets/images/settings/'), $filename);
+    //         $filename = ImageUploadHelper::uploadImage($file, 'uploads/settings');
     //         $about_one__image__three = Setting::where('key', 'about_one__image__three')->first();
     //         if ($about_one__image__three && $about_one__image__three->value) {
     //             // Delete the old image
-    //             unlink(public_path('assets/images/settings/' . $about_one__image__three->value));
+    //             if (file_exists(public_path($about_one__image__three->value))) {
+    //                 unlink(public_path($$about_one__image__three->value));
+    //             }
     //             // Save the new file
     //             $about_one__image__three->value = $filename;
     //             $about_one__image__three->is_image = 1;
@@ -156,25 +158,28 @@ class SettingController extends Controller
     //     return response()->json(['status' => 'success', 'message' => 'Page updated successfully!']);
     // }
 
-
-
     public function aboutPageChange(Request $request)
     {
         // Define image keys and default folder
-        $imageKeys = ['about_one__image__one', 'about_one__image__two', 'about_one__image__three'];
+        $imageKeys = ['about_one__image__one', 'about_one__image__two', 'about_one__image__three', 'about_two__image__one', 'about_two__image__two'];
+        $uploadPath = public_path('assets/images/settings/');
+
         // Handle image uploads
         foreach ($imageKeys as $key) {
-            if ($request->hasFile($key)) {
-                $file = $request->file($key);
-                $imagePath = ImageUploadHelper::uploadImage($file, 'uploads/settings');
+            if ($request->$key) {
+                $file = $request->$key;
+                $filename = ImageUploadHelper::uploadImage($file, 'uploads/settings');
+
                 $setting = Setting::where('key', $key)->first();
 
                 if ($setting && $setting->value) {
                     if ($setting->value && file_exists(public_path($setting->value))) {
                         unlink(public_path($setting->value));
                     }
+                    $setting->update(['value' => $filename, 'is_image' => 1]);
+                } else {
+                    Setting::create(['key' => $key, 'value' => $filename, 'is_image' => 1]);
                 }
-                Setting::updateOrCreate(['key' => $key, 'value' => $imagePath, 'is_image' => 1]);
             }
         }
 
@@ -188,9 +193,6 @@ class SettingController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Page updated successfully!']);
     }
-
-
-
 
 
     public function homePage()
@@ -210,7 +212,6 @@ class SettingController extends Controller
             'home_about_sec_1' => $request->home_about_sec_1,
             'home_reliable_one_content' => $request->home_reliable_one_content
         ];
-        dd($request->all());
 
         foreach ($settings as $key => $value) {
             if ($value) {
