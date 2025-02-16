@@ -314,7 +314,9 @@
                                         data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                     <a href="javascript:void(0);"
-                                        class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn" data-product="{{ $product }}">
+                                        class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn"
+                                        data-image="{{ ImageUploadHelper::getProductImageUrl($images?->image) }}"
+                                        data-product="{{ $product }}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                 </div>
 
@@ -478,9 +480,11 @@
             });
 
             $('.addCartItemBtn').click(function() {
+                var image = $(this).data('image');
+                console.log(image);
                 var product = $(this).data('product');
                 console.log(product);
-                addItem(product.id, product.name, product.price, 1);
+                addItem(product.id, product.name, product.price, 1, image);
                 $('.totalCartItems').html(getTotalQuantity())
                 displayCartItems();
             });
