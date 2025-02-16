@@ -184,6 +184,10 @@
         font-size: 14px;
     }
 
+    span.variation-item {
+        font-size: 12px;
+    }
+
     a.offcanvas__cart-product__remove {
         display: block;
         font-size: 16px;
@@ -210,6 +214,22 @@
         background: var(--floens-base);
         color: #fff;
         padding: 10px 0;
+    }
+
+    @media (max-width: 767px) {
+        .offcanvas__cart-product__content__wrapper {
+            gap: 10px !important;
+        }
+
+        .offcanvas__cart-product__image {
+            max-width: 60px !important;
+        }
+
+        span.offcanvas__total-text,
+        span.offcanvas__total-price {
+            font-size: 20px !important;
+            font-weight: 700 !important;
+        }
     }
 </style>
 {{-- Common Modal --}}

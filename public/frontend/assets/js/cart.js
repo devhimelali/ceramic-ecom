@@ -53,7 +53,8 @@ function clearCart() {
     saveCart();
 }
 
-getTotalQuantity = () => cart.reduce((total, item) => total + item.quantity, 0);
+getTotalQuantity = () => cart.reduce((total, item) => total + Number(item.quantity), 0);
+
 
 // Initialize cart
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -71,6 +72,17 @@ function displayCartItems() {
     cart.forEach(item => {
         let cartItem = document.createElement("div");
         cartItem.classList.add("offcanvas__cart-product");
+
+        let variationHTML = "";
+        if (item.variation && typeof item.variation === "object") {
+            variationHTML = Object.entries(item.variation)
+                .map(([key, value]) => `<span class="variation-item"> ${value}</span>`)
+                .join("/");
+        } else {
+            variationHTML = "Default";
+        }
+
+
         cartItem.innerHTML = `
             <div class="offcanvas__cart-product__content__wrapper">
                 <div class="offcanvas__cart-product__image">
@@ -80,7 +92,7 @@ function displayCartItems() {
                     <h3 class="offcanvas__cart-product__title">
                         <a href="product-details.html">${item.name}</a>
                     </h3>
-                    <span class="offcanvas__cart-product__variation">${item.variation || 'Default'}</span>
+                    <div class="offcanvas__cart-product__variation">${variationHTML}</div>
                 </div>
             </div>
             <div class="offcanvas__cart-product__remove">

@@ -129,6 +129,52 @@ class OrderController extends Controller
             'html' => $html
         ]);
     }
+    public function addToCart($id)
+    {
+        // Load the product with attributes and their values, and also the pivot data (attribute_value_id)
+        $product = Product::with(['attributes' => function ($query) {
+            $query->withPivot('attribute_value_id'); // Load the pivot column
+        }])->find($id);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found.'], 404);
+        }
+
+        $result = [];
+
+        // Iterate over the product's attributes
+        foreach ($product->attributes as $attribute) {
+            // Get the attribute name
+            $attributeName = $attribute->name;
+
+            // Get the value from the pivot table
+            $pivotValueId = $attribute->pivot->attribute_value_id; // This will now be available
+
+            // Find the corresponding value from the attribute values
+            $selectedValue = $attribute->values->firstWhere('id', $pivotValueId);
+
+            if ($selectedValue) {
+                if (!isset($result[$attributeName])) {
+                    $result[$attributeName] = [
+                        'attribute' => $attributeName,
+                        'values' => [],
+                    ];
+                }
+
+                // Append the value if not already added
+                if (!in_array($selectedValue->value, $result[$attributeName]['values'])) {
+                    $result[$attributeName]['values'][] = $selectedValue->value;
+                }
+            }
+        }
+        // Render the view with the result
+        $html = view('frontend.products.add-to-modal', compact('product', 'result'))->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
+    }
 
 
     public function storeSingleProductQuery(Request $request, $id)
