@@ -30,12 +30,17 @@
                                 @php
                                     $images = $product->images->where('type', 'gallery');
                                 @endphp
-                                @foreach ($images as $image)
+                                @forelse ($images as $image)
                                     <div class="swiper-slide">
                                         <img src="{{ ImageUploadHelper::getProductImageUrl($image->image) }}"
                                             alt="product details image" class="product-details__gallery-top__img">
                                     </div>
-                                @endforeach
+                                @empty
+                                    <div class="swiper-slide">
+                                        <img src="{{ asset('frontend/assets/images/product-placeholder.png') }}"
+                                            alt="product details image" class="product-details__gallery-top__img">
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                         <div class="swiper product-details__gallery-thumb">
@@ -64,29 +69,31 @@
                             </a><!-- /.video-button -->
                         </div> --}}
                         <div class="product-details__excerpt">
+                            <h3 class="product-details__excerpt__text1">
+                                {{ $product->name ?? 'No Name' }}
+                            </h3>
+                        </div><!-- /.excerp-text -->
+                        <div class="product-details__excerpt">
                             <p class="product-details__excerpt__text1">
-                                {{ $product->short_description }}
+                                {{ $product->short_description ?? 'No Description' }}
                             </p>
                         </div><!-- /.excerp-text -->
-                        <div class="product-details__color">
-                            @foreach ($product->attributes as $attribute)
-                                <h3 class="product-details__content__title">{{ $attribute->name }}</h3>
+                        <div class="mt-3">
+                            @foreach ($attributes as $group)
+                                <div class="row mb-3" id="variation_{{ Str::slug($group['attribute']) }}">
+                                    <div class="col-12">
+                                        <h6 class="mb-2">{{ $group['attribute'] }}:</h6>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @foreach ($group['values'] as $value)
+                                                <span class="badge bg-secondary p-2">{{ $value }}</span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
+                        </div>
 
-                            <div class="product-details__color__box">
-
-                            </div><!-- /.product-details__color__box -->
-                        </div><!-- /.product-details__color -->
-                        <div class="product-details__size">
-                            <h3 class="product-details__content__title">Size</h3>
-                            <div class="product-details__size__box">
-                                <button type="button" class="product-details__size__btn"><span>S</span></button>
-                                <button type="button" class="product-details__size__btn"><span>M</span></button>
-                                <button type="button" class="product-details__size__btn"><span>L</span></button>
-                                <button type="button" class="product-details__size__btn"><span>XL</span></button>
-                            </div><!-- /.product-details__size__box -->
-                        </div><!-- /.product-details__size -->
-                        <div class="product-details__info">
+                        {{-- <div class="product-details__info">
                             <div class="product-details__quantity">
                                 <h3 class="product-details__content__title">Quantity</h3>
                                 <div class="quantity-box">
@@ -95,38 +102,24 @@
                                     <button type="button" class="add"><i class="fa fa-plus"></i></button>
                                 </div>
                             </div><!-- /.quantity -->
-                            <div class="product-details__socials">
-                                <h3 class="product-details__socials__title">share:</h3>
-                                <div class="details-social">
-                                    <a href="https://facebook.com/">
-                                        <i class="icon-facebook" aria-hidden="true"></i>
-                                        <span class="sr-only">Facebook</span>
-                                    </a>
-                                    <a href="https://twitter.com/">
-                                        <i class="icon-twitter" aria-hidden="true"></i>
-                                        <span class="sr-only">Twitter</span>
-                                    </a>
-                                    <a href="https://linkedin.com/">
-                                        <i class="icon-linkedin" aria-hidden="true"></i>
-                                        <span class="sr-only">Linkedin</span>
-                                    </a>
-                                    <a href="https://youtube.com/">
-                                        <i class="icon-youtube" aria-hidden="true"></i>
-                                        <span class="sr-only">Youtube</span>
-                                    </a>
-                                </div><!-- /.details-social -->
-                            </div><!-- /.product-details__socials -->
-                        </div><!-- /.product-details__info -->
+                        </div><!-- /.product-details__info --> --}}
                         <div class="product-details__buttons">
-                            <a href="cart.html" class="product-details__btn-cart floens-btn">
-                                <span>Add to Cart</span>
-                                <i class="icon-cart"></i>
-                            </a>
-                        </div><!-- /.qty-btn -->
+                            <div class="d-flex align-items-center justify-content-center">
+                                <a href="javascript:void(0);"
+                                    class="floens-btn product__item__link me-2 custom-button p-3 enquireBtn"
+                                    data-id="{{ $product->id }}"
+                                    data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                <a href="javascript:void(0);"
+                                    class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn addToCartBtn"
+                                    data-product-id="{{ $product->id }}"
+                                    data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                    <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- /.product-details -->
         </div>
         <div class="product-details__description-wrapper">
             <div class="container">
@@ -137,11 +130,82 @@
                         <p class="product-details__description__text">
                             {!! $product->description !!}
                         </p>
-                    </div><!-- /.product-details__text__box -->
+                    </div>
                 </div>
-                <!-- /.product-description -->
-            </div><!-- /.container -->
-        </div><!-- /.product-details__description__wrapper -->
+            </div>
+        </div>
     </section>
     <!-- Products End -->
+@endsection
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            displayCartItems();
+            $('.enquireBtn').click(function() {
+                console.log('clicked');
+                var productId = $(this).data('id');
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(response) {
+                        $('#enquireFormResponse').html(response.html);
+                        $('#myModal').modal('show');
+                    }
+                })
+            });
+
+            $('.addToCartBtn').click(function() {
+                var productId = $(this).data('product-id');
+                var url = $(this).data('url');
+                // $('#addToCartModal').modal('show');
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(response) {
+                        $('#addToCartResponse').html(response.html);
+                        $('#addToCartModal').modal('show');
+                    }
+                })
+            });
+
+            $('#enquireForm').submit(function(e) {
+                e.preventDefault();
+                var formData = $('#enquireForm').serialize();
+                $.ajax({
+                    url: "{{ route('enquire') }}",
+                    method: 'POST',
+                    data: formData,
+                    beforeSend: function() {
+                        $('.enquireSubmitBtn').prop('disabled', true);
+                        $('.enquireSubmitBtn').html(
+                            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+                        );
+                    },
+                    success: function(response) {
+                        $('.enquireSubmitBtn').prop('disabled', false);
+                        $('.enquireSubmitBtn').html('Submit');
+                        if (response.status == 'success') {
+                            notify(response.status, response.message);
+                            $('#enquireForm')[0].reset();
+                            $('#myModal').modal('hide');
+                        }
+
+                    },
+                    error: function(xhr, status, error) {
+                        $('.enquireSubmitBtn').prop('disabled', false);
+                        $('.enquireSubmitBtn').html('Submit');
+                        let errors = xhr.responseJSON.errors;
+                        if (errors) {
+                            $.each(errors, function(key, value) {
+                                let inputField = $('[name="' + key + '"]');
+                                inputField.addClass('is-invalid');
+                                notify('error', value[0]);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

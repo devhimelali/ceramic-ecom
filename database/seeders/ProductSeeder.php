@@ -19,40 +19,69 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        // Create a category
-        $category = Category::firstOrCreate(['name' => 'Ceramic Tiles'], ['slug' => 'ceramic-tiles']);
+        // Create categories
+        $categories = [
+            ['name' => 'Ceramic Tiles', 'slug' => 'ceramic-tiles'],
+            ['name' => 'Porcelain Tiles', 'slug' => 'porcelain-tiles'],
+            ['name' => 'Handmade Ceramics', 'slug' => 'handmade-ceramics'],
+            ['name' => 'Mosaic Tiles', 'slug' => 'mosaic-tiles'],
+        ];
 
-        // Create a brand
-        $brand = Brand::firstOrCreate(['name' => 'Luxury Ceramics', 'slug' => 'luxury-ceramics'], ['status' => StatusEnum::ACTIVE]);
+        foreach ($categories as $catData) {
+            $category = Category::firstOrCreate(
+                ['name' => $catData['name']],
+                ['slug' => $catData['slug']]
+            );
+        }
+
+        // Create brands
+        $brands = [
+            ['name' => 'Luxury Ceramics', 'slug' => 'luxury-ceramics'],
+            ['name' => 'Elegant Tiles', 'slug' => 'elegant-tiles'],
+            ['name' => 'Handcrafted Designs', 'slug' => 'handcrafted-designs'],
+        ];
+
+        foreach ($brands as $brandData) {
+            $brand = Brand::firstOrCreate(
+                ['name' => $brandData['name']],
+                ['slug' => $brandData['slug'], 'status' => StatusEnum::ACTIVE]
+            );
+        }
 
         // Product data
         $products = [
-            ['name' => 'Porcelain Floor Tile', 'status' => 'active', 'slug' => 'porcelain-floor-tile', 'price' => 29.99],
-            ['name' => 'Handmade Ceramic Vase', 'status' => 'active', 'slug' => 'handmade-ceramic-vase', 'price' => 49.99],
-            ['name' => 'Mosaic Wall Tiles', 'status' => 'active', 'slug' => 'mosaic-wall-tiles', 'price' => 39.99],
-            ['name' => 'Hand-Painted Ceramic Plate', 'status' => 'active', 'slug' => 'hand-painted-ceramic-plate', 'price' => 19.99],
+            ['name' => 'Porcelain Floor Tile', 'slug' => 'porcelain-floor-tile', 'price' => 29.99],
+            ['name' => 'Handmade Ceramic Vase', 'slug' => 'handmade-ceramic-vase', 'price' => 49.99],
+            ['name' => 'Mosaic Wall Tiles', 'slug' => 'mosaic-wall-tiles', 'price' => 39.99],
+            ['name' => 'Hand-Painted Ceramic Plate', 'slug' => 'hand-painted-ceramic-plate', 'price' => 19.99],
+            ['name' => 'Textured Ceramic Tile', 'slug' => 'textured-ceramic-tile', 'price' => 24.99],
+            ['name' => 'Rustic Clay Pot', 'slug' => 'rustic-clay-pot', 'price' => 34.99],
+            ['name' => 'Glossy White Tiles', 'slug' => 'glossy-white-tiles', 'price' => 45.99],
+            ['name' => 'Artisan Ceramic Mug', 'slug' => 'artisan-ceramic-mug', 'price' => 14.99],
         ];
 
         foreach ($products as $productData) {
+            $category = Category::inRandomOrder()->first();
+            $brand = Brand::inRandomOrder()->first();
+
             $product = Product::create([
                 'category_id' => $category->id,
                 'brand_id' => $brand->id,
                 'name' => $productData['name'],
                 'slug' => $productData['slug'],
                 'price' => $productData['price'],
-                'status' => 'active',
+                'status' => StatusEnum::ACTIVE,
             ]);
 
-            // Attach random attributes
-            $attributeIds = Attribute::inRandomOrder()->limit(rand(1, 4))->pluck('id');
+            // Attach multiple attributes
+            $attributeIds = Attribute::inRandomOrder()->limit(rand(2, 5))->pluck('id');
             foreach ($attributeIds as $attributeId) {
-                $attributeValueId = AttributeValue::where('attribute_id', $attributeId)
+                $attributeValueIds = AttributeValue::where('attribute_id', $attributeId)
                     ->inRandomOrder()
-                    ->limit(1)
-                    ->pluck('id')
-                    ->first();
+                    ->limit(rand(1, 3))
+                    ->pluck('id');
 
-                if ($attributeValueId) {
+                foreach ($attributeValueIds as $attributeValueId) {
                     DB::table('product_attribute_values')->insert([
                         'product_id' => $product->id,
                         'attribute_id' => $attributeId,

@@ -123,7 +123,7 @@
                                     data-key="t-analytics">Home Page</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('settings.aboutPageChange') }}"
+                                <a href="{{ route('settings.aboutPageChange') }}" target="_blank"
                                     class="nav-link {{ $active == 'about' ? 'active' : '' }}"
                                     data-key="t-analytics">About
                                     Page</a>

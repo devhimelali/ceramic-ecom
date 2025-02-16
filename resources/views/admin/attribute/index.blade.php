@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Brands')
+@section('title', 'Attributes')
 @section('content')
     {{--  Start breadcrumb  --}}
     <div class="row">
