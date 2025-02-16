@@ -18,46 +18,61 @@
     </div>
 
     <div class="row">
-        <div class="col-xxl col-sm-6">
-            <div class="card overflow-hidden">
-                <div class="card-body">
-                    <h4><span class="counter-value" data-target="368.24">368.24</span></h4>
-                    <p class="text-muted mb-4">Total Product</p>
-                </div>
-                <div class="progress progress-sm rounded-0" role="progressbar" aria-valuenow="76" aria-valuemin="0"
-                    aria-valuemax="100">
-                    <div class="progress-bar" style="width: 100%"></div>
+        <div class="col-sm-2">
+            <div class="card border-bottom border-3 card-animate border-primary">
+                <div class="card-body text-center">
+                    <h4 class="mb-4"><span class="counter-value" data-target="21438">{{$totalProducts}}</span></h4>
+                    <p class="text-muted fw-medium text-uppercase mb-0">Total Products</p>
                 </div>
             </div>
-        </div><!--end col-->
-        <div class="col-xxl col-sm-6">
-            <div class="card overflow-hidden">
-                <div class="card-body">
-                    <h4><span class="counter-value">1,454.71</span> </h4>
-                    <p class="text-muted mb-4">Total Brand</p>
-                </div>
-                <div class="progress progress-sm rounded-0" role="progressbar" aria-valuenow="88" aria-valuemin="0"
-                    aria-valuemax="100">
-                    <div class="progress-bar bg-secondary" style="width: 100%"></div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border-bottom border-3 card-animate border-secondary">
+                <div class="card-body text-center">
+                    <h4 class="mb-4"><span class="counter-value" data-target="21438">{{$totalBrands}}</span></h4>
+                    <p class="text-muted fw-medium text-uppercase mb-0">Total Brands</p>
                 </div>
             </div>
-        </div><!--end col-->
-        <div class="col-xxl col-sm-6">
-            <div class="card overflow-hidden">
-                <div class="card-body">
-                    <div class="avatar-sm float-end">
-                        <div class="avatar-title bg-danger-subtle text-danger fs-3xl rounded">
-                            <i class="bi bi-broadcast"></i>
-                        </div>
-                    </div>
-                    <h4><span class="counter-value" data-target="33.37">33.37</span>%</h4>
-                    <p class="text-muted mb-4">Unread Contact</p>
-                </div>
-                <div class="progress progress-sm rounded-0" role="progressbar" aria-valuenow="18" aria-valuemin="0"
-                    aria-valuemax="100">
-                    <div class="progress-bar bg-danger" style="width: 100%"></div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border-bottom border-3 card-animate border-info">
+                <div class="card-body text-center">
+                    <h4 class="mb-4"><span class="counter-value" data-target="21438">{{$totalCategories}}</span></h4>
+                    <p class="text-muted fw-medium text-uppercase mb-0">Total Categories</p>
                 </div>
             </div>
-        </div><!--end col-->
+        </div>
+        <div class="col-sm-2">
+            <div class="card border-bottom border-3 card-animate border-success">
+                <div class="card-body text-center">
+                    <h4 class="mb-4"><span class="counter-value" data-target="21438">{{$totalQueries}}</span></h4>
+                    <p class="text-muted fw-medium text-uppercase mb-0">Total Product Inquires</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border-bottom border-3 card-animate border-warning">
+                <div class="card-body text-center">
+                    <h4 class="mb-4"><span class="counter-value" data-target="21438">{{$totalPendingQueries}}</span></h4>
+                    <p class="text-muted fw-medium text-uppercase mb-0">Total Pending Inquires</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border-bottom border-3 card-animate border-danger">
+                <div class="card-body text-center">
+                    <h4 class="mb-4"><span class="counter-value" data-target="21438">{{$totalUnreadContact}}</span></h4>
+                    <p class="text-muted fw-medium text-uppercase mb-0">Total Unread Messages</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border-bottom border-3 card-animate border-warning">
+                <div class="card-body text-center">
+                    <h4 class="mb-4"><span class="counter-value" data-target="21438">{{$totalPendingReplay}}</span></h4>
+                    <p class="text-muted fw-medium text-uppercase mb-0">Total Pending Replied</p>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
