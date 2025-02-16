@@ -29,7 +29,8 @@
 
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
-                height: 324px !important;
+                height: 364px !important;
+                width: auto !important;
             }
 
             .sec_1_prev_2 {
@@ -37,15 +38,18 @@
             }
 
             .sec_1_prev_1 {
-                height: 190px;
+                height: 166px;
+                width: auto !important;
             }
 
             .sec_2_prev_1 {
                 height: 346px;
+                /* width: auto !important; */
             }
 
             .sec_2_prev_2 {
                 height: 346px;
+                /* width: auto !important; */
             }
 
 
@@ -177,13 +181,17 @@
                 <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1500ms">
                     <div class="reliable-one__images">
                         <div class="reliable-one__image">
-                            <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-2-1.jpg" alt="reliable"
-                                class="reliable-one__image__one">
+                            @php
+                                $about_two__image__one = $settings->where('key', 'about_two__image__one')->first();
+                            @endphp
+                            <img src="{{ $about_two__image__one ? asset($about_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-2-1.jpg') }}"
+                                alt="reliable" class="reliable-one__image__one sec_2_prev_1">
                             <div class="reliable-one__image__inner">
-                                <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-2-2.jpg" alt="reliable"
-                                    class="reliable-one__image__two">
-                                {{-- <img src="{{ asset('frontend') }}/assets/images/reliable/reliable-2-3.png" alt="reliable"
-                                    class="reliable-one__image__three"> --}}
+                                @php
+                                    $about_two__image__two = $settings->where('key', 'about_two__image__two')->first();
+                                @endphp
+                                <img src="{{ $about_two__image__two ? asset($about_two__image__two->value) : asset('frontend/assets/images/reliable/reliable-2-2.jpg') }}"
+                                    alt="reliable" class="reliable-one__image__two sec_2_prev_2">
                             </div><!-- /.reliable-one__image__inner -->
                             <div class="experience reliable-one__experience">
                                 <div class="experience__inner">

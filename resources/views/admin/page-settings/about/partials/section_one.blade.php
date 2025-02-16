@@ -8,10 +8,11 @@
                     <div class="about-one__image-grid">
                         <div class="about-one__image">
                             <div class="image-container">
-                                <img src="{{ app_setting('about_one__image__one') ? app_setting('about_one__image__one') : asset('frontend/assets/images/about/about-1-3.png') }}"
+                                @php
+                                    $about_one__image__one = $settings->where('key', 'about_one__image__one')->first();
+                                @endphp
+                                <img src="{{ $about_one__image__one ? asset($about_one__image__one->value) : asset('frontend/assets/images/about/about-1-3.png') }}"
                                     alt="about" class="about-one__image__one sec_1_prev_1">
-
-
                                 <input type="file" class="image-upload sec_1_img_1 d-none"
                                     data-target="about-one__image__one" name="about_one__image__one">
                                 <label class="upload-btn"
@@ -21,7 +22,10 @@
                                 </label>
                             </div>
                             <div class="image-container">
-                                <img src="{{ app_setting('about_one__image__two') ? app_setting('about_one__image__two') : asset('frontend/assets/images/about/about-1-2.jpg') }}"
+                                @php
+                                    $about_one__image__two = $settings->where('key', 'about_one__image__two')->first();
+                                @endphp
+                                <img src="{{ $about_one__image__two ? asset($about_one__image__two->value) : asset('frontend/assets/images/about/about-1-2.jpg') }}"
                                     alt="about" class="about-one__image__two sec_1_prev_2">
 
 
@@ -37,7 +41,12 @@
 
                         <div class="about-one__image">
                             <div class="image-container">
-                                <img src="{{ app_setting('about_one__image__three') ? app_setting('about_one__image__three') : asset('frontend/assets/images/about/about-1-1.jpg') }}"
+                                @php
+                                    $about_one__image__three = $settings
+                                        ->where('key', 'about_one__image__three')
+                                        ->first();
+                                @endphp
+                                <img src="{{ $about_one__image__three ? asset($about_one__image__three->value) : asset('frontend/assets/images/about/about-1-1.jpg') }}"
                                     alt="about" class="about-one__image__three sec_1_prev_3">
 
 
@@ -74,8 +83,11 @@
                 <div class="col-lg-6">
                     <textarea class="d-none" name="about_sec_1" id="about_one__content__one" cols="30" rows="10"></textarea>
                     <div id="about_content__one" class="about-one__content">
-                        @if (app_setting('about_sec_1'))
-                            {!! app_setting('about_sec_1') !!}
+                        @php
+                            $about_sec_1 = $settings->where('key', 'about_sec_1')->first();
+                        @endphp
+                        @if ($about_sec_1 != null)
+                            {!! $about_sec_1->value !!}
                         @else
                             <div class="sec-title sec-title--border">
                                 <h6 class="sec-title__tagline" contenteditable="true">about us</h6>

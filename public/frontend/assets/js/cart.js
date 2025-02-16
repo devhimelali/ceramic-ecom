@@ -75,8 +75,11 @@ function clearCart() {
 
 // Display cart items
 function displayCartItems() {
-    let cartItemsContainer = document.querySelector(".offcanvas__cart-products");
+    let cartItemsContainer = document.querySelector(
+        ".offcanvas__cart-products"
+    );
     let subtotalContainer = document.querySelector(".offcanvas__total-price");
+
 
     if (!cartItemsContainer || !subtotalContainer) return;
 
@@ -103,10 +106,14 @@ function displayCartItems() {
                 </div>
             </div>
             <div class="offcanvas__cart-product__remove">
-                <a href="javascript:void(0);" class="offcanvas__cart-product__remove remove-item" data-id="${item.id}">
+                <a href="javascript:void(0);" class="offcanvas__cart-product__remove remove-item" data-id="${
+                    item.id
+                }">
                     <i class="fas fa-times"></i>
                 </a>
-                <span class="offcanvas__cart-product__quantity">${item.quantity} x $${parseFloat(item.price).toFixed(2)}</span>
+                <span class="offcanvas__cart-product__quantity">${
+                    item.quantity
+                } x $${parseFloat(item.price).toFixed(2)}</span>
             </div>
         `;
         cartItemsContainer.appendChild(cartItem);

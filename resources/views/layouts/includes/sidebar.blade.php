@@ -77,7 +77,8 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('product.queries') }}"
-                        class="nav-link menu-link {{ $active == 'product_query' ? 'active' : '' }}" aria-expanded="false">
+                        class="nav-link menu-link {{ $active == 'product_query' ? 'active' : '' }}"
+                        aria-expanded="false">
                         <i class="ph ph-address-book"></i>
                         <span data-key="t-dashboards">Product Queries</span>
                     </a>
@@ -89,7 +90,7 @@
                         <span data-key="t-dashboards">Contacts</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('settings.index') }}"
                         class="nav-link menu-link {{ $active == 'settings' ? 'active' : '' }}" aria-expanded="false">
                         <i class="ph-gear"></i>
@@ -100,6 +101,35 @@
                         <i class="ph-gear"></i>
                         <span data-key="t-dashboards">About Page</span>
                     </a>
+                </li> --}}
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ $active == 'settings' || $active == 'about' ? 'active' : '' }}"
+                        href="#settings" data-bs-toggle="collapse" role="button" aria-expanded="true"
+                        aria-controls="settings">
+                        <i class="ph-gear"></i> <span data-key="t-dashboards">Settings</span>
+                    </a>
+                    <div class="menu-dropdown collapse {{ $active == 'settings' || $active == 'about' || $active == 'home' ? 'show' : '' }}"
+                        id="settings" style="">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('settings.index') }}"
+                                    class="nav-link {{ $active == 'settings' ? 'active' : '' }}"
+                                    data-key="t-analytics">Settings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('sliders.index') }}"
+                                    class="nav-link {{ $active == 'home' ? 'active' : '' }}"
+                                    data-key="t-analytics">Home Page</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('settings.aboutPageChange') }}"
+                                    class="nav-link {{ $active == 'about' ? 'active' : '' }}"
+                                    data-key="t-analytics">About
+                                    Page</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </div>

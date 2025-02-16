@@ -48,8 +48,11 @@
             <div class="main-header__left">
                 <div class="main-header__logo">
                     <a href="{{ route('frontend.home') }}">
-                        <img src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}"
-                            alt="logo" width="125">
+                        @php
+                            $app_logo = $settings->where('key', 'dark_logo')->first();
+                        @endphp
+                        <img src="{{ $app_logo ? asset('assets/images/settings/' . $app_logo->value) : '#' }}"
+                            alt="logo-dark" width="125">
                     </a>
                 </div><!-- /.main-header__logo -->
                 <nav class="main-header__nav main-menu">

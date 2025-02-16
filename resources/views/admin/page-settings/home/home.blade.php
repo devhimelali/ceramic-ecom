@@ -22,6 +22,81 @@
         .enquireBtn {
             width: 70%;
         }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-container img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            transition: 0.3s;
+            z-index: 99;
+        }
+
+        .upload-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .upload-btn input {
+            display: none;
+        }
+
+        .sec_1_prev_3 {
+            width: 270px;
+            height: 617px !important;
+        }
+
+        .sec_1_prev_2 {
+            width: 240px;
+            height: 347px
+        }
+
+        .sec_1_prev_1 {
+            width: 240px;
+            height: 240px
+        }
+
+        .sec_2_prev_1 {
+            width: 338px;
+            height: 463px
+        }
+
+        .sec_2_prev_2 {
+            width: 276px;
+            height: 463px
+        }
+
+        @media screen and (max-width: 480px) {
+            .sec_1_prev_3 {
+                height: 324px !important;
+            }
+
+            .sec_1_prev_2 {
+                height: 195px;
+            }
+
+            .sec_1_prev_1 {
+                height: 190px;
+            }
+        }
     </style>
 @endsection
 @section('content')
@@ -197,58 +272,73 @@
 @endsection
 @section('page-script')
     <script>
-        $(document).ready(function() {
-            $('.enquireBtn').click(function() {
-                var productId = $(this).data('id');
-                var url = $(this).data('url');
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function(response) {
-                        $('#enquireFormResponse').html(response.html);
-                        $('#myModal').modal('show');
-                    }
-                })
+        function setupImagePreview(inputSelector, previewSelector, minWidth, minHeight) {
+            $(inputSelector).click();
+
+            $(inputSelector).change(function() {
+                if (this.files && this.files[0]) {
+                    var file = this.files[0];
+
+                    validateImageSize(file, minWidth, minHeight, function(isValid, imageUrl) {
+                        if (isValid) {
+                            $(previewSelector).attr("src", imageUrl);
+                        }
+                    });
+                }
             });
+        }
 
-            // $('#enquireForm').submit(function(e) {
-            //     e.preventDefault();
-            //     var formData = $('#enquireForm').serialize();
-            //     // console.log(formData);
-            //     $.ajax({
-            //         url: "{{ route('enquire') }}",
-            //         method: 'POST',
-            //         data: formData,
-            //         beforeSend: function() {
-            //             $('.enquireSubmitBtn').prop('disabled', true);
-            //             $('.enquireSubmitBtn').html(
-            //                 '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
-            //             );
-            //         },
-            //         success: function(response) {
-            //             $('.enquireSubmitBtn').prop('disabled', false);
-            //             $('.enquireSubmitBtn').html('Submit');
-            //             if (response.status == 'success') {
-            //                 notify(response.status, response.message);
-            //                 $('#enquireForm')[0].reset();
-            //                 $('#myModal').modal('hide');
-            //             }
-
-            //         },
-            //         error: function(xhr, status, error) {
-            //             $('.enquireSubmitBtn').prop('disabled', false);
-            //             $('.enquireSubmitBtn').html('Submit');
-            //             let errors = xhr.responseJSON.errors;
-            //             if (errors) {
-            //                 $.each(errors, function(key, value) {
-            //                     let inputField = $('[name="' + key + '"]');
-            //                     inputField.addClass('is-invalid');
-            //                     notify('error', value[0]);
-            //                 });
-            //             }
-            //         }
-            //     });
-            // });
+        function validateImageSize(file, minWidth, minHeight, callback) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var image = new Image();
+                image.src = e.target.result;
+                image.onload = function() {
+                    if (image.width < minWidth || image.height < minHeight) {
+                        alert(`Image is too small! Minimum required size is ${minWidth} × ${minHeight} px.`);
+                        callback(false); // Image size is invalid
+                    } else {
+                        callback(true, e.target.result); // Image is valid
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // When content is edited
+            $('[contenteditable="true"]').on('blur', function() {
+                $(this).addClass('edited'); // Mark as edited
+            });
         });
+
+        function saveChanges(cloneId, appendId, formId) {
+            let fullContent = $(cloneId).clone();
+            // console.log(fullContent.html());
+            $(appendId).val(fullContent.html());
+
+            // Prepare the form data and CSRF token
+            let formData = new FormData($(formId)[0]);
+            let actionUrl = $(formId).attr('action');
+            $.ajax({
+                url: actionUrl,
+                method: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                },
+                success: function(response) {
+                    if (response.status === "success") {
+                        notify(response.status, response.message);
+                    }
+                },
+                error: function(xhr) {
+                    notify('error', 'Failed to save changes.');
+                }
+            });
+        }
     </script>
 @endsection

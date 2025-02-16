@@ -16,6 +16,7 @@ class FrontendController extends Controller
     public function home()
     {
         $data = [
+            'setting' => Setting::get(),
             'active' => 'home',
             'sliders' => Slider::get(),
             'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->limit(15)->get(),
