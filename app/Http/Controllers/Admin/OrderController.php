@@ -323,18 +323,20 @@ class OrderController extends Controller
             'phone' => 'required|string|max:255',
             'message' => 'required|string|max:255',
         ]);
+        
+        $productQuery = ProductQuery::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'status' => ProductQueryStatus::PENDING
+        ]);
 
         foreach ($request->cartItems as $item) {
             // dd($item);
             $product = Product::findOrFail($item['id']);
 
-            $productQuery = ProductQuery::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'message' => $request->message,
-                'status' => ProductQueryStatus::PENDING
-            ]);
+
 
             $productQueryItem = $productQuery->items()->create([
                 'product_id' => $product->id,

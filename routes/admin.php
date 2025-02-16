@@ -45,4 +45,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('product-queries', [OrderController::class, 'productQueries'])->name('product.queries');
     Route::get('product-query/{id}', [OrderController::class, 'viewProductQuery'])->name('product.query');
     Route::post('product-query-status/{id}', [OrderController::class, 'changeProductQueryStatus'])->name('product.query.status');
+    Route::get('chart-data', [DashboardController::class, 'getChartData'])->name('get.chart.data');
 });
