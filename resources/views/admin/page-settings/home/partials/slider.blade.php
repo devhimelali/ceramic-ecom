@@ -56,8 +56,8 @@
                     <div class="main-slider__right">
                         <div class="main-slider__image">
                             <div class="main-slider__image__inner">
-                                <img src="{{ $slider->image ?? asset('frontend/assets/images/slider/slider-thumbs-1-1.jpg') }}"
-                                    alt="slider" class="main-slider__image__one">
+                                <img src="{{ $slider->image ? asset($slider->image) : asset('frontend/assets/images/slider/slider-thumbs-1-1.jpg') }}"
+                                    alt="slider-image" class="main-slider__image__one">
                             </div><!-- /.main-slider__image__inner -->
                             <img src="{{ asset('frontend') }}/assets/images/shapes/slider-shape-1-1.jpg" alt="slider"
                                 class="main-slider__image__two">
@@ -266,7 +266,7 @@
             }'>
         @foreach ($sliders as $slider)
             <li>
-                <img src="{{ $slider->image ?? asset('frontend/assets/images/slider/slider-thumbs-1-1.jpg') }}"
+                <img src="{{ $slider->image ? asset($slider->image) : asset('frontend/assets/images/slider/slider-thumbs-1-1.jpg') }}"
                     alt="slider-thumbs">
             </li>
         @endforeach

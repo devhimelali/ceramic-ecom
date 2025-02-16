@@ -28,10 +28,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('settings/about-page', [SettingController::class, 'aboutPageChange'])->name('settings.aboutPageChange');
 
 
-    Route::get('settings/home-page', [SettingController::class, 'homePage'])->name('settings.aboutPage');
-    // Route::post('settings/about-page', [SettingController::class, 'aboutPageChange'])->name('settings.aboutPageChange');
 
-    Route::resource('sliders', SliderController::class);
+    Route::resource('settings/sliders', SliderController::class);
+    Route::get('settings/home-page', [SettingController::class, 'homePage'])->name('settings.homePage');
+    Route::post('settings/home-page', [SettingController::class, 'homePageChange'])->name('settings.homePageChange');
 
 
     Route::resource('attributes', AttributeController::class);

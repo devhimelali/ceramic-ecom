@@ -43,6 +43,14 @@
 
 @section('content')
     <div class="container my-5">
+        <div class="d-flex justify-content-between">
+            <h2 class="my-3">
+                Home Page Slider
+            </h2>
+            <div>
+                <a href="{{ route('settings.homePage') }}" target="_blank" class="btn btn-primary">Manage Home Page</a>
+            </div>
+        </div>
         <div id="">
             @foreach ($sliders as $key => $slider)
                 <form id="uploadForm-{{ $key + 1 }}" action="{{ route('sliders.update', $slider->id) }}" method="POST"
@@ -60,7 +68,7 @@
                                 placeholder="Enter Title">
                         </div>
                         <div class="mb-2">
-                            <textarea class="form-control description" name="description" placeholder="Enter Description">{{ $slider->description }}</textarea>
+                            <textarea class="form-control description" rows="4" name="description" placeholder="Enter Description">{{ $slider->description }}</textarea>
                         </div>
                         <div class="d-flex justify-content-between">
                             <input type="file" class="form-control d-none file-input" name="file"

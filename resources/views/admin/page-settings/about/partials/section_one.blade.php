@@ -10,8 +10,6 @@
                             <div class="image-container">
                                 <img src="{{ app_setting('about_one__image__one') ? app_setting('about_one__image__one') : asset('frontend/assets/images/about/about-1-3.png') }}"
                                     alt="about" class="about-one__image__one sec_1_prev_1">
-
-
                                 <input type="file" class="image-upload sec_1_img_1 d-none"
                                     data-target="about-one__image__one" name="about_one__image__one">
                                 <label class="upload-btn"
