@@ -46,6 +46,11 @@
     <div class="container-fluid">
         <div class="main-header__inner">
             <div class="main-header__left">
+                <div class="mobile-nav__btn mobile-nav__toggler">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div><!-- /.mobile-nav__toggler -->
                 <div class="main-header__logo">
                     <a href="{{ route('frontend.home') }}">
                         @php
@@ -99,30 +104,31 @@
                 </nav><!-- /.main-header__nav -->
             </div><!-- /.main-header__left -->
             <div class="main-header__right">
-                <div class="mobile-nav__btn mobile-nav__toggler">
+                {{-- <div class="mobile-nav__btn mobile-nav__toggler">
                     <span></span>
                     <span></span>
                     <span></span>
-                </div><!-- /.mobile-nav__toggler -->
+                </div><!-- /.mobile-nav__toggler --> --}}
+                <a href="javascript:void(0);" class="search-toggler main-header__search">
+                    <i class="icon-search" aria-hidden="true"></i>
+                    <span class="sr-only">Search</span>
+                </a><!-- /.search-toggler -->
                 <a href="javascript:void(0);" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                     aria-controls="offcanvasRight" class="main-header__cart">
                     <i class="icon-cart" aria-hidden="true"></i>
                     <span class="sr-only">Cart</span>
                     <span class="totalCartItems"></span>
                 </a><!-- /.shopping card -->
-                <a href="#" class="search-toggler main-header__search">
-                    <i class="icon-search" aria-hidden="true"></i>
-                    <span class="sr-only">Search</span>
-                </a><!-- /.search-toggler -->
+
                 {{-- <a href="#" class="floens-btn main-header__btn">
                     <span>get a quote</span>
                     <i class="icon-right-arrow"></i>
                 </a><!-- /.thm-btn main-header__btn --> --}}
-                <button class="main-header__sidebar-btn sidebar-btn__toggler">
+                {{-- <button class="main-header__sidebar-btn sidebar-btn__toggler">
                     <span class="main-header__sidebar-btn__box"></span><!-- /.main-header__sidebar-btn__box -->
                     <span class="main-header__sidebar-btn__box"></span><!-- /.main-header__sidebar-btn__box -->
                     <span class="main-header__sidebar-btn__box"></span><!-- /.main-header__sidebar-btn__box -->
-                </button><!-- /.main-header__sidebar-btn -->
+                </button><!-- /.main-header__sidebar-btn --> --}}
             </div><!-- /.main-header__right -->
         </div><!-- /.main-header__inner -->
     </div><!-- /.container-fluid -->
@@ -133,6 +139,55 @@
     })
 </script>
 <style>
+    /* .mobile-nav__btn.mobile-nav__toggler {
+        display: none;
+    } */
+
+    @media (max-width: 425px) {
+        .main-header__search {
+            font-size: 16px;
+            margin-left: 0px;
+            margin-right: 0px !important;
+        }
+
+        .main-header__cart {
+            margin-left: 15px;
+            padding-left: 15px;
+            margin-right: 15px;
+        }
+
+        .main-header__inner {
+            padding-top: 20px !important;
+            padding-bottom: 10px !important;
+        }
+    }
+
+    @media (min-width: 448px) {
+        .mobile-nav__btn.mobile-nav__toggler {
+            display: none;
+        }
+    }
+
+    .main-header__search {
+        font-size: 16px;
+        margin-left: 0px;
+        margin-right: 20px;
+    }
+
+
+
+
+    .mobile-nav__btn {
+        width: 24px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        flex-wrap: wrap;
+        cursor: pointer;
+        z-index: 3;
+        margin: 0 30px 0 10px;
+    }
+
     span.totalCartItems {
         position: absolute;
         right: -12px;

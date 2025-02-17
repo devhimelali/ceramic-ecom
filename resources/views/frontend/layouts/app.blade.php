@@ -95,9 +95,12 @@
             <span class="mobile-nav__close mobile-nav__toggler"><i class="fa fa-times"></i></span>
 
             <div class="logo-box">
-                <a href="{{ route('frontend.home') }}" aria-label="logo image"><img
-                        src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}" width="155"
-                        alt="logo" /></a>
+                <a href="{{ route('frontend.home') }}" aria-label="logo image">
+                    @php
+                        $app_logo = $settings->where('key', 'dark_logo')->first();
+                    @endphp
+                    <img src="{{ $app_logo ? asset('assets/images/settings/' . $app_logo->value) : '#' }}"
+                        width="155" alt="logo" /></a>
             </div>
             <!-- /.logo-box -->
             <div class="mobile-nav__container"></div>
@@ -157,9 +160,12 @@
         <div class="sidebar-one__content">
             <span class="sidebar-one__close sidebar-btn__toggler"><i class="fa fa-times"></i></span>
             <div class="sidebar-one__logo sidebar-one__item">
-                <a href="index.html" aria-label="logo image"><img
-                        src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}" width="123"
-                        alt="logo" /></a>
+                <a href="{{ route('frontend.home') }}" aria-label="logo image">
+                    @php
+                        $app_logo = $settings->where('key', 'dark_logo')->first();
+                    @endphp
+                    <img src="{{ $app_logo ? asset('assets/images/settings/' . $app_logo->value) : '#' }}"
+                        width="123" alt="logo" /></a>
             </div><!-- /.sidebar-one__logo -->
             <div class="sidebar-one__about sidebar-one__item">
                 <p class="sidebar-one__about__text">

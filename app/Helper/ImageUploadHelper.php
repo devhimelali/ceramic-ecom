@@ -57,12 +57,13 @@ class ImageUploadHelper
 
     public static function getProductImageUrl($filename, $folder = 'products', $type = 'thumbnail')
     {
-        if (!$filename) {
+        $path = "uploads/{$folder}/{$type}/{$filename}";
+        if (!$filename || file_exists($path)) {
             return asset('frontend/assets/images/product-placeholder.png'); // Default placeholder image
         }
 
         // Define the image path based on type
-        $path = "uploads/{$folder}/{$type}/{$filename}";
+        
 
         return Storage::disk('public')->exists($path) ? asset("storage/{$path}") : asset('images/no-image.png');
     }
