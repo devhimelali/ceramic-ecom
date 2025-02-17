@@ -54,13 +54,13 @@
                         <span data-key="t-dashboards">Category</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('orders.index') }}"
                         class="nav-link menu-link {{ $active == 'order' ? 'active' : '' }}" aria-expanded="false">
                         <i class="ph-gauge"></i>
                         <span data-key="t-dashboards">Orders</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="{{ route('attributes.index') }}"
                         class="nav-link menu-link {{ $active == 'attribute' ? 'active' : '' }}" aria-expanded="false">

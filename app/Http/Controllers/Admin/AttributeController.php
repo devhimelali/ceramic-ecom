@@ -105,7 +105,6 @@ class AttributeController extends Controller
 
     public function edit(Request $request, $id)
     {
-        sleep(2);
         $attribute = Attribute::find($id);
         return view('admin.attribute.edit', compact('attribute'));
     }
