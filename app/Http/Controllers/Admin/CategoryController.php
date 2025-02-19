@@ -15,7 +15,7 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::with('children')->whereNull('parent_id')->orderBy('id', 'desc');
+        $categories = Category::with('children')->whereNull('parent_id')->orderBy('id', 'desc')->get();
         if ($request->ajax()) {
             $categories = Category::with('parent')->select('id', 'name', 'slug', 'image', 'parent_id', 'is_active', 'front_show');
             return DataTables::of($categories)

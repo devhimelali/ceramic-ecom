@@ -279,7 +279,9 @@
                     success: function(response) {
                         if (response.status === "success") {
                             notify(response.status, response.message);
-                            $("#addForm")[0].reset();
+                            $('#name').val('');
+                            $('#parent_id').val('');
+                            $('#is_active').val('');
                             $(".previewImg").attr("src",
                                 "{{ asset('assets/placeholder-image.webp') }}");
 
