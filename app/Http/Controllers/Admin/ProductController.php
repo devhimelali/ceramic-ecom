@@ -34,8 +34,8 @@ class ProductController extends Controller
                 ->addIndexColumn()
                 ->addColumn('image', function ($row) {
                     $image = $row->images->where('type', 'thumbnail')->first();
-                    $imageUrl = $row->image
-                        ? asset('storage/' . $row->image)
+                    $imageUrl = $image
+                        ? asset('storage/uploads/products/thumbnail/' . $image->image)
                         : "https://ui-avatars.com/api/?name=" . urlencode($row->name);
 
                     return '<img class="rounded-circle header-profile-user" src="' . $imageUrl . '" alt="' . e($row->name) . '" width="50" height="50">';
@@ -44,7 +44,7 @@ class ProductController extends Controller
                     return $row->category->name;
                 })
                 ->addColumn('brand', function ($row) {
-                    return $row->brand->name;
+                    return $row->brand->name ?? 'N/A';
                 })
                 ->addColumn('status', function ($row) {
                     return $row->status->value == 'active' ? '<span class="badge text-bg-success">Active</span>' : '<span class="badge text-bg-danger">Inactive</span>';
@@ -271,7 +271,7 @@ class ProductController extends Controller
     {
         $imageId = $request->input('image_id');
         $productId = $request->input('product_id');
-        
+
         $image = ProductImage::where('id', $imageId)->where('product_id', $productId)->first();
 
         if ($image) {

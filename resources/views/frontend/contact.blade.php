@@ -21,8 +21,8 @@
         <div class="container">
             <h2 class="page-header__title">Contact Us</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home"></i> <a href="index.html">Home</a></li>
-                <li><span>Contact Us</span></li>
+                <li><i class="icon-home text-white"></i> <a href="index.html">Home</a></li>
+                <li><span class="text-white">Contact Us</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
     </section><!-- /.page-header -->
@@ -78,7 +78,8 @@
                                             <span class="icon-location"></span>
                                         </div><!-- /.contact-one__info__icon -->
                                         <address class="contact-one__info__text"><a
-                                                href="#">{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a></address>
+                                                href="#">{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a>
+                                        </address>
                                         <!-- /.contact-one__info__text -->
                                     </div><!-- /.contact-one__info__item__inner -->
                                 </div><!-- /.contact-one__info__item -->

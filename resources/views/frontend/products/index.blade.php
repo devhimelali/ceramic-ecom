@@ -1,4 +1,5 @@
 @extends('frontend.layouts.app')
+@section('title', 'Products')
 @section('page-style')
     <style>
         .product__sidebar__attribute {
@@ -141,8 +142,8 @@
         <div class="container">
             <h2 class="page-header__title">Find Your Products</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
-                <li><span>Products</span></li>
+                <li><i class="icon-home text-white"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
+                <li><span class="text-white">Products</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
     </section><!-- /.page-header -->
@@ -212,77 +213,15 @@
                                     </div>
                                 </div>
                             @endforeach
-
-                            {{-- @foreach ($attributes as $attribute)
-                                <div class="product__sidebar__attribute">
-                                    <h3 class="product__sidebar__title product__categories__title"
-                                        data-attribute-id="{{ $attribute->id }}">
-                                        {{ $attribute->name }}
-                                        <span class="expand-icon" id="expand-icon-{{ $attribute->id }}">
-                                            <i class="fas fa-plus"></i>
-                                        </span>
-                                    </h3>
-                                    <div class="product__sidebar__values" id="values-{{ $attribute->id }}"
-                                        style="display: none;">
-                                        @foreach ($attribute->values as $attributeValue)
-                                            <div class="product__sidebar__value">
-                                                <input type="checkbox"
-                                                    id="attribute-{{ $attribute->id }}-value-{{ $attributeValue->id }}"
-                                                    name="attribute[{{ $attribute->id }}][]"
-                                                    value="{{ $attributeValue->id }}" class="product__sidebar__checkbox"
-                                                    @if (in_array($attributeValue->id, request()->input('attribute.' . $attribute->id, []))) checked @endif>
-                                                <label
-                                                    for="attribute-{{ $attribute->id }}-value-{{ $attributeValue->id }}"
-                                                    class="product__sidebar__label">
-                                                    {{ $attributeValue->value }}
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endforeach --}}
-
-
                         </div><!-- /.category-widget -->
                     </aside><!-- /.shop-sidebar -->
                 </div><!-- /.col-xl-3 col-lg-4 -->
                 <div class="col-xl-9 col-lg-8">
-                    {{-- <div class="product__info-top">
-                        <div class="product__showing-text-box">
-                            <p class="product__showing-text">Showing 1–9 of 12 Results</p>
-                        </div>
-                        <div class="product__showing-sort">
-                            <select class="selectpicker" aria-label="default shorting">
-                                <option selected>default shorting</option>
-                                <option value="1">Sort by view</option>
-                                <option value="2">Sort by price</option>
-                                <option value="3">Sort by ratings</option>
-                            </select>
-                        </div>
-                    </div> --}}
-                    <div class="product__info-top mb-4">
-                        <div class="product__showing-text-box">
-                            <div class="mt-4">
-                                <h3 class="product__sidebar__title">Filter by Brand</h3>
-                                <select name="brand" class="selectpicker" id="brand" aria-label="default shorting">
-                                    <option value="" selected disabled>Select Brand</option>
-                                    @foreach ($brands as $brand)
-                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-
                     <div id="loader" class="loader" style="display: none;">
                         <div class="spinner"></div>
                         <p>Loading...</p>
                     </div>
-                    <div id="products">
-                        <!-- Custom Loader (Initially hidden) -->
-                        <!-- Products Content -->
-                        <!-- Your products content will be placed here -->
+                    <div id="products" class="mt-5 pt-4">
                     </div>
 
 

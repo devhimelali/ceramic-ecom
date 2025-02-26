@@ -31,9 +31,8 @@
                         <i class="icon-instagram" aria-hidden="true"></i>
                         <span class="sr-only">Instagram</span>
                     </a>
-                    <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}
-                        <i class="icon-youtube"
-                        aria-hidden="true"></i>
+                    <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}"> <i
+                            class="icon-youtube" aria-hidden="true"></i>
                         <span class="sr-only">Youtube</span>
                     </a>
                 </div><!-- /.topbar-one__social -->
@@ -104,11 +103,6 @@
                 </nav><!-- /.main-header__nav -->
             </div><!-- /.main-header__left -->
             <div class="main-header__right">
-                {{-- <div class="mobile-nav__btn mobile-nav__toggler">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div><!-- /.mobile-nav__toggler --> --}}
                 <a href="javascript:void(0);" class="search-toggler main-header__search">
                     <i class="icon-search" aria-hidden="true"></i>
                     <span class="sr-only">Search</span>
@@ -119,16 +113,6 @@
                     <span class="sr-only">Cart</span>
                     <span class="totalCartItems"></span>
                 </a><!-- /.shopping card -->
-
-                {{-- <a href="#" class="floens-btn main-header__btn">
-                    <span>get a quote</span>
-                    <i class="icon-right-arrow"></i>
-                </a><!-- /.thm-btn main-header__btn --> --}}
-                {{-- <button class="main-header__sidebar-btn sidebar-btn__toggler">
-                    <span class="main-header__sidebar-btn__box"></span><!-- /.main-header__sidebar-btn__box -->
-                    <span class="main-header__sidebar-btn__box"></span><!-- /.main-header__sidebar-btn__box -->
-                    <span class="main-header__sidebar-btn__box"></span><!-- /.main-header__sidebar-btn__box -->
-                </button><!-- /.main-header__sidebar-btn --> --}}
             </div><!-- /.main-header__right -->
         </div><!-- /.main-header__inner -->
     </div><!-- /.container-fluid -->

@@ -6,15 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title') - {{ $settings->where('key', 'site_name')->first()->value ?? 'Laravel' }}</title>
     <!-- favicons Icons -->
-    <link rel="apple-touch-icon" sizes="180x180"
+    {{-- <link rel="apple-touch-icon" sizes="180x180"
         href="{{ asset('frontend') }}/assets/images/favicons/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32"
-        href="{{ asset('frontend') }}/assets/images/favicons/favicon-32x32.png" />
+        href="{{ asset('frontend') }}/assets/images/favicons/favicon-32x32.png" /> --}}
+    @php
+        $site_icon = $settings->where('key', 'site_icon')->first();
+    @endphp
     <link rel="icon" type="image/png" sizes="16x16"
-        href="{{ asset('frontend') }}/assets/images/favicons/favicon-16x16.png" />
+        href="{{ $site_icon ? asset('assets/images/settings/' . $site_icon->value) : asset('frontend/assets/images/favicons/favicon-16x16.png') }}" />
     <link rel="manifest" href="{{ asset('frontend') }}/assets/images/favicons/site.webmanifest" />
     <meta name="description"
-        content="Floens is a modern HTML Template for Beauty, Spa Centers, Hair, Nail, Spa Salons & Cosmetic shops. The template perfectly fits Beauty Spa, Salon, and Wellness Treatments websites and businesses." />
+        content="{{ $settings->where('key', 'about_description')->first()->value ?? 'Laravel' }}" />
     <script src="{{ asset('frontend') }}/assets/vendors/jquery/jquery-3.7.0.min.js"></script>
     {{-- csrf --}}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -66,6 +69,13 @@
         .icon-facebook,
         .icon-twitter {
             color: rgb(255, 255, 255) !important;
+        }
+
+        span.variation_value_pointer.selected {
+            background: #e28245;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #fff;
         }
     </style>
 </head>

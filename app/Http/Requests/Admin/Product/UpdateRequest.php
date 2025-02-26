@@ -27,15 +27,14 @@ class UpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', Rule::unique('products', 'name')->ignore($id)],
             'category' => ['required', 'exists:categories,id'],
-            'brand' => ['required', 'exists:brands,id'],
             'short_description' => ['required', 'string'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric'],
             'status' => ['required', Rule::enum(StatusEnum::class)],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp'],
             'images.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp'],
-            'variation_names' => ['nullable', 'array', 'exists:attributes,id'],
-            'variation_values' => ['nullable', 'array', 'exists:attribute_values,id'],
+            'variation_names' => ['required', 'array', 'exists:attributes,id'],
+            'variation_values' => ['required', 'array', 'exists:attribute_values,id'],
         ];
     }
 }

@@ -2,7 +2,7 @@
     use App\Helpers\ImageUploadHelper;
 @endphp
 @extends('frontend.layouts.app')
-
+@section('title', $product->name)
 @section('content')
     <section class="page-header">
         <div class="page-header__bg"
@@ -12,9 +12,9 @@
         <div class="container">
             <h2 class="page-header__title">{{ $product->name }}</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
-                <li><span>shop</span></li>
-                <li><span>{{ $product->name }}</span></li>
+                <li><i class="icon-home text-white"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
+                <li><span class="text-white">shop</span></li>
+                <li><span class="text-white">{{ $product->name }}</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
     </section><!-- /.page-header -->
@@ -28,7 +28,10 @@
                         <div class="swiper product-details__gallery-top">
                             <div class="swiper-wrapper">
                                 @php
-                                    $images = $product->images->where('type', 'gallery');
+                                    $images = $product
+                                        ->images()
+                                        ->whereIn('type', ['gallery', 'thumbnail'])
+                                        ->get();
                                 @endphp
                                 @forelse ($images as $image)
                                     <div class="swiper-slide">
@@ -57,17 +60,6 @@
                 </div><!-- /.column -->
                 <div class="col-lg-6 col-xl-6 wow fadeInRight" data-wow-delay="300ms">
                     <div class="product-details__content">
-                        {{-- <div class="product-details__top">
-                            <div class="product-details__top__left">
-                                <h3 class="product-details__name">mosaic tiles</h3><!-- /.product-title -->
-                                <h4 class="product-details__price">$69</h4><!-- /.product-price -->
-                            </div><!-- /.product-details__price -->
-                            <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
-                                class="product-details__video video-button video-popup">
-                                <span class="icon-play"></span>
-                                <i class="video-button__ripple"></i>
-                            </a><!-- /.video-button -->
-                        </div> --}}
                         <div class="product-details__excerpt">
                             <h3 class="product-details__excerpt__text1">
                                 {{ $product->name ?? 'No Name' }}
@@ -93,16 +85,6 @@
                             @endforeach
                         </div>
 
-                        {{-- <div class="product-details__info">
-                            <div class="product-details__quantity">
-                                <h3 class="product-details__content__title">Quantity</h3>
-                                <div class="quantity-box">
-                                    <button type="button" class="sub"><i class="fa fa-minus"></i></button>
-                                    <input type="text" id="1" value="1">
-                                    <button type="button" class="add"><i class="fa fa-plus"></i></button>
-                                </div>
-                            </div><!-- /.quantity -->
-                        </div><!-- /.product-details__info --> --}}
                         <div class="product-details__buttons">
                             <div class="d-flex align-items-center justify-content-center">
                                 <a href="javascript:void(0);"
@@ -208,4 +190,16 @@
             });
         });
     </script>
+@endsection
+@section('page-style')
+    <style>
+        .floens-breadcrumb li:not(:last-of-type)::after {
+            color: #fff;
+        }
+
+        .section-space {
+            padding-top: var(--section-space, 120px);
+            padding-bottom: 0;
+        }
+    </style>
 @endsection

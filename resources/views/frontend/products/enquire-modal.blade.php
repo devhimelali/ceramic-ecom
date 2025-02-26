@@ -43,6 +43,17 @@
         gap: 15px;
         align-items: center;
     }
+
+    span.variation_value_pointer.selected {
+        background: #e28245;
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: #fff;
+    }
+
+    span.color-variation.selected {
+        transform: scale(1.14);
+    }
 </style>
 
 <form action="" method="post" id="enquireForm">
@@ -55,7 +66,7 @@
                     <div class="col-lg-12 variationContainer">
                         @foreach ($result as $group)
                             <div class="row" data-id="variation_{{ Str::slug($group['attribute']) }}">
-                                <div class="col-lg-5">
+                                <div class="col-lg-12">
                                     <div class="mb-3">
                                         <h6>{{ $group['attribute'] }}: <span
                                                 class="selectedValue-{{ Str::slug($group['attribute']) }}"></span></h6>
@@ -66,11 +77,11 @@
                                                         data-id="{{ Str::slug($value) }}" value=""> --}}
                                                     @if (Str::slug($group['attribute']) == 'color')
                                                         <span
-                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer"
+                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer color-variation"
                                                             data-id="{{ Str::slug($value) }}"
                                                             data-key="{{ Str::slug($group['attribute']) }}"
                                                             data-value="{{ $value }}"
-                                                            style="background-color: {{ strtolower($value) }}; height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
+                                                            style="background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif  height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
                                                     @else
                                                         <span
                                                             class="variation_{{ Str::slug($value) }} variation_value_pointer"

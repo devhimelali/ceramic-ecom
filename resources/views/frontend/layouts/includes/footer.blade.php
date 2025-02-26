@@ -6,7 +6,7 @@
     <div class="main-footer__top">
         <div class="container">
             <div class="row">
-                <div class="col-xl-4 col-lg-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                <div class="col-xl-6 col-lg-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <div class="footer-widget footer-widget--about">
                         <a href="{{ route('frontend.home') }}" class="footer-widget__logo">
                             @php
@@ -33,15 +33,15 @@
                         </ul><!-- /.list-unstyled footer-widget__links -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-2 col-lg-3 col-md-3 col-sm-6 -->
-                <div class="col-xl-3 col-lg-6 col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="600ms">
+                <div class="col-xl-4 col-lg-6 col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="600ms">
                     <div class="footer-widget footer-widget--contact">
                         <div class="footer-widget__top">
                             <div class="footer-widget__title-box"></div><!-- /.footer-widget__title-box -->
                             <h2 class="footer-widget__title">Get inTouch</h2><!-- /.footer-widget__title -->
                         </div><!-- /.footer-widget__top -->
                         <ul class="list-unstyled footer-widget__info">
-                            <li><a
-                                    href="javascript:void(0);">{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a>
+                            <li><a href="javascript:void(0);"> <span class="icon-location"></span>
+                                    {{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a>
                             </li>
                             <li><span class="icon-paper-plane"></span> <a
                                     href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
@@ -220,6 +220,12 @@
         background: var(--floens-base);
         color: #fff;
         padding: 10px 0;
+    }
+
+    .footer-widget--links-one {
+        position: relative;
+        right: 0px;
+        padding-left: 0px;
     }
 
     @media (max-width: 767px) {
