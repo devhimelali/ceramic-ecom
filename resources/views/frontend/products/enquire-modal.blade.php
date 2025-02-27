@@ -54,6 +54,25 @@
     span.color-variation.selected {
         transform: scale(1.14);
     }
+
+    .variationContainer {
+        border: 1px solid #d7d7d7;
+        padding: 6px 12px 0px 12px;
+    }
+
+    .singleVariationContainer:not(:last-child) {
+        border-bottom: 1px solid #d7d7d7;
+        margin-bottom: 10px;
+    }
+
+    .attribute-title {
+        display: inline-block;
+        float: left;
+        margin-right: 30px;
+        color: black;
+        font-size: 14px !important;
+        line-height: 26px;
+    }
 </style>
 
 <form action="" method="post" id="enquireForm">
@@ -62,14 +81,17 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name">Variant <span class="text-danger">*</span></label>
+                    <label for="name" style="font-size: 16px">Variant <span class="text-danger">*</span></label>
                     <div class="col-lg-12 variationContainer">
                         @foreach ($result as $group)
-                            <div class="row" data-id="variation_{{ Str::slug($group['attribute']) }}">
+                            <div class="row singleVariationContainer"
+                                data-id="variation_{{ Str::slug($group['attribute']) }}">
                                 <div class="col-lg-12">
-                                    <div class="mb-3">
-                                        <h6>{{ $group['attribute'] }}: <span
-                                                class="selectedValue-{{ Str::slug($group['attribute']) }}"></span></h6>
+                                    <div>
+                                        <h6 class="attribute-title">
+                                            {{ $group['attribute'] }}: <span
+                                                class="selectedValue-{{ Str::slug($group['attribute']) }}"></span>
+                                        </h6>
                                         <ul class="attribute_list">
                                             @foreach ($group['values'] as $value)
                                                 <li class="attribute_list_item">
@@ -156,7 +178,15 @@
         }).appendTo('#enquireForm');
 
         // Update the UI to show the selected variant
-        $('.selectedValue-' + key).text(value);
+        // $('.selectedValue-' + key).text(value).css({
+        //     "font-size": "13px",
+        //     "font-weight": "200",
+        //     "border": "1px solid red",
+        //     "padding": "2px 5px",
+        //     "border-radius": "3px",
+        //     "background": "red",
+        //     "color": "white"
+        // });;
 
         // Highlight the selected variant
         $('.variation_value_pointer[data-key="' + key + '"]').removeClass('selected');

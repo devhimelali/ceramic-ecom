@@ -237,7 +237,7 @@ class OrderController extends Controller
             'variations' => $filteredVariations
         ]));
 
-        Mail::to($request->email)->send(new AdminProductQueryNotificationMail([
+        Mail::to(env('ADMIN_MAIL'))->send(new AdminProductQueryNotificationMail([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
@@ -323,7 +323,7 @@ class OrderController extends Controller
             'phone' => 'required|string|max:255',
             'message' => 'required|string|max:255',
         ]);
-        
+
         $productQuery = ProductQuery::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -375,7 +375,7 @@ class OrderController extends Controller
             'cartItems' => $request->cartItems,
         ]));
 
-        Mail::to($request->email)->send(new AdminMultipleProductQueryNotificationMail([
+        Mail::to(env('ADMIN_MAIL'))->send(new AdminMultipleProductQueryNotificationMail([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,

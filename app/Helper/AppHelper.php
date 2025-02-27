@@ -1,7 +1,9 @@
 <?php
 
+use GuzzleHttp\Client;
 use App\Models\Setting;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
 
 function app_setting($key)
 {
@@ -22,4 +24,39 @@ function category_show()
 {
     $categories = Category::with('children')->where('front_show', 1)->limit(10)->get();
     return $categories;
+}
+
+function sendMarketingMessage($to, $message)
+{
+
+    $client = new Client();
+
+    $username = env("TOUCH_SMS_USER_NAME");
+    $password = env("TOUCH_SMS_PASSWORD");
+
+    $headers = [
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Basic ' . base64_encode("$username:$password"),
+    ];
+
+    $body = json_encode([
+        "reject_duplicates_by_recipient" => false,
+        "messages" => [
+            [
+                "to" => $to,
+                "from" => env("APP_NAME"),
+                "body" => $message
+            ]
+        ]
+    ]);
+
+    try {
+        $response = $client->request('POST', 'https://app.touchsms.com.au/api/v2/sms', [
+            'headers' => $headers,
+            'body' => $body,
+        ]);
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+    }
 }

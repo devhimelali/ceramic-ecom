@@ -251,7 +251,7 @@
     <div class="modal-dialog">
         <div class="modal-content p-4">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Product Enquire</h5>
+                <h5 class="modal-title" id="myModalLabel">Product Enquiry</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div id="enquireFormResponse"></div>
@@ -275,7 +275,7 @@
     <div class="modal-dialog">
         <div class="modal-content p-4">
             <div class="modal-header">
-                <h5 class="modal-title" id="checkoutModalLabel">Products Enquire Form</h5>
+                <h5 class="modal-title" id="checkoutModalLabel">Products Enquiry Form</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <form action="" method="post" id="checkoutForm">
