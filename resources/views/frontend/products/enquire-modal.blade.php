@@ -62,7 +62,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name">Variant</label>
+                    <label for="name">Variant <span class="text-danger">*</span></label>
                     <div class="col-lg-12 variationContainer">
                         @foreach ($result as $group)
                             <div class="row" data-id="variation_{{ Str::slug($group['attribute']) }}">
@@ -104,7 +104,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name">Your Name</label>
+                    <label for="name">Your Name <span class="text-danger">*</span></label>
                     <input type="text" id="name" name="name" placeholder="Enter your name">
                 </div>
             </div>
@@ -117,13 +117,13 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="phone">Phone</label>
+                    <label for="phone">Phone <span class="text-danger">*</span></label>
                     <input type="text" name="phone" id="phone" placeholder="Enter your phone">
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="message">Message</label>
+                    <label for="message">Message <span class="text-danger">*</span></label>
                     <textarea name="message" id="message" placeholder="Enter your message"></textarea>
                 </div>
             </div>
@@ -179,7 +179,6 @@
             }
         });
 
-        console.log('Selected Variants:', selectedVariants);
         var id = $('#products_id').val();
         var formData = new FormData(document.getElementById('enquireForm'));
         var actionUrl = "{{ route('submit.single.product.query', $product->id) }}";
@@ -202,6 +201,18 @@
                     notify(response.status, response.message);
                     $('#enquireForm')[0].reset();
                     $('#myModal').modal('hide');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('.enquireSubmitBtn').prop('disabled', false);
+                $('.enquireSubmitBtn').html('Submit');
+                let errors = xhr.responseJSON.errors;
+                if (errors) {
+                    $.each(errors, function(key, value) {
+                        let inputField = $('[name="' + key + '"]');
+                        inputField.addClass('is-invalid');
+                        notify('error', value[0]);
+                    });
                 }
             }
         });

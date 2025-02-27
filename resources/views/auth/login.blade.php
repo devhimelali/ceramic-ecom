@@ -5,7 +5,7 @@
         <div class="card mb-0">
             <div class="row g-0 align-items-center">
                 <div class="col-xxl-12 mx-auto">
-                    <div class="card mb-0 border-0 shadow-none mb-0">
+                    <div class="card mb-0 border-0 shadow-none">
                         <div class="card-body p-sm-5 m-lg-1">
                             <div class="text-center">
                                 <h5 class="fs-3xl">Welcome Back</h5>
@@ -66,11 +66,11 @@
                                     </div>
                                 </form>
 
-                                <div class="text-center mt-4">
+                                {{-- <div class="text-center mt-4">
                                     <p class="mb-0">Don't have an account ? <a href="{{ route('register') }}"
                                             class="fw-semibold text-secondary text-decoration-underline">
                                             SignUp</a></p>
-                                </div>
+                                </div> --}}
                             </div>
                         </div><!-- end card body -->
                     </div><!-- end card -->
