@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
     <!-- Layout config Js -->
-    <script src="{{ asset('assets/js/layout.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/layout.js') }}"></script> --}}
     <!-- Bootstrap Css -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
     <!-- Icons Css -->
@@ -22,9 +22,9 @@
     <!-- App Css-->
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css">
     <!-- custom Css-->
-    <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css">
+    {{-- <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css"> --}}
     <!-- extra css-->
-    <link href="{{ asset('assets/css/extra-css.css') }}" rel="stylesheet" type="text/css">
+    {{-- <link href="{{ asset('assets/css/extra-css.css') }}" rel="stylesheet" type="text/css"> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}">
     <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
@@ -95,7 +95,7 @@
     <!-- JAVASCRIPT -->
 
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script> --}}
     <!-- App js -->
     {{-- public/assets/cdn/datatables/jquery.dataTables.min.js --}}
 

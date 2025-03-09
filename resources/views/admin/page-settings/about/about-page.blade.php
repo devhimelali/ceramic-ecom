@@ -142,18 +142,43 @@
 
     <script>
         $(document).ready(function() {
-            // When content is edited
+            $('[contenteditable="true"]').on('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    document.execCommand('insertHTML', false, '<br><br>');
+                    return false; // Prevents default Enter behavior (which creates <div>)
+                }
+            });
+
+            $('[contenteditable="true"]').on('paste', function(e) {
+                e.preventDefault(); // Stop default paste behavior
+                let text = (e.originalEvent || e).clipboardData.getData('text/plain'); // Get plain text
+                text = text.replace(/\n/g, '<br>'); // Convert new lines to <br>
+                document.execCommand("insertHTML", false, text);
+            });
+
             $('[contenteditable="true"]').on('blur', function() {
-                $(this).addClass('edited'); // Mark as edited
+                $(this).addClass('edited');
             });
         });
 
+
         function saveChanges(cloneId, appendId, formId) {
             let fullContent = $(cloneId).clone();
-            console.log(fullContent.html());
+
+            // Fix line breaks inside contenteditable
+            fullContent.find('[contenteditable="true"]').each(function() {
+                let content = $(this).html()
+                    .replace(/<div>/g, '<br>') // Convert <div> to <br> for new lines
+                    .replace(/<\/div>/g, '') // Remove unnecessary closing div tags
+                    .replace(/<p>/g, '') // Remove <p> tags if needed
+                    .replace(/<\/p>/g, '') // Remove </p> tags if needed
+                    .replace(/<br><br>/g, '<br>'); // Prevent double <br>
+                $(this).html(content);
+            });
+
             $(appendId).val(fullContent.html());
 
-            // Prepare the form data and CSRF token
+            // Prepare form data
             let formData = new FormData($(formId)[0]);
             let actionUrl = $(formId).attr('action');
 

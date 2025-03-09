@@ -105,39 +105,6 @@
                                     and distribution of various types of tiles used for a wide range of applications.
                                 </p>
                             </div>
-
-                            <div class="row about-one__inner-row">
-                                <div class="col-xl-6">
-                                    <div class="about-one__service about-one__service--one">
-                                        <div class="about-one__service__icon">
-                                            <span class="icon-toilet"></span>
-                                        </div>
-                                        <div class="about-one__service__content">
-                                            <h4 class="about-one__service__title" contenteditable="true">Tiles & Toilet
-                                            </h4>
-                                            <p class="about-one__service__text" contenteditable="true">Tiles company,
-                                                also
-                                                known as a tile</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="about-one__service about-one__service--two">
-                                        <div class="about-one__service__icon">
-                                            <span class="icon-kitchen"></span>
-                                        </div>
-                                        <div class="about-one__service__content">
-                                            <h4 class="about-one__service__title" contenteditable="true">Design Kitchen
-                                                in
-                                                3D</h4>
-                                            <p class="about-one__service__text" contenteditable="true">Tiles company,
-                                                also
-                                                known as a tile</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms"
                                 data-wow-delay="00ms">
                                 <a href="{{ route('frontend.contact') }}" class="floens-btn">
