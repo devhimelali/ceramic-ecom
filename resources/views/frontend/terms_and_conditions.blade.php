@@ -8,7 +8,7 @@
         <div class="container">
             <h2 class="page-header__title">Terms and Conditions</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home text-white"></i> <a href="/">Home</a></li>
+                <li><i class="text-white icon-home"></i> <a href="/">Home</a></li>
                 <li><span class="text-white">Terms and Conditions</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
@@ -99,9 +99,18 @@
             constitutes acceptance of the updated terms.</p>
 
         <p><strong>For inquiries:</strong></p>
-        <p><strong>Melbourne Building Products Pty Ltd</strong><br> <strong>Address:</strong> 1/11 Dazln Dr, Melton VIC
-            3337<br><strong>Phone:</strong> <a
-                href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a><br><strong>Email:</strong>
+        <p class="mb-0">
+            <strong>Melbourne Building Products Pty Ltd</strong>
+        </p>
+        <p class="mb-0">
+            <strong>Address:</strong> 1/11 Dazln Dr, Melton VIC 3337
+        </p>
+        <p class="mb-0">
+            <strong>Phone:</strong> <a
+                href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
+        </p>
+        <p class="mb-0">
+            <strong>Email:</strong>
             <a
                 href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
         </p>

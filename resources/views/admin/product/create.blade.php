@@ -8,7 +8,7 @@
                 <h4 class="mb-sm-0">Crate Product</h4>
 
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
+                    <ol class="m-0 breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="{{ route('dashboard') }}">Dashboard</a>
                         </li>
@@ -22,14 +22,14 @@
         </div>
     </div>
     {{--  End breadcrumb  --}}
-    <div class="row mb-5">
+    <div class="mb-5 row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center">
                     <h4>Add a New Product</h4>
                     <div class="ms-auto">
                         <a href="{{ route('products.index') }}" class="btn btn-danger add-btn">
-                            <i class="bi bi-arrow-left align-baseline me-1"></i> Back
+                            <i class="align-baseline bi bi-arrow-left me-1"></i> Back
                         </a>
                     </div>
                 </div>
@@ -100,8 +100,8 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="mb-3 mt-4 pt-1 d-flex justify-content-end">
-                                    <span class="text-danger me-3 mt-2 pt-1">Create at least one variation</span>
+                                <div class="pt-1 mt-4 mb-3 d-flex justify-content-end">
+                                    <span class="pt-1 mt-2 text-danger me-3">Create at least one variation</span>
                                     <button type="button" class="btn btn-primary addVariation"> <i class="bx bx-plus"></i>
                                         Add Variation</button>
                                 </div>
@@ -109,7 +109,7 @@
                             <div class="col-lg-12 variationContainer">
 
                             </div>
-                            <div class="col-md-3 pt-4">
+                            <div class="pt-4 col-md-3">
                                 <div class="d-flex align-items-center">
                                     <div class="text-center">
                                         <div class="custom-upload-box">
@@ -121,13 +121,13 @@
                                         <input type="file" name="image" class="d-none hidden-input"
                                             accept="image/*">
 
-                                        <button type="button" class="btn btn-dark mt-1 px-4"
+                                        <button type="button" class="px-4 mt-1 btn btn-dark"
                                             onclick="setupImagePreview('.hidden-input', '.preview-img')"><i
                                                 class="bx bx-cloud-upload fs-3"></i>Thumbnail Image</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-9 pt-4">
+                            <div class="pt-4 col-md-9">
                                 <div id="dropZone" class="drop-zone">
                                     Drag & Drop Images Here or Click to Select
                                     <input type="file" id="imageInput" name="images[]" class="form-control d-none"
@@ -136,7 +136,7 @@
 
                                 <div class="image-preview" id="imagePreview"></div>
                             </div>
-                            <div class="col-lg-12 mt-4">
+                            <div class="mt-4 col-lg-12">
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-primary" id="submitBtn">Save</button>
                                 </div>
@@ -337,7 +337,7 @@
                     <div class="col-lg-5">
                         <div class="mb-3">
                             <label for="name" class="form-label">Variation Name</label>
-                            <select class="form-control select2 variationName" data-choice id="variation_name" name="variation_names[]" required>
+                            <select class="form-control select2 variationName" data-choice  name="variation_names[]" required>
                                 <option value="" selected disabled>Select Variation Name</option>
                                 @foreach ($attributes as $variation)
                                     <option value="{{ $variation->id }}">{{ $variation->name }}</option>
@@ -348,13 +348,13 @@
                     <div class="col-lg-5">
                         <div class="mb-3">
                             <label for="name" class="form-label">Variation Value</label>
-                            <select class="form-control select2" data-choice id="variation_value" name="variation_values[]" required>
+                            <select class="form-control select2" data-choice name="variation_values[]" required>
                                 <option value="" selected disabled>Select Variation Value</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <div class="mb-3 mt-4 pt-1 ms-2">
+                        <div class="pt-1 mt-4 mb-3 ms-2">
                             <button type="button" class="btn btn-danger removeVariation"> <i class="bx bx-minus"></i> Remove</button>
                         </div>
                     </div>
@@ -456,6 +456,10 @@
                                 notify('error', value[0]);
                             });
                         }
+                    },
+                    complete: function() {
+                        $('#submitBtn').prop('disabled', false);
+                        $('#submitBtn').html('Save');
                     }
                 });
             })

@@ -12,7 +12,7 @@
         <div class="container">
             <h2 class="page-header__title">{{ $product->name }}</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home text-white"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
+                <li><i class="text-white icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><span class="text-white">shop</span></li>
                 <li><span class="text-white">{{ $product->name }}</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
@@ -72,12 +72,12 @@
                         </div><!-- /.excerp-text -->
                         <div class="mt-3">
                             @foreach ($attributes as $group)
-                                <div class="row mb-3" id="variation_{{ Str::slug($group['attribute']) }}">
+                                <div class="mb-3 row" id="variation_{{ Str::slug($group['attribute']) }}">
                                     <div class="col-12">
                                         <h6 class="mb-2">{{ $group['attribute'] }}:</h6>
-                                        <div class="d-flex flex-wrap gap-2">
+                                        <div class="flex-wrap gap-2 d-flex">
                                             @foreach ($group['values'] as $value)
-                                                <span class="badge bg-secondary p-2">{{ $value }}</span>
+                                                <span class="p-2 badge bg-secondary">{{ $value }}</span>
                                             @endforeach
                                         </div>
                                     </div>
@@ -88,12 +88,12 @@
                         <div class="product-details__buttons">
                             <div class="d-flex align-items-center justify-content-center">
                                 <a href="javascript:void(0);"
-                                    class="floens-btn product__item__link me-2 custom-button p-3 enquireBtn"
+                                    class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
                                     data-id="{{ $product->id }}"
                                     data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                 <a href="javascript:void(0);"
-                                    class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn addToCartBtn"
+                                    class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
                                     data-product-id="{{ $product->id }}"
                                     data-url="{{ route('add.to.cart.form', $product->id) }}">
                                     <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
@@ -193,6 +193,17 @@
 @endsection
 @section('page-style')
     <style>
+        .product-details__description figure table {
+            width: 100%;
+            padding: 20px !important;
+            display: block;
+            background: #fff;
+        }
+
+        .product-details__gallery-top__img {
+            height: 521px;
+        }
+
         .floens-breadcrumb li:not(:last-of-type)::after {
             color: #fff;
         }

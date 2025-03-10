@@ -27,6 +27,12 @@
             height: 463px;
         }
 
+        @media (max-width: 991px) {
+            .about-one__image img {
+                width: 100% !important;
+            }
+        }
+
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
                 height: 364px !important;
@@ -65,7 +71,7 @@
         <div class="container">
             <h2 class="page-header__title">About us</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home text-white"></i> <a href="/">Home</a></li>
+                <li><i class="text-white icon-home"></i> <a href="/">Home</a></li>
                 <li><span class="text-white">About us</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->

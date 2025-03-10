@@ -42,8 +42,14 @@
                             <h2 class="footer-widget__title">Get inTouch</h2><!-- /.footer-widget__title -->
                         </div><!-- /.footer-widget__top -->
                         <ul class="list-unstyled footer-widget__info">
-                            <li><a href="javascript:void(0);"> <span class="icon-location"></span>
-                                    {{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a>
+                            @php
+                                $location = $settings->where('key', 'contact_address')->first()->value ?? 'N/A';
+                                $encodedLocation = urlencode($location);
+                                $mapUrl = 'https://www.google.com/maps/search/?api=1&query=' . $encodedLocation;
+                            @endphp
+                            <li>
+                                <a href="{{ $mapUrl }}" target="_blank"> <span class="icon-location"></span>
+                                    {{ $location }}</a>
                             </li>
                             <li><span class="icon-paper-plane"></span> <a
                                     href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
@@ -63,20 +69,24 @@
                 <div class="row gutter-y-30 align-items-center">
                     <div class="col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="000ms">
                         <div class="main-footer__social floens-social">
-                            <a href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
+                            <a target="_blank"
+                                href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
                                 <i class="icon-facebook" aria-hidden="true"></i>
                                 <span class="sr-only">Facebook</span>
                             </a>
-                            <a href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
-                                <i class="fa-brands fa-threads text-white"></i>
+                            <a target="_blank"
+                                href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
+                                <i class="text-white fa-brands fa-threads"></i>
                                 <span class="sr-only">Threads</span>
                             </a>
-                            <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
+                            <a target="_blank"
+                                href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                                 <i class="icon-instagram" aria-hidden="true"></i>
                                 <span class="sr-only">Instagram</span>
                             </a>
-                            <a href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
-                                <i class="fa-brands fa-tiktok text-white"></i>
+                            <a target="_blank"
+                                href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
+                                <i class="text-white fa-brands fa-tiktok"></i>
                                 <span class="sr-only">Tiktok</span>
                             </a>
                         </div><!-- /.main-footer__social -->
@@ -251,7 +261,7 @@
 <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     style="display: none;">
     <div class="modal-dialog">
-        <div class="modal-content p-4">
+        <div class="p-4 modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalLabel">Product Enquiry</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
@@ -263,7 +273,7 @@
 <div id="addToCartModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     style="display: none;">
     <div class="modal-dialog">
-        <div class="modal-content p-4">
+        <div class="p-4 modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalLabel">Add To Card</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
@@ -275,7 +285,7 @@
 <div id="checkoutModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     style="display: none;">
     <div class="modal-dialog">
-        <div class="modal-content p-4">
+        <div class="p-4 modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="checkoutModalLabel">Products Enquiry Form</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
@@ -309,12 +319,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded"
+                    <button type="button" class="p-3 mb-3 rounded floens-btn product__item__link bg-danger"
                         data-bs-dismiss="modal"><span>Close</span>
                     </button>
 
                     <button type="submit"
-                        class="floens-btn product__item__link mb-3 p-3 rounded checkoutSubmitBtn"><span>Submit</span>
+                        class="p-3 mb-3 rounded floens-btn product__item__link checkoutSubmitBtn"><span>Submit</span>
                     </button>
                 </div>
             </form>

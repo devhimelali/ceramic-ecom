@@ -69,6 +69,11 @@ class FrontendController extends Controller
             }
         }
 
+        if ($request->has('min_price') && $request->has('max_price')) {
+            $priceRange = [$request->min_price, $request->max_price];
+            $query->whereBetween('price', $priceRange);
+        }
+
 
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');

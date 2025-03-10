@@ -204,7 +204,7 @@
 
 
     <!-- services info start -->
-    <section class="services-one__info mt-3">
+    <section class="mt-3 services-one__info">
         <div class="container">
             <div class="services-one__info__inner">
                 <div class="services-one__info__bg"
@@ -370,12 +370,12 @@
 
                                 <div class="d-flex align-items-center justify-content-center">
                                     <a href="javascript:void(0);"
-                                        class="floens-btn product__item__link me-2 custom-button p-3 enquireBtn"
+                                        class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
                                         data-id="{{ $product->id }}"
                                         data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                     <a href="javascript:void(0);"
-                                        class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn addToCartBtn"
+                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
                                         data-product-id="{{ $product->id }}"
                                         data-url="{{ route('add.to.cart.form', $product->id) }}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
@@ -444,15 +444,23 @@
         $(document).ready(function() {
             displayCartItems();
             $('.enquireBtn').click(function() {
-                console.log('clicked');
+                $('#myModal').modal('show');
                 var productId = $(this).data('id');
                 var url = $(this).data('url');
                 $.ajax({
                     url: url,
                     method: 'GET',
+                    beforeSend: function() {
+                        $('#myModal .modal-body').html(
+                            '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                        );
+                        $('.enquireSubmitBtn').prop('disabled', true)
+                        $('.enquireSubmitBtn').html('Processing...')
+                    },
                     success: function(response) {
+                        $('.enquireSubmitBtn').prop('disabled', false)
+                        $('.enquireSubmitBtn').html('Submit')
                         $('#enquireFormResponse').html(response.html);
-                        $('#myModal').modal('show');
                     }
                 })
             });
@@ -460,13 +468,21 @@
             $('.addToCartBtn').click(function() {
                 var productId = $(this).data('product-id');
                 var url = $(this).data('url');
-                // $('#addToCartModal').modal('show');
+                $('#addToCartModal').modal('show');
                 $.ajax({
                     url: url,
                     method: 'GET',
+                    beforeSend: function() {
+                        $('#addToCartModal .modal-body').html(
+                            '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                        );
+                        $('.enquireSubmitBtn').prop('disabled', true)
+                        $('.enquireSubmitBtn').html('Processing...')
+                    },
                     success: function(response) {
+                        $('.enquireSubmitBtn').prop('disabled', false)
+                        $('.enquireSubmitBtn').html('Add To Cart')
                         $('#addToCartResponse').html(response.html);
-                        $('#addToCartModal').modal('show');
                     }
                 })
             });

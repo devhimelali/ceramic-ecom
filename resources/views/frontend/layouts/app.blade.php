@@ -80,6 +80,15 @@
             border-radius: 4px;
             color: #fff;
         }
+
+        .product__item__image {
+            text-align: center;
+        }
+
+        .product__item__image img {
+            width: auto;
+            height: 200px !important;
+        }
     </style>
 </head>
 
@@ -132,20 +141,20 @@
                 </li>
             </ul><!-- /.mobile-nav__contact -->
             <div class="mobile-nav__social">
-                <a href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
+                <a target="_blank" href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
                     <i class="icon-facebook" aria-hidden="true"></i>
                     <span class="sr-only">Facebook</span>
                 </a>
-                <a href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
-                    <i class="fa-brands fa-threads text-white"></i>
+                <a target="_blank" href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
+                    <i class="text-white fa-brands fa-threads"></i>
                     <span class="sr-only">Threads</span>
                 </a>
-                <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
+                <a target="_blank" href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                     <i class="icon-instagram" aria-hidden="true"></i>
                     <span class="sr-only">Instagram</span>
                 </a>
-                <a href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
-                    <i class="fa-brands fa-tiktok text-white"></i>
+                <a target="_blank" href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
+                    <i class="text-white fa-brands fa-tiktok"></i>
                     <span class="sr-only">Tiktok</span>
                 </a>
             </div><!-- /.mobile-nav__social -->
@@ -204,7 +213,7 @@
                     <span class="sr-only">Facebook</span>
                 </a>
                 <a href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
-                    <i class="fa-brands fa-threads text-white"></i>
+                    <i class="text-white fa-brands fa-threads"></i>
                     <span class="sr-only">Threads</span>
                 </a>
                 <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
@@ -212,7 +221,7 @@
                     <span class="sr-only">Instagram</span>
                 </a>
                 <a href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
-                    <i class="fa-brands fa-tiktok text-white"></i>
+                    <i class="text-white fa-brands fa-tiktok"></i>
                     <span class="sr-only">Tiktok</span>
                 </a>
             </div><!-- /sidebar-one__social -->

@@ -6,6 +6,10 @@
             grid-gap: 14px !important;
         }
 
+        .contact-one__info__text a {
+            overflow-wrap: anywhere;
+        }
+
         @media (max-width: 575px) {
             .contact-one__info__item__inner {
                 flex-direction: row !important;
@@ -21,7 +25,7 @@
         <div class="container">
             <h2 class="page-header__title">Contact Us</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home text-white"></i> <a href="/">Home</a></li>
+                <li><i class="text-white icon-home"></i> <a href="/">Home</a></li>
                 <li><span class="text-white">Contact Us</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->

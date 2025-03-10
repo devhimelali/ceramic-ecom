@@ -142,7 +142,7 @@
         <div class="container">
             <h2 class="page-header__title">Find Your Products</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home text-white"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
+                <li><i class="text-white icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><span class="text-white">Products</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
@@ -221,7 +221,7 @@
                         <div class="spinner"></div>
                         <p>Loading...</p>
                     </div>
-                    <div id="products" class="mt-5 pt-4">
+                    <div id="products" class="pt-4 mt-5">
                     </div>
 
 
@@ -294,7 +294,7 @@
                 let urlParams = new URLSearchParams(window.location.search);
                 checkQueryParams(urlParams);
             })
-            checkQueryParams(new URLSearchParams(window.location.search));
+            // checkQueryParams(new URLSearchParams(window.location.search));
 
 
 
