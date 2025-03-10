@@ -56,7 +56,7 @@
                             $app_logo = $settings->where('key', 'dark_logo')->first();
                         @endphp
                         <img src="{{ $app_logo ? asset('assets/images/settings/' . $app_logo->value) : '#' }}"
-                            alt="logo-dark" width="125">
+                            alt="{{ $app_logo->value }}" width="125">
                     </a>
                 </div><!-- /.main-header__logo -->
                 <nav class="main-header__nav main-menu">
@@ -68,7 +68,7 @@
                         <li class="dropdown">
                             <a href="#">Categories</a>
                             <ul>
-                                @foreach (category_show() as $category)
+                                @foreach (category_show()->where('parent_id', null) as $category)
                                     <li>
                                         <a
                                             href="{{ route('frontend.productsPage', ['category' => $category->slug]) }}">{{ $category->name }}</a>
