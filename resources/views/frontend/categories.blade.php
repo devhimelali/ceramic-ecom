@@ -23,7 +23,7 @@
         <div class="container">
             <h2 class="page-header__title">Our All Categories</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home text-white"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
+                <li><i class="text-white icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><span class="text-white">Categories</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
@@ -42,14 +42,14 @@
                             <div class="work-card__content-show">
                                 <div class="work-card__content-inner">
                                     <h3 class="work-card__tagline">{{ $category->name }}</h3>
-                                    <h3 class="work-card__title"><a href="work-details.html"></a>
+                                    <h3 class="work-card__title"><a
+                                            href="{{ route('frontend.productsPage', ['category' => $category->slug]) }}"></a>
                                     </h3>
                                 </div>
                             </div>
                             <div class="work-card__content-hover">
                                 <div class="work-card__content-inner">
                                     <h3 class="work-card__tagline">{{ $category->name }}</h3>
-                                    {{-- <h3 class="work-card__title"><a href="work-details.html">Modern Tiles fitting</a> --}}
                                     </h3>
                                 </div>
                                 <a href="{{ route('frontend.productsPage', ['category' => $category->slug]) }}"
@@ -60,7 +60,7 @@
                 @endforeach
             </div><!-- /.row -->
             <div class="mt-5 ">
-                <div class="d-flex justify-content-center mt-4">
+                <div class="mt-4 d-flex justify-content-center">
                     {{ $categories->links('pagination::bootstrap-4') }}
                 </div>
             </div>
