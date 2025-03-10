@@ -475,7 +475,6 @@
                 var container = $(this).closest('.row');
                 var variationValueSelect = container.find('[name="variation_values[]"]');
                 variationValueSelect.empty().append('<option selected disabled>Loading...</option>');
-                console.log(variationId);
                 if (variationId) {
                     $.ajax({
                         url: "{{ route('get.attribute.values') }}",

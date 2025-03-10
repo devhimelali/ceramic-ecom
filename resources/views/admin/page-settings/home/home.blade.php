@@ -111,7 +111,7 @@
 
 
     <!-- services info start -->
-    <section class="services-one__info mt-3">
+    <section class="mt-3 services-one__info">
         <div class="container">
             <div class="services-one__info__inner">
                 <div class="services-one__info__bg"
@@ -187,12 +187,12 @@
 
                                 <div class="d-flex align-items-center justify-content-center">
                                     <a href="javascript:void(0);"
-                                        class="floens-btn product__item__link me-2 custom-button p-3 enquireBtn"
+                                        class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
                                         data-id="{{ $product->id }}"
                                         data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                     <a href="javascript:void(0);"
-                                        class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn"
+                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn"
                                         data-product="{{ $product }}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                 </div>
@@ -259,7 +259,7 @@
     <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
         style="display: none;">
         <div class="modal-dialog">
-            <div class="modal-content p-4">
+            <div class="p-4 modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">Product Enquiry</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
@@ -315,7 +315,6 @@
 
         function saveChanges(cloneId, appendId, formId) {
             let fullContent = $(cloneId).clone();
-            // console.log(fullContent.html());
             $(appendId).val(fullContent.html());
 
             // Prepare the form data and CSRF token

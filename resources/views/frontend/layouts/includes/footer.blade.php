@@ -370,7 +370,6 @@
                 },
                 error: function(xhr) {
                     $('.checkoutSubmitBtn').prop('disabled', false).html('Submit');
-                    console.log(xhr.responseText);
                     notify('error', 'Something went wrong. Please try again.');
                 }
             });

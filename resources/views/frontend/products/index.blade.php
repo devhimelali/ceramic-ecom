@@ -414,7 +414,6 @@
                 },
                 error: function(xhr, status, error) {
                     // Handle errors (Optional)
-                    console.log("Error:", error);
                     $('#loader').hide();
                 }
             });
