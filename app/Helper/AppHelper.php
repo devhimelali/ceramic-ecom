@@ -22,7 +22,11 @@ function app_setting($key)
 
 function category_show()
 {
-    $categories = Category::with('children')->where('front_show', 1)->limit(10)->get();
+    $categories = Category::with('children')
+        ->whereNull('parent_id')
+        ->where('front_show', 1)
+        ->limit(10)
+        ->get();
     return $categories;
 }
 

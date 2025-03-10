@@ -156,4 +156,20 @@ class FrontendController extends Controller
         ];
         return view('frontend.about-us', $data);
     }
+
+    public function termAndCondition()
+    {
+        $data = [
+            'active' => 'terms-and-conditions'
+        ];
+        return view('frontend.terms_and_conditions', $data);
+    }
+
+    public function privacyPolicy()
+    {
+        $data = [
+            'active' => 'privacy-policy'
+        ];
+        return view('frontend.privacy_policy', $data);
+    }
 }

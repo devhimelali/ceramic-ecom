@@ -53,6 +53,9 @@
     <!-- template styles -->
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/floens.css" />
     <link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     @yield('page-style')
     <style>
         :root {
@@ -133,17 +136,17 @@
                     <i class="icon-facebook" aria-hidden="true"></i>
                     <span class="sr-only">Facebook</span>
                 </a>
-                <a href="{{ $settings->where('key', 'twitter_link')->first()->value ?? '#' }}">
-                    <i class="icon-twitter" aria-hidden="true"></i>
-                    <span class="sr-only">Twitter</span>
+                <a href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
+                    <i class="fa-brands fa-threads text-white"></i>
+                    <span class="sr-only">Threads</span>
                 </a>
                 <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                     <i class="icon-instagram" aria-hidden="true"></i>
                     <span class="sr-only">Instagram</span>
                 </a>
-                <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}">
-                    <i class="icon-youtube" aria-hidden="true"></i>
-                    <span class="sr-only">Youtube</span>
+                <a href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
+                    <i class="fa-brands fa-tiktok text-white"></i>
+                    <span class="sr-only">Tiktok</span>
                 </a>
             </div><!-- /.mobile-nav__social -->
         </div>
@@ -200,17 +203,17 @@
                     <i class="icon-facebook" aria-hidden="true"></i>
                     <span class="sr-only">Facebook</span>
                 </a>
-                <a href="{{ $settings->where('key', 'twitter_link')->first()->value ?? '#' }}">
-                    <i class="icon-twitter" aria-hidden="true"></i>
-                    <span class="sr-only">Twitter</span>
+                <a href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
+                    <i class="fa-brands fa-threads text-white"></i>
+                    <span class="sr-only">Threads</span>
                 </a>
                 <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                     <i class="icon-instagram" aria-hidden="true"></i>
                     <span class="sr-only">Instagram</span>
                 </a>
-                <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}">
-                    <i class="icon-youtube" aria-hidden="true"></i>
-                    <span class="sr-only">Youtube</span>
+                <a href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
+                    <i class="fa-brands fa-tiktok text-white"></i>
+                    <span class="sr-only">Tiktok</span>
                 </a>
             </div><!-- /sidebar-one__social -->
         </div><!-- /.sidebar__content -->

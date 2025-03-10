@@ -23,17 +23,17 @@
                         <i class="icon-facebook" aria-hidden="true"></i>
                         <span class="sr-only">Facebook</span>
                     </a>
-                    <a href="{{ $settings->where('key', 'twitter_link')->first()->value ?? '#' }}">
-                        <i class="icon-twitter" aria-hidden="true"></i>
-                        <span class="sr-only">Twitter</span>
+                    <a href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
+                        <i class="fa-brands fa-threads text-white"></i>
+                        <span class="sr-only">Threads</span>
                     </a>
                     <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                         <i class="icon-instagram" aria-hidden="true"></i>
                         <span class="sr-only">Instagram</span>
                     </a>
-                    <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}"> <i
-                            class="icon-youtube" aria-hidden="true"></i>
-                        <span class="sr-only">Youtube</span>
+                    <a href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
+                        <i class="fa-brands fa-tiktok text-white"></i>
+                        <span class="sr-only">Tiktok</span>
                     </a>
                 </div><!-- /.topbar-one__social -->
             </div><!-- /.topbar-one__right -->
