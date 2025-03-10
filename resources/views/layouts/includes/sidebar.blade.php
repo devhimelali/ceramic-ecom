@@ -43,7 +43,7 @@
                 <li class="nav-item">
                     <a href="{{ route('brands.index') }}"
                         class="nav-link menu-link {{ $active == 'brand' ? 'active' : '' }}" aria-expanded="false">
-                        <i class="ph-gauge"></i>
+                        <i class="ph ph-bookmark"></i>
                         <span data-key="t-dashboards">Brand</span>
                     </a>
                 </li>
@@ -64,7 +64,7 @@
                 <li class="nav-item">
                     <a href="{{ route('attributes.index') }}"
                         class="nav-link menu-link {{ $active == 'attribute' ? 'active' : '' }}" aria-expanded="false">
-                        <i class="ph-gauge"></i>
+                        <i class="ph ph-circle-wavy"></i>
                         <span data-key="t-dashboards">Attribute</span>
                     </a>
                 </li>
@@ -79,7 +79,7 @@
                     <a href="{{ route('product.queries') }}"
                         class="nav-link menu-link {{ $active == 'product_query' ? 'active' : '' }}"
                         aria-expanded="false">
-                        <i class="ph ph-address-book"></i>
+                        <i class="ph ph-question"></i>
                         <span data-key="t-dashboards">Product Queries</span>
                     </a>
                 </li>
@@ -90,19 +90,13 @@
                         <span data-key="t-dashboards">Contacts</span>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a href="{{ route('settings.index') }}"
-                        class="nav-link menu-link {{ $active == 'settings' ? 'active' : '' }}" aria-expanded="false">
-                        <i class="ph-gear"></i>
-                        <span data-key="t-dashboards">Settings</span>
+                <li class="nav-item">
+                    <a href="{{ route('marketing.index') }}"
+                        class="nav-link menu-link {{ $active == 'marketing' ? 'active' : '' }}" aria-expanded="false">
+                        <i class="ph ph-chat-dots"></i>
+                        <span data-key="t-dashboards">Marketing Tools</span>
                     </a>
-                    <a href="{{ route('settings.aboutPage') }}"
-                        class="nav-link menu-link {{ $active == 'settings' ? 'active' : '' }}" aria-expanded="false">
-                        <i class="ph-gear"></i>
-                        <span data-key="t-dashboards">About Page</span>
-                    </a>
-                </li> --}}
-
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ $active == 'settings' || $active == 'about' ? 'active' : '' }}"
                         href="#settings" data-bs-toggle="collapse" role="button" aria-expanded="true"

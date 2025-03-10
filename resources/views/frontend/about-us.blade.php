@@ -65,8 +65,8 @@
         <div class="container">
             <h2 class="page-header__title">About us</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home"></i> <a href="index.html">Home</a></li>
-                <li><span>About us</span></li>
+                <li><i class="icon-home text-white"></i> <a href="index.html">Home</a></li>
+                <li><span class="text-white">About us</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
     </section><!-- /.page-header -->

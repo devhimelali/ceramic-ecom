@@ -4,14 +4,6 @@
     </div>
     <!-- /.main-slider__bg -->
     <div class="hero-slider__social">
-        <a href="https://facebook.com/">
-            <i class="icon-facebook" aria-hidden="true"></i>
-            <span class="sr-only">Facebook</span>
-        </a>
-        <a href="https://twitter.com/">
-            <i class="icon-twitter" aria-hidden="true"></i>
-            <span class="sr-only">Twitter</span>
-        </a>
     </div><!-- /.hero-slider__social -->
     <a href="#about" class="main-slider__scroll-btn"><span></span></a><!-- /.main-slider__scroll-btn -->
     <div class="main-slider__carousel floens-slick__carousel--with-counter"

@@ -237,7 +237,7 @@ class OrderController extends Controller
             'variations' => $filteredVariations
         ]));
 
-        Mail::to($request->email)->send(new AdminProductQueryNotificationMail([
+        Mail::to(env('ADMIN_MAIL'))->send(new AdminProductQueryNotificationMail([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
@@ -324,17 +324,19 @@ class OrderController extends Controller
             'message' => 'required|string|max:255',
         ]);
 
+        $productQuery = ProductQuery::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'status' => ProductQueryStatus::PENDING
+        ]);
+
         foreach ($request->cartItems as $item) {
             // dd($item);
             $product = Product::findOrFail($item['id']);
 
-            $productQuery = ProductQuery::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'message' => $request->message,
-                'status' => ProductQueryStatus::PENDING
-            ]);
+
 
             $productQueryItem = $productQuery->items()->create([
                 'product_id' => $product->id,
@@ -373,7 +375,7 @@ class OrderController extends Controller
             'cartItems' => $request->cartItems,
         ]));
 
-        Mail::to($request->email)->send(new AdminMultipleProductQueryNotificationMail([
+        Mail::to(env('ADMIN_MAIL'))->send(new AdminMultipleProductQueryNotificationMail([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,

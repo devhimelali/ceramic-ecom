@@ -38,7 +38,8 @@ class ImageUploadHelper
         $manager = new ImageManager(Driver::class);
 
         // Create and Store Thumbnail (270x270)
-        $imageManager = $manager->read($image);
+        // $imageManager = $manager->read($image);
+        $imageManager = $manager->read($image->getPathname());
         $thumbnail = $imageManager->scaleDown(270, 270);
         Storage::disk('public')->put($pathThumbnail, (string) $thumbnail->encode());
 
@@ -61,10 +62,13 @@ class ImageUploadHelper
             return asset('frontend/assets/images/product-placeholder.png'); // Default placeholder image
         }
 
-        // Define the image path based on type
         $path = "uploads/{$folder}/{$type}/{$filename}";
 
-        return Storage::disk('public')->exists($path) ? asset("storage/{$path}") : asset('images/no-image.png');
+        if (!Storage::disk('public')->exists($path)) {
+            return asset('frontend/assets/images/product-placeholder.png'); // Default placeholder image
+        }
+
+        return asset("storage/{$path}");
     }
 
     public static function deleteProductImage($filename, $folder = 'products')

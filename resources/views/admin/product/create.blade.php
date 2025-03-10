@@ -49,7 +49,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="price" name="price"
+                                    <input type="text" class="form-control" id="price" name="price"
                                         placeholder="Price">
                                 </div>
                             </div>
@@ -68,7 +68,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label for="brand" class="form-label">Brand</label>
-                                    <select class="form-control select2" data-choice id="brand" name="brand" required>
+                                    <select class="form-control select2" data-choice id="brand" name="brand">
                                         <option value="" selected disabled>Select Brand</option>
                                         @foreach ($brands as $brand)
                                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
@@ -101,6 +101,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3 mt-4 pt-1 d-flex justify-content-end">
+                                    <span class="text-danger me-3 mt-2 pt-1">Create at least one variation</span>
                                     <button type="button" class="btn btn-primary addVariation"> <i class="bx bx-plus"></i>
                                         Add Variation</button>
                                 </div>

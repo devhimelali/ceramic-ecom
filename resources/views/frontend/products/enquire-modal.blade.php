@@ -43,6 +43,36 @@
         gap: 15px;
         align-items: center;
     }
+
+    span.variation_value_pointer.selected {
+        background: #e28245;
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: #fff;
+    }
+
+    span.color-variation.selected {
+        transform: scale(1.14);
+    }
+
+    .variationContainer {
+        border: 1px solid #d7d7d7;
+        padding: 6px 12px 0px 12px;
+    }
+
+    .singleVariationContainer:not(:last-child) {
+        border-bottom: 1px solid #d7d7d7;
+        margin-bottom: 10px;
+    }
+
+    .attribute-title {
+        display: inline-block;
+        float: left;
+        margin-right: 30px;
+        color: black;
+        font-size: 14px !important;
+        line-height: 26px;
+    }
 </style>
 
 <form action="" method="post" id="enquireForm">
@@ -51,14 +81,17 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name">Variant</label>
+                    <label for="name" style="font-size: 16px">Variant <span class="text-danger">*</span></label>
                     <div class="col-lg-12 variationContainer">
                         @foreach ($result as $group)
-                            <div class="row" data-id="variation_{{ Str::slug($group['attribute']) }}">
-                                <div class="col-lg-5">
-                                    <div class="mb-3">
-                                        <h6>{{ $group['attribute'] }}: <span
-                                                class="selectedValue-{{ Str::slug($group['attribute']) }}"></span></h6>
+                            <div class="row singleVariationContainer"
+                                data-id="variation_{{ Str::slug($group['attribute']) }}">
+                                <div class="col-lg-12">
+                                    <div>
+                                        <h6 class="attribute-title">
+                                            {{ $group['attribute'] }}: <span
+                                                class="selectedValue-{{ Str::slug($group['attribute']) }}"></span>
+                                        </h6>
                                         <ul class="attribute_list">
                                             @foreach ($group['values'] as $value)
                                                 <li class="attribute_list_item">
@@ -66,11 +99,11 @@
                                                         data-id="{{ Str::slug($value) }}" value=""> --}}
                                                     @if (Str::slug($group['attribute']) == 'color')
                                                         <span
-                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer"
+                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer color-variation"
                                                             data-id="{{ Str::slug($value) }}"
                                                             data-key="{{ Str::slug($group['attribute']) }}"
                                                             data-value="{{ $value }}"
-                                                            style="background-color: {{ strtolower($value) }}; height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
+                                                            style="background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif  height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
                                                     @else
                                                         <span
                                                             class="variation_{{ Str::slug($value) }} variation_value_pointer"
@@ -93,7 +126,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name">Your Name</label>
+                    <label for="name">Your Name <span class="text-danger">*</span></label>
                     <input type="text" id="name" name="name" placeholder="Enter your name">
                 </div>
             </div>
@@ -106,13 +139,13 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="phone">Phone</label>
+                    <label for="phone">Phone <span class="text-danger">*</span></label>
                     <input type="text" name="phone" id="phone" placeholder="Enter your phone">
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="message">Message</label>
+                    <label for="message">Message <span class="text-danger">*</span></label>
                     <textarea name="message" id="message" placeholder="Enter your message"></textarea>
                 </div>
             </div>
@@ -145,7 +178,15 @@
         }).appendTo('#enquireForm');
 
         // Update the UI to show the selected variant
-        $('.selectedValue-' + key).text(value);
+        // $('.selectedValue-' + key).text(value).css({
+        //     "font-size": "13px",
+        //     "font-weight": "200",
+        //     "border": "1px solid red",
+        //     "padding": "2px 5px",
+        //     "border-radius": "3px",
+        //     "background": "red",
+        //     "color": "white"
+        // });;
 
         // Highlight the selected variant
         $('.variation_value_pointer[data-key="' + key + '"]').removeClass('selected');
@@ -168,7 +209,6 @@
             }
         });
 
-        console.log('Selected Variants:', selectedVariants);
         var id = $('#products_id').val();
         var formData = new FormData(document.getElementById('enquireForm'));
         var actionUrl = "{{ route('submit.single.product.query', $product->id) }}";
@@ -191,6 +231,18 @@
                     notify(response.status, response.message);
                     $('#enquireForm')[0].reset();
                     $('#myModal').modal('hide');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('.enquireSubmitBtn').prop('disabled', false);
+                $('.enquireSubmitBtn').html('Submit');
+                let errors = xhr.responseJSON.errors;
+                if (errors) {
+                    $.each(errors, function(key, value) {
+                        let inputField = $('[name="' + key + '"]');
+                        inputField.addClass('is-invalid');
+                        notify('error', value[0]);
+                    });
                 }
             }
         });

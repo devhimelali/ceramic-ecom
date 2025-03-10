@@ -4,14 +4,19 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title') - {{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title') - {{ $settings->where('key', 'site_name')->first()->value ?? 'Laravel' }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
+    <meta content="{{ $settings->where('key', 'about_description')->first()->value ?? 'Laravel' }}"
+        name="description" />
+    <meta content="{{ $settings->where('key', 'site_name')->first()->value ?? 'Laravel' }}" name="author" />
     <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+    @php
+        $site_icon = $settings->where('key', 'site_icon')->first();
+    @endphp
+    <link rel="shortcut icon" href="{{ $site_icon ? asset('assets/images/settings/' . $site_icon->value) : '' }}" />
+    {{-- <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}"> --}}
 
     <!-- Layout config Js -->
     {{-- <script src="{{ asset('assets/js/layout.js') }}"></script> --}}
@@ -64,8 +69,8 @@
                         <script>
                             document.write(new Date().getFullYear())
                         </script>
-                        © Koormal.
-                        <a href="https://themesbrand.com/steex/layouts/dashboard-crm.html" target="_blank"> steex</a>
+                        © Design and Developed by
+                        <a href="https://nuxtit.com" target="_blank">Nuxt IT</a>
                     </div>
                 </div>
             </div>

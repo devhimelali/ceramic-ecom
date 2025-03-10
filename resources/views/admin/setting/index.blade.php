@@ -41,7 +41,7 @@
                             <div class="col-md-6 mb-2">
                                 <label class="col-sm-2 col-form-label" for="site_icon"">Site Icon</label>
                                 <div class="col-sm-10">
-                                    <input type="hidden" name="types[]" value="site_title">
+                                    <input type="hidden" name="types[]" value="site_icon">
                                     <input type="file" name="site_icon" id="site_icon" class="form-control"
                                         value="{{ old('site_icon') }}">
                                 </div>
@@ -105,11 +105,11 @@
                                     </div>
                                     <div class="col-md-12 mb-2">
                                         <label class="col-sm-2 col-form-label" for="copy_right">Copy Right Text</label>
-        
-                                            <input type="hidden" name="types[]" value="copy_right">
-                                            <input type="text" name="copy_right" id="copy_right" class="form-control"
-                                                value="{{ old('copy_right', app_setting('copy_right')) }}">
-                              
+
+                                        <input type="hidden" name="types[]" value="copy_right">
+                                        <input type="text" name="copy_right" id="copy_right" class="form-control"
+                                            value="{{ old('copy_right', app_setting('copy_right')) }}">
+
                                     </div>
                                     <div class="col-md-12 mb-2">
                                         <label class="col-sm-2 col-form-label" for="about_description"">About
@@ -129,7 +129,8 @@
                                             <input type="hidden" name="types[]" value="facebook_link">
                                             <input type="text" name="facebook_link" id="facebook_link"
                                                 class="form-control"
-                                                value="{{ old('facebook_link', app_setting('facebook_link')) }}" placeholder="https://www.facebook.com/xyz">
+                                                value="{{ old('facebook_link', app_setting('facebook_link')) }}"
+                                                placeholder="https://www.facebook.com/xyz">
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-2">
@@ -138,7 +139,8 @@
                                             <input type="hidden" name="types[]" value="twitter_link">
                                             <input type="text" name="twitter_link" id="twitter_link"
                                                 class="form-control"
-                                                value="{{ old('twitter_link', app_setting('twitter_link')) }}" placeholder="https://www.twitter.com/xyz">
+                                                value="{{ old('twitter_link', app_setting('twitter_link')) }}"
+                                                placeholder="https://www.twitter.com/xyz">
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-2">
@@ -147,7 +149,8 @@
                                             <input type="hidden" name="types[]" value="instagram_link">
                                             <input type="text" name="instagram_link" id="instagram_link"
                                                 class="form-control"
-                                                value="{{ old('instagram_link', app_setting('instagram_link')) }}" placeholder="https://www.instagram.com/xyz">
+                                                value="{{ old('instagram_link', app_setting('instagram_link')) }}"
+                                                placeholder="https://www.instagram.com/xyz">
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-2">
@@ -156,7 +159,8 @@
                                             <input type="hidden" name="types[]" value="youtube_link">
                                             <input type="text" name="youtube_link" id="youtube_link"
                                                 class="form-control"
-                                                value="{{ old('youtube_link', app_setting('youtube_link')) }}" placeholder="https://www.youtube.com/xyz">
+                                                value="{{ old('youtube_link', app_setting('youtube_link')) }}"
+                                                placeholder="https://www.youtube.com/xyz">
                                         </div>
                                     </div>
                                 </div>

@@ -46,6 +46,30 @@
         gap: 15px;
         align-items: center;
     }
+
+    span.color-variation.selected {
+        transform: scale(1.14) !important;
+    }
+
+    .variationContainer {
+        border: 1px solid #d7d7d7;
+        padding: 6px 12px 0px 12px;
+    }
+
+    .singleVariationContainer:not(:last-child) {
+        border-bottom: 1px solid #d7d7d7;
+        margin: 0 -12px 0 -12px;
+        padding: 3px 0;
+    }
+
+    .attribute-title {
+        display: inline-block;
+        float: left;
+        margin-right: 30px;
+        color: black;
+        font-size: 14px !important;
+        line-height: 26px;
+    }
 </style>
 
 <form action="" method="post" id="cartForm">
@@ -56,23 +80,22 @@
                 <div class="form-group">
                     <div class="col-lg-12 variationContainer">
                         @foreach ($result as $group)
-                            <div class="row" data-id="variation_{{ Str::slug($group['attribute']) }}">
-                                <div class="col-lg-5">
-                                    <div class="mb-3">
-                                        <h6>{{ $group['attribute'] }}: <span
+                            <div class="row singleVariationContainer"
+                                data-id="variation_{{ Str::slug($group['attribute']) }}">
+                                <div class="col-lg-12">
+                                    <div>
+                                        <h6 class="attribute-title">{{ $group['attribute'] }}: <span
                                                 class="selectedValue-{{ Str::slug($group['attribute']) }}"></span></h6>
                                         <ul class="attribute_list">
                                             @foreach ($group['values'] as $value)
                                                 <li class="attribute_list_item">
-                                                    {{-- <input type="hidden" name="variation_values[]"
-                                                        data-id="{{ Str::slug($value) }}" value=""> --}}
                                                     @if (Str::slug($group['attribute']) == 'color')
                                                         <span
-                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer"
+                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer color-variation"
                                                             data-id="{{ Str::slug($value) }}"
                                                             data-key="{{ Str::slug($group['attribute']) }}"
                                                             data-value="{{ $value }}"
-                                                            style="background-color: {{ strtolower($value) }}; height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
+                                                            style="background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
                                                     @else
                                                         <span
                                                             class="variation_{{ Str::slug($value) }} variation_value_pointer"
@@ -154,7 +177,7 @@
         }).appendTo('#cartForm');
 
         // Update the UI to show the selected variant
-        $('.selectedValue-' + key).text(value);
+        // $('.selectedValue-' + key).text(value);
 
         // Highlight the selected variant
         $('.variation_value_pointer[data-key="' + key + '"]').removeClass('selected');

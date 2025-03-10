@@ -53,7 +53,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="price" name="price"
+                                    <input type="text" class="form-control" id="price" name="price"
                                         placeholder="Price" value="{{ $product->price }}">
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label for="brand" class="form-label">Brand</label>
-                                    <select class="form-control select2" data-choice id="brand" name="brand" required>
+                                    <select class="form-control select2" data-choice id="brand" name="brand">
                                         <option value="" selected disabled>Select Brand</option>
                                         @foreach ($brands as $brand)
                                             <option {{ $brand->id == $product->brand_id ? 'selected' : '' }}
@@ -160,7 +160,7 @@
                                             @php
                                                 $thumbnailImage = $product->images->where('type', 'thumbnail')->first();
                                             @endphp
-                                            <img src="{{ ImageUploadHelper::getProductImageUrl($thumbnailImage->image, 'products', 'thumbnail') }}"
+                                            <img src="{{ $thumbnailImage ? ImageUploadHelper::getProductImageUrl($thumbnailImage->image, 'products', 'thumbnail') : asset('frontend/assets/images/product-placeholder.png') }}"
                                                 class="preview-img" alt="Image Preview">
 
                                             <button type="button" class="remove-btn removeImage"

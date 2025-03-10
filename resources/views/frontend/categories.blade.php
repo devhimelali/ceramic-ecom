@@ -23,8 +23,8 @@
         <div class="container">
             <h2 class="page-header__title">Our All Categories</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
-                <li><span>Categories</span></li>
+                <li><i class="icon-home text-white"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
+                <li><span class="text-white">Categories</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
     </section><!-- /.page-header -->
@@ -52,8 +52,8 @@
                                     {{-- <h3 class="work-card__title"><a href="work-details.html">Modern Tiles fitting</a> --}}
                                     </h3>
                                 </div>
-                                <a href="work-details.html" class="work-card__link floens-btn"><span
-                                        class="icon-right-arrow"></span></a>
+                                <a href="{{ route('frontend.productsPage', ['category' => $category->slug]) }}"
+                                    class="work-card__link floens-btn"><span class="icon-right-arrow"></span></a>
                             </div>
                         </div>
                     </div>

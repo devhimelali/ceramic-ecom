@@ -6,11 +6,14 @@
     <div class="main-footer__top">
         <div class="container">
             <div class="row">
-                <div class="col-xl-4 col-lg-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                <div class="col-xl-6 col-lg-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <div class="footer-widget footer-widget--about">
-                        <a href="index.html" class="footer-widget__logo">
-                            <img src="{{ $settings->where('key', 'dark_logo')->first()->value ?? '#' }}" width="123"
-                                alt="Logo">
+                        <a href="{{ route('frontend.home') }}" class="footer-widget__logo">
+                            @php
+                                $app_logo = $settings->where('key', 'dark_logo')->first();
+                            @endphp
+                            <img src="{{ $app_logo ? asset('assets/images/settings/' . $app_logo->value) : '#' }}"
+                                width="123" alt="Logo">
                         </a>
                         <p class="footer-widget__about-text">
                             {{ $settings->where('key', 'about_description')->first()->value ?? 'N/A' }}</p>
@@ -30,15 +33,15 @@
                         </ul><!-- /.list-unstyled footer-widget__links -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-2 col-lg-3 col-md-3 col-sm-6 -->
-                <div class="col-xl-3 col-lg-6 col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="600ms">
+                <div class="col-xl-4 col-lg-6 col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="600ms">
                     <div class="footer-widget footer-widget--contact">
                         <div class="footer-widget__top">
                             <div class="footer-widget__title-box"></div><!-- /.footer-widget__title-box -->
                             <h2 class="footer-widget__title">Get inTouch</h2><!-- /.footer-widget__title -->
                         </div><!-- /.footer-widget__top -->
                         <ul class="list-unstyled footer-widget__info">
-                            <li><a
-                                    href="javascript:void(0);">{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a>
+                            <li><a href="javascript:void(0);"> <span class="icon-location"></span>
+                                    {{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</a>
                             </li>
                             <li><span class="icon-paper-plane"></span> <a
                                     href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
@@ -89,7 +92,7 @@
     </div><!-- /.main-footer__bottom -->
 </footer><!-- /.main-footer -->
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+{{-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasRightLabel">Shopping cart</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -98,41 +101,8 @@
         <div class="offcanvas__top flex-grow-1">
             <div class="offcanvas__cart-products">
                 <div class="offcanvas__cart-product">
+                    <p class="no-items-message">Your cart is empty</p>
                     <div class="offcanvas__cart-product__content__wrapper">
-                        <div class="offcanvas__cart-product__image">
-                            <img src="{{ asset('frontend') }}/assets/images/products/product-1-1.jpg"
-                                alt="Natural Stone Tiles">
-                        </div>
-                        <div class="offcanvas__cart-product__content">
-                            <h3 class="offcanvas__cart-product__title"><a href="product-details.html">Natural Stone
-                                    Tiles</a>
-                            </h3>
-                            <span class="offcanvas__cart-product__variation">Red/White/20x20</span>
-                        </div>
-                    </div>
-                    <div class="offcanvas__cart-product__remove">
-                        <a class="offcanvas__cart-product__remove" href="#"><i class="fas fa-times"></i>
-                            Remove</a>
-                        <span class="offcanvas__cart-product__quantity">1 x $50.00</span>
-                    </div>
-                </div>
-                <div class="offcanvas__cart-product">
-                    <div class="offcanvas__cart-product__content__wrapper">
-                        <div class="offcanvas__cart-product__image">
-                            <img src="{{ asset('frontend') }}/assets/images/products/product-1-1.jpg"
-                                alt="Natural Stone Tiles">
-                        </div>
-                        <div class="offcanvas__cart-product__content">
-                            <h3 class="offcanvas__cart-product__title"><a href="product-details.html">Natural Stone
-                                    Tiles</a>
-                            </h3>
-                            <span class="offcanvas__cart-product__variation">Red/White/20x20</span>
-                        </div>
-                    </div>
-                    <div class="offcanvas__cart-product__remove">
-                        <a class="offcanvas__cart-product__remove" href="#"><i class="fas fa-times"></i>
-                            Remove</a>
-                        <span class="offcanvas__cart-product__quantity">1 x $50.00</span>
                     </div>
                 </div>
             </div>
@@ -147,8 +117,43 @@
                 <i class="icon-right-arrow"></i></a>
         </div>
     </div>
+</div> --}}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Shopping Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        <div class="offcanvas__top flex-grow-1">
+            <!-- Empty cart container -->
+            <div class="offcanvas__cart-empty-container" style="display: none;">
+                <p class="no-items-message">Your cart is empty</p>
+            </div>
+            <div class="offcanvas__cart-products">
+                <!-- Cart items will be dynamically injected here -->
+            </div>
+        </div>
+        <div class="offcanvas__bottom" style="display: none;">
+            <div class="offcanvas__total">
+                <span class="offcanvas__total-text">Subtotal:</span>
+                <span class="offcanvas__total-price">$0.00</span>
+            </div>
+            <a href="javascript:void(0);" class="floens-btn cart-page__checkout-btn checkoutBtn"
+                data-bs-dismiss="offcanvas" aria-label="Close">Proceed to Checkout
+                <i class="icon-right-arrow"></i></a>
+        </div>
+    </div>
 </div>
+
 <style>
+    p.no-items-message {
+        width: 100%;
+        flex-basis: inherit;
+        text-align: center;
+        height: 50VH;
+        transform: translatey(50%);
+    }
+
     .offcanvas__cart-product {
         display: flex;
         justify-content: space-between;
@@ -217,6 +222,12 @@
         padding: 10px 0;
     }
 
+    .footer-widget--links-one {
+        position: relative;
+        right: 0px;
+        padding-left: 0px;
+    }
+
     @media (max-width: 767px) {
         .offcanvas__cart-product__content__wrapper {
             gap: 10px !important;
@@ -240,7 +251,7 @@
     <div class="modal-dialog">
         <div class="modal-content p-4">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Product Enquire</h5>
+                <h5 class="modal-title" id="myModalLabel">Product Enquiry</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div id="enquireFormResponse"></div>
@@ -264,7 +275,7 @@
     <div class="modal-dialog">
         <div class="modal-content p-4">
             <div class="modal-header">
-                <h5 class="modal-title" id="checkoutModalLabel">Products Enquire Form</h5>
+                <h5 class="modal-title" id="checkoutModalLabel">Products Enquiry Form</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <form action="" method="post" id="checkoutForm">

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AttributeValueController;
+use App\Http\Controllers\Admin\MarketingController;
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -45,4 +46,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('product-queries', [OrderController::class, 'productQueries'])->name('product.queries');
     Route::get('product-query/{id}', [OrderController::class, 'viewProductQuery'])->name('product.query');
     Route::post('product-query-status/{id}', [OrderController::class, 'changeProductQueryStatus'])->name('product.query.status');
+    Route::get('chart-data', [DashboardController::class, 'getChartData'])->name('get.chart.data');
+    Route::get('marketing', [MarketingController::class, 'index'])->name('marketing.index');
+    Route::post('send-sms-selected-users', [MarketingController::class, 'sendSMSSelectedUsers'])->name('send.sms.selected.users');
+    Route::post('send-sms-all-users', [MarketingController::class, 'sendSMSAllUsers'])->name('send.sms.all.users');
 });

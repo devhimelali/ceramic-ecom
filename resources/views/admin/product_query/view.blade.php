@@ -21,6 +21,12 @@
             <td>{{ $product->product->name }}</td>
         </tr>
         <tr>
+            <th>Product Quantity</th>
+            <td>
+                <span class="badge bg-success">{{ $product->quantity }}</span>
+            </td>
+        </tr>
+        <tr>
             <th>Product Details</th>
             <td>
                 <ul>
