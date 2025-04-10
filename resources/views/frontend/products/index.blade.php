@@ -133,6 +133,7 @@
     </style>
     <!-- Include jQuery UI CSS -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
 @endsection
 @section('content')
     <section class="page-header">
@@ -142,7 +143,7 @@
         <div class="container">
             <h2 class="page-header__title">Find Your Products</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="text-white icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
+                <li><i class="icon-home text-white"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><span class="text-white">Products</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
@@ -221,7 +222,7 @@
                         <div class="spinner"></div>
                         <p>Loading...</p>
                     </div>
-                    <div id="products" class="pt-4 mt-5">
+                    <div id="products" class="mt-5 pt-4">
                     </div>
 
 
@@ -233,6 +234,7 @@
 @section('page-script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{ asset('frontend/assets/vendors/owl-carousel/js/owl.carousel.min.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let urlParams = new URLSearchParams(window.location.search);

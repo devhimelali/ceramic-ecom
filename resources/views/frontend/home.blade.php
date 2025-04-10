@@ -97,6 +97,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
 @endsection
 @section('content')
     <!-- main slider start -->
@@ -355,13 +356,18 @@
                 @foreach ($products as $product)
                     <div class="col-xl-3 col-lg-4 col-md-6 ">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                            <div class="product__item__image">
-                                @php
-                                    $images = $product->images->where('type', 'thumbnail')->first();
-                                @endphp
-                                <img src="{{ ImageUploadHelper::getProductImageUrl($images?->image) }}"
-                                    alt="Natural Stone Tiles">
-                            </div><!-- /.product-image -->
+                            @php
+                                $images = $product->images->filter(function ($image) {
+                                    return in_array($image->type, ['gallery', 'thumbnail']);
+                                });
+                            @endphp
+                            <div class="product__item__image product-carousel owl-carousel">
+                                @foreach ($images as $image)
+                                    <img class="item"
+                                        src="{{ ImageUploadHelper::getProductImageUrl($image?->image, 'products', 'thumbnail') }}"
+                                        alt="Natural Stone Tiles">
+                                @endforeach
+                            </div>
                             <div class="product__item__content">
                                 <h4 class="product__item__title"><a
                                         href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
@@ -440,8 +446,27 @@
 
 @endsection
 @section('page-script')
+    <script src="{{ asset('frontend/assets/vendors/owl-carousel/js/owl.carousel.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+            var owl = $('.product-carousel');
+            owl.owlCarousel({
+                items: 1,
+                loop: true,
+                margin: 10,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true
+            });
+
+            $('.play').on('click', function() {
+                owl.trigger('play.owl.autoplay', [1000]);
+            });
+
+            $('.stop').on('click', function() {
+                owl.trigger('stop.owl.autoplay');
+            });
+
             displayCartItems();
             $('.enquireBtn').click(function() {
                 $('#myModal').modal('show');

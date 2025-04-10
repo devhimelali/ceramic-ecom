@@ -192,6 +192,11 @@
 @endsection
 @section('page-style')
     <style>
+        .product-details__gallery-thumb__img {
+            width: 83px !important;
+            height: 83px !important;
+        }
+
         .product-details__description figure table {
             width: 100%;
             padding: 20px !important;
