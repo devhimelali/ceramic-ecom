@@ -9,12 +9,12 @@
                         <div class="about-one__image">
                             <div class="image-container">
                                 @php
-                                    $home_one__image__one = $settings->where('key', 'home_one__image__one')->first();
+                                    $home_one_imageone = $settings->where('key', 'home_oneimage_one')->first();
                                 @endphp
-                                <img src="{{ $home_one__image__one ? asset($home_one__image__one->value) : asset('frontend/assets/images/about/about-1-3.png') }}"
-                                    alt="about" class="about-one__image__one sec_1_prev_1">
+                                <img src="{{ $home_one_imageone ? asset($home_oneimage_one->value) : asset('frontend/assets/images/about/about-1-3.png') }}"
+                                    alt="about" class="about-one_image_one sec_1_prev_1">
                                 <input type="file" class="image-upload home_sec_1_img_1 d-none"
-                                    data-target="about-one__image__one" name="home_one__image__one">
+                                    data-target="about-one_imageone" name="home_oneimage_one">
                                 <label class="upload-btn"
                                     onclick="setupImagePreview('.home_sec_1_img_1', '.sec_1_prev_1', '240', '240')">
                                     240 × 240 px <br>
@@ -23,14 +23,14 @@
                             </div>
                             <div class="image-container">
                                 @php
-                                    $images = $settings->where('key', 'home_one__image__two')->first();
+                                    $images = $settings->where('key', 'home_one_image_two')->first();
                                 @endphp
                                 <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/about/about-1-2.jpg') }}"
-                                    alt="about" class="about-one__image__two sec_1_prev_2">
+                                    alt="about" class="about-one_image_two sec_1_prev_2">
 
 
                                 <input type="file" class="image-upload home_sec_1_img_2 d-none"
-                                    data-target="about-one__image__two" name="home_one__image__two">
+                                    data-target="about-one_imagetwo" name="home_oneimage_two">
                                 <label onclick="setupImagePreview('.home_sec_1_img_2', '.sec_1_prev_2','240', '347')"
                                     class="upload-btn">
                                     240 × 347 px <br>
@@ -42,16 +42,16 @@
                         <div class="about-one__image">
                             <div class="image-container">
                                 @php
-                                    $images = $settings->where('key', 'home_one__image__three')->first();
+                                    $images = $settings->where('key', 'home_one_image_three')->first();
                                 @endphp
                                 <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/about/about-1-1.jpg') }}"
-                                    alt="about" class="about-one__image__three sec_1_prev_3">
+                                    alt="about" class="about-one_image_three sec_1_prev_3">
 
 
                                 <input type="file" class="image-upload home_sec_1_img_3 d-none"
-                                    data-target="about-one__image__three" name="home_one__image__three">
+                                    data-target="about-one_imagethree" name="home_oneimage_three">
                                 <label onclick="setupImagePreview('.home_sec_1_img_3', '.sec_1_prev_3','270', '617')"
-                                    class="upload-btn mt-3">
+                                    class="mt-3 upload-btn">
                                     270 × 617 px <br>
                                     Upload
                                 </label>
@@ -59,14 +59,14 @@
                         </div><!-- /.about-one__image -->
 
                         <div class="about-one__circle-text">
-                            <div class="about-one__circle-text__bg"
+                            <div class="about-one_circle-text_bg"
                                 style="background-image: url('{{ asset('frontend') }}/assets/images/resources/about-award-bg.jpg');">
                             </div>
                             <img src="{{ asset('frontend') }}/assets/images/resources/about-award-symbol.png"
-                                alt="award-symbole" class="about-one__circle-text__image">
+                                alt="award-symbole" class="about-one_circle-text_image">
                             <div class="about-one__curved-circle curved-circle">
                                 <!-- curved-circle start-->
-                                <div class="about-one__curved-circle__item curved-circle__item"
+                                <div class="about-one_curved-circleitem curved-circle_item"
                                     data-circle-text-options='{
                             "radius": 84,
                             "forceWidth": true,
@@ -79,8 +79,8 @@
                 </div><!-- /.col-lg-6 -->
                 <div class="col-lg-6">
 
-                    <textarea name="home_about_sec_1" class="d-none" id="about_one__content__one"></textarea>
-                    <div class="about-one__content" id="about_content__one">
+                    <textarea name="home_about_sec_1" class="d-none" id="about_one_content_one"></textarea>
+                    <div class="about-one_content" id="about_content_one">
                         @php
                             $home_about_sec_1 = $settings->where('key', 'home_about_sec_1')->first();
                         @endphp
@@ -96,7 +96,7 @@
                                 </h3>
                                 <!-- /.sec-title__title -->
                             </div><!-- /.sec-title -->
-                            <div class="about-one__content__text wow fadeInUp" data-wow-duration="1500ms"
+                            <div class="about-one_content_text wow fadeInUp" data-wow-duration="1500ms"
                                 data-wow-delay="00ms">
                                 <h5 class="about-one__text-title" contenteditable="true">Welcome to Melbourne Building
                                     Products,
@@ -121,45 +121,7 @@
                                     range of applications. These companies play a crucial role in the construn and
                                     interior
                                     design industries by providing tiles for residential.</p><!-- /.about-one__text -->
-                            </div><!-- /.about-one__content__text -->
-                            <div class="row about-one__inner-row gutter-y-40">
-                                <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                                    <div class="about-one__service about-one__service--one">
-                                        <div class="about-one__service__icon">
-                                            <span class="icon-toilet"></span>
-                                        </div><!-- /.about-one__service__icon -->
-                                        <div class="about-one__service__content">
-                                            <h4 class="about-one__service__title" contenteditable="true">Tiles & Toilet
-                                            </h4>
-                                            <!-- /.about-one__service__title -->
-                                            <p class="about-one__service__text" contenteditable="true">Tiles company,
-                                                also
-                                                known
-                                                as a tile</p>
-                                            <!-- /.about-one__service__text -->
-                                        </div><!-- /.about-one__service__content -->
-                                    </div><!-- /.about-one__service -->
-                                </div><!-- /.col-xl-6 -->
-                                <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
-                                    <div class="about-one__service about-one__service--two">
-                                        <div class="about-one__service__icon">
-                                            <span class="icon-kitchen"></span>
-                                        </div><!-- /.about-one__service__icon -->
-                                        <div class="about-one__service__content">
-                                            <h4 class="about-one__service__title" contenteditable="true">design Kitchen
-                                                in
-                                                3D
-                                            </h4>
-                                            <!-- /.about-one__service__title -->
-                                            <p class="about-one__service__text" contenteditable="true">Tiles company,
-                                                also
-                                                known
-                                                as a tile</p>
-                                            <!-- /.about-one__service__text -->
-                                        </div><!-- /.about-one__service__content -->
-                                    </div><!-- /.about-one__service -->
-                                </div><!-- /.col-xl-6 -->
-                            </div><!-- /.row -->
+                            </div><!-- /.about-one_content_text -->
                             <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms"
                                 data-wow-delay="00ms">
                                 <a href="{{ route('frontend.contact') }}" class="floens-btn">
@@ -174,15 +136,15 @@
             </div><!-- /.row -->
         </form>
         <div class="mt-3 text-end">
-            <button type="button"
-                onclick="saveChanges('#about_content__one', '#about_one__content__one', '#aboutFormSectionOne')"
+            <button type="button" id="aboutButtonSectionOne"
+                onclick="saveChanges('#about_content_one', '#about_onecontent_one', '#aboutFormSectionOne','#aboutButtonSectionOne')"
                 class="btn btn-primary">Save Changes</button>
         </div><!-- /.col-lg-6 -->
     </div><!-- /.container -->
     <div class="about-one__shapes">
         <img src="{{ asset('frontend') }}/assets/images/shapes/about-shape-1-1.jpg" alt="about-shape"
-            class="about-one__shape about-one__shape--one">
+            class="about-one_shape about-one_shape--one">
         <img src="{{ asset('frontend') }}/assets/images/shapes/about-shape-1-1.jpg" alt="about-shape"
-            class="about-one__shape about-one__shape--two">
+            class="about-one_shape about-one_shape--two">
     </div><!-- /.about-one__shapes -->
 </section><!-- /.about-one section-space -->

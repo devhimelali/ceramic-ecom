@@ -113,38 +113,38 @@
     <!-- services info start -->
     <section class="mt-3 services-one__info">
         <div class="container">
-            <div class="services-one__info__inner">
-                <div class="services-one__info__bg"
+            <div class="services-one_info_inner">
+                <div class="services-one_info_bg"
                     style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/services-info-bg-1.png);">
                 </div>
-                <!-- /.services-one__info__bg -->
+                <!-- /.services-one_info_bg -->
                 <div class="row gutter-y-40 align-items-center">
                     <div class="col-lg-6">
-                        <div class="services-one__info__left">
-                            <h3 class="services-one__info__title">Get a Professional Services</h3>
-                            <!-- /.services-one__info__title -->
-                            <p class="services-one__info__text">Laminate flooring is a type of synthetic flooring
+                        <div class="services-one_info_left">
+                            <h3 class="services-one_info_title">Get a Professional Services</h3>
+                            <!-- /.services-one_info_title -->
+                            <p class="services-one_info_text">Laminate flooring is a type of synthetic flooring
                                 that
                                 designed like hardwood, tile, or other natural materials</p>
-                            <!-- /.services-one__info__text -->
-                        </div><!-- /.services-one__info__left -->
+                            <!-- /.services-one_info_text -->
+                        </div><!-- /.services-one_info_left -->
                     </div><!-- /.col-lg-6 -->
                     <div class="col-lg-6">
-                        <div class="services-one__info__right">
-                            <div class="services-one__info__right__inner">
-                                <div class="services-one__info__icon">
+                        <div class="services-one_info_right">
+                            <div class="services-one_inforight_inner">
+                                <div class="services-one_info_icon">
                                     <span class="icon-telephone"></span>
-                                </div><!-- /.services-one__info__icon -->
+                                </div><!-- /.services-one_info_icon -->
                                 <a href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}"
-                                    class="services-one__info__number">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
-                                <!-- /.services-one__info__number -->
-                            </div><!-- /.services-one__info__right__inner -->
-                        </div><!-- /.services-one__info__right -->
+                                    class="services-one_info_number">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
+                                <!-- /.services-one_info_number -->
+                            </div><!-- /.services-one_inforight_inner -->
+                        </div><!-- /.services-one_info_right -->
                     </div><!-- /.col-lg-6 -->
                 </div><!-- /.row -->
-                <div class="services-one__info__shape-one"></div><!-- /.services-one__info__shape-one -->
-                <div class="services-one__info__shape-two"></div><!-- /.services-one__info__shape-two -->
-            </div><!-- /.services-one__info__inner -->
+                <div class="services-one_infoshape-one"></div><!-- /.services-oneinfo_shape-one -->
+                <div class="services-one_infoshape-two"></div><!-- /.services-oneinfo_shape-two -->
+            </div><!-- /.services-one_info_inner -->
         </div><!-- /.container -->
     </section><!-- /.services-one__info -->
     <!-- services info end -->
@@ -162,7 +162,7 @@
         <div class="container">
             <div class="sec-title sec-title--center">
 
-                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
+                <h6 class="sec-title_tagline">our shop</h6><!-- /.sec-title_tagline -->
 
                 <h3 class="sec-title__title">Let’s Explore Latest <br> Product in Shop</h3>
                 <!-- /.sec-title__title -->
@@ -173,26 +173,26 @@
                 @foreach ($products as $product)
                     <div class="col-xl-3 col-lg-4 col-md-6 ">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                            <div class="product__item__image">
+                            <div class="product_item_image">
                                 @php
                                     $images = $product->images->where('type', 'thumbnail')->first();
                                 @endphp
                                 <img src="{{ ImageUploadHelper::getProductImageUrl($images?->image) }}"
                                     alt="Natural Stone Tiles">
                             </div><!-- /.product-image -->
-                            <div class="product__item__content">
-                                <h4 class="product__item__title"><a href="#">{{ Str::limit($product->name, 15) }}</a>
+                            <div class="product_item_content">
+                                <h4 class="product_item_title"><a href="#">{{ Str::limit($product->name, 15) }}</a>
                                 </h4><!-- /.product-title -->
-                                <div class="product__item__price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
+                                <div class="product_item_price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
 
                                 <div class="d-flex align-items-center justify-content-center">
                                     <a href="javascript:void(0);"
-                                        class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
+                                        class="p-3 floens-btn product_item_link me-2 custom-button enquireBtn"
                                         data-id="{{ $product->id }}"
                                         data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                     <a href="javascript:void(0);"
-                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn"
+                                        class="p-4 floens-btn product_item_link me-2 custom-button addCartItemBtn"
                                         data-product="{{ $product }}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                 </div>
@@ -212,7 +212,7 @@
     <!-- client carousel start -->
     <div class="client-carousel @@extraClassName">
         <div class="container">
-            <div class="client-carousel__one floens-owl__carousel owl-theme owl-carousel"
+            <div class="client-carousel_one floens-owl_carousel owl-theme owl-carousel"
                 data-owl-options='{
                     "items": 5,
                     "margin": 65,
@@ -246,7 +246,7 @@
                     }
                     }'>
                 @foreach ($brands as $barand)
-                    <div class="client-carousel__one__item">
+                    <div class="client-carousel_one_item">
                         <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
                             alt="brand">
                     </div><!-- /.owl-slide-item-->
@@ -295,7 +295,13 @@
                 image.src = e.target.result;
                 image.onload = function() {
                     if (image.width < minWidth || image.height < minHeight) {
-                        alert(`Image is too small! Minimum required size is ${minWidth} × ${minHeight} px.`);
+                        alert(Image is too small!Minimum required size is $ {
+                                minWidth
+                            }×
+                            $ {
+                                minHeight
+                            }
+                            px.);
                         callback(false); // Image size is invalid
                     } else {
                         callback(true, e.target.result); // Image is valid
@@ -313,8 +319,10 @@
             });
         });
 
-        function saveChanges(cloneId, appendId, formId) {
+        function saveChanges(cloneId, appendId, formId, buttonId) {
+            alert('Save Changes');
             let fullContent = $(cloneId).clone();
+            // console.log(fullContent.html());
             $(appendId).val(fullContent.html());
 
             // Prepare the form data and CSRF token
@@ -329,6 +337,12 @@
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
                 },
+                beforeSend: function() {
+                    $(buttonId).prop('disabled', true);
+                    $(buttonId).html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving.....'
+                    )
+                },
                 success: function(response) {
                     if (response.status === "success") {
                         notify(response.status, response.message);
@@ -336,6 +350,10 @@
                 },
                 error: function(xhr) {
                     notify('error', 'Failed to save changes.');
+                },
+                complete: function() {
+                    $(buttonId).prop('disabled', false);
+                    $(buttonId).html('Save Changes');
                 }
             });
         }
