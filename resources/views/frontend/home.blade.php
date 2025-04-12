@@ -496,7 +496,9 @@
                 margin: 10,
                 autoplay: true,
                 autoplayTimeout: 2000,
-                autoplayHoverPause: true
+                autoplayHoverPause: true,
+                nav: true,
+                dots: false,
             });
 
             $('.play').on('click', function() {
