@@ -69,6 +69,38 @@
             height: 463px
         }
 
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel button.owl-dot.owl-nav {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            background-color: var(--base-color) !important;
+            display: block;
+            padding: 0 .3em !important;
+            font-size: 3em;
+            margin: 0;
+            cursor: pointer;
+            color: #fff;
+            transform: translate(-50%, -50%);
+        }
+
+        .owl-carousel .owl-nav button.owl-next,
+        .owl-carousel .owl-nav button.owl-next,
+        .owl-carousel button.owl-dot.owl-nav {
+            position: absolute;
+            right: -23px;
+            top: 50%;
+            background-color: var(--base-color) !important;
+            display: block;
+            padding: 0 .3em !important;
+            font-size: 3em;
+            margin: 0;
+            cursor: pointer;
+            color: #fff;
+            transform: translate(-50%, -50%);
+        }
+
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
                 height: 364px !important;
