@@ -96,6 +96,43 @@
                 width: auto !important;
             }
         }
+
+        .product__item__title a {
+            font-size: 15px !important;
+            text-align: left !important;
+            text-transform: capitalize;
+            font-weight: bold !important;
+        }
+
+        .product__item__content {
+            text-align: left !important;
+        }
+
+        .product__item__price {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            font-size: 18px;
+            color: var(--floens-text, #7A736A);
+            line-height: normal;
+            font-weight: 700;
+            margin-bottom: 17px !important;
+        }
+
+        .product__item__content {
+            padding: 10px !important;
+            height: 173px;
+            overflow: hidden;
+        }
+
+        .enquireBtn {
+            width: 70%;
+            padding: 9px !important;
+        }
+
+        a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
+            padding: 16px !important;
+        }
     </style>
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
 @endsection
@@ -354,7 +391,7 @@
 
             <div class="row gutter-y-30">
                 @foreach ($products as $product)
-                    <div class="col-xl-3 col-lg-4 col-md-6 ">
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                             @php
                                 $images = $product->images->filter(function ($image) {
@@ -369,9 +406,12 @@
                                 @endforeach
                             </div>
                             <div class="product__item__content">
-                                <h4 class="product__item__title"><a
+                                {{-- <h4 class="product__item__title"><a
                                         href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
-                                </h4><!-- /.product-title -->
+                                </h4><!-- /.product-title --> --}}
+                                <p class="product__item__title"><a
+                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
+                                </p><!-- /.product-title -->
                                 <div class="product__item__price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
 
                                 <div class="d-flex align-items-center justify-content-center">
@@ -384,7 +424,7 @@
                                         class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
                                         data-product-id="{{ $product->id }}"
                                         data-url="{{ route('add.to.cart.form', $product->id) }}">
-                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                        <i style='font-size:17px; right: 8px' class='fas'>&#xf217;</i></a>
                                 </div>
                             </div><!-- /.product-content -->
                         </div><!-- /.product-item -->

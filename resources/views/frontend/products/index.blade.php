@@ -415,5 +415,9 @@
                 }
             });
         }
+        history.pushState(null, null, location.href);
+        window.addEventListener('popstate', function(event) {
+            window.location.href = "{{ route('frontend.home') }}";
+        });
     </script>
 @endsection
