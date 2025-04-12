@@ -96,6 +96,38 @@
                 width: auto !important;
             }
         }
+
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel button.owl-dot.owl-nav {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            background-color: var(--base-color) !important;
+            display: block;
+            padding: 0 .3em !important;
+            font-size: 3em;
+            margin: 0;
+            cursor: pointer;
+            color: #fff;
+            transform: translate(-50%, -50%);
+        }
+
+        .owl-carousel .owl-nav button.owl-next,
+        .owl-carousel .owl-nav button.owl-next,
+        .owl-carousel button.owl-dot.owl-nav {
+            position: absolute;
+            right: -23px;
+            top: 50%;
+            background-color: var(--base-color) !important;
+            display: block;
+            padding: 0 .3em !important;
+            font-size: 3em;
+            margin: 0;
+            cursor: pointer;
+            color: #fff;
+            transform: translate(-50%, -50%);
+        }
     </style>
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
 @endsection
@@ -456,7 +488,9 @@
                 margin: 10,
                 autoplay: true,
                 autoplayTimeout: 2000,
-                autoplayHoverPause: true
+                autoplayHoverPause: true,
+                nav: true,
+                dots: false,
             });
 
             $('.play').on('click', function() {
