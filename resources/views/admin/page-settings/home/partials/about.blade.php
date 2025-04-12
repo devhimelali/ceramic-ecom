@@ -122,44 +122,6 @@
                                     interior
                                     design industries by providing tiles for residential.</p><!-- /.about-one__text -->
                             </div><!-- /.about-one__content__text -->
-                            <div class="row about-one__inner-row gutter-y-40">
-                                <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                                    <div class="about-one__service about-one__service--one">
-                                        <div class="about-one__service__icon">
-                                            <span class="icon-toilet"></span>
-                                        </div><!-- /.about-one__service__icon -->
-                                        <div class="about-one__service__content">
-                                            <h4 class="about-one__service__title" contenteditable="true">Tiles & Toilet
-                                            </h4>
-                                            <!-- /.about-one__service__title -->
-                                            <p class="about-one__service__text" contenteditable="true">Tiles company,
-                                                also
-                                                known
-                                                as a tile</p>
-                                            <!-- /.about-one__service__text -->
-                                        </div><!-- /.about-one__service__content -->
-                                    </div><!-- /.about-one__service -->
-                                </div><!-- /.col-xl-6 -->
-                                <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
-                                    <div class="about-one__service about-one__service--two">
-                                        <div class="about-one__service__icon">
-                                            <span class="icon-kitchen"></span>
-                                        </div><!-- /.about-one__service__icon -->
-                                        <div class="about-one__service__content">
-                                            <h4 class="about-one__service__title" contenteditable="true">design Kitchen
-                                                in
-                                                3D
-                                            </h4>
-                                            <!-- /.about-one__service__title -->
-                                            <p class="about-one__service__text" contenteditable="true">Tiles company,
-                                                also
-                                                known
-                                                as a tile</p>
-                                            <!-- /.about-one__service__text -->
-                                        </div><!-- /.about-one__service__content -->
-                                    </div><!-- /.about-one__service -->
-                                </div><!-- /.col-xl-6 -->
-                            </div><!-- /.row -->
                             <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms"
                                 data-wow-delay="00ms">
                                 <a href="{{ route('frontend.contact') }}" class="floens-btn">
@@ -174,8 +136,8 @@
             </div><!-- /.row -->
         </form>
         <div class="mt-3 text-end">
-            <button type="button"
-                onclick="saveChanges('#about_content__one', '#about_one__content__one', '#aboutFormSectionOne')"
+            <button type="button" id="aboutButtonSectionOne"
+                onclick="saveChanges('#about_content__one', '#about_one__content__one', '#aboutFormSectionOne','#aboutButtonSectionOne')"
                 class="btn btn-primary">Save Changes</button>
         </div><!-- /.col-lg-6 -->
     </div><!-- /.container -->

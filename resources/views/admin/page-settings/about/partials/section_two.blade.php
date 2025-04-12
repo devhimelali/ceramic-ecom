@@ -84,8 +84,8 @@
             </div><!-- /.row -->
         </form>
         <div class="mt-5 text-end">
-            <button type="button"
-                onclick="saveChanges('#about_content__two','#about_one__content__two','#aboutFormSectionTwo')"
+            <button type="button" id="aboutButtonSectionTwo"
+                onclick="saveChanges('#about_content__two','#about_one__content__two','#aboutFormSectionTwo','#aboutButtonSectionTwo')"
                 class="btn btn-primary">Save
                 Changes</button>
         </div>

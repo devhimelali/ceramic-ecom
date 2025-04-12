@@ -117,8 +117,8 @@
             </div><!-- /.row -->
         </form>
         <div class="mt-3 text-end">
-            <button type="button"
-                onclick="saveChanges('#home_reliable_one', '#home_reliable_one_content', '#homeFormReliableSection')"
+            <button type="button" id="aboutButtonSectionTwo"
+                onclick="saveChanges('#home_reliable_one', '#home_reliable_one_content', '#homeFormReliableSection','#aboutButtonSectionTwo')"
                 class="btn btn-primary">Save Changes</button>
         </div>
     </div><!-- /.container -->
