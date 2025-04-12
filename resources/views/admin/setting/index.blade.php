@@ -134,12 +134,12 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-2">
-                                        <label class="col-sm-2 col-form-label" for="twitter_link">Twitter Link</label>
+                                        <label class="col-sm-2 col-form-label" for="threads_link">Threads Link</label>
                                         <div class="col-sm-10">
-                                            <input type="hidden" name="types[]" value="twitter_link">
-                                            <input type="text" name="twitter_link" id="twitter_link"
+                                            <input type="hidden" name="types[]" value="threads_link">
+                                            <input type="text" name="threads_link" id="threads_link"
                                                 class="form-control"
-                                                value="{{ old('twitter_link', app_setting('twitter_link')) }}"
+                                                value="{{ old('threads_link', app_setting('threads_link')) }}"
                                                 placeholder="https://www.twitter.com/xyz">
                                         </div>
                                     </div>
@@ -154,21 +154,17 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-2">
-                                        <label class="col-sm-2 col-form-label" for="youtube_link">Youtube Link</label>
+                                        <label class="col-sm-2 col-form-label" for="tiktok_link">Tiktok Link</label>
                                         <div class="col-sm-10">
-                                            <input type="hidden" name="types[]" value="youtube_link">
-                                            <input type="text" name="youtube_link" id="youtube_link"
+                                            <input type="hidden" name="types[]" value="tiktok_link">
+                                            <input type="text" name="tiktok_link" id="tiktok_link"
                                                 class="form-control"
-                                                value="{{ old('youtube_link', app_setting('youtube_link')) }}"
+                                                value="{{ old('tiktok_link', app_setting('tiktok_link')) }}"
                                                 placeholder="https://www.youtube.com/xyz">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-
-
                         </div>
 
                         <button type="submit" class="btn btn-primary">Save</button>

@@ -27,6 +27,12 @@
             height: 463px;
         }
 
+        @media (max-width: 991px) {
+            .about-one__image img {
+                width: 100% !important;
+            }
+        }
+
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
                 height: 364px !important;
@@ -65,7 +71,7 @@
         <div class="container">
             <h2 class="page-header__title">About us</h2>
             <ul class="floens-breadcrumb list-unstyled">
-                <li><i class="icon-home text-white"></i> <a href="index.html">Home</a></li>
+                <li><i class="text-white icon-home"></i> <a href="/">Home</a></li>
                 <li><span class="text-white">About us</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
@@ -175,64 +181,6 @@
         </div><!-- /.about-one__shapes -->
     </section><!-- /.about-one section-space -->
 
-    <section class="reliable-one @@extraClassName section-space-bottom">
-        <div class="container">
-            <div class="row gutter-y-60">
-                <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1500ms">
-                    <div class="reliable-one__images">
-                        <div class="reliable-one__image">
-                            @php
-                                $about_two__image__one = $settings->where('key', 'about_two__image__one')->first();
-                            @endphp
-                            <img src="{{ $about_two__image__one ? asset($about_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-2-1.jpg') }}"
-                                alt="reliable" class="reliable-one__image__one sec_2_prev_1">
-                            <div class="reliable-one__image__inner">
-                                @php
-                                    $about_two__image__two = $settings->where('key', 'about_two__image__two')->first();
-                                @endphp
-                                <img src="{{ $about_two__image__two ? asset($about_two__image__two->value) : asset('frontend/assets/images/reliable/reliable-2-2.jpg') }}"
-                                    alt="reliable" class="reliable-one__image__two sec_2_prev_2">
-                            </div><!-- /.reliable-one__image__inner -->
-                            <div class="experience reliable-one__experience">
-                                <div class="experience__inner">
-                                    <h3 class="experience__year"
-                                        style="background-image: url('{{ asset('frontend') }}/assets/images/shapes/reliable-shape-1-1.png');">
-                                        25
-                                    </h3>
-                                    <!-- /.experience__year -->
-                                    <p class="experience__text">years of <br> experience</p>
-                                    <!-- /.experience__text -->
-                                </div><!-- /.experience__inner -->
-                            </div><!-- /.experience -->
-                        </div><!-- /.reliable-one__image -->
-                    </div><!-- /.reliable-one__images -->
-                </div><!-- /.col-lg-6 -->
-                <div class="col-lg-6">
-                    <div class="reliable-one__content">
-
-                        @if ($settings->where('key', 'about_sec_2')->first())
-                            {!! $settings->where('key', 'about_sec_2')->first()->value !!}
-                        @else
-                            <div class="sec-title sec-title--border">
-
-                                <h6 class="sec-title__tagline">reliable</h6><!-- /.sec-title__tagline -->
-
-                                <h3 class="sec-title__title">We Provide Reliable Flooring Services</h3>
-                                <!-- /.sec-title__title -->
-                            </div><!-- /.sec-title -->
-                            <p class="reliable-one__text">Our vision is to provide innovative, independent flooring
-                                solutions
-                                that problems for homes, industries, and workspaces, as well as flooring we would like in
-                                our own residences, work spaces,
-                            </p>
-                        @endif
-
-
-                    </div><!-- /.reliable-one__content -->
-                </div><!-- /.col-lg-6 -->
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </section><!-- /.reliable-one section-space-bottom -->
 @endsection
 @section('page-script')
     <script>

@@ -69,6 +69,11 @@ class FrontendController extends Controller
             }
         }
 
+        if ($request->has('min_price') && $request->has('max_price')) {
+            $priceRange = [$request->min_price, $request->max_price];
+            $query->whereBetween('price', $priceRange);
+        }
+
 
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -155,5 +160,21 @@ class FrontendController extends Controller
             'active' => 'about-us'
         ];
         return view('frontend.about-us', $data);
+    }
+
+    public function termAndCondition()
+    {
+        $data = [
+            'active' => 'terms-and-conditions'
+        ];
+        return view('frontend.terms_and_conditions', $data);
+    }
+
+    public function privacyPolicy()
+    {
+        $data = [
+            'active' => 'privacy-policy'
+        ];
+        return view('frontend.privacy_policy', $data);
     }
 }

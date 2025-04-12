@@ -97,6 +97,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
 @endsection
 @section('content')
     <!-- main slider start -->
@@ -180,34 +181,6 @@
                                     interior
                                     design industries by providing tiles for residential.</p><!-- /.about-one__text -->
                             </div><!-- /.about-one__content__text -->
-                            <div class="row about-one__inner-row gutter-y-40">
-                                <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                                    <div class="about-one__service about-one__service--one">
-                                        <div class="about-one__service__icon">
-                                            <span class="icon-toilet"></span>
-                                        </div><!-- /.about-one__service__icon -->
-                                        <div class="about-one__service__content">
-                                            <h4 class="about-one__service__title">Tiles & Toilet</h4>
-                                            <!-- /.about-one__service__title -->
-                                            <p class="about-one__service__text">Tiles company, also known as a tile</p>
-                                            <!-- /.about-one__service__text -->
-                                        </div><!-- /.about-one__service__content -->
-                                    </div><!-- /.about-one__service -->
-                                </div><!-- /.col-xl-6 -->
-                                <div class="col-xl-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
-                                    <div class="about-one__service about-one__service--two">
-                                        <div class="about-one__service__icon">
-                                            <span class="icon-kitchen"></span>
-                                        </div><!-- /.about-one__service__icon -->
-                                        <div class="about-one__service__content">
-                                            <h4 class="about-one__service__title">design Kitchen in 3D</h4>
-                                            <!-- /.about-one__service__title -->
-                                            <p class="about-one__service__text">Tiles company, also known as a tile</p>
-                                            <!-- /.about-one__service__text -->
-                                        </div><!-- /.about-one__service__content -->
-                                    </div><!-- /.about-one__service -->
-                                </div><!-- /.col-xl-6 -->
-                            </div><!-- /.row -->
                             <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                                 <a href="{{ route('frontend.contact') }}" class="floens-btn">
                                     <span>get in touch</span>
@@ -232,7 +205,7 @@
 
 
     <!-- services info start -->
-    <section class="services-one__info mt-3">
+    <section class="mt-3 services-one__info">
         <div class="container">
             <div class="services-one__info__inner">
                 <div class="services-one__info__bg"
@@ -374,7 +347,7 @@
 
                 <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
 
-                <h3 class="sec-title__title">Let’s Explore Latest <br> Product in Shop</h3>
+                <h3 class="sec-title__title">Latest Products in Shop</h3>
                 <!-- /.sec-title__title -->
             </div><!-- /.sec-title -->
 
@@ -383,13 +356,18 @@
                 @foreach ($products as $product)
                     <div class="col-xl-3 col-lg-4 col-md-6 ">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                            <div class="product__item__image">
-                                @php
-                                    $images = $product->images->where('type', 'thumbnail')->first();
-                                @endphp
-                                <img src="{{ ImageUploadHelper::getProductImageUrl($images?->image) }}"
-                                    alt="Natural Stone Tiles">
-                            </div><!-- /.product-image -->
+                            @php
+                                $images = $product->images->filter(function ($image) {
+                                    return in_array($image->type, ['gallery', 'thumbnail']);
+                                });
+                            @endphp
+                            <div class="product__item__image product-carousel owl-carousel">
+                                @foreach ($images as $image)
+                                    <img class="item"
+                                        src="{{ ImageUploadHelper::getProductImageUrl($image?->image, 'products', 'thumbnail') }}"
+                                        alt="Natural Stone Tiles">
+                                @endforeach
+                            </div>
                             <div class="product__item__content">
                                 <h4 class="product__item__title"><a
                                         href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
@@ -398,12 +376,12 @@
 
                                 <div class="d-flex align-items-center justify-content-center">
                                     <a href="javascript:void(0);"
-                                        class="floens-btn product__item__link me-2 custom-button p-3 enquireBtn"
+                                        class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
                                         data-id="{{ $product->id }}"
                                         data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                     <a href="javascript:void(0);"
-                                        class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn addToCartBtn"
+                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
                                         data-product-id="{{ $product->id }}"
                                         data-url="{{ route('add.to.cart.form', $product->id) }}">
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
@@ -468,19 +446,46 @@
 
 @endsection
 @section('page-script')
+    <script src="{{ asset('frontend/assets/vendors/owl-carousel/js/owl.carousel.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+            var owl = $('.product-carousel');
+            owl.owlCarousel({
+                items: 1,
+                loop: true,
+                margin: 10,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true
+            });
+
+            $('.play').on('click', function() {
+                owl.trigger('play.owl.autoplay', [1000]);
+            });
+
+            $('.stop').on('click', function() {
+                owl.trigger('stop.owl.autoplay');
+            });
+
             displayCartItems();
             $('.enquireBtn').click(function() {
-                console.log('clicked');
+                $('#myModal').modal('show');
                 var productId = $(this).data('id');
                 var url = $(this).data('url');
                 $.ajax({
                     url: url,
                     method: 'GET',
+                    beforeSend: function() {
+                        $('#myModal .modal-body').html(
+                            '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                        );
+                        $('.enquireSubmitBtn').prop('disabled', true)
+                        $('.enquireSubmitBtn').html('Processing...')
+                    },
                     success: function(response) {
+                        $('.enquireSubmitBtn').prop('disabled', false)
+                        $('.enquireSubmitBtn').html('Submit')
                         $('#enquireFormResponse').html(response.html);
-                        $('#myModal').modal('show');
                     }
                 })
             });
@@ -488,13 +493,21 @@
             $('.addToCartBtn').click(function() {
                 var productId = $(this).data('product-id');
                 var url = $(this).data('url');
-                // $('#addToCartModal').modal('show');
+                $('#addToCartModal').modal('show');
                 $.ajax({
                     url: url,
                     method: 'GET',
+                    beforeSend: function() {
+                        $('#addToCartModal .modal-body').html(
+                            '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                        );
+                        $('.enquireSubmitBtn').prop('disabled', true)
+                        $('.enquireSubmitBtn').html('Processing...')
+                    },
                     success: function(response) {
+                        $('.enquireSubmitBtn').prop('disabled', false)
+                        $('.enquireSubmitBtn').html('Add To Cart')
                         $('#addToCartResponse').html(response.html);
-                        $('#addToCartModal').modal('show');
                     }
                 })
             });

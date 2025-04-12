@@ -30,32 +30,32 @@
                                 our own residences, work spaces,</p><!-- /.reliable-one__text -->
                             <div class="row align-items-center gutter-y-30">
                                 <div class="col-xl-6 col-lg-12 col-md-5 col-sm-6">
-                                    <div class="reliable-one__info reliable-one__info--one">
-                                        <div class="reliable-one__info__icon">
+                                    <div class="reliable-one_info reliable-one_info--one">
+                                        <div class="reliable-one_info_icon">
                                             <span class="icon-smiley"></span>
-                                        </div><!-- /.reliable-one__info__icon -->
-                                        <div class="reliable-one__info__text">
-                                            <h4 class="reliable-one__info__title" contenteditable="true">Happy clients
+                                        </div><!-- /.reliable-one_info_icon -->
+                                        <div class="reliable-one_info_text">
+                                            <h4 class="reliable-one_info_title" contenteditable="true">Happy clients
                                             </h4>
-                                            <!-- /.reliable-one__info__title -->
-                                            <h5 class="reliable-one__info__total" contenteditable="true">2.5M+</h5>
-                                            <!-- /.reliable-one__info__total -->
-                                        </div><!-- /.reliable-one__info__text -->
+                                            <!-- /.reliable-one_info_title -->
+                                            <h5 class="reliable-one_info_total" contenteditable="true">2.5M+</h5>
+                                            <!-- /.reliable-one_info_total -->
+                                        </div><!-- /.reliable-one_info_text -->
                                     </div><!-- /.reliable-one__info -->
                                 </div><!-- /.col-xl-6 col-lg-12 col-md-5 col-sm-6 -->
                                 <div class="col-xl-6 col-lg-12 col-md-5 col-sm-6">
-                                    <div class="reliable-one__info reliable-one__info--two">
-                                        <div class="reliable-one__info__icon">
+                                    <div class="reliable-one_info reliable-one_info--two">
+                                        <div class="reliable-one_info_icon">
                                             <span class="icon-cooperation"></span>
-                                        </div><!-- /.reliable-one__info__icon -->
-                                        <div class="reliable-one__info__text">
-                                            <h4 class="reliable-one__info__title" contenteditable="true">Trusted
+                                        </div><!-- /.reliable-one_info_icon -->
+                                        <div class="reliable-one_info_text">
+                                            <h4 class="reliable-one_info_title" contenteditable="true">Trusted
                                                 partners
                                             </h4>
-                                            <!-- /.reliable-one__info__title -->
-                                            <h5 class="reliable-one__info__total" contenteditable="true">420+</h5>
-                                            <!-- /.reliable-one__info__total -->
-                                        </div><!-- /.reliable-one__info__text -->
+                                            <!-- /.reliable-one_info_title -->
+                                            <h5 class="reliable-one_info_total" contenteditable="true">420+</h5>
+                                            <!-- /.reliable-one_info_total -->
+                                        </div><!-- /.reliable-one_info_text -->
                                     </div><!-- /.reliable-one__info -->
                                 </div><!-- /.col-xl-6 col-lg-12 col-md-5 col-sm-6 -->
                             </div><!-- /.row -->
@@ -71,27 +71,27 @@
                     <div class="reliable-one__images">
                         <div class="reliable-one__image">
                             @php
-                                $home_two__image__one = $settings->where('key', 'home_two__image__one')->first();
+                                $home_two_imageone = $settings->where('key', 'home_twoimage_one')->first();
                             @endphp
-                            <img src="{{ $home_two__image__one ? asset($home_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
-                                alt="reliable" class="reliable-one__image__one sec_2_prev_1">
+                            <img src="{{ $home_two_imageone ? asset($home_twoimage_one->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
+                                alt="reliable" class="reliable-one_image_one sec_2_prev_1">
 
                             <input type="file" class="image-upload home_sec_2_img_1 d-none"
-                                data-target="about-one__image__one" name="home_two__image__one">
+                                data-target="about-one_imageone" name="home_twoimage_one">
                             <label class="upload-btn"
                                 onclick="setupImagePreview('.home_sec_2_img_1', '.sec_2_prev_1', '338', '463')">
                                 338 × 463 px <br>
                                 Upload
                             </label>
-                            <div class="reliable-one__image__inner">
+                            <div class="reliable-one_image_inner">
                                 @php
-                                    $images = $settings->where('key', 'home_two__image__two')->first();
+                                    $images = $settings->where('key', 'home_two_image_two')->first();
                                 @endphp
                                 <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/reliable/reliable-1-2.jpg') }}"
-                                    alt="reliable" class="reliable-one__image__two sec_2_prev_2">
+                                    alt="reliable" class="reliable-one_image_two sec_2_prev_2">
 
                                 <input type="file" class="image-upload home_sec_2_img_2 d-none"
-                                    data-target="about-one__image__one" name="home_two__image__two">
+                                    data-target="about-one_imageone" name="home_twoimage_two">
                                 <label class="upload-btn"
                                     onclick="setupImagePreview('.home_sec_2_img_2', '.sec_2_prev_2', '276', '463')">
                                     276 × 463 px <br>
@@ -99,7 +99,7 @@
                                 </label>
 
 
-                            </div><!-- /.reliable-one__image__inner -->
+                            </div><!-- /.reliable-one_image_inner -->
                             <div class="experience reliable-one__experience">
                                 <div class="experience__inner">
                                     <h3 class="experience__year"

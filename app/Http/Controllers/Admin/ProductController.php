@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Helpers\ImageUploadHelper;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
@@ -96,50 +97,70 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
     public function store(StoreRequest $request)
     {
-        $product = Product::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'category_id' => $request->category,
-            'brand_id' => $request->brand,
-            'price' => $request->price,
-            'short_description' => $request->short_description,
-            'description' => $request->description,
-            'status' => $request->status,
-        ]);
+        DB::beginTransaction();
 
-        foreach ($request->variation_names as $key => $variation_name) {
-            $product->attributes()->attach([
-                $variation_name => ['attribute_value_id' => $request->variation_values[$key]]
+        try {
+            // Create the product
+            $product = Product::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'category_id' => $request->category,
+                'brand_id' => $request->brand,
+                'price' => $request->price,
+                'short_description' => $request->short_description,
+                'description' => $request->description,
+                'status' => $request->status,
             ]);
-        }
 
-        if ($request->hasFile('image')) {
-            $imageData = ImageUploadHelper::uploadProductImage($request->file('image'), 'products', $product->id);
+            // Attach product attributes and variation values
+            foreach ($request->variation_names as $key => $variation_name) {
+                $product->attributes()->attach([
+                    $variation_name => ['attribute_value_id' => $request->variation_values[$key]]
+                ]);
+            }
 
-            $product->images()->create([
-                'type' => 'thumbnail',
-                'image' => $imageData['filename'],
-            ]);
-        }
-
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $imageData = ImageUploadHelper::uploadProductImage($image, 'products', $product->id);
+            // Upload thumbnail image
+            if ($request->hasFile('image')) {
+                $imageData = ImageUploadHelper::uploadProductImage($request->file('image'), 'products', $product->id);
 
                 $product->images()->create([
-                    'type' => 'gallery',
+                    'type' => 'thumbnail',
                     'image' => $imageData['filename'],
                 ]);
             }
+
+            // Upload gallery images
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageData = ImageUploadHelper::uploadProductImage($image, 'products', $product->id);
+
+                    $product->images()->create([
+                        'type' => 'gallery',
+                        'image' => $imageData['filename'],
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Product created successfully',
+                'product' => $product->load(['attributes', 'images']),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong while creating the product.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Product created successfully',
-        ]);
     }
 
 
@@ -169,12 +190,15 @@ class ProductController extends Controller
     }
 
 
+
     public function update(UpdateRequest $request, $id)
     {
         DB::beginTransaction();
         try {
+            // Retrieve product with related images and attributes
             $product = Product::with(['images', 'attributes'])->findOrFail($id);
 
+            // Update product details
             $product->update([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
@@ -186,14 +210,16 @@ class ProductController extends Controller
                 'status' => $request->status,
             ]);
 
-            $attributeData = [];
+            $product->attributes()->detach();
 
+            // Attach product attributes and variation values
             foreach ($request->variation_names as $key => $variation_name) {
-                $attributeData[$variation_name] = ['attribute_value_id' => $request->variation_values[$key]];
+                $product->attributes()->attach([
+                    $variation_name => ['attribute_value_id' => $request->variation_values[$key]]
+                ]);
             }
 
-            $product->attributes()->sync($attributeData);
-
+            // Handle thumbnail image update
             if ($request->hasFile('image')) {
                 $oldImage = $product->images->where('type', 'thumbnail')->first();
                 if ($oldImage) {
@@ -208,6 +234,7 @@ class ProductController extends Controller
                 ]);
             }
 
+            // Handle additional gallery images
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $imageData = ImageUploadHelper::uploadProductImage($image, 'products', $product->id);
@@ -222,15 +249,19 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product updated successfully',
+                'product' => $product->load(['attributes', 'images']),
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Product Update Failed: ' . $e->getMessage());
+
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to update product: ' . $e->getMessage(),
+                'message' => 'Failed to update product.',
             ], 500);
         }
     }
+
 
 
     public function destroy($id)

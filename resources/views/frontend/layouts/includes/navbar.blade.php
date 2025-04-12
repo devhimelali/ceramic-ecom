@@ -19,21 +19,21 @@
             </ul><!-- /.list-unstyled topbar-one__info -->
             <div class="topbar-one__right">
                 <div class="topbar-one__social">
-                    <a href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
+                    <a target="_blank" href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
                         <i class="icon-facebook" aria-hidden="true"></i>
                         <span class="sr-only">Facebook</span>
                     </a>
-                    <a href="{{ $settings->where('key', 'twitter_link')->first()->value ?? '#' }}">
-                        <i class="icon-twitter" aria-hidden="true"></i>
-                        <span class="sr-only">Twitter</span>
+                    <a target="_blank" href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
+                        <i class="text-white fa-brands fa-threads"></i>
+                        <span class="sr-only">Threads</span>
                     </a>
-                    <a href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
+                    <a target="_blank" href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                         <i class="icon-instagram" aria-hidden="true"></i>
                         <span class="sr-only">Instagram</span>
                     </a>
-                    <a href="{{ $settings->where('key', 'youtube_link')->first()->value ?? '#' }}"> <i
-                            class="icon-youtube" aria-hidden="true"></i>
-                        <span class="sr-only">Youtube</span>
+                    <a target="_blank" href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
+                        <i class="text-white fa-brands fa-tiktok"></i>
+                        <span class="sr-only">Tiktok</span>
                     </a>
                 </div><!-- /.topbar-one__social -->
             </div><!-- /.topbar-one__right -->
@@ -123,11 +123,21 @@
     })
 </script>
 <style>
-    /* .mobile-nav__btn.mobile-nav__toggler {
-        display: none;
-    } */
-
     @media (max-width: 425px) {
+        .logo-box a img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .mobile-nav__contact li {
+            overflow-wrap: anywhere;
+        }
+
+        .main-header__logo a img {
+            max-height: 60px;
+            width: auto;
+        }
+
         .main-header__search {
             font-size: 16px;
             margin-left: 0px;
@@ -149,6 +159,20 @@
     @media (min-width: 448px) {
         .mobile-nav__btn.mobile-nav__toggler {
             display: none;
+        }
+
+        .mobile-nav__contact li {
+            overflow-wrap: anywhere;
+        }
+
+        .main-header__logo a img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .logo-box a img {
+            max-height: 60px;
+            width: auto;
         }
     }
 

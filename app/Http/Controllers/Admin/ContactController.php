@@ -14,8 +14,8 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ContactUs::query();
-            return DataTables($data)
+            $data = ContactUs::orderBy('id', 'desc');
+            return DataTables(source: $data)
                 ->addIndexColumn()
                 ->addColumn('created_at', function ($row) {
                     return $row->created_at->diffForHumans();
@@ -62,7 +62,7 @@ class ContactController extends Controller
         $request->validate([
             'reply_message' => ['required', 'string'],
         ]);
-        
+
         $contact = ContactUs::find($id);
 
         $contact->update([

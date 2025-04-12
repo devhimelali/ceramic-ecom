@@ -53,13 +53,13 @@
 
     .variationContainer {
         border: 1px solid #d7d7d7;
-        padding: 6px 12px 0px 12px;
+        padding: 0px 12px 0px 12px;
     }
 
     .singleVariationContainer:not(:last-child) {
         border-bottom: 1px solid #d7d7d7;
         margin: 0 -12px 0 -12px;
-        padding: 3px 0;
+        /*padding: 3px 0;*/
     }
 
     .attribute-title {
@@ -82,9 +82,9 @@
                         @foreach ($result as $group)
                             <div class="row singleVariationContainer"
                                 data-id="variation_{{ Str::slug($group['attribute']) }}">
-                                <div class="col-lg-12">
+                                <div class="col-lg-12 py-2">
                                     <div>
-                                        <h6 class="attribute-title">{{ $group['attribute'] }}: <span
+                                        <h6 class="attribute-title mb-0">{{ $group['attribute'] }}: <span
                                                 class="selectedValue-{{ Str::slug($group['attribute']) }}"></span></h6>
                                         <ul class="attribute_list">
                                             @foreach ($group['values'] as $value)
@@ -95,13 +95,14 @@
                                                             data-id="{{ Str::slug($value) }}"
                                                             data-key="{{ Str::slug($group['attribute']) }}"
                                                             data-value="{{ $value }}"
-                                                            style="background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
+                                                            style="border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px; background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
                                                     @else
                                                         <span
                                                             class="variation_{{ Str::slug($value) }} variation_value_pointer"
                                                             data-id="{{ Str::slug($value) }}"
                                                             data-key="{{ Str::slug($group['attribute']) }}"
-                                                            data-value="{{ $value }}" style="cursor: pointer;">
+                                                            data-value="{{ $value }}"
+                                                            style="cursor: pointer; border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px;">
                                                             {{ $value }}
                                                         </span>
                                                     @endif

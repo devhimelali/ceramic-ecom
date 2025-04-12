@@ -57,7 +57,7 @@
 
     .variationContainer {
         border: 1px solid #d7d7d7;
-        padding: 6px 12px 0px 12px;
+        padding: 6px 14px 0px 14px;
     }
 
     .singleVariationContainer:not(:last-child) {
@@ -81,7 +81,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name" style="font-size: 16px">Variant <span class="text-danger">*</span></label>
+                    <label for="name" style="font-size: 16px">Variant <span class="text-danger"
+                            style="font-size: 12px;">* (Please select the product variation)</span></label>
                     <div class="col-lg-12 variationContainer">
                         @foreach ($result as $group)
                             <div class="row singleVariationContainer"
@@ -103,13 +104,14 @@
                                                             data-id="{{ Str::slug($value) }}"
                                                             data-key="{{ Str::slug($group['attribute']) }}"
                                                             data-value="{{ $value }}"
-                                                            style="background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif  height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
+                                                            style="border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px; background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif  height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
                                                     @else
                                                         <span
                                                             class="variation_{{ Str::slug($value) }} variation_value_pointer"
                                                             data-id="{{ Str::slug($value) }}"
                                                             data-key="{{ Str::slug($group['attribute']) }}"
-                                                            data-value="{{ $value }}" style="cursor: pointer;">
+                                                            data-value="{{ $value }}"
+                                                            style="cursor: pointer; border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px;">
                                                             {{ $value }}
                                                         </span>
                                                     @endif

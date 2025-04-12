@@ -133,6 +133,7 @@
     </style>
     <!-- Include jQuery UI CSS -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
 @endsection
 @section('content')
     <section class="page-header">
@@ -233,6 +234,7 @@
 @section('page-script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{ asset('frontend/assets/vendors/owl-carousel/js/owl.carousel.min.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let urlParams = new URLSearchParams(window.location.search);
@@ -409,7 +411,6 @@
                 },
                 error: function(xhr, status, error) {
                     // Handle errors (Optional)
-                    console.log("Error:", error);
                     $('#loader').hide();
                 }
             });

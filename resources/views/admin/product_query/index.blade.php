@@ -8,7 +8,7 @@
                 <h4 class="mb-sm-0">Product Queries</h4>
 
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
+                    <ol class="m-0 breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">Product Queries</li>
                     </ol>
@@ -17,15 +17,15 @@
         </div>
     </div>
     {{--  End breadcrumb  --}}
-    <div class="row mb-5">
+    <div class="mb-5 row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="card-title mb-0">Product Query List</h1>
+                    <h1 class="mb-0 card-title">Product Query List</h1>
                 </div>
 
                 <div class="card-body">
-                    <div class="table-responsive mt-3 mb-1">
+                    <div class="mt-3 mb-1 table-responsive">
                         <table id="dataTable" class="table align-middle ">
                             <thead class="table-light">
                                 <tr>
@@ -217,6 +217,8 @@
 
         $('body').on('click', '.viewDetails', function() {
             var id = $(this).data('id');
+            $("#modalHeading").html("View Product Enquiry Details");
+            $("#modal").modal("show");
             $.ajax({
                 url: "{{ route('product.query', 'id') }}".replace('id', id),
                 type: "GET",
@@ -226,8 +228,6 @@
                     );
                 },
                 success: function(response) {
-                    $("#modalHeading").html("View Product Enquiry Details");
-                    $("#modal").modal("show");
                     $("#modal .modal-body").html(response);
                 },
                 error: function(xhr) {

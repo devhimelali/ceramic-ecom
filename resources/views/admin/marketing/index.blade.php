@@ -8,7 +8,7 @@
                 <h4 class="mb-sm-0">Marketing Tool</h4>
 
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
+                    <ol class="m-0 breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">Marketing Tool</li>
                     </ol>
@@ -17,16 +17,16 @@
         </div>
     </div>
     {{--  End breadcrumb  --}}
-    <div class="row mb-5">
+    <div class="mb-5 row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                            <h1 class="card-title mb-0">Contact List</h1>
+                            <h1 class="mb-0 card-title">Contact List</h1>
                         </div>
                         <div class="col-md-6">
-                            <div class="d-flex flex-wrap align-items-center justify-content-end gap-2">
+                            <div class="flex-wrap gap-2 d-flex align-items-center justify-content-end">
                                 <a href="javascript:void(0)" class="btn btn-primary" id="sendToAll">Send To All</a>
                                 <a href="javascript:void(0)" class="btn btn-secondary" id="sendToSelected">Send To
                                     Selected</a>
@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="table-responsive mt-3 mb-1">
+                    <div class="mt-3 mb-1 table-responsive">
                         <table id="dataTable" class="table align-middle ">
                             <thead class="table-light">
                                 <tr>
@@ -76,7 +76,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
-                            <textarea class="form-control mb-2" name="message" id="message" rows="8"></textarea>
+                            <textarea class="mb-2 form-control" name="message" id="message" rows="8"></textarea>
                             <span class="text-danger">{customer_name}</span>
                         </div>
                     </div>
@@ -166,7 +166,7 @@
         });
 
         $('.sendSms').on('click', function() {
-            console.log("click");
+            
             // var id = $(this).data('id');
             // $('#sendModalForm').attr('action', "{{ route('send.sms.selected.users') }}");
             // $('#sendModalForm').append('<input type="hidden" name="ids" value="' + id.join(',') + '">');
@@ -177,7 +177,7 @@
             $('#sendModalForm')[0].reset();
             $('#sendModalForm .modal-body').html(`<div class="mb-3">
                             <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
-                            <textarea class="form-control mb-2" name="message" id="message" rows="8"></textarea>
+                            <textarea class="mb-2 form-control" name="message" id="message" rows="8"></textarea>
                             <span class="text-danger">{customer_name}</span>
                         </div>`);
             $('#sendModalForm').attr('action', "");

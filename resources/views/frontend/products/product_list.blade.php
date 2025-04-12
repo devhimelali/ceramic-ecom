@@ -25,31 +25,38 @@
     @forelse ($products as $product)
         <div class="col-xl-4 col-lg-6 col-md-6 ">
             <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                <div class="product__item__image">
-                    @php
-                        $images = $product->images->where('type', 'thumbnail')->first();
-                    @endphp
-                    <img src="{{ ImageUploadHelper::getProductImageUrl($images?->image) }}" alt="Natural Stone Tiles">
-                </div><!-- /.product-image -->
+                @php
+                    $images = $product->images->filter(function ($image) {
+                        return in_array($image->type, ['gallery', 'thumbnail']);
+                    });
+                @endphp
+                <div class="product__item__image product-carousel owl-carousel">
+                    @foreach ($images as $image)
+                        <img class="item"
+                            src="{{ ImageUploadHelper::getProductImageUrl($image?->image, 'products', 'thumbnail') }}"
+                            alt="Natural Stone Tiles">
+                    @endforeach
+                </div>
+
                 <div class="product__item__content">
                     <h6 class="product__item__title"><a
                             href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
                     </h6><!-- /.product-title -->
                     <div class="product__item__price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
                     <!-- /.product-price -->
-                    {{-- <a href="#" class="floens-btn product__item__link py-3">
+                    {{-- <a href="#" class="py-3 floens-btn product__item__link">
                         <span>Add to Cart</span>
                         <i class="icon-cart"></i>
                     </a> --}}
 
                     <div class="d-flex align-items-center justify-content-center">
                         <a href="javascript:void(0);"
-                            class="floens-btn product__item__link me-2 custom-button p-3 enquireBtn"
+                            class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
                             data-id="{{ $product->id }}"
                             data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                         <a href="javascript:void(0);"
-                            class="floens-btn product__item__link me-2 custom-button p-4 addCartItemBtn addToCartBtn"
+                            class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
                             data-product-id="{{ $product->id }}"
                             data-url="{{ route('add.to.cart.form', $product->id) }}">
                             <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
@@ -59,28 +66,57 @@
         </div><!-- /.col-md-6 col-lg-4 -->
     @empty
         <div class="no-products-message">
-            <h2 class="text-center text-danger my-auto">No products found</h2>
+            <h2 class="my-auto text-center text-danger">No products found</h2>
         </div>
     @endforelse
 </div><!-- /.row -->
 <div class="mt-5">
-    <div class="d-flex justify-content-center mt-4" id="pagination-wrapper">
+    <div class="mt-4 d-flex justify-content-center" id="pagination-wrapper">
         {{ $products->links('pagination::bootstrap-4') }}
     </div>
 </div>
+
 <script>
     $(document).ready(function() {
+
+        var owl = $('.product-carousel');
+        owl.owlCarousel({
+            items: 1,
+            loop: true,
+            margin: 10,
+            autoplay: true,
+            autoplayTimeout: 2000,
+            autoplayHoverPause: true
+        });
+
+        $('.play').on('click', function() {
+            owl.trigger('play.owl.autoplay', [1000]);
+        });
+
+        $('.stop').on('click', function() {
+            owl.trigger('stop.owl.autoplay');
+        });
+
+
         displayCartItems();
         $('.enquireBtn').click(function() {
-            console.log('clicked');
+            $('#myModal').modal('show');
             var productId = $(this).data('id');
             var url = $(this).data('url');
             $.ajax({
                 url: url,
                 method: 'GET',
+                beforeSend: function() {
+                    $('#myModal .modal-body').html(
+                        '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                    );
+                    $('.enquireSubmitBtn').prop('disabled', true)
+                    $('.enquireSubmitBtn').html('Processing...')
+                },
                 success: function(response) {
+                    $('.enquireSubmitBtn').prop('disabled', false)
+                    $('.enquireSubmitBtn').html('Submit')
                     $('#enquireFormResponse').html(response.html);
-                    $('#myModal').modal('show');
                 }
             })
         });
@@ -88,13 +124,21 @@
         $('.addToCartBtn').click(function() {
             var productId = $(this).data('product-id');
             var url = $(this).data('url');
-            // $('#addToCartModal').modal('show');
+            $('#addToCartModal').modal('show');
             $.ajax({
                 url: url,
                 method: 'GET',
+                beforeSend: function() {
+                    $('#addToCartModal .modal-body').html(
+                        '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                    );
+                    $('.enquireSubmitBtn').prop('disabled', true)
+                    $('.enquireSubmitBtn').html('Processing...')
+                },
                 success: function(response) {
+                    $('.enquireSubmitBtn').prop('disabled', false)
+                    $('.enquireSubmitBtn').html('Add To Cart')
                     $('#addToCartResponse').html(response.html);
-                    $('#addToCartModal').modal('show');
                 }
             })
         });

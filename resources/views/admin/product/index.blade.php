@@ -8,7 +8,7 @@
                 <h4 class="mb-sm-0">Products</h4>
 
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
+                    <ol class="m-0 breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">Products</li>
                     </ol>
@@ -17,19 +17,19 @@
         </div>
     </div>
     {{--  End breadcrumb  --}}
-    <div class="row mb-5">
+    <div class="mb-5 row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center">
                     <div class="ms-auto">
                         <a href="{{ route('products.create') }}" class="btn btn-primary add-btn">
-                            <i class="bi bi-plus-circle align-baseline me-1"></i> Add Product
+                            <i class="align-baseline bi bi-plus-circle me-1"></i> Add Product
                         </a>
                     </div>
                 </div>
 
                 <div class="card-body">
-                    <div class="table-responsive mt-3 mb-1">
+                    <div class="mt-3 mb-1 table-responsive">
                         <table id="dataTable" class="table align-middle ">
                             <thead class="table-light">
                                 <tr>
@@ -104,7 +104,6 @@
 
 
         function confirmDelete(deleteUrl) {
-            console.log(deleteUrl);
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to undo this action!",

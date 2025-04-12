@@ -18,7 +18,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="card border-bottom border-3 card-animate border-primary">
                 <div class="card-body text-center">
                     <h4 class="mb-4"><span class="counter-value" data-target="21438">{{ $totalProducts }}</span></h4>
@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="card border-bottom border-3 card-animate border-secondary">
                 <div class="card-body text-center">
                     <h4 class="mb-4"><span class="counter-value" data-target="21438">{{ $totalBrands }}</span></h4>
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="card border-bottom border-3 card-animate border-info">
                 <div class="card-body text-center">
                     <h4 class="mb-4"><span class="counter-value" data-target="21438">{{ $totalCategories }}</span></h4>
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="card border-bottom border-3 card-animate border-success">
                 <div class="card-body text-center">
                     <h4 class="mb-4"><span class="counter-value" data-target="21438">{{ $totalQueries }}</span></h4>
@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="card border-bottom border-3 card-animate border-warning">
                 <div class="card-body text-center">
                     <h4 class="mb-4"><span class="counter-value" data-target="21438">{{ $totalPendingQueries }}</span>
@@ -59,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="card border-bottom border-3 card-animate border-danger">
                 <div class="card-body text-center">
                     <h4 class="mb-4"><span class="counter-value" data-target="21438">{{ $totalUnreadContact }}</span></h4>
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="card border-bottom border-3 card-animate border-warning">
                 <div class="card-body text-center">
                     <h4 class="mb-4"><span class="counter-value" data-target="21438">{{ $totalPendingReplay }}</span></h4>
@@ -86,7 +86,7 @@
                     <select id="filter" class="form-control">
                         <option value="1M" selected>Last 1 Month</option>
                         <option value="6M">Last 6 Months</option>
-                        <option value="1Y" >Last 1 Year</option>
+                        <option value="1Y">Last 1 Year</option>
                     </select>
                     <canvas id="queryChart"></canvas>
                 </div>
