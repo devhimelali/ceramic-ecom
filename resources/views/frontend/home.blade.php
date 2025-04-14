@@ -4,6 +4,9 @@
 @extends('frontend.layouts.app')
 @section('title', 'Home')
 @section('page-style')
+    <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
+        type="image/webp" fetchpriority="high" />
+
     <style>
         /* Style the submit button */
         .custom-button {
@@ -69,38 +72,6 @@
             height: 463px
         }
 
-        .owl-carousel .owl-nav button.owl-prev,
-        .owl-carousel .owl-nav button.owl-prev,
-        .owl-carousel button.owl-dot.owl-nav {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            background-color: var(--base-color) !important;
-            display: block;
-            padding: 0 .3em !important;
-            font-size: 3em;
-            margin: 0;
-            cursor: pointer;
-            color: #fff;
-            transform: translate(-50%, -50%);
-        }
-
-        .owl-carousel .owl-nav button.owl-next,
-        .owl-carousel .owl-nav button.owl-next,
-        .owl-carousel button.owl-dot.owl-nav {
-            position: absolute;
-            right: -23px;
-            top: 50%;
-            background-color: var(--base-color) !important;
-            display: block;
-            padding: 0 .3em !important;
-            font-size: 3em;
-            margin: 0;
-            cursor: pointer;
-            color: #fff;
-            transform: translate(-50%, -50%);
-        }
-
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
                 height: 364px !important;
@@ -129,11 +100,14 @@
             }
         }
 
+
+
+
         .product__item__title a {
             font-size: 15px !important;
             text-align: left !important;
             text-transform: capitalize;
-            font-weight: bold !important;
+            line-height: 0% !important;
         }
 
         .product__item__content {
@@ -153,8 +127,11 @@
 
         .product__item__content {
             padding: 10px !important;
-            height: 173px;
             overflow: hidden;
+        }
+
+        .product__item__title {
+            height: 49px;
         }
 
         .enquireBtn {
@@ -164,6 +141,106 @@
 
         a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
             padding: 16px !important;
+        }
+
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel button.owl-dot.owl-nav {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            background-color: var(--base-color) !important;
+            display: block;
+            padding: 0 .3em !important;
+            font-size: 3em;
+            margin: 0;
+            cursor: pointer;
+            color: #fff;
+            transform: translate(-50%, -50%);
+        }
+
+        .owl-nav button {
+            font-size: 48px !important;
+        }
+
+        .owl-carousel .owl-nav button.owl-next,
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel button.owl-dot {
+            margin-right: 37px !important;
+        }
+
+
+        .owl-carousel .owl-nav button.owl-next,
+        .owl-carousel .owl-nav button.owl-next,
+        .owl-carousel button.owl-dot.owl-nav {
+            position: absolute;
+            right: -23px;
+            top: 50%;
+            background-color: var(--base-color) !important;
+            display: block;
+            padding: 0 .3em !important;
+            font-size: 3em !important;
+            margin: 0;
+            cursor: pointer;
+            color: #fff;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Owl Carousel Prev Button */
+        .owl-carousel .owl-nav button.owl-prev {
+            position: absolute;
+            background-color: #434343c7 !important;
+            color: #fff !important;
+            font-size: 24px !important;
+            border-radius: 50% !important;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        /* Owl Carousel Next Button */
+        .owl-carousel .owl-nav button.owl-next {
+            position: absolute;
+            top: 50%;
+            background-color: #434343c7 !important;
+            color: #fff !important;
+            font-size: 24px !important;
+            border-radius: 50% !important;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        @media screen and (max-width: 480px) {
+            .product__item__image img {
+                height: 142px !important;
+                width: 100% !important;
+            }
+
+            .product__item__title a {
+                font-size: 0.75rem !important;
+            }
+
+            .product__item__title {
+                height: 51px;
+                overflow: hidden;
+            }
+
+            .product__item__price {
+                font-size: 14px !important;
+            }
+
+            .product_item {
+                padding: 5px !important;
+            }
         }
     </style>
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
@@ -184,12 +261,12 @@
                                 $home_one__image__one = $settings->where('key', 'home_one__image__one')->first();
                             @endphp
                             <img src="{{ $home_one__image__one ? asset($home_one__image__one->value) : asset('frontend/assets/images/about/about-1-3.png') }}"
-                                alt="about" class="about-one__image__one sec_1_prev_1">
+                                alt="about" class="about-one__image__one sec_1_prev_1" loading="lazy">
                             @php
                                 $home_one__image__two = $settings->where('key', 'home_one__image__two')->first();
                             @endphp
                             <img src="{{ $home_one__image__two ? asset($home_one__image__two->value) : asset('frontend/assets/images/about/about-1-2.jpg') }}"
-                                alt="about" class="about-one__image__two sec_1_prev_2">
+                                alt="about" class="about-one__image__two sec_1_prev_2" loading="lazy">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__image">
                             @php
@@ -197,14 +274,14 @@
                             @endphp
 
                             <img src="{{ $home_one__image__three ? asset($home_one__image__three->value) : asset('frontend/assets/images/about/about-1-1.jpg') }}"
-                                alt="about" class="about-one__image__three sec_1_prev_3">
+                                alt="about" class="about-one__image__three sec_1_prev_3" loading="lazy">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__circle-text">
                             <div class="about-one__circle-text__bg"
                                 style="background-image: url('{{ asset('frontend') }}/assets/images/resources/about-award-bg.jpg');">
                             </div>
                             <img src="{{ asset('frontend') }}/assets/images/resources/about-award-symbol.png"
-                                alt="award-symbole" class="about-one__circle-text__image">
+                                alt="award-symbole" class="about-one__circle-text__image" loading="lazy">
                             <div class="about-one__curved-circle curved-circle">
                                 <!-- curved-circle start-->
                                 <div class="about-one__curved-circle__item curved-circle__item"
@@ -264,9 +341,9 @@
         </div><!-- /.container -->
         <div class="about-one__shapes">
             <img src="{{ asset('frontend') }}/assets/images/shapes/about-shape-1-1.jpg" alt="about-shape"
-                class="about-one__shape about-one__shape--one">
+                class="about-one__shape about-one__shape--one" loading="lazy">
             <img src="{{ asset('frontend') }}/assets/images/shapes/about-shape-1-1.jpg" alt="about-shape"
-                class="about-one__shape about-one__shape--two">
+                class="about-one__shape about-one__shape--two" loading="lazy">
         </div><!-- /.about-one__shapes -->
     </section><!-- /.about-one section-space -->
     <!-- about End -->
@@ -378,14 +455,14 @@
                                 $home_two__image__one = $settings->where('key', 'home_two__image__one')->first();
                             @endphp
                             <img src="{{ $home_two__image__one ? asset($home_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
-                                alt="reliable" class="reliable-one__image__one sec_2_prev_1">
+                                loading="lazy" alt="reliable" class="reliable-one__image__one sec_2_prev_1">
                             <div class="reliable-one__image__inner">
                                 @php
                                     $images = $settings->where('key', 'home_two__image__two')->first();
                                 @endphp
                                 <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/reliable/reliable-1-2.jpg') }}"
-                                    alt="reliable" class="reliable-one__image__two sec_2_prev_2">
-                            </div><!-- /.reliable-one__image__inner -->
+                                    alt="reliable" class="reliable-one__image__two sec_2_prev_2" loading="lazy">
+                            </div>
                             <div class="experience reliable-one__experience">
                                 <div class="experience__inner">
                                     <h3 class="experience__year"
@@ -421,9 +498,9 @@
             </div><!-- /.sec-title -->
 
 
-            <div class="row gutter-y-30">
+            <div class="row">
                 @foreach ($products as $product)
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                             @php
                                 $images = $product->images->filter(function ($image) {
@@ -432,21 +509,17 @@
                             @endphp
                             <div class="product__item__image product-carousel owl-carousel">
                                 @foreach ($images as $image)
-                                    <img class="item"
+                                    <img class="item" loading="lazy"
                                         src="{{ ImageUploadHelper::getProductImageUrl($image?->image, 'products', 'thumbnail') }}"
                                         alt="Natural Stone Tiles">
                                 @endforeach
                             </div>
                             <div class="product__item__content">
-                                {{-- <h4 class="product__item__title"><a
-                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
-                                </h4><!-- /.product-title --> --}}
                                 <p class="product__item__title"><a
                                         href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
-                                </p><!-- /.product-title -->
                                 <div class="product__item__price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
 
-                                <div class="d-flex align-items-center justify-content-center">
+                                <div class="d-flex align-items-center justify-content-between">
                                     <a href="javascript:void(0);"
                                         class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
                                         data-id="{{ $product->id }}"
@@ -456,7 +529,9 @@
                                         class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
                                         data-product-id="{{ $product->id }}"
                                         data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                        <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
                                         <i style='font-size:17px; right: 8px' class='fas'>&#xf217;</i></a>
+                                    </a>
                                 </div>
                             </div><!-- /.product-content -->
                         </div><!-- /.product-item -->
@@ -507,7 +582,7 @@
                 @foreach ($brands as $barand)
                     <div class="client-carousel__one__item">
                         <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
-                            alt="brand">
+                            loading="lazy" alt="brand">
                     </div><!-- /.owl-slide-item-->
                 @endforeach
             </div><!-- /.thm-owl__slider -->
@@ -521,6 +596,7 @@
     <script src="{{ asset('frontend/assets/vendors/owl-carousel/js/owl.carousel.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+
             var owl = $('.product-carousel');
             owl.owlCarousel({
                 items: 1,
@@ -540,6 +616,7 @@
             $('.stop').on('click', function() {
                 owl.trigger('stop.owl.autoplay');
             });
+
 
             displayCartItems();
             $('.enquireBtn').click(function() {
