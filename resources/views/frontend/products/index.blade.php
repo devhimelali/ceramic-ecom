@@ -380,11 +380,6 @@
 
                 checkQueryParams(urlParams); // Call AJAX to reload products
             });
-
-
-
-
-
             $(document).on('click', '#pagination-wrapper a', function(e) {
                 e.preventDefault();
                 let url = $(this).attr('href');
@@ -402,14 +397,14 @@
                 paramsObject[key] = value;
             });
             $.ajax({
-                url: "{{ route('frontend.productsPage') }}", // Current URL
-                data: paramsObject, // Pass plain object as data
+                url: "{{ route('frontend.productsPage') }}",
+                data: paramsObject,
                 type: "GET",
                 beforeSend: function() {
                     $('#loader').show();
                 },
                 success: function(response) {
-                    $('#products').html(response.html); // Update the product list with response
+                    $('#products').html(response.html);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -420,5 +415,9 @@
                 }
             });
         }
+        history.pushState(null, null, location.href);
+        window.addEventListener('popstate', function(event) {
+            window.location.href = "{{ route('frontend.home') }}";
+        });
     </script>
 @endsection

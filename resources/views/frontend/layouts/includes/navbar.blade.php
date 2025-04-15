@@ -56,7 +56,7 @@
                             $app_logo = $settings->where('key', 'dark_logo')->first();
                         @endphp
                         <img src="{{ $app_logo ? asset('assets/images/settings/' . $app_logo->value) : '#' }}"
-                            alt="{{ $app_logo->value }}" width="125">
+                            alt="{{ $app_logo->value }}" class="img-fluid app_logo" loading="lazy">
                     </a>
                 </div><!-- /.main-header__logo -->
                 <nav class="main-header__nav main-menu">

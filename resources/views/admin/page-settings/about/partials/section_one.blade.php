@@ -118,8 +118,8 @@
             </div><!-- /.row -->
         </form>
         <div class="mt-3 text-end">
-            <button type="button"
-                onclick="saveChanges('#about_content__one', '#about_one__content__one', '#aboutFormSectionOne')"
+            <button type="button" id="aboutButtonSectionOne"
+                onclick="saveChanges('#about_content__one', '#about_one__content__one', '#aboutFormSectionOne','#aboutButtonSectionOne')"
                 class="btn btn-primary">Save Changes</button>
         </div>
     </div><!-- /.container -->

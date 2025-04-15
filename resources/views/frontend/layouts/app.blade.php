@@ -34,18 +34,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500&amp;display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/bootstrap-select/bootstrap-select.min.css" />
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/animate/animate.min.css" />
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/fontawesome/css/all.min.css" />
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/jquery-ui/jquery-ui.css" />
+    {{-- <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/bootstrap-select/bootstrap-select.min.css" /> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/animate/animate.min.css" /> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/fontawesome/css/all.min.css" /> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/jquery-ui/jquery-ui.css" /> --}}
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/jarallax/jarallax.css" />
-    <link rel="stylesheet"
-        href="{{ asset('frontend') }}/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.css" />
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/nouislider/nouislider.min.css" />
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/nouislider/nouislider.pips.css" />
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/tiny-slider/tiny-slider.css" />
+    {{-- <link rel="stylesheet"
+        href="{{ asset('frontend') }}/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.css" /> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/nouislider/nouislider.min.css" /> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/nouislider/nouislider.pips.css" /> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/tiny-slider/tiny-slider.css" /> --}}
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/floens-icons/style.css" />
-    <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/swiper/css/swiper-bundle.min.css" />
+    {{-- <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/swiper/css/swiper-bundle.min.css" /> --}}
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/owl-carousel/css/owl.carousel.min.css" />
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/owl-carousel/css/owl.theme.default.min.css" />
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/vendors/slick/slick.css" />
@@ -56,7 +56,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    @yield('page-style')
     <style>
         :root {
             --floens-base: #2a4e72 !important;
@@ -89,7 +88,20 @@
             width: auto;
             height: 200px !important;
         }
+
+        .app_logo {
+            width: 125px;
+        }
+
+        @media screen and (max-width: 480px) {
+            .app_logo {
+                width: 77px;
+                height: auto;
+            }
+        }
     </style>
+    @yield('page-style')
+
 </head>
 
 <body class="custom-cursor">
@@ -235,25 +247,30 @@
 
 
     <script src="{{ asset('frontend') }}/assets/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jarallax/jarallax.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery-ui/jquery-ui.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery-appear/jquery.appear.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/nouislider/nouislider.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/tiny-slider/tiny-slider.js"></script>
     <script src="{{ asset('frontend') }}/assets/vendors/swiper/js/swiper-bundle.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/wnumb/wNumb.min.js"></script>
+
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/bootstrap-select/bootstrap-select.min.js"></script> --}}
+    <script src="{{ asset('frontend') }}/assets/vendors/jarallax/jarallax.min.js"></script>
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/jquery-ui/jquery-ui.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/jquery-appear/jquery.appear.min.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/jquery-validate/jquery.validate.min.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/nouislider/nouislider.min.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/tiny-slider/tiny-slider.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/wnumb/wNumb.min.js"></script> --}}
     <script src="{{ asset('frontend') }}/assets/vendors/owl-carousel/js/owl.carousel.min.js"></script>
     <script src="{{ asset('frontend') }}/assets/vendors/wow/wow.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/imagesloaded/imagesloaded.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/isotope/isotope.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/countdown/countdown.min.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery-circleType/jquery.circleType.js"></script>
-    <script src="{{ asset('frontend') }}/assets/vendors/jquery-lettering/jquery.lettering.min.js"></script>
+
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/imagesloaded/imagesloaded.min.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/isotope/isotope.js"></script> --}}
+    {{-- <script src="{{ asset('frontend') }}/assets/vendors/countdown/countdown.min.js"></script> --}}
+    <script src="{{ asset('frontend') }}/assets/vendors/jquery-circleType/jquery.circleType.js" type="text/javascript"
+        async></script>
+    <script src="{{ asset('frontend') }}/assets/vendors/jquery-lettering/jquery.lettering.min.js" type="text/javascript"
+        async></script>
+
     <script src="{{ asset('frontend') }}/assets/vendors/slick/slick.min.js"></script>
     <!-- template js -->
     <script src="{{ asset('frontend') }}/assets/js/floens.js"></script>

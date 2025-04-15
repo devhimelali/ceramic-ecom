@@ -162,7 +162,7 @@
         });
 
 
-        function saveChanges(cloneId, appendId, formId) {
+        function saveChanges(cloneId, appendId, formId, buttonId) {
             let fullContent = $(cloneId).clone();
 
             // Fix line breaks inside contenteditable
@@ -191,6 +191,12 @@
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
                 },
+                beforeSend: function() {
+                    $(buttonId).prop('disabled', true);
+                    $(buttonId).html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving.....'
+                    )
+                },
                 success: function(response) {
                     if (response.status === "success") {
                         notify(response.status, response.message);
@@ -198,6 +204,10 @@
                 },
                 error: function(xhr) {
                     notify('error', 'Failed to save changes.');
+                },
+                complete: function() {
+                    $(buttonId).prop('disabled', false);
+                    $(buttonId).html('Save Changes');
                 }
             });
         }
