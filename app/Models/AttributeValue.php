@@ -18,16 +18,4 @@ class AttributeValue extends Model
     {
         return $this->belongsTo(Attribute::class);
     }
-
-//    public function products()
-//    {
-//        return $this->belongsToMany(Product::class, 'product_attribute_values');
-//    }
-//
-//    protected function casts(): array
-//    {
-//        return [
-//            'status' => StatusEnum::class,
-//        ];
-//    }
 }

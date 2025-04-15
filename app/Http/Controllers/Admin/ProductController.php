@@ -101,7 +101,7 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
-        // dd($request->all());
+//        dd($request->all());
         DB::beginTransaction();
         try {
             // 1. Create Product
@@ -116,6 +116,11 @@ class ProductController extends Controller
                 'short_description' => $request->short_description,
                 'description' => $request->description,
             ]);
+
+            // 2. Handle Product Images Upload
+//            if ($request->hasFile('images')) {
+//
+//            }
 
             // 2. Handle Attributes
             if ($request->has('attributes')) {
@@ -138,10 +143,20 @@ class ProductController extends Controller
             // 3. Handle Variations
             if ($request->has('variations')) {
                 foreach ($request->variations as $variation) {
-                    $product->variations()->create([
+                    $variationData = $product->variations()->create([
                         'attribute_string' => $variation['attributes'],
                         'price' => $variation['price'],
                     ]);
+
+                    if(isset($variation['images'])) {
+                        foreach ($variation['images'] as $image) {
+                            $fileInfo = uploadImage($image, 'products');
+                            $variationData->images()->create([
+                                'name' => $fileInfo['name'],
+                                'path' => $fileInfo['path'],
+                            ]);
+                        }
+                    }
                 }
             }
 
