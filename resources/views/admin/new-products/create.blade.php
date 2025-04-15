@@ -85,7 +85,7 @@
                     <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" id="name" name="name"
@@ -94,16 +94,9 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="text" class="form-control" id="price" name="price"
-                                        placeholder="Price">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
                                     <select class="form-control select2" data-choice id="category" name="category"
-                                        required>
+                                            required>
                                         <option value="" selected disabled>Select Category</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -122,6 +115,32 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label for="regular_price" class="form-label">Regular Price</label>
+                                    <input type="text" class="form-control" id="regular_price" name="regular_price"
+                                        placeholder="Price">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label for="sale_price" class="form-label">Sale Price</label>
+                                    <input type="text" class="form-control" id="sale_price" name="sale_price"
+                                        placeholder="Price">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control select2" id="productStatus" name="status" required>
+                                        <option value="" selected disabled>Select Status</option>
+                                        @foreach ($statuses as $status)
+                                            <option value="{{ $status->value }}">{{ $status->description() }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="short_description" class="form-label">Short Description</label>
@@ -134,17 +153,7 @@
                                     <textarea class="form-control ckeditor-classic" id="description" name="description" rows="4"></textarea>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Status</label>
-                                    <select class="form-control select2" id="productStatus" name="status" required>
-                                        <option value="" selected disabled>Select Status</option>
-                                        @foreach ($statuses as $status)
-                                            <option value="{{ $status->value }}">{{ $status->description() }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+
                         </div>
 
 

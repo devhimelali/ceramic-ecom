@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use App\Enum\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Attribute extends Model
+class Variation extends Model
 {
     protected $fillable = [
         'product_id',
-        "name",
+        'attribute_string',
+        'price',
+        'description',
     ];
 
     public function product(): BelongsTo
@@ -19,8 +20,8 @@ class Attribute extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function values(): HasMany
+    public function images(): MorphMany
     {
-        return $this->hasMany(AttributeValue::class);
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

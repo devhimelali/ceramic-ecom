@@ -55,13 +55,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         $categories = \App\Models\Category::orderBy('name', 'asc')->get();
         $brands = \App\Models\Brand::orderBy('name', 'asc')->get();
         $statuses = \App\Enum\StatusEnum::cases();
-        $attributes = \App\Models\Attribute::where('status', \App\Enum\StatusEnum::ACTIVE)->orderBy('name', 'asc')->get();
+//        $attributes = \App\Models\Attribute::where('status', orderBy('name', 'asc')->get();
         $data = [
             'categories' => $categories,
             'brands' => $brands,
             'statuses' => $statuses,
             'active' => 'products',
-            'attributes' => $attributes
 
         ];
         return view('admin.new-products.create', $data);
