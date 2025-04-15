@@ -27,19 +27,25 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Product::with(['images', 'category', 'brand', 'attributes' => function ($query) {
-                $query->with('values');
-            }])->orderBy('id', 'desc')->get();
+            $data = Product::with([
+                'images', 'category', 'brand', 'attributes' => function ($query) {
+                    $query->with('values');
+                }
+            ])->orderBy('id', 'desc')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('image', function ($row) {
-                    $image = $row->images->where('type', 'thumbnail')->first();
+                    $image = null;
+                    if ($row->images) {
+                        $image = $row->images->where('imageable_id', $row->id)->where('imageable_type',
+                            'App\Models\Product')->first();
+                    }
                     $imageUrl = $image
-                        ? asset('storage/uploads/products/thumbnail/' . $image->image)
-                        : "https://ui-avatars.com/api/?name=" . urlencode($row->name);
+                        ? asset($image->path)
+                        : "https://ui-avatars.com/api/?name=".urlencode($row->name);
 
-                    return '<img class="rounded-circle header-profile-user" src="' . $imageUrl . '" alt="' . e($row->name) . '" width="50" height="50">';
+                    return '<img class="rounded-circle header-profile-user" src="'.$imageUrl.'" alt="'.e($row->name).'" width="50" height="50">';
                 })
                 ->addColumn('category', function ($row) {
                     return $row->category->name;
@@ -47,13 +53,20 @@ class ProductController extends Controller
                 ->addColumn('brand', function ($row) {
                     return $row->brand->name ?? 'N/A';
                 })
+                ->addColumn('regular_price', function ($row) {
+                    return $row->regular_price ?? 'N/A';
+                })
+                ->addColumn('sale_price', function ($row) {
+                    return $row->sale_price ?? 'N/A';
+                })
                 ->addColumn('status', function ($row) {
                     return $row->status->value == 'active' ? '<span class="badge text-bg-success">Active</span>' : '<span class="badge text-bg-danger">Inactive</span>';
                 })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-group" role="group" aria-label="Basic example">';
-                    $html .= '<a href="' . route('products.edit', $row->id) . '" class="btn btn-sm btn-secondary"><i class="ph-pencil"></i> Edit</a>';
-                    $html .= '<button onclick="confirmDelete(\'' . route('products.destroy', $row->id) . '\')" class="btn btn-sm btn-danger remove-item-btn">
+                    $html .= '<a href="'.route('products.edit',
+                            $row->id).'" class="btn btn-sm btn-secondary"><i class="ph-pencil"></i> Edit</a>';
+                    $html .= '<button onclick="confirmDelete(\''.route('products.destroy', $row->id).'\')" class="btn btn-sm btn-danger remove-item-btn">
                                 <i class="bi bi-trash me-2"></i>Delete
                             </button>';
                     $html .= '</div>';
@@ -79,24 +92,15 @@ class ProductController extends Controller
         $categories = Category::orderBy('name', 'asc')->get();
         $brands = Brand::orderBy('name', 'asc')->get();
         $statuses = StatusEnum::cases();
-        $attributes = Attribute::where('status', StatusEnum::ACTIVE)->orderBy('name', 'asc')->get();
         $data = [
             'categories' => $categories,
             'brands' => $brands,
             'statuses' => $statuses,
             'active' => 'products',
-            'attributes' => $attributes
 
         ];
         return view('admin.product.create', $data);
     }
-
-    /**
-     * Store a newly created product in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
 
 
     public function store(StoreRequest $request)
@@ -104,91 +108,101 @@ class ProductController extends Controller
         DB::beginTransaction();
 
         try {
-            // Create the product
+            // 1. Create Product
             $product = Product::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
                 'category_id' => $request->category,
                 'brand_id' => $request->brand,
-                'price' => $request->price,
+                'regular_price' => $request->regular_price,
+                'sale_price' => $request->sale_price,
+                'status' => $request->status,
                 'short_description' => $request->short_description,
                 'description' => $request->description,
-                'status' => $request->status,
             ]);
-
-            // Attach product attributes and variation values
-            foreach ($request->variation_names as $key => $variation_name) {
-                $product->attributes()->attach([
-                    $variation_name => ['attribute_value_id' => $request->variation_values[$key]]
-                ]);
-            }
-
-            // Upload thumbnail image
-            if ($request->hasFile('image')) {
-                $imageData = ImageUploadHelper::uploadProductImage($request->file('image'), 'products', $product->id);
-
+            // 2. Handle upload product thumbnail image
+            if($request->hasFile('image')){
+                $fileInfo = uploadImage($request->file('image'), 'products');
                 $product->images()->create([
-                    'type' => 'thumbnail',
-                    'image' => $imageData['filename'],
+                    'name' => $fileInfo['name'],
+                    'path' => $fileInfo['path'],
                 ]);
             }
-
-            // Upload gallery images
-            if ($request->hasFile('images')) {
+            // 3. Handle upload product gallery images
+            if($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
-                    $imageData = ImageUploadHelper::uploadProductImage($image, 'products', $product->id);
-
+                    $fileInfo = uploadImage($image, 'products');
                     $product->images()->create([
-                        'type' => 'gallery',
-                        'image' => $imageData['filename'],
+                        'name' => $fileInfo['name'],
+                        'path' => $fileInfo['path'],
                     ]);
+                }
+            }
+            // 4. Handle Attributes
+            if ($request['attributes'] != null) {
+                foreach ($request['attributes'] as $attr) {
+                    $attribute = $product->attributes()->create([
+                        'name' => $attr['name'],
+                    ]);
+
+                    $values = array_map('trim', explode(',', $attr['values']));
+                    foreach ($values as $val) {
+                        $attribute->values()->create([
+                            'value' => $val
+                        ]);
+                    }
+                }
+            }
+            // 5. Handle Variations
+            if ($request->has('variations') && is_array($request->variations)) {
+                foreach ($request->variations as $variation) {
+                    $variationData = $product->variations()->create([
+                        'attribute_string' => $variation['attributes'],
+                        'price' => $variation['price'],
+                    ]);
+
+                    if (isset($variation['images'])) {
+                        foreach ($variation['images'] as $image) {
+                            $fileInfo = uploadImage($image, 'products');
+                            $variationData->images()->create([
+                                'name' => $fileInfo['name'],
+                                'path' => $fileInfo['path'],
+                            ]);
+                        }
+                    }
                 }
             }
 
             DB::commit();
 
             return response()->json([
-                'status' => 'success',
                 'message' => 'Product created successfully',
-                'product' => $product->load(['attributes', 'images']),
-            ]);
+                'product' => $product,
+            ], 201);
+
         } catch (\Exception $e) {
             DB::rollBack();
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Something went wrong while creating the product.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
 
     public function edit($id)
     {
-        $product = Product::with([
-            'images',
-            'category',
-            'brand',
-            'attributes',
-            'attributeValues'
-        ])->findOrFail($id);
-        // return $product;
+        $product = Product::with(['category', 'brand', 'attributes', 'variations'])->findOrFail($id);
         $categories = Category::orderBy('name', 'asc')->get();
         $brands = Brand::orderBy('name', 'asc')->get();
         $statuses = StatusEnum::cases();
-        $attributes = Attribute::with('values')->where('status', StatusEnum::ACTIVE)->orderBy('name', 'asc')->get();
         $data = [
             'product' => $product,
             'categories' => $categories,
             'brands' => $brands,
             'statuses' => $statuses,
-            'attributes' => $attributes,
             'active' => 'products',
         ];
-        return view('admin.product.edit', $data);
-    }
 
+        return view('admin.new-products.edit', $data);
+    }
 
 
     public function update(UpdateRequest $request, $id)
@@ -253,7 +267,7 @@ class ProductController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Product Update Failed: ' . $e->getMessage());
+            Log::error('Product Update Failed: '.$e->getMessage());
 
             return response()->json([
                 'status' => 'error',
@@ -261,7 +275,6 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
 
 
     public function destroy($id)
@@ -293,7 +306,7 @@ class ProductController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete product: ' . $e->getMessage(),
+                'message' => 'Failed to delete product: '.$e->getMessage(),
             ], 500);
         }
     }

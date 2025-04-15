@@ -1,5 +1,5 @@
-{{-- resources/views/products/create.blade.php --}}
 @extends('layouts.app')
+
 @section('page-css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
@@ -48,32 +48,26 @@
 @endsection
 
 @section('content')
-    {{--  Start breadcrumb  --}}
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Crate Product</h4>
-
+                <h4 class="mb-sm-0">Edit Product</h4>
                 <div class="page-title-right">
                     <ol class="m-0 breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard') }}">Dashboard</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('products.index') }}">Products</a>
-                        </li>
-                        <li class="breadcrumb-item active">Create</li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a></li>
+                        <li class="breadcrumb-item active">Edit</li>
                     </ol>
                 </div>
             </div>
         </div>
     </div>
-    {{--  End breadcrumb  --}}
+
     <div class="mb-5 row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center">
-                    <h4>Add a New Product</h4>
+                    <h4>Edit Product</h4>
                     <div class="ms-auto">
                         <a href="{{ route('products.index') }}" class="btn btn-danger add-btn">
                             <i class="align-baseline bi bi-arrow-left me-1"></i> Back
@@ -82,82 +76,81 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('products.store') }}" method="POST" id="createProductForm"
+                    <form action="{{ route('products.update', $product->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
+
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name"
-                                        placeholder="Name">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="category" class="form-label">Category</label>
-                                    <select class="form-control select2" data-choice id="category" name="category"
-                                        required>
-                                        <option value="" selected disabled>Select Category</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="brand" class="form-label">Brand</label>
-                                    <select class="form-control select2" data-choice id="brand" name="brand">
-                                        <option value="" selected disabled>Select Brand</option>
-                                        @foreach ($brands as $brand)
-                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label for="regular_price" class="form-label">Regular Price</label>
-                                    <input type="text" class="form-control" id="regular_price" name="regular_price"
-                                        placeholder="Price">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label for="sale_price" class="form-label">Sale Price</label>
-                                    <input type="text" class="form-control" id="sale_price" name="sale_price"
-                                        placeholder="Price">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Status</label>
-                                    <select class="form-control select2" id="productStatus" name="status" required>
-                                        <option value="" selected disabled>Select Status</option>
-                                        @foreach ($statuses as $status)
-                                            <option value="{{ $status->value }}">{{ $status->description() }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                            <div class="col-lg-12 mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    value="{{ $product->name }}">
                             </div>
 
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label for="short_description" class="form-label">Short Description</label>
-                                    <textarea class="form-control" id="short_description" name="short_description" rows="4"></textarea>
-                                </div>
+                            <div class="col-lg-6 mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-control select2" id="category" name="category" required>
+                                    <option value="" disabled>Select Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control ckeditor-classic" id="description" name="description" rows="4"></textarea>
-                                </div>
+
+                            <div class="col-lg-6 mb-3">
+                                <label for="brand" class="form-label">Brand</label>
+                                <select class="form-control select2" id="brand" name="brand">
+                                    <option value="" disabled>Select Brand</option>
+                                    @foreach ($brands as $brand)
+                                        <option value="{{ $brand->id }}"
+                                            {{ $product->brand_id == $brand->id ? 'selected' : '' }}>
+                                            {{ $brand->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-lg-4 mb-3">
+                                <label for="regular_price" class="form-label">Regular Price</label>
+                                <input type="text" class="form-control" id="regular_price" name="regular_price"
+                                    value="{{ $product->regular_price }}">
+                            </div>
+
+                            <div class="col-lg-4 mb-3">
+                                <label for="sale_price" class="form-label">Sale Price</label>
+                                <input type="text" class="form-control" id="sale_price" name="sale_price"
+                                    value="{{ $product->sale_price }}">
+                            </div>
+
+                            <div class="col-lg-4 mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-control select2" id="productStatus" name="status" required>
+                                    <option value="" disabled>Select Status</option>
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status->value }}"
+                                            {{ $product->status === $status->value ? 'selected' : '' }}>
+                                            {{ $status->description() }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-lg-12 mb-3">
+                                <label for="short_description" class="form-label">Short Description</label>
+                                <textarea class="form-control" id="short_description" name="short_description" rows="4">{{ $product->short_description }}</textarea>
+                            </div>
+
+                            <div class="col-lg-12 mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control ckeditor-classic" id="description" name="description" rows="4">{{ $product->description }}</textarea>
                             </div>
                         </div>
 
-
-
+                        {{-- Attribute + Variations Tabs --}}
                         <div class="vertical-navs-step mt-3">
                             <div class="row gy-5">
                                 <div class="col-lg-3">
@@ -191,6 +184,9 @@
                                             <div class="tab-pane fade show active" id="v-pills-bill-info" role="tabpanel"
                                                 aria-labelledby="variation-tab">
                                                 <div id="attributesWrapper">
+                                                    {{-- @foreach ($product->attributes as $attribute) --}}
+
+                                                    {{-- @endforeach --}}
                                                     <div class="row mb-2">
                                                         <div class="col-md-5">
                                                             <input name="attributes[0][name]" type="text"
@@ -236,11 +232,12 @@
                                 <!-- end col -->
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-4">Save Product</button>
+
+                        <button type="submit" class="btn btn-primary mt-4">Update Product</button>
                     </form>
                 </div>
-            </div><!--end card-->
-        </div><!--end col-->
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -342,25 +339,25 @@
                 const safeAttrDisplay = attrDisplay.replace(/"/g, '&quot;');
 
                 const html = `
-                    <div class="card p-3 mb-3">
-                        <h5>Variation: ${index + 1}</h5>
-                        <input type="hidden" name="variations[${index}][attributes]" value="${safeAttrDisplay}">
-                        <div class="row">
-                            <div class="col-md-6 mb-2">
-                                <label>Variation</label>
-                                <input type="text" value="${attrDisplay}" disabled class="form-control">
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label>Price</label>
-                                <input name="variations[${index}][price]" type="number" step="0.01" class="form-control">
-                            </div>
-                            <div class="col-12 mb-2">
-                                <label>Images</label>
-                                <input name="variations[${index}][images][]" type="file" class="form-control variation-image-input" data-index="${index}" multiple accept="image/*">
-                                <div id="imagePreview-${index}" class="d-flex flex-wrap mt-2 gap-2"></div>
-                            </div>
-                        </div>
-                    </div>`;
+            <div class="card p-3 mb-3">
+                <h5>Variation: ${index + 1}</h5>
+                <input type="hidden" name="variations[${index}][attributes]" value="${safeAttrDisplay}">
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label>Variation</label>
+                        <input type="text" value="${attrDisplay}" disabled class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label>Price</label>
+                        <input name="variations[${index}][price]" type="number" step="0.01" class="form-control">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label>Images</label>
+                        <input name="variations[${index}][images][]" type="file" class="form-control variation-image-input" data-index="${index}" multiple accept="image/*">
+                        <div id="imagePreview-${index}" class="d-flex flex-wrap mt-2 gap-2"></div>
+                    </div>
+                </div>
+            </div>`;
                 container.append(html);
             });
         }
@@ -428,24 +425,5 @@
             const [first, ...rest] = arrays;
             return first.flatMap(value => generateCombinations(rest, [...prefix, value]));
         }
-
-
-        $('#createProductForm').on('submit', function(e) {
-            e.preventDefault();
-            let formData = new FormData(this);
-            let actionUrl = $(this).attr('action');
-            $.ajax({
-                url: actionUrl,
-                method: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response.status === 'success') {
-
-                    }
-                }
-            })
-        });
     </script>
 @endsection

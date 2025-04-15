@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\Admin\BrandController;
@@ -11,8 +14,6 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\AttributeValueController;
-use App\Http\Controllers\Admin\MarketingController;
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -50,27 +51,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('marketing', [MarketingController::class, 'index'])->name('marketing.index');
     Route::post('send-sms-selected-users', [MarketingController::class, 'sendSMSSelectedUsers'])->name('send.sms.selected.users');
     Route::post('send-sms-all-users', [MarketingController::class, 'sendSMSAllUsers'])->name('send.sms.all.users');
-
-    Route::get('new-products', function () {
-        $categories = \App\Models\Category::orderBy('name', 'asc')->get();
-        $brands = \App\Models\Brand::orderBy('name', 'asc')->get();
-        $statuses = \App\Enum\StatusEnum::cases();
-        $attributes = \App\Models\Attribute::where('status', \App\Enum\StatusEnum::ACTIVE)->orderBy('name', 'asc')->get();
-        $data = [
-            'categories' => $categories,
-            'brands' => $brands,
-            'statuses' => $statuses,
-            'active' => 'products',
-            'attributes' => $attributes
-
-        ];
-        return view('admin.new-products.create', $data);
-    })->name('new.products');
 });
 
-Route::get('test', function () {
-    $data = [
-        'active' => 'products'
-    ];
-    return view('test', $data);
-});
+
+
+// Route::get('test', function () {
+//     $data = [
+//         'active' => 'products'
+//     ];
+//     return view('test', $data);
+// });

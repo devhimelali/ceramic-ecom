@@ -64,3 +64,11 @@ function sendMarketingMessage($to, $message)
         Log::error($e->getMessage());
     }
 }
+
+function uploadImage($file, $folder)
+{
+    $image = $file;
+    $imageName = uniqid() . time() . '.' . $image->getClientOriginalExtension();
+    $image->storeAs($folder, $imageName, 'public');
+    return ['name' => $imageName, 'path' => 'storage/' . $folder . '/' . $imageName];
+}

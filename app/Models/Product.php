@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Product extends Model
 {
@@ -16,10 +18,10 @@ class Product extends Model
         'brand_id',
         'name',
         'slug',
-        'image',
         'short_description',
         'description',
-        'price',
+        'regular_price',
+        'sale_price',
         'status',
     ];
 
@@ -56,26 +58,26 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+
     /**
-     * The images that belong to this product.
+     * Get all the image for the product.
      *
-     * @return HasMany<ProductImage>
+     * @return MorphMany<Image>
      */
-    public function images(): HasMany
+    public function images(): MorphMany
     {
-        return $this->hasMany(ProductImage::class);
+        // Define a polymorphic one-to-many relationship.
+        return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function attributes()
+    public function attributes(): HasMany
     {
-        return $this->belongsToMany(Attribute::class, 'product_attribute_values')
-            ->withPivot('attribute_value_id');
+        return $this->hasMany(Attribute::class);
     }
 
-
-    public function attributeValues()
+    public function variations(): HasMany
     {
-        return $this->belongsToMany(AttributeValue::class, 'product_attribute_values', 'product_id', 'attribute_value_id');
+        return $this->hasMany(Variation::class);
     }
 
 
