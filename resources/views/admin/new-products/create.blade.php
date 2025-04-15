@@ -82,7 +82,8 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('products.store') }}" method="POST" id="createProductForm"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-lg-12">
@@ -96,7 +97,7 @@
                                 <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
                                     <select class="form-control select2" data-choice id="category" name="category"
-                                            required>
+                                        required>
                                         <option value="" selected disabled>Select Category</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -430,10 +431,22 @@
         }
 
 
-        // When Variation tab is clicked, store attributes and show combinations
-        // document.getElementById('attribute-tab').addEventListener('click', function() {
-        //     storeAttributesInLocalStorage();
-        //     renderVariationsFromAttributes();
-        // });
+        $('#createProductForm').on('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let actionUrl = $(this).attr('action');
+            $.ajax({
+                url: actionUrl,
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+
+                    }
+                }
+            })
+        });
     </script>
 @endsection
