@@ -28,7 +28,10 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             $data = Product::with([
-                'images', 'category', 'brand', 'attributes' => function ($query) {
+                'images',
+                'category',
+                'brand',
+                'attributes' => function ($query) {
                     $query->with('values');
                 }
             ])->orderBy('id', 'desc')->get();
@@ -38,14 +41,16 @@ class ProductController extends Controller
                 ->addColumn('image', function ($row) {
                     $image = null;
                     if ($row->images) {
-                        $image = $row->images->where('imageable_id', $row->id)->where('imageable_type',
-                            'App\Models\Product')->first();
+                        $image = $row->images->where('imageable_id', $row->id)->where(
+                            'imageable_type',
+                            'App\Models\Product'
+                        )->first();
                     }
                     $imageUrl = $image
                         ? asset($image->path)
-                        : "https://ui-avatars.com/api/?name=".urlencode($row->name);
+                        : "https://ui-avatars.com/api/?name=" . urlencode($row->name);
 
-                    return '<img class="rounded-circle header-profile-user" src="'.$imageUrl.'" alt="'.e($row->name).'" width="50" height="50">';
+                    return '<img class="rounded-circle header-profile-user" src="' . $imageUrl . '" alt="' . e($row->name) . '" width="50" height="50">';
                 })
                 ->addColumn('category', function ($row) {
                     return $row->category->name;
@@ -64,9 +69,11 @@ class ProductController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $html = '<div class="btn-group" role="group" aria-label="Basic example">';
-                    $html .= '<a href="'.route('products.edit',
-                            $row->id).'" class="btn btn-sm btn-secondary"><i class="ph-pencil"></i> Edit</a>';
-                    $html .= '<button onclick="confirmDelete(\''.route('products.destroy', $row->id).'\')" class="btn btn-sm btn-danger remove-item-btn">
+                    $html .= '<a href="' . route(
+                        'products.edit',
+                        $row->id
+                    ) . '" class="btn btn-sm btn-secondary"><i class="ph-pencil"></i> Edit</a>';
+                    $html .= '<button onclick="confirmDelete(\'' . route('products.destroy', $row->id) . '\')" class="btn btn-sm btn-danger remove-item-btn">
                                 <i class="bi bi-trash me-2"></i>Delete
                             </button>';
                     $html .= '</div>';
@@ -121,7 +128,7 @@ class ProductController extends Controller
                 'description' => $request->description,
             ]);
             // 2. Handle upload product thumbnail image
-            if($request->hasFile('image')){
+            if ($request->hasFile('image')) {
                 $fileInfo = uploadImage($request->file('image'), 'products');
                 $product->images()->create([
                     'name' => $fileInfo['name'],
@@ -129,7 +136,7 @@ class ProductController extends Controller
                 ]);
             }
             // 3. Handle upload product gallery images
-            if($request->hasFile('images')) {
+            if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $fileInfo = uploadImage($image, 'products');
                     $product->images()->create([
@@ -207,7 +214,8 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-//        dd($request->all());
+        // dd($request->all());
+
         DB::beginTransaction();
 
         try {
@@ -225,15 +233,19 @@ class ProductController extends Controller
             ]);
 
             // 2. Sync Attributes
-//            $product->attributes()->delete();
+            //            $product->attributes()->delete();
             if ($request['attributes'] != null) {
-                foreach ($request->attributes ?? [] as $attr) {
-
-                    $attribute = $product->attributes()->updateOrCreate(
-                        ['name' => $attr['name']],
-                        ['name' => $attr['name']]
-                    );
-
+                foreach ($request['attributes'] as $attr) {
+                    if (isset($attr['id']) && $attr['id'] != null) {
+                        $attribute = $product->attributes()->find($attr['id']);
+                        $attribute->update([
+                            'name' => $attr['name']
+                        ]);
+                    } else {
+                        $attribute = $product->attributes()->create([
+                            'name' => $attr['name']
+                        ]);
+                    }
                     $values = array_map('trim', explode(',', $attr['values']));
                     $attribute->values()->delete();
                     foreach ($values as $val) {
@@ -245,35 +257,19 @@ class ProductController extends Controller
                     }
                 }
             }
-
             // 3. Sync Variations
             foreach ($request->variations ?? [] as $variation) {
-                $attributeString = $variation['attributes'];
-
-                // Update or create variation
-                $variationModel = $product->variations()->updateOrCreate(
-                    ['attribute_string' => $attributeString],
-                    ['price' => $variation['price']]
-                );
-
-                // Handle preserved existing images
-                $keepImageIds = $variation['existing_images'] ?? [];
-                $variationModel->images()->whereNotIn('id', $keepImageIds)->each(function ($image) {
-                    Storage::disk('public')->delete($image->path);
-                    $image->delete();
-                });
-
-                // Handle new uploaded images
-                if (!empty($variation['images']) && is_array($variation['images'])) {
-//                    foreach ($variation['images'] as $image) {
-//                        if ($image && $image->isValid()) {
-//                            $fileInfo = uploadImage($image, 'products');
-//                            $variationModel->images()->create([
-//                                'name' => $fileInfo['name'],
-//                                'path' => $fileInfo['path'],
-//                            ]);
-//                        }
-//                    }
+                if ($variation['variation_id'] != null) {
+                    $variation_data = $product->variations()->find($variation['variation_id']);
+                    $variation_data->update([
+                        'attribute_string' => $variation['attributes'],
+                        'price' => $variation['price']
+                    ]);
+                } else {
+                    $variation_data = $product->variations()->create([
+                        'attribute_string' => $variation['attributes'],
+                        'price' => $variation['price']
+                    ]);
                 }
             }
 
@@ -324,7 +320,7 @@ class ProductController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete product: '.$e->getMessage(),
+                'message' => 'Failed to delete product: ' . $e->getMessage(),
             ], 500);
         }
     }
