@@ -132,3 +132,8 @@
 
     <div class="sidebar-background"></div>
 </div>
+<style>
+    .nav-item{
+        width: 90%;
+    }
+</style>

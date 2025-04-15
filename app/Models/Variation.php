@@ -12,7 +12,6 @@ class Variation extends Model
         'product_id',
         'attribute_string',
         'price',
-        'description',
     ];
 
     public function product(): BelongsTo

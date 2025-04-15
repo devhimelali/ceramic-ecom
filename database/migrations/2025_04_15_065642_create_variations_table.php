@@ -13,7 +13,6 @@ return new class extends Migration {
             $table->string('attribute_string');
             $table->decimal('price');
             $table->string('image')->nullable();
-            $table->longText('description');
             $table->timestamps();
         });
     }
