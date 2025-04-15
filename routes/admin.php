@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\Admin\BrandController;
@@ -52,6 +50,38 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('send-sms-selected-users', [MarketingController::class, 'sendSMSSelectedUsers'])->name('send.sms.selected.users');
     Route::post('send-sms-all-users', [MarketingController::class, 'sendSMSAllUsers'])->name('send.sms.all.users');
 });
+
+Route::post('/get-variations', function (Request $request) {
+    $productId = $request->product_id;
+    $combinations = $request->combinations; // array of attribute_string like "Size: M / Color: Red"
+
+    $variations = App\Models\Variation::with('images')->where('product_id', $productId)
+        ->whereIn('attribute_string', $combinations)
+        ->get()
+        ->keyBy('attribute_string');
+
+    return response()->json($variations);
+});
+
+use Illuminate\Support\Facades\Storage;
+
+Route::post('/variation-image/delete', function (Request $request) {
+    $request->validate([
+        'id' => 'required|integer|exists:images,id'
+    ]);
+
+    $image =  App\Models\Image::findOrFail($request->id);
+
+    // Delete image file
+    if (Storage::disk('public')->exists($image->path)) {
+        Storage::disk('public')->delete($image->path);
+    }
+    // Delete record
+    $image->delete();
+
+    return response()->json(['status' => 'success']);
+});
+
 
 
 
