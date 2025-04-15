@@ -12,7 +12,6 @@
 
         div#variationContainer::-webkit-scrollbar {
             width: 4px;
-            /* Width of the scrollbar */
         }
 
         div#variationContainer::-webkit-scrollbar-track {
@@ -53,7 +52,7 @@
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                 <h4 class="mb-sm-0">Edit Product</h4>
                 <div class="page-title-right">
-                    <ol class="m-0 breadcrumb">
+                    <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a></li>
                         <li class="breadcrumb-item active">Edit</li>
@@ -63,31 +62,27 @@
         </div>
     </div>
 
-    <div class="mb-5 row">
+    <div class="row mb-5">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center">
                     <h4>Edit Product</h4>
-                    <div class="ms-auto">
-                        <a href="{{ route('products.index') }}" class="btn btn-danger add-btn">
-                            <i class="align-baseline bi bi-arrow-left me-1"></i> Back
-                        </a>
-                    </div>
+                    <a href="{{ route('products.index') }}" class="btn btn-danger ms-auto"><i
+                            class="bi bi-arrow-left me-1"></i> Back</a>
                 </div>
-
                 <div class="card-body">
-                    <form action="{{ route('products.update', $product->id) }}" method="POST"
+                    <form action="{{ route('products.update', $product->id) }}" id="editForm" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
+                        {{-- Basic Fields --}}
                         <div class="row">
                             <div class="col-lg-12 mb-3">
                                 <label for="name" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="name" name="name"
                                     value="{{ $product->name }}">
                             </div>
-
                             <div class="col-lg-6 mb-3">
                                 <label for="category" class="form-label">Category</label>
                                 <select class="form-control select2" id="category" name="category" required>
@@ -100,7 +95,6 @@
                                     @endforeach
                                 </select>
                             </div>
-
                             <div class="col-lg-6 mb-3">
                                 <label for="brand" class="form-label">Brand</label>
                                 <select class="form-control select2" id="brand" name="brand">
@@ -113,19 +107,16 @@
                                     @endforeach
                                 </select>
                             </div>
-
                             <div class="col-lg-4 mb-3">
                                 <label for="regular_price" class="form-label">Regular Price</label>
                                 <input type="text" class="form-control" id="regular_price" name="regular_price"
                                     value="{{ $product->regular_price }}">
                             </div>
-
                             <div class="col-lg-4 mb-3">
                                 <label for="sale_price" class="form-label">Sale Price</label>
                                 <input type="text" class="form-control" id="sale_price" name="sale_price"
                                     value="{{ $product->sale_price }}">
                             </div>
-
                             <div class="col-lg-4 mb-3">
                                 <label for="status" class="form-label">Status</label>
                                 <select class="form-control select2" id="productStatus" name="status" required>
@@ -138,98 +129,76 @@
                                     @endforeach
                                 </select>
                             </div>
-
                             <div class="col-lg-12 mb-3">
                                 <label for="short_description" class="form-label">Short Description</label>
-                                <textarea class="form-control" id="short_description" name="short_description" rows="4">{{ $product->short_description }}</textarea>
+                                <textarea class="form-control" name="short_description" rows="4">{{ $product->short_description }}</textarea>
                             </div>
-
                             <div class="col-lg-12 mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control ckeditor-classic" id="description" name="description" rows="4">{{ $product->description }}</textarea>
+                                <textarea class="form-control ckeditor-classic" name="description" rows="4">{{ $product->description }}</textarea>
                             </div>
                         </div>
 
-                        {{-- Attribute + Variations Tabs --}}
+                        {{-- Attributes + Variations --}}
                         <div class="vertical-navs-step mt-3">
                             <div class="row gy-5">
                                 <div class="col-lg-3">
-                                    <div class="nav flex-column custom-nav nav-pills" role="tablist"
-                                        aria-orientation="vertical">
-                                        {{-- Tab 1 --}}
+                                    <div class="nav flex-column custom-nav nav-pills" role="tablist">
                                         <button class="nav-link active" id="variation-tab" data-bs-toggle="pill"
-                                            data-bs-target="#v-pills-bill-info" type="button" role="tab"
-                                            aria-controls="v-pills-bill-info" aria-selected="true">
-                                            <span class="step-title me-2">
-                                                <i class="ri-close-circle-fill step-icon me-2"></i> Step 1
-                                            </span>
-                                            Attributes
-                                        </button>
-                                        {{-- Tab 2 --}}
-                                        <button class="nav-link" id="attribute-tab"
-                                            data-bs-target="#v-pills-bill-address" type="button" role="tab"
-                                            aria-controls="v-pills-bill-address" aria-selected="false">
-                                            <span class="step-title me-2">
-                                                <i class="ri-close-circle-fill step-icon me-2"></i> Step 2
-                                            </span>
-                                            Variations
-                                        </button>
-                                    </div>
-                                    <!-- end nav -->
-                                </div> <!-- end col-->
-                                <div class="col-lg-9">
-                                    <div class="px-lg-4">
-                                        <div class="tab-content">
-                                            {{-- Tab 1 --}}
-                                            <div class="tab-pane fade show active" id="v-pills-bill-info" role="tabpanel"
-                                                aria-labelledby="variation-tab">
-                                                <div id="attributesWrapper">
-                                                    {{-- @foreach ($product->attributes as $attribute) --}}
-
-                                                    {{-- @endforeach --}}
-                                                    <div class="row mb-2">
-                                                        <div class="col-md-5">
-                                                            <input name="attributes[0][name]" type="text"
-                                                                class="form-control" placeholder="Attribute Name">
-                                                        </div>
-                                                        <div class="col-md-5">
-                                                            <input name="attributes[0][values]" type="text"
-                                                                class="form-control"
-                                                                placeholder="Comma separated values (e.g. Red, Blue)">
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="button" class="btn btn-success"
-                                                                onclick="addAttribute()">+</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="d-flex align-items-start gap-3 mt-4">
-                                                    <button type="button"
-                                                        class="btn btn-success btn-label right ms-auto nexttab nexttab"
-                                                        data-nexttab="attribute-tab"><i
-                                                            class="ri-arrow-right-line label-icon align-middle fs-lg ms-2"></i>Step
-                                                        2</button>
-                                                </div>
-                                            </div>
-                                            <!-- end tab pane -->
-                                            {{-- Tab 2 --}}
-                                            <div class="tab-pane fade" id="v-pills-bill-address" role="tabpanel"
-                                                aria-labelledby="attribute-tab">
-                                                <p class="text-muted">Based on the attribute combinations, you can define
-                                                    each variation's
-                                                    price, image,
-                                                    and description.</p>
-                                                <div id="variationContainer">
-                                                    {{-- Variations will be added via JS --}}
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <!-- end tab content -->
+                                            data-bs-target="#attributes-tab" type="button" role="tab">Step 1 -
+                                            Attributes</button>
+                                        <button class="nav-link" id="attribute-tab" data-bs-toggle="pill"
+                                            data-bs-target="#variations-tab" type="button" role="tab">Step 2 -
+                                            Variations</button>
                                     </div>
                                 </div>
-                                <!-- end col -->
+                                <div class="col-lg-9">
+                                    <div class="px-lg-4 tab-content">
+                                        {{-- Attributes Tab --}}
+                                        <div class="tab-pane fade show active" id="attributes-tab" role="tabpanel">
+                                            <div id="attributesWrapper">
+                                                @foreach ($product->attributes as $index => $attribute)
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-5">
+                                                            <input type="text" name="attributes[{{ $index }}][id]" value="{{$attribute->id}}">
+                                                            <input name="attributes[{{ $index }}][name]"
+                                                                type="text" class="form-control"
+                                                                value="{{ $attribute->name }}"
+                                                                placeholder="Attribute Name">
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <input name="attributes[{{ $index }}][values]"
+                                                                type="text" class="form-control"
+                                                                value="{{ $attribute->values->pluck('value')->implode(', ') }}"
+                                                                placeholder="Comma separated values">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            @if ($index === 0)
+                                                                <button type="button" class="btn btn-success"
+                                                                    onclick="addAttribute()">+</button>
+                                                            @else
+                                                                <button type="button"
+                                                                    class="btn btn-danger remove-attr">x</button>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <div class="d-flex align-items-start gap-3 mt-4">
+                                                <button type="button" class="btn btn-success ms-auto nexttab"
+                                                    data-nexttab="attribute-tab">
+                                                    Step 2 <i class="ri-arrow-right-line ms-2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {{-- Variations Tab --}}
+                                        <div class="tab-pane fade" id="variations-tab" role="tabpanel">
+                                            <p class="text-muted">Define price, image, and info for each variation.</p>
+                                            <div id="variationContainer"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -243,187 +212,255 @@
 
 @section('page-script')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('assets/js/pages/form-wizard.init.js') }}"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
     <script>
-        $('document').ready(function() {
+        const productId = {{ $product->id }};
+
+        $(document).ready(function() {
             $('.select2').select2();
-            ClassicEditor.create(document.querySelector('#description')).catch(error => {});
-        });
-        let attrIndex = 1;
+            ClassicEditor.create(document.querySelector('#description')).catch(error => console.error(error));
 
-        function addAttribute() {
-            const html = `
-                <div class="row mb-2">
-                    <div class="col-md-5">
-                        <input name="attributes[${attrIndex}][name]" type="text" class="form-control" placeholder="Attribute Name">
-                    </div>
-                    <div class="col-md-5">
-                        <input name="attributes[${attrIndex}][values]" type="text" class="form-control" placeholder="Comma separated values">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger remove-attr">x</button>
-                    </div>
-                </div>`;
-            $('#attributesWrapper').append(html);
-            attrIndex++;
-        }
+            let attrIndex = $('#attributesWrapper .row').length;
 
-        // Remove attribute row
-        $(document).on('click', '.remove-attr', function() {
-            $(this).closest('.row').remove();
-        });
-
-        $('#attribute-tab').on('click', function(e) {
-            let hasEmpty = false;
-
-            $('#attributesWrapper .row').each(function() {
-                const nameInput = $(this).find('input[name*="[name]"]').val().trim();
-                const valuesInput = $(this).find('input[name*="[values]"]').val().trim();
-
-                if (!nameInput || !valuesInput) {
-                    hasEmpty = true;
-                    return false;
-                }
-            });
-
-            if (hasEmpty) {
-                alert('Please fill out all attribute names and values before continuing.');
-                return;
+            window.addAttribute = function() {
+                const html = `
+                    <div class="row mb-2">
+                        <div class="col-md-5">
+                            <input name="attributes[${attrIndex}][name]" type="text" class="form-control" placeholder="Attribute Name">
+                        </div>
+                        <div class="col-md-5">
+                            <input name="attributes[${attrIndex}][values]" type="text" class="form-control" placeholder="Comma separated values">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger remove-attr">x</button>
+                        </div>
+                    </div>`;
+                $('#attributesWrapper').append(html);
+                attrIndex++;
             }
 
-            storeAttributesInLocalStorage();
-            renderVariationsFromAttributes();
+            $(document).on('click', '.remove-attr', function() {
+                $(this).closest('.row').remove();
+            });
 
-            // Bootstrap tab switch
-            const tab = new bootstrap.Tab($('#attribute-tab')[0]);
-            tab.show();
-        });
+            $('[data-nexttab="attribute-tab"]').on('click', function() {
+                $('#attribute-tab').click();
+            });
 
-        // If next button is clicked
-        $('[data-nexttab="attribute-tab"]').on('click', function() {
-            $('#attribute-tab').click();
-        });
+            $('#attribute-tab').on('click', function() {
+                let hasEmpty = false;
+                $('#attributesWrapper .row').each(function() {
+                    const name = $(this).find('input[name*="[name]"]').val().trim();
+                    const values = $(this).find('input[name*="[values]"]').val().trim();
+                    if (!name || !values) {
+                        hasEmpty = true;
+                        return false;
+                    }
+                });
 
-        function storeAttributesInLocalStorage() {
-            const attributes = [];
+                if (hasEmpty) {
+                    alert('Please fill out all attribute fields.');
+                    return;
+                }
 
-            $('#attributesWrapper .row').each(function() {
-                const name = $(this).find('input[name*="[name]"]').val().trim();
-                const values = $(this).find('input[name*="[values]"]').val().split(',').map(v => v.trim()).filter(
-                    Boolean);
+                storeAttributes();
+                renderVariations();
+            });
 
-                if (name && values.length) {
-                    attributes.push({
-                        name,
-                        values
+            function storeAttributes() {
+                const attributes = [];
+                $('#attributesWrapper .row').each(function() {
+                    const name = $(this).find('input[name*="[name]"]').val().trim();
+                    const values = $(this).find('input[name*="[values]"]').val().split(',').map(v => v
+                        .trim()).filter(Boolean);
+                    if (name && values.length) {
+                        attributes.push({
+                            name,
+                            values
+                        });
+                    }
+                });
+                localStorage.setItem('product_attributes', JSON.stringify(attributes));
+            }
+
+            function generateCombinations(arrays, prefix = []) {
+                if (!arrays.length) return [prefix];
+                const [first, ...rest] = arrays;
+                return first.flatMap(value => generateCombinations(rest, [...prefix, value]));
+            }
+
+            function renderVariations() {
+                const container = $('#variationContainer');
+                container.html('');
+                const attributes = JSON.parse(localStorage.getItem('product_attributes') || '[]');
+                if (!attributes.length) return;
+
+                const attrNames = attributes.map(attr => attr.name);
+                const combinations = generateCombinations(attributes.map(attr => attr.values));
+                const comboStrings = combinations.map(combo =>
+                    combo.map((val, i) => `${attrNames[i]}: ${val}`).join(' / ')
+                );
+
+                $.ajax({
+                    url: '/get-variations',
+                    type: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        product_id: productId,
+                        combinations: comboStrings
+                    },
+                    success: function(response) {
+                        combinations.forEach((combo, index) => {
+                            const attrDisplay = combo.map((val, i) => `${attrNames[i]}: ${val}`)
+                                .join(' / ');
+                            const safeAttrDisplay = attrDisplay.replace(/"/g, '&quot;');
+                            const variation = response[attrDisplay] || {};
+                            const price = variation.price || '';
+                            const imageObjs = variation.images || [];
+                            const variation_id = variation.id || '';
+
+                            const imagePreviewHTML = imageObjs.map(img => `
+                                <div class="position-relative me-2 mb-2">
+                                    <img src="${img.path.startsWith('http') ? img.path : '/' + img.path}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid #e0e0e0;">
+                                    <button type="button" class="position-absolute top-0 end-0 m-1 remove-image-existing" data-id="${img.id}" style="
+                                        width: 24px; height: 24px; background-color: #ff4d4f; color: white;
+                                        border: none; border-radius: 50%; display: flex; align-items: center;
+                                        justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); cursor: pointer;">
+                                        <i class="ph ph-x" style="font-size: 14px;"></i>
+                                    </button>
+                                </div>`).join('');
+
+                            const html = `
+                                <div class="card p-3 mb-3">
+                                    <h5>Variation: ${index + 1}</h5>
+                                    <input type="text" name="variations[${index}][attributes]" value="${safeAttrDisplay}">
+                                    <input type="text" name="variations[${index}][variation_id]" value="${variation_id}">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <label>Variation</label>
+                                            <input type="text" value="${attrDisplay}" disabled class="form-control">
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label>Price</label>
+                                            <input name="variations[${index}][price]" type="number" step="0.01" class="form-control" value="${price}">
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <label>Images</label>
+                                            <input name="variations[${index}][images][]" type="file" class="form-control variation-image-input" data-index="${index}" multiple accept="image/*">
+                                            <div id="imagePreview-${index}" class="d-flex flex-wrap mt-2 gap-2">
+                                                ${imagePreviewHTML}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            container.append(html);
+                        });
+                    }
+                });
+            }
+
+            $(document).on('change', '.variation-image-input', function(e) {
+                const index = $(this).data('index');
+                const previewContainer = $(`#imagePreview-${index}`);
+
+                const files = Array.from(e.target.files);
+                const fileInput = this;
+                let dataTransfer = new DataTransfer();
+
+                files.forEach((file, fileIndex) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = $(`
+                        <div class="position-relative me-2 mb-2">
+                            <img src="${e.target.result}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid #e0e0e0;">
+                            <button type="button" class="position-absolute top-0 end-0 m-1 remove-image" data-file-index="${fileIndex}" style="
+                                width: 24px; height: 24px; background-color: #ff4d4f; color: white;
+                                border: none; border-radius: 50%; display: flex; align-items: center;
+                                justify-content: center; cursor: pointer;">
+                                <i class="ph ph-x" style="font-size: 14px;"></i>
+                            </button>
+                        </div>`);
+                        previewContainer.append(
+                            preview);
+                    };
+                    dataTransfer.items.add(file);
+                    reader.readAsDataURL(file);
+                });
+
+                fileInput.files = dataTransfer.files;
+                $(fileInput).data('dt', dataTransfer);
+            });
+
+
+            $(document).on('click', '.remove-image', function() {
+                const fileIndex = $(this).data('file-index');
+                const previewDiv = $(this).closest('.position-relative');
+                const fileInput = $(this).closest('.col-12').find('.variation-image-input')[0];
+                let dt = $(fileInput).data('dt') || new DataTransfer();
+
+                dt.items.remove(fileIndex);
+                fileInput.files = dt.files;
+                $(fileInput).data('dt', dt);
+
+                previewDiv.remove();
+            });
+
+            // AJAX delete for existing images
+            $(document).on('click', '.remove-image-existing', function() {
+                const imageId = $(this).data('id');
+                const container = $(this).closest('.position-relative');
+
+                if (confirm('Are you sure you want to delete this image?')) {
+                    $.ajax({
+                        url: '/variation-image/delete',
+                        type: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            id: imageId
+                        },
+                        success: function() {
+                            container.remove();
+                        },
+                        error: function() {
+                            alert('Failed to delete image');
+                        }
                     });
                 }
             });
 
-            localStorage.setItem('product_attributes', JSON.stringify(attributes));
-        }
 
-        function renderVariationsFromAttributes() {
-            const container = $('#variationContainer');
-            container.html('');
 
-            const attributes = JSON.parse(localStorage.getItem('product_attributes') || '[]');
-            if (!attributes.length) return;
+            // AJAX Submit for the entire form
+            $('#editForm').on('submit', function(e) {
+                e.preventDefault();
+                const form = this;
+                const formData = new FormData(form);
 
-            const attrNames = attributes.map(attr => attr.name);
-            const combinations = generateCombinations(attributes.map(attr => attr.values));
-
-            combinations.forEach((combo, index) => {
-                const attrDisplay = combo.map((val, i) => `${attrNames[i]}: ${val}`).join(' / ');
-                const safeAttrDisplay = attrDisplay.replace(/"/g, '&quot;');
-
-                const html = `
-            <div class="card p-3 mb-3">
-                <h5>Variation: ${index + 1}</h5>
-                <input type="hidden" name="variations[${index}][attributes]" value="${safeAttrDisplay}">
-                <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <label>Variation</label>
-                        <input type="text" value="${attrDisplay}" disabled class="form-control">
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <label>Price</label>
-                        <input name="variations[${index}][price]" type="number" step="0.01" class="form-control">
-                    </div>
-                    <div class="col-12 mb-2">
-                        <label>Images</label>
-                        <input name="variations[${index}][images][]" type="file" class="form-control variation-image-input" data-index="${index}" multiple accept="image/*">
-                        <div id="imagePreview-${index}" class="d-flex flex-wrap mt-2 gap-2"></div>
-                    </div>
-                </div>
-            </div>`;
-                container.append(html);
-            });
-        }
-
-        $(document).on('change', '.variation-image-input', function(e) {
-            const index = $(this).data('index');
-            const previewContainer = $(`#imagePreview-${index}`);
-            previewContainer.html('');
-
-            const files = Array.from(e.target.files);
-            const fileInput = this;
-
-            // Store a clone of files to manipulate later
-            let dataTransfer = new DataTransfer();
-
-            files.forEach((file, fileIndex) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const previewWrapper = $(`
-                <div class="position-relative me-2 mb-2">
-                    <img src="${e.target.result}"style="width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid #e0e0e0; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-                    <button type="button" class="position-absolute top-0 end-0 m-1 remove-image" data-file-index="${fileIndex}" style="
-                            width: 24px;
-                            height: 24px;
-                            background-color: #ff4d4f;
-                            color: white;
-                            border: none;
-                            border-radius: 50%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                            cursor: pointer;
-                        "><i class="ph ph-x" style="font-size: 14px;"></i></button>
-                </div>
-                `);
-                    previewContainer.append(previewWrapper);
-                };
-                dataTransfer.items.add(file);
-                reader.readAsDataURL(file);
+                $.ajax({
+                    url: $(form).attr('action'),
+                    method: $(form).attr('method'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        $('button[type="submit"]').prop('disabled', true).text('Updating...');
+                    },
+                    success: function(response) {
+                        // ✅ success logic (redirect or message)
+                        alert('Product updated successfully!');
+                        // window.location.href = "{{ route('products.index') }}";
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                        alert('Something went wrong. Please check the inputs.');
+                    },
+                    complete: function() {
+                        $('button[type="submit"]').prop('disabled', false).text(
+                            'Update Product');
+                    }
+                });
             });
 
-            // Replace input files with the new DataTransfer object
-            fileInput.files = dataTransfer.files;
-
-            // Store the updated DataTransfer object for later use
-            $(fileInput).data('dt', dataTransfer);
         });
-
-        $(document).on('click', '.remove-image', function() {
-            const fileIndex = $(this).data('file-index');
-            const previewDiv = $(this).closest('.position-relative');
-            const fileInput = $(this).closest('.col-12').find('.variation-image-input')[0];
-            let dt = $(fileInput).data('dt') || new DataTransfer();
-
-            dt.items.remove(fileIndex);
-            fileInput.files = dt.files;
-            $(fileInput).data('dt', dt);
-
-            previewDiv.remove();
-        });
-
-        function generateCombinations(arrays, prefix = []) {
-            if (!arrays.length) return [prefix];
-            const [first, ...rest] = arrays;
-            return first.flatMap(value => generateCombinations(rest, [...prefix, value]));
-        }
     </script>
 @endsection

@@ -179,7 +179,6 @@ class ProductController extends Controller
                 'message' => 'Product created successfully',
                 'product' => $product,
             ], 201);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 500);
@@ -189,7 +188,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::with(['category', 'brand', 'attributes', 'variations'])->findOrFail($id);
+        $product = Product::with(['category', 'brand', 'attributes.values', 'variations'])->findOrFail($id);
         $categories = Category::orderBy('name', 'asc')->get();
         $brands = Brand::orderBy('name', 'asc')->get();
         $statuses = StatusEnum::cases();
@@ -205,73 +204,92 @@ class ProductController extends Controller
     }
 
 
-    public function update(UpdateRequest $request, $id)
-    {
-        DB::beginTransaction();
-        try {
-            // Retrieve product with related images and attributes
-            $product = Product::with(['images', 'attributes'])->findOrFail($id);
 
-            // Update product details
+    public function update(Request $request, Product $product)
+    {
+//        dd($request->all());
+        DB::beginTransaction();
+
+        try {
+            // 1. Update Product Info
             $product->update([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
                 'category_id' => $request->category,
                 'brand_id' => $request->brand,
-                'price' => $request->price,
+                'regular_price' => $request->regular_price,
+                'sale_price' => $request->sale_price,
+                'status' => $request->status,
                 'short_description' => $request->short_description,
                 'description' => $request->description,
-                'status' => $request->status,
             ]);
 
-            $product->attributes()->detach();
+            // 2. Sync Attributes
+//            $product->attributes()->delete();
+            if ($request['attributes'] != null) {
+                foreach ($request->attributes ?? [] as $attr) {
 
-            // Attach product attributes and variation values
-            foreach ($request->variation_names as $key => $variation_name) {
-                $product->attributes()->attach([
-                    $variation_name => ['attribute_value_id' => $request->variation_values[$key]]
-                ]);
-            }
+                    $attribute = $product->attributes()->updateOrCreate(
+                        ['name' => $attr['name']],
+                        ['name' => $attr['name']]
+                    );
 
-            // Handle thumbnail image update
-            if ($request->hasFile('image')) {
-                $oldImage = $product->images->where('type', 'thumbnail')->first();
-                if ($oldImage) {
-                    ImageUploadHelper::deleteProductImage($oldImage->image, 'products');
-                    $oldImage->delete();
+                    $values = array_map('trim', explode(',', $attr['values']));
+                    $attribute->values()->delete();
+                    foreach ($values as $val) {
+                        if ($val !== '') {
+                            $attribute->values()->create([
+                                'value' => $val
+                            ]);
+                        }
+                    }
                 }
-
-                $imageData = ImageUploadHelper::uploadProductImage($request->file('image'), 'products', $product->id);
-                $product->images()->create([
-                    'type' => 'thumbnail',
-                    'image' => $imageData['filename'],
-                ]);
             }
 
-            // Handle additional gallery images
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
-                    $imageData = ImageUploadHelper::uploadProductImage($image, 'products', $product->id);
-                    $product->images()->create([
-                        'type' => 'gallery',
-                        'image' => $imageData['filename'],
-                    ]);
+            // 3. Sync Variations
+            foreach ($request->variations ?? [] as $variation) {
+                $attributeString = $variation['attributes'];
+
+                // Update or create variation
+                $variationModel = $product->variations()->updateOrCreate(
+                    ['attribute_string' => $attributeString],
+                    ['price' => $variation['price']]
+                );
+
+                // Handle preserved existing images
+                $keepImageIds = $variation['existing_images'] ?? [];
+                $variationModel->images()->whereNotIn('id', $keepImageIds)->each(function ($image) {
+                    Storage::disk('public')->delete($image->path);
+                    $image->delete();
+                });
+
+                // Handle new uploaded images
+                if (!empty($variation['images']) && is_array($variation['images'])) {
+//                    foreach ($variation['images'] as $image) {
+//                        if ($image && $image->isValid()) {
+//                            $fileInfo = uploadImage($image, 'products');
+//                            $variationModel->images()->create([
+//                                'name' => $fileInfo['name'],
+//                                'path' => $fileInfo['path'],
+//                            ]);
+//                        }
+//                    }
                 }
             }
 
             DB::commit();
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product updated successfully',
-                'product' => $product->load(['attributes', 'images']),
+                'product' => $product,
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Product Update Failed: '.$e->getMessage());
+            Log::error('Product Update Failed: ' . $e->getMessage());
 
             return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update product.',
+                'error' => $e->getMessage()
             ], 500);
         }
     }
