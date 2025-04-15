@@ -34,9 +34,10 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Image</th>
+                                    <th style="max-width: 50px; width: 46px">Image</th>
                                     <th>Name</th>
-                                    <th>Price</th>
+                                    <th>Regular Price</th>
+                                    <th>Selling Price</th>
                                     <th>Category</th>
                                     <th>Brand</th>
                                     <th>Status</th>
@@ -73,10 +74,13 @@
                         data: 'name',
                         name: 'name'
                     },
-
                     {
-                        data: 'price',
-                        name: 'price'
+                        data: 'regular_price',
+                        name: 'regular_price'
+                    },
+                    {
+                        data: 'sale_price',
+                        name: 'sale_price'
                     },
                     {
                         data: 'category',
