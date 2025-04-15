@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\Admin\BrandController;
@@ -10,9 +13,6 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\AttributeValueController;
-use App\Http\Controllers\Admin\MarketingController;
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -55,7 +55,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         $categories = \App\Models\Category::orderBy('name', 'asc')->get();
         $brands = \App\Models\Brand::orderBy('name', 'asc')->get();
         $statuses = \App\Enum\StatusEnum::cases();
-//        $attributes = \App\Models\Attribute::where('status', orderBy('name', 'asc')->get();
         $data = [
             'categories' => $categories,
             'brands' => $brands,
@@ -67,9 +66,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     })->name('new.products');
 });
 
-Route::get('test', function () {
-    $data = [
-        'active' => 'products'
-    ];
-    return view('test', $data);
-});
+
+
+// Route::get('test', function () {
+//     $data = [
+//         'active' => 'products'
+//     ];
+//     return view('test', $data);
+// });

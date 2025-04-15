@@ -101,65 +101,56 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
+        // dd($request->all());
         DB::beginTransaction();
-
         try {
-            // Create the product
+            // 1. Create Product
             $product = Product::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
                 'category_id' => $request->category,
                 'brand_id' => $request->brand,
-                'price' => $request->price,
+                'regular_price' => $request->regular_price,
+                'sale_price' => $request->sale_price,
+                'status' => $request->status,
                 'short_description' => $request->short_description,
                 'description' => $request->description,
-                'status' => $request->status,
             ]);
 
-            // Attach product attributes and variation values
-            foreach ($request->variation_names as $key => $variation_name) {
-                $product->attributes()->attach([
-                    $variation_name => ['attribute_value_id' => $request->variation_values[$key]]
-                ]);
+            // 2. Handle Attributes
+            if ($request->has('attributes')) {
+                foreach ($request->attributes as $attr) {
+                    $attribute = $product->attributes()->create([
+                        'name' => $attr['name'],
+                    ]);
+
+                    // Split values by comma and trim
+                    $values = array_map('trim', explode(',', $attr['values']));
+
+                    foreach ($values as $val) {
+                        $attribute->values()->create([
+                            'value' => $val
+                        ]);
+                    }
+                }
             }
 
-            // Upload thumbnail image
-            if ($request->hasFile('image')) {
-                $imageData = ImageUploadHelper::uploadProductImage($request->file('image'), 'products', $product->id);
-
-                $product->images()->create([
-                    'type' => 'thumbnail',
-                    'image' => $imageData['filename'],
-                ]);
-            }
-
-            // Upload gallery images
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
-                    $imageData = ImageUploadHelper::uploadProductImage($image, 'products', $product->id);
-
-                    $product->images()->create([
-                        'type' => 'gallery',
-                        'image' => $imageData['filename'],
+            // 3. Handle Variations
+            if ($request->has('variations')) {
+                foreach ($request->variations as $variation) {
+                    $product->variations()->create([
+                        'attribute_string' => $variation['attributes'],
+                        'price' => $variation['price'],
                     ]);
                 }
             }
 
             DB::commit();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Product created successfully',
-                'product' => $product->load(['attributes', 'images']),
-            ]);
+            return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
         } catch (\Exception $e) {
-            DB::rollBack();
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Something went wrong while creating the product.',
-                'error' => $e->getMessage(),
-            ], 500);
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

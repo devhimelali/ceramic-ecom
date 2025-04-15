@@ -24,16 +24,33 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:products,name'],
-            'category' => ['required', 'exists:categories,id'],
-            'short_description' => ['required', 'string'],
-            'description' => ['nullable', 'string'],
-            'price' => ['required', 'numeric'],
-            'status' => ['required', Rule::enum(StatusEnum::class)],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp'],
-            'images.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp'],
-            'variation_names' => ['required', 'array', 'exists:attributes,id'],
-            'variation_values' => ['required', 'array', 'exists:attribute_values,id'],
+            'name' => 'required|string|max:255',
+            'category' => 'required|exists:categories,id',
+            'brand' => 'required|exists:brands,id',
+            'regular_price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0|lte:regular_price',
+            'status' => 'required|in:active,inactive',
+            'short_description' => 'nullable|string|max:500',
+            'description' => 'nullable|string',
+
+            'attributes' => 'required|array|min:1',
+            'attributes.*.name' => 'required|string|max:255',
+            'attributes.*.values' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    $values = array_filter(array_map('trim', explode(',', $value)));
+                    if (empty($values)) {
+                        $fail('Attribute values must contain at least one non-empty item.');
+                    }
+                }
+            ],
+
+            'variations' => 'required|array|min:1',
+            'variations.*.attributes' => 'required|string|max:255',
+            'variations.*.price' => 'required|numeric|min:0',
+            'variations.*.image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'variations.*.description' => 'nullable|string|max:1000',
         ];
     }
 }
