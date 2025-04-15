@@ -51,20 +51,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('marketing', [MarketingController::class, 'index'])->name('marketing.index');
     Route::post('send-sms-selected-users', [MarketingController::class, 'sendSMSSelectedUsers'])->name('send.sms.selected.users');
     Route::post('send-sms-all-users', [MarketingController::class, 'sendSMSAllUsers'])->name('send.sms.all.users');
-
-    Route::get('new-products', function () {
-        $categories = \App\Models\Category::orderBy('name', 'asc')->get();
-        $brands = \App\Models\Brand::orderBy('name', 'asc')->get();
-        $statuses = \App\Enum\StatusEnum::cases();
-        $data = [
-            'categories' => $categories,
-            'brands' => $brands,
-            'statuses' => $statuses,
-            'active' => 'products',
-
-        ];
-        return view('admin.new-products.create', $data);
-    })->name('new.products');
 });
 
 
