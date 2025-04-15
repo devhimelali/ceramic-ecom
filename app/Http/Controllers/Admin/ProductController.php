@@ -79,16 +79,14 @@ class ProductController extends Controller
         $categories = Category::orderBy('name', 'asc')->get();
         $brands = Brand::orderBy('name', 'asc')->get();
         $statuses = StatusEnum::cases();
-        $attributes = Attribute::where('status', StatusEnum::ACTIVE)->orderBy('name', 'asc')->get();
         $data = [
             'categories' => $categories,
             'brands' => $brands,
             'statuses' => $statuses,
             'active' => 'products',
-            'attributes' => $attributes
 
         ];
-        return view('admin.product.create', $data);
+        return view('admin.new-products.create', $data);
     }
 
     /**
@@ -101,8 +99,8 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
-        // dd($request->all());
         DB::beginTransaction();
+
         try {
             // 1. Create Product
             $product = Product::create([
@@ -118,15 +116,13 @@ class ProductController extends Controller
             ]);
 
             // 2. Handle Attributes
-            if ($request->has('attributes')) {
-                foreach ($request->attributes as $attr) {
+            if ($request['attributes'] != null) {
+                foreach ($request['attributes'] as $attr) {
                     $attribute = $product->attributes()->create([
                         'name' => $attr['name'],
                     ]);
 
-                    // Split values by comma and trim
                     $values = array_map('trim', explode(',', $attr['values']));
-
                     foreach ($values as $val) {
                         $attribute->values()->create([
                             'value' => $val
@@ -134,9 +130,8 @@ class ProductController extends Controller
                     }
                 }
             }
-
             // 3. Handle Variations
-            if ($request->has('variations')) {
+            if ($request->has('variations') && is_array($request->variations)) {
                 foreach ($request->variations as $variation) {
                     $product->variations()->create([
                         'attribute_string' => $variation['attributes'],
@@ -147,37 +142,33 @@ class ProductController extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
+            return response()->json([
+                'message' => 'Product created successfully',
+                'product' => $product,
+            ], 201);
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
 
+
     public function edit($id)
     {
-        $product = Product::with([
-            'images',
-            'category',
-            'brand',
-            'attributes',
-            'attributeValues'
-        ])->findOrFail($id);
-        // return $product;
+        $product = Product::with(['category', 'brand', 'attributes', 'variations'])->findOrFail($id);
         $categories = Category::orderBy('name', 'asc')->get();
         $brands = Brand::orderBy('name', 'asc')->get();
         $statuses = StatusEnum::cases();
-        $attributes = Attribute::with('values')->where('status', StatusEnum::ACTIVE)->orderBy('name', 'asc')->get();
         $data = [
             'product' => $product,
             'categories' => $categories,
             'brands' => $brands,
             'statuses' => $statuses,
-            'attributes' => $attributes,
             'active' => 'products',
         ];
-        return view('admin.product.edit', $data);
+        dd($product);
+        return view('admin.new-products.edit', $data);
     }
 
 
