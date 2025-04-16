@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Enum\StatusEnum;
 use App\Models\Category;
 use App\Models\Attribute;
+use App\Models\Variation;
 use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
@@ -207,7 +208,7 @@ class ProductController extends Controller
             'active' => 'products',
         ];
 
-        return view('admin.new-products.edit', $data);
+        return view('admin.product.edit', $data);
     }
 
 
@@ -271,6 +272,15 @@ class ProductController extends Controller
                         'price' => $variation['price']
                     ]);
                 }
+                if (isset($variation['images']) && $variation['images'] != null) {
+                    foreach ($variation['images'] as $image) {
+                        $fileInfo = uploadImage($image, 'products');
+                        $variation_data->images()->create([
+                            'name' => $fileInfo['name'],
+                            'path' => $fileInfo['path'],
+                        ]);
+                    }
+                }
             }
 
             DB::commit();
@@ -327,17 +337,32 @@ class ProductController extends Controller
 
     public function deleteProductImage(Request $request)
     {
-        $imageId = $request->input('image_id');
-        $productId = $request->input('product_id');
+        $request->validate([
+            'id' => 'required|integer|exists:images,id'
+        ]);
 
-        $image = ProductImage::where('id', $imageId)->where('product_id', $productId)->first();
-
-        if ($image) {
-            ImageUploadHelper::deleteProductImage($image->image, 'products');
-            $image->delete();
-            return response()->json(['status' => 'success', 'message' => 'Image deleted successfully.']);
-        } else {
-            return response()->json(['status' => 'error', 'message' => 'Image not found.']);
+        $image =  Image::findOrFail($request->id);
+        $filePath = preg_replace('/^storage\//', '', $image->path);
+        // Delete image file
+        if (Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
         }
+        // Delete record
+        $image->delete();
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function getVariations(Request $request)
+    {
+        $productId = $request->product_id;
+        $combinations = $request->combinations; // array of attribute_string like "Size: M / Color: Red"
+
+        $variations = Variation::with('images')->where('product_id', $productId)
+            ->whereIn('attribute_string', $combinations)
+            ->get()
+            ->keyBy('attribute_string');
+
+        return response()->json($variations);
     }
 }
