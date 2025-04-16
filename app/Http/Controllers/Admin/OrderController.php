@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Attribute;
 use App\Models\ProductQuery;
+use App\Models\Variation;
 use Illuminate\Http\Request;
 use App\Models\AttributeValue;
 use App\Models\ProductVairants;
@@ -87,44 +88,25 @@ class OrderController extends Controller
 
     public function enquireForm($productId)
     {
-        // Load the product with attributes and their values, and also the pivot data (attribute_value_id)
-        $product = Product::with(['attributes' => function ($query) {
-            $query->withPivot('attribute_value_id'); // Load the pivot column
-        }])->find($productId);
+        $product = Product::with('images', 'attributes', 'variations.images')->where('id', $productId)->first();
 
         if (!$product) {
             return response()->json(['message' => 'Product not found.'], 404);
         }
 
-        $result = [];
+        $attributes = Attribute::with('values')
+            ->where('product_id', $product->id)
+            ->get()
+            ->groupBy('name')
+            ->map(function ($group, $name) {
+                return [
+                    'attribute' => $name,
+                    'values' => $group->flatMap->values->pluck('value')->unique()->values(),
+                ];
+            })->values();
 
-        // Iterate over the product's attributes
-        foreach ($product->attributes as $attribute) {
-            // Get the attribute name
-            $attributeName = $attribute->name;
-
-            // Get the value from the pivot table
-            $pivotValueId = $attribute->pivot->attribute_value_id; // This will now be available
-
-            // Find the corresponding value from the attribute values
-            $selectedValue = $attribute->values->firstWhere('id', $pivotValueId);
-
-            if ($selectedValue) {
-                if (!isset($result[$attributeName])) {
-                    $result[$attributeName] = [
-                        'attribute' => $attributeName,
-                        'values' => [],
-                    ];
-                }
-
-                // Append the value if not already added
-                if (!in_array($selectedValue->value, $result[$attributeName]['values'])) {
-                    $result[$attributeName]['values'][] = $selectedValue->value;
-                }
-            }
-        }
         // Render the view with the result
-        $html = view('frontend.products.enquire-modal', compact('productId', 'product', 'result'))->render();
+        $html = view('frontend.products.enquire-modal', compact('productId', 'product', 'attributes'))->render();
 
         return response()->json([
             'status' => 'success',
@@ -133,44 +115,24 @@ class OrderController extends Controller
     }
     public function addToCart($id)
     {
-        // Load the product with attributes and their values, and also the pivot data (attribute_value_id)
-        $product = Product::with(['attributes' => function ($query) {
-            $query->withPivot('attribute_value_id'); // Load the pivot column
-        }])->find($id);
+        $product = Product::with('images', 'attributes', 'variations.images')->where('id', $id)->first();
 
         if (!$product) {
             return response()->json(['message' => 'Product not found.'], 404);
         }
 
-        $result = [];
-
-        // Iterate over the product's attributes
-        foreach ($product->attributes as $attribute) {
-            // Get the attribute name
-            $attributeName = $attribute->name;
-
-            // Get the value from the pivot table
-            $pivotValueId = $attribute->pivot->attribute_value_id; // This will now be available
-
-            // Find the corresponding value from the attribute values
-            $selectedValue = $attribute->values->firstWhere('id', $pivotValueId);
-
-            if ($selectedValue) {
-                if (!isset($result[$attributeName])) {
-                    $result[$attributeName] = [
-                        'attribute' => $attributeName,
-                        'values' => [],
-                    ];
-                }
-
-                // Append the value if not already added
-                if (!in_array($selectedValue->value, $result[$attributeName]['values'])) {
-                    $result[$attributeName]['values'][] = $selectedValue->value;
-                }
-            }
-        }
+        $attributes = Attribute::with('values')
+            ->where('product_id', $product->id)
+            ->get()
+            ->groupBy('name')
+            ->map(function ($group, $name) {
+                return [
+                    'attribute' => $name,
+                    'values' => $group->flatMap->values->pluck('value')->unique()->values(),
+                ];
+            })->values();
         // Render the view with the result
-        $html = view('frontend.products.add-to-modal', compact('product', 'result'))->render();
+        $html = view('frontend.products.add-to-modal', compact('product', 'attributes'))->render();
 
         return response()->json([
             'status' => 'success',
@@ -386,6 +348,25 @@ class OrderController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Query submitted successfully. A confirmation email has been sent.'
+        ]);
+    }
+
+    public function getProductVariationPrice(Request $request, $id)
+    {
+        $variation = Variation::where('product_id', $id)
+            ->where('attribute_string', $request->variation)
+            ->first();
+
+        if ($variation) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $variation
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Variation not found'
         ]);
     }
 }

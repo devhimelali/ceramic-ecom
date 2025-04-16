@@ -1,3 +1,6 @@
+@php
+    use App\Helpers\ImageUploadHelper;
+@endphp
 <style>
     /* Style each form group */
     .form-group {
@@ -44,25 +47,19 @@
         align-items: center;
     }
 
-    span.variation_value_pointer.selected {
-        background: #e28245;
-        padding: 4px 8px;
-        border-radius: 4px;
-        color: #fff;
-    }
-
     span.color-variation.selected {
-        transform: scale(1.14);
+        transform: scale(1.14) !important;
     }
 
     .variationContainer {
         border: 1px solid #d7d7d7;
-        padding: 6px 14px 0px 14px;
+        padding: 0px 12px 0px 12px;
     }
 
     .singleVariationContainer:not(:last-child) {
         border-bottom: 1px solid #d7d7d7;
-        margin-bottom: 10px;
+        margin: 0 -12px 0 -12px;
+        /*padding: 3px 0;*/
     }
 
     .attribute-title {
@@ -75,35 +72,30 @@
     }
 </style>
 
-<form action="" method="post" id="enquireForm">
+<form action="" method="post" id="cartForm">
     @csrf
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name" style="font-size: 16px">Variant <span class="text-danger"
-                            style="font-size: 12px;">* (Please select the product variation)</span></label>
                     <div class="col-lg-12 variationContainer">
-                        @foreach ($attributes as $group)
+                        @foreach ($result as $group)
                             <div class="row singleVariationContainer"
                                 data-id="variation_{{ Str::slug($group['attribute']) }}">
-                                <div class="col-lg-12">
+                                <div class="col-lg-12 py-2">
                                     <div>
-                                        <h6 class="attribute-title">
-                                            {{ $group['attribute'] }}: <span
-                                                class="selectedValue-{{ Str::slug($group['attribute']) }}"></span>
-                                        </h6>
+                                        <h6 class="attribute-title mb-0">{{ $group['attribute'] }}: <span
+                                                class="selectedValue-{{ Str::slug($group['attribute']) }}"></span></h6>
                                         <ul class="attribute_list">
                                             @foreach ($group['values'] as $value)
                                                 <li class="attribute_list_item">
-                                                    {{-- Hidden input for variation selection --}}
                                                     @if (Str::slug($group['attribute']) == 'color')
                                                         <span
                                                             class="variation_{{ Str::slug($value) }} variation_value_pointer color-variation"
                                                             data-id="{{ Str::slug($value) }}"
                                                             data-key="{{ Str::slug($group['attribute']) }}"
                                                             data-value="{{ $value }}"
-                                                            style="border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px; background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif  height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
+                                                            style="border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px; background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;"></span>
                                                     @else
                                                         <span
                                                             class="variation_{{ Str::slug($value) }} variation_value_pointer"
@@ -124,46 +116,52 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-12">
-                <div class="form-group">
-                    <label for="name">Your Name <span class="text-danger">*</span></label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name">
+                {{-- product quality --}}
+                <h6>Product Quality</h6>
+                <div class="product-details__quantity">
+                    <div class="quantity-box">
+                        <button type="button" class="sub"><i class="fa fa-minus"></i></button>
+                        <input type="text" id="product_quality" value="1">
+                        <button type="button" class="add"><i class="fa fa-plus"></i></button>
+                    </div>
                 </div>
             </div>
             <input type="hidden" name="product_id" id="products_id" value="{{ $product->id }}">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="Enter your email">
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="phone">Phone <span class="text-danger">*</span></label>
-                    <input type="text" name="phone" id="phone" placeholder="Enter your phone">
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="message">Message <span class="text-danger">*</span></label>
-                    <textarea name="message" id="message" placeholder="Enter your message"></textarea>
-                </div>
-            </div>
+            <input type="hidden" name="product_name" id="product_name" value="{{ $product->name }}">
+            <input type="hidden" name="product_price" id="product_price" value="{{ $product->price }}">
+            <input type="hidden" name="image" id="image"
+                value="{{ ImageUploadHelper::getProductImageUrl($product->images->where('type', 'thumbnail')->first()?->image) }}">
         </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded"
             data-bs-dismiss="modal"><span>Close</span>
         </button>
-        <button type="submit"
-            class="floens-btn product__item__link mb-3 p-3 rounded enquireSubmitBtn"><span>Submit</span>
+
+        <button type="submit" class="floens-btn product__item__link mb-3 p-3 rounded enquireSubmitBtn"><span>Add To
+                Cart</span>
         </button>
     </div>
 </form>
-
 <script>
-    // Click event for selecting variation values
+    $(".add").click(function() {
+        let input = $("#product_quality");
+        let currentValue = parseInt(input.val(), 10);
+        input.val(currentValue + 1);
+    });
+
+    $(".sub").click(function() {
+        let input = $("#product_quality");
+        let currentValue = parseInt(input.val(), 10);
+        if (currentValue > 1) {
+            input.val(currentValue - 1);
+        }
+    });
+
+    $("#product_quality").on("input", function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
     $('.variation_value_pointer').on('click', function() {
         var id = $(this).attr('data-id');
         var key = $(this).attr('data-key');
@@ -177,31 +175,22 @@
             type: 'hidden',
             name: 'variation_values[' + key + ']',
             value: value
-        }).appendTo('#enquireForm');
+        }).appendTo('#cartForm');
 
         // Update the UI to show the selected variant
-        $('.selectedValue-' + key).text(value).css({
-            "font-size": "13px",
-            "font-weight": "200",
-            "border": "1px solid red",
-            "padding": "2px 5px",
-            "border-radius": "3px",
-            "background": "red",
-            "color": "white"
-        });
+        // $('.selectedValue-' + key).text(value);
 
         // Highlight the selected variant
         $('.variation_value_pointer[data-key="' + key + '"]').removeClass('selected');
         $(this).addClass('selected');
     });
 
-    // On form submit, get selected values and send the data via AJAX
-    $('#enquireForm').on('submit', function(e) {
+    // On form submit, get selected values
+    $('#cartForm').on('submit', function(e) {
         e.preventDefault(); // Prevent default submission for testing
 
         var selectedVariants = {};
 
-        // Collect the selected variation values
         $('input[name^="variation_values"]').each(function() {
             var match = $(this).attr('name').match(
                 /\[([^\]]+)\]/); // Extract text inside square brackets
@@ -212,44 +201,17 @@
             }
         });
 
-        // Include the product ID and other form data
-        var id = $('#products_id').val();
-        var formData = new FormData(document.getElementById('enquireForm'));
-        var actionUrl = "{{ route('submit.single.product.query', $product->id) }}";
+        var productId = $('#products_id').val();
+        var productName = $('#product_name').val();
+        var productPrice = $('#product_price').val();
+        var productImage = $('#image').val();
+        var productQuality = $('#product_quality').val();
 
-        $.ajax({
-            url: actionUrl,
-            method: 'POST',
-            data: formData,
-            contentType: false, // Ensure that contentType is false when sending FormData
-            processData: false, // Do not process the data as a query string
-            beforeSend: function() {
-                $('.enquireSubmitBtn').prop('disabled', true);
-                $('.enquireSubmitBtn').html(
-                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
-                );
-            },
-            success: function(response) {
-                $('.enquireSubmitBtn').prop('disabled', false);
-                $('.enquireSubmitBtn').html('Submit');
-                if (response.status == 'success') {
-                    notify(response.status, response.message);
-                    $('#enquireForm')[0].reset();
-                    $('#myModal').modal('hide');
-                }
-            },
-            error: function(xhr, status, error) {
-                $('.enquireSubmitBtn').prop('disabled', false);
-                $('.enquireSubmitBtn').html('Submit');
-                let errors = xhr.responseJSON.errors;
-                if (errors) {
-                    $.each(errors, function(key, value) {
-                        let inputField = $('[name="' + key + '"]');
-                        inputField.addClass('is-invalid');
-                        notify('error', value[0]);
-                    });
-                }
-            }
-        });
+        addItem(productId, productName, productPrice, productQuality, productImage, selectedVariants);
+        notify('success', 'Product added to cart.');
+        $('#cartForm')[0].reset();
+        $('#addToCartModal').modal('hide');
+        displayCartItems();
+        $('.totalCartItems').html(getTotalQuantity())
     });
 </script>

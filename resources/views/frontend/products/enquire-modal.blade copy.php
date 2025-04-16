@@ -84,7 +84,7 @@
                     <label for="name" style="font-size: 16px">Variant <span class="text-danger"
                             style="font-size: 12px;">* (Please select the product variation)</span></label>
                     <div class="col-lg-12 variationContainer">
-                        @foreach ($attributes as $group)
+                        @foreach ($result as $group)
                             <div class="row singleVariationContainer"
                                 data-id="variation_{{ Str::slug($group['attribute']) }}">
                                 <div class="col-lg-12">
@@ -96,7 +96,8 @@
                                         <ul class="attribute_list">
                                             @foreach ($group['values'] as $value)
                                                 <li class="attribute_list_item">
-                                                    {{-- Hidden input for variation selection --}}
+                                                    {{-- <input type="hidden" name="variation_values[]"
+                                                        data-id="{{ Str::slug($value) }}" value=""> --}}
                                                     @if (Str::slug($group['attribute']) == 'color')
                                                         <span
                                                             class="variation_{{ Str::slug($value) }} variation_value_pointer color-variation"
@@ -122,9 +123,9 @@
                             </div>
                         @endforeach
                     </div>
+
                 </div>
             </div>
-
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="name">Your Name <span class="text-danger">*</span></label>
@@ -156,14 +157,13 @@
         <button type="button" class="floens-btn product__item__link mb-3 bg-danger p-3 rounded"
             data-bs-dismiss="modal"><span>Close</span>
         </button>
+
         <button type="submit"
             class="floens-btn product__item__link mb-3 p-3 rounded enquireSubmitBtn"><span>Submit</span>
         </button>
     </div>
 </form>
-
 <script>
-    // Click event for selecting variation values
     $('.variation_value_pointer').on('click', function() {
         var id = $(this).attr('data-id');
         var key = $(this).attr('data-key');
@@ -180,28 +180,27 @@
         }).appendTo('#enquireForm');
 
         // Update the UI to show the selected variant
-        $('.selectedValue-' + key).text(value).css({
-            "font-size": "13px",
-            "font-weight": "200",
-            "border": "1px solid red",
-            "padding": "2px 5px",
-            "border-radius": "3px",
-            "background": "red",
-            "color": "white"
-        });
+        // $('.selectedValue-' + key).text(value).css({
+        //     "font-size": "13px",
+        //     "font-weight": "200",
+        //     "border": "1px solid red",
+        //     "padding": "2px 5px",
+        //     "border-radius": "3px",
+        //     "background": "red",
+        //     "color": "white"
+        // });;
 
         // Highlight the selected variant
         $('.variation_value_pointer[data-key="' + key + '"]').removeClass('selected');
         $(this).addClass('selected');
     });
 
-    // On form submit, get selected values and send the data via AJAX
+    // On form submit, get selected values
     $('#enquireForm').on('submit', function(e) {
         e.preventDefault(); // Prevent default submission for testing
 
         var selectedVariants = {};
 
-        // Collect the selected variation values
         $('input[name^="variation_values"]').each(function() {
             var match = $(this).attr('name').match(
                 /\[([^\]]+)\]/); // Extract text inside square brackets
@@ -212,11 +211,9 @@
             }
         });
 
-        // Include the product ID and other form data
         var id = $('#products_id').val();
         var formData = new FormData(document.getElementById('enquireForm'));
         var actionUrl = "{{ route('submit.single.product.query', $product->id) }}";
-
         $.ajax({
             url: actionUrl,
             method: 'POST',

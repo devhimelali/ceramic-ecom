@@ -116,7 +116,7 @@ class FrontendController extends Controller
 
     function productDetails($slug)
     {
-        $product = Product::with('images', 'attributes', 'variations.images')->where('slug', $slug)->first();
+        $product = Product::with('images', 'attributes', 'variations.images')->where('slug', $slug)->firstOrFail();
         $attributes = Attribute::with('values')
             ->where('product_id', $product->id)
             ->get()
