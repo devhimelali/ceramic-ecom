@@ -27,18 +27,10 @@
             </td>
         </tr>
         <tr>
-            <th>Product Details</th>
+            <th>Selected Product Variation:</th>
             <td>
                 <ul>
-                    @forelse ($product->variations as $variation)
-                        <li>
-                            <strong>{{ \App\Models\Attribute::find($variation->pivot->attribute_id)->name }} : </strong>
-                            {{ \App\Models\AttributeValue::find($variation->pivot->attribute_value_id)->value }}
-                        </li>
-
-                    @empty
-                        <p>No Variations</p>
-                    @endforelse
+                    <li style="text-transform: capitalize">{{ ucfirst(string: $product->variation_name) }}</li>
                 </ul>
             </td>
         </tr>
