@@ -100,23 +100,15 @@
             }
         }
 
-
-
-
-        .product__item__title a {
-            font-size: 15px !important;
-            text-align: left !important;
-            text-transform: capitalize;
-            line-height: 0% !important;
-        }
-
         .product__item__content {
-            text-align: left !important;
+            border: none;
+            padding: 0.24px 17px 20px !important;
         }
+
 
         .product__item__price {
             display: flex;
-            justify-content: end;
+            justify-content: center;
             align-items: center;
             font-size: 18px;
             color: var(--floens-text, #7A736A);
@@ -130,18 +122,16 @@
             overflow: hidden;
         }
 
-        .product__item__title {
-            height: 49px;
-        }
+        /* .enquireBtn {
+                                                width: 70%;
+                                                padding: 9px !important;
+                                            }
 
-        .enquireBtn {
-            width: 70%;
-            padding: 9px !important;
-        }
+                                            a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
+                                                padding: 16px !important;
+                                            } */
 
-        a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
-            padding: 16px !important;
-        }
+
 
         .owl-carousel .owl-nav button.owl-prev,
         .owl-carousel .owl-nav button.owl-prev,
@@ -191,7 +181,7 @@
             position: absolute;
             background-color: #434343c7 !important;
             color: #fff !important;
-            font-size: 24px !important;
+            font-size: 22px !important;
             border-radius: 50% !important;
             width: 25px;
             height: 25px;
@@ -208,7 +198,7 @@
             top: 50%;
             background-color: #434343c7 !important;
             color: #fff !important;
-            font-size: 24px !important;
+            font-size: 22px !important;
             border-radius: 50% !important;
             width: 25px;
             height: 25px;
@@ -241,6 +231,43 @@
             .product_item {
                 padding: 5px !important;
             }
+        }
+
+        .product__item {
+            border: 1px solid #DED8D3;
+        }
+
+        .product__item:hover {
+            border: 1px solid #2a4e72;
+        }
+
+        .product__item__content {
+            border: none;
+            padding: 0.24px 17px 20px !important;
+        }
+
+        span.discount {
+            position: absolute;
+            right: 7px;
+            top: 7px;
+            z-index: 2;
+            background: #C7844F;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+        }
+
+        .product__item__price {
+            margin-bottom: 12px;
+        }
+
+        .custom-button {
+            font-size: 14px !important;
+            padding: 12px 24px !important;
+        }
+
+        .addToCartBtn {
+            padding: 19px 24px !important;
         }
     </style>
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
@@ -503,21 +530,49 @@
                     <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                             @php
-                                $images = $product->images->filter(function ($image) {
-                                    return in_array($image->type, ['gallery', 'thumbnail']);
+                                $productImages = $product->images; // This is already a Collection
+                                $variantImages = $product->variations->flatMap(function ($variation) {
+                                    return $variation->images;
                                 });
+
+                                $images = $productImages->merge($variantImages);
                             @endphp
+                            @if ($product->sale_price && $product->regular_price > 0)
+                                @php
+                                    $saving =
+                                        (($product->regular_price - $product->sale_price) / $product->regular_price) *
+                                        100;
+                                @endphp
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                    Saving {{ number_format($saving, 0) }}%
+                                </span>
+                            @else
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
+                            @endif
                             <div class="product__item__image product-carousel owl-carousel">
                                 @foreach ($images as $image)
-                                    <img class="item" loading="lazy"
-                                        src="{{ ImageUploadHelper::getProductImageUrl($image?->image, 'products', 'thumbnail') }}"
-                                        alt="Natural Stone Tiles">
+                                    <img class="item" src="{{ asset($image->path) }}" loading="lazy"
+                                        alt="{{ $product->name }}">
                                 @endforeach
                             </div>
                             <div class="product__item__content">
                                 <p class="product__item__title"><a
                                         href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
-                                <div class="product__item__price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
+                                <div class="product__item__price">
+                                    @if ($product->sale_price && $product->regular_price > 0)
+                                        <span
+                                            style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                        <span style="color: #888; font-size: 16px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                        </span>
+                                    @else
+                                        <span>
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                    @endif
+                                </div>
 
                                 <div class="d-flex align-items-center justify-content-between">
                                     <a href="javascript:void(0);"
@@ -530,7 +585,7 @@
                                         data-product-id="{{ $product->id }}"
                                         data-url="{{ route('add.to.cart.form', $product->id) }}">
                                         <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
-                                        <i style='font-size:17px; right: 8px' class='fas'>&#xf217;</i></a>
+                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                     </a>
                                 </div>
                             </div><!-- /.product-content -->

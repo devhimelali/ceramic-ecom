@@ -36,9 +36,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::resource('attributes', AttributeController::class);
     Route::resource('attribute-values', AttributeValueController::class);
+
     Route::resource('products', ProductController::class);
-    Route::get('get-attribute-values', [GeneralController::class, 'getAttributeValues'])->name('get.attribute.values');
     Route::post('delete-product-image', [ProductController::class, 'deleteProductImage'])->name('delete.product.image');
+    Route::post('/get-variations', [ProductController::class, 'getVariations'])->name('get.variations');
+
+
+    Route::get('get-attribute-values', [GeneralController::class, 'getAttributeValues'])->name('get.attribute.values');
     Route::resource('contacts', ContactController::class);
     Route::post('/contact-us/{id}/reply', [ContactController::class, 'reply'])->name('contact.reply');
     // Route::resource('orders', OrderController::class);
@@ -49,37 +53,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('marketing', [MarketingController::class, 'index'])->name('marketing.index');
     Route::post('send-sms-selected-users', [MarketingController::class, 'sendSMSSelectedUsers'])->name('send.sms.selected.users');
     Route::post('send-sms-all-users', [MarketingController::class, 'sendSMSAllUsers'])->name('send.sms.all.users');
-});
-
-Route::post('/get-variations', function (Request $request) {
-    $productId = $request->product_id;
-    $combinations = $request->combinations; // array of attribute_string like "Size: M / Color: Red"
-
-    $variations = App\Models\Variation::with('images')->where('product_id', $productId)
-        ->whereIn('attribute_string', $combinations)
-        ->get()
-        ->keyBy('attribute_string');
-
-    return response()->json($variations);
-});
-
-use Illuminate\Support\Facades\Storage;
-
-Route::post('/variation-image/delete', function (Request $request) {
-    $request->validate([
-        'id' => 'required|integer|exists:images,id'
-    ]);
-
-    $image =  App\Models\Image::findOrFail($request->id);
-
-    // Delete image file
-    if (Storage::disk('public')->exists($image->path)) {
-        Storage::disk('public')->delete($image->path);
-    }
-    // Delete record
-    $image->delete();
-
-    return response()->json(['status' => 'success']);
 });
 
 
