@@ -204,7 +204,8 @@
                                             <div class="product__sidebar__value">
                                                 <input type="checkbox" id="attribute_value-{{ $attributeValue->id }}"
                                                     name="attribute[{{ $name }}][]"
-                                                    value="{{ $attributeValue->id }}" class="product__sidebar__checkbox">
+                                                    value="{{ $attributeValue->value }}"
+                                                    class="product__sidebar__checkbox">
                                                 <label for="attribute_value-{{ $attributeValue->id }}"
                                                     class="product__sidebar__label">
                                                     {{ $attributeValue->value }}
@@ -285,6 +286,8 @@
                         ','));
                     newUrl += '?' + queryString.toString();
                 }
+
+                console.log(selectedValues);
 
                 window.history.pushState({
                     path: newUrl

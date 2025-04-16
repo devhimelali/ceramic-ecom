@@ -1,6 +1,3 @@
-@php
-    use App\Helpers\ImageUploadHelper;
-@endphp
 <style>
     /* Style the submit button */
     .custom-button {

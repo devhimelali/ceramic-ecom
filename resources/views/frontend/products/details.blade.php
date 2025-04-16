@@ -1,6 +1,3 @@
-@php
-    use App\Helpers\ImageUploadHelper;
-@endphp
 @extends('frontend.layouts.app')
 @section('title', $product->name)
 @section('content')
@@ -25,18 +22,20 @@
             <div class="row gutter-y-50">
                 <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
                     <div class="product-details__img">
+                        @php
+                            $productImages = $product->images; // This is already a Collection
+                            $variantImages = $product->variations->flatMap(function ($variation) {
+                                return $variation->images;
+                            });
+
+                            $images = $productImages->merge($variantImages);
+                        @endphp
                         <div class="swiper product-details__gallery-top">
                             <div class="swiper-wrapper">
-                                @php
-                                    $images = $product
-                                        ->images()
-                                        ->whereIn('type', ['gallery', 'thumbnail'])
-                                        ->get();
-                                @endphp
                                 @forelse ($images as $image)
                                     <div class="swiper-slide">
-                                        <img src="{{ ImageUploadHelper::getProductImageUrl($image->image) }}"
-                                            alt="product details image" class="product-details__gallery-top__img">
+                                        <img src="{{ asset($image->path) }}" alt="product details image"
+                                            class="product-details__gallery-top__img">
                                     </div>
                                 @empty
                                     <div class="swiper-slide">
@@ -50,8 +49,8 @@
                             <div class="swiper-wrapper">
                                 @foreach ($images as $image)
                                     <div class="product-details__gallery-thumb-slide swiper-slide">
-                                        <img src="{{ ImageUploadHelper::getProductImageUrl($image->image) }}"
-                                            alt="product details thumb" class="product-details__gallery-thumb__img">
+                                        <img src="{{ asset($image->path) }}" alt="product details thumb"
+                                            class="product-details__gallery-thumb__img">
                                     </div>
                                 @endforeach
                             </div>
@@ -120,6 +119,7 @@
     <!-- Products End -->
 @endsection
 @section('page-script')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script>
         $(document).ready(function() {
             displayCartItems();
@@ -191,6 +191,7 @@
     </script>
 @endsection
 @section('page-style')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     <style>
         .product-details__gallery-thumb__img {
             width: 83px !important;
