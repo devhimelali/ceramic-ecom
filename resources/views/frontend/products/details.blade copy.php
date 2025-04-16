@@ -75,27 +75,14 @@
                                     <div class="col-12">
                                         <h6 class="mb-2">{{ $group['attribute'] }}:</h6>
                                         <div class="flex-wrap gap-2 d-flex">
-                                            {{-- @foreach ($group['values'] as $value)
-                                                <label class="attribute-option">
-                                                    <input type="radio"
-                                                        name="attribute_{{ Str::slug($group['attribute']) }}"
-                                                        value="{{ $value }}" class="d-none attribute-input">
-                                                    <span class="badge bg-secondary">{{ $value }}</span>
-                                                </label>
-                                            @endforeach --}}
                                             @foreach ($group['values'] as $value)
-                                                <label class="attribute-option">
-                                                    <input type="radio" class="attribute-input d-none"
-                                                        name="{{ $group['attribute'] }}" value="{{ $value }}">
-                                                    <span class="badge bg-secondary">{{ $value }}</span>
-                                                </label>
+                                                <span class="p-2 badge bg-secondary">{{ $value }}</span>
                                             @endforeach
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
-                        <div id="price-wrapper"></div>
 
                         <div class="product-details__buttons">
                             <div class="d-flex align-items-center justify-content-center">
@@ -133,55 +120,6 @@
 @endsection
 @section('page-script')
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const totalAttributes = {{ count($attributes) }};
-
-            document.querySelectorAll('.attribute-input').forEach(input => {
-                input.addEventListener('change', () => {
-                    let selectedAttributes = {};
-
-                    document.querySelectorAll('.attribute-input:checked').forEach(selected => {
-                        selectedAttributes[selected.name] = selected.value;
-                    });
-
-                    if (Object.keys(selectedAttributes).length === totalAttributes) {
-                        // Build attribute_string in the exact format
-                        let attributeString = Object.entries(selectedAttributes)
-                            .map(([key, value]) => `${key}: ${value}`)
-                            .join(' / ');
-
-                        $.ajax({
-                            url: "{{ route('get.product.variation.price', $product->id) }}",
-                            method: 'GET',
-                            data: {
-                                variation: attributeString
-                            },
-                            beforeSend: function() {
-                                $('#price-wrapper').html(
-                                    '<div id="loader" class="text-danger">Loading...</div>'
-                                );
-                            },
-                            success: function(response) {
-                                $('#loader').hide();
-                                if (response.status === 'success') {
-                                    let html =
-                                        `<span class="price">$ ${response.data.price}</span>`;
-                                    $('#price-wrapper').html(html);
-                                } else {
-                                    alert('Variation not found.');
-                                }
-                            },
-                            error: function() {
-                                $('#loader').hide();
-                                alert('Something went wrong.');
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
     <script>
         $(document).ready(function() {
             displayCartItems();
@@ -255,32 +193,6 @@
 @section('page-style')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     <style>
-        span.price {
-            font-size: 20px;
-            font-weight: 700;
-            color: #e28245;
-        }
-
-        .product-details__buttons {
-            margin-top: 15px !important;
-        }
-
-        .attribute-option {
-            cursor: pointer;
-        }
-
-        .attribute-option .badge {
-            padding: 0.6rem 1rem;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .attribute-option input:checked+.badge {
-            background-color: #e28245 !important;
-            color: white;
-            border-color: #db783b;
-        }
-
         .product-details__gallery-thumb__img {
             width: 83px !important;
             height: 83px !important;

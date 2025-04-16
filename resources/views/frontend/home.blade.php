@@ -123,13 +123,13 @@
         }
 
         /* .enquireBtn {
-                                                width: 70%;
-                                                padding: 9px !important;
-                                            }
+                                                            width: 70%;
+                                                            padding: 9px !important;
+                                                        }
 
-                                            a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
-                                                padding: 16px !important;
-                                            } */
+                                                        a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
+                                                            padding: 16px !important;
+                                                        } */
 
 
 
@@ -235,6 +235,7 @@
 
         .product__item {
             border: 1px solid #DED8D3;
+            border-radius: 4px;
         }
 
         .product__item:hover {
@@ -268,6 +269,10 @@
 
         .addToCartBtn {
             padding: 19px 24px !important;
+        }
+
+        .product__item__image {
+            border-radius: 4px;
         }
     </style>
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
