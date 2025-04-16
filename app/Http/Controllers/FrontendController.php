@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Slider;
 use App\Models\Product;
@@ -20,8 +21,9 @@ class FrontendController extends Controller
             'active' => 'home',
             'sliders' => Slider::get(),
             'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->limit(15)->get(),
-            'products' => Product::with('images', 'attributes', 'attributeValues')->where('status', StatusEnum::ACTIVE)->latest()->limit(4)->get(),
+            'products' => Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE)->latest()->limit(4)->get()
         ];
+
         return view('frontend.home', $data);
     }
 
@@ -39,35 +41,26 @@ class FrontendController extends Controller
     public function productsPage(Request $request)
     {
         $attributes = [];
-        $query = Product::query();
+        $query = Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE);
+
+
         // if ($request->has('attribute')) {
-        //     $decryptedValues = array_map(function ($value) {
-        //         return base64_decode($value, true);
-        //     }, explode(',', $request->input('attribute')));
-        //     $attributes = $decryptedValues;
-        //     $query->whereHas('attributes', function ($query) use ($attributes) {
-        //         $query->whereIn('product_attribute_values.attribute_value_id', $attributes);
-        //     });
+        //     $decryptedValues = array_filter(array_map(function ($value) {
+        //         $decoded = base64_decode($value, true);
+        //         return $decoded !== false ? $decoded : null;
+        //     }, explode(',', $request->input('attribute'))));
+        //     // dd($decryptedValues);
+        //     if (!empty($decryptedValues)) {
+        //         $attributes = $decryptedValues;
+        //         // dd($attributes);
+        //         foreach ($attributes as $key => $value) {
+        //             // dd($value);
+        //             $query->whereHas('attributes', function ($query) use ($value) {
+        //                 $query->where('product_attribute_values.attribute_value_id', $value);
+        //             });
+        //         }
+        //     }
         // }
-
-
-        if ($request->has('attribute')) {
-            $decryptedValues = array_filter(array_map(function ($value) {
-                $decoded = base64_decode($value, true);
-                return $decoded !== false ? $decoded : null;
-            }, explode(',', $request->input('attribute'))));
-            // dd($decryptedValues);
-            if (!empty($decryptedValues)) {
-                $attributes = $decryptedValues;
-                // dd($attributes);
-                foreach ($attributes as $key => $value) {
-                    // dd($value);
-                    $query->whereHas('attributes', function ($query) use ($value) {
-                        $query->where('product_attribute_values.attribute_value_id', $value);
-                    });
-                }
-            }
-        }
 
         if ($request->has('min_price') && $request->has('max_price')) {
             $priceRange = [$request->min_price, $request->max_price];
@@ -97,15 +90,17 @@ class FrontendController extends Controller
                 'message' => 'Products updated successfully!',
             ]);
         }
-        $attributesData = Attribute::with([
-            'values' => function ($query) {
-                $query->where('status', StatusEnum::ACTIVE)
-                    ->whereNotNull('value');
-            }
-        ])->get();
+
+        $allAttributes = Attribute::with('values')->get();
+
+        $groupedAttributes = $allAttributes->groupBy('name')->map(function ($attributes) {
+            // Merge all values across attributes with same name and remove duplicates
+            return $attributes->flatMap->values->unique('value');
+        });
+
         return view('frontend.products.index', [
             'active'     => 'products',
-            'attributes' => $attributesData,
+            'attributes' => $groupedAttributes,
             'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->get(),
         ]);
     }
@@ -117,7 +112,7 @@ class FrontendController extends Controller
 
     function productDetails($slug)
     {
-        $product = Product::with('attributes', 'attributeValues')->where('slug', $slug)->first();
+        $product = Product::with('attributes')->where('slug', $slug)->first();
 
         $result = [];
 

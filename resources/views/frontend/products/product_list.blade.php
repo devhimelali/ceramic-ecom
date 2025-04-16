@@ -25,32 +25,74 @@
     .owl-carousel .owl-nav button.owl-prev,
     .owl-carousel button.owl-dot.owl-nav {
         position: absolute;
-        left: 20px;
+        left: 15px;
         top: 50%;
-        background-color: var(--base-color) !important;
-        display: block;
-        padding: 0 .3em !important;
-        font-size: 3em;
-        margin: 0;
-        cursor: pointer;
-        color: #fff;
-        transform: translate(-50%, -50%);
+        background-color: #434343c7 !important;
+        color: #fff !important;
+        font-size: 22px !important;
+        border-radius: 50% !important;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-50%);
     }
 
     .owl-carousel .owl-nav button.owl-next,
     .owl-carousel .owl-nav button.owl-next,
     .owl-carousel button.owl-dot.owl-nav {
         position: absolute;
-        right: -23px;
+        right: 12px;
         top: 50%;
-        background-color: var(--base-color) !important;
-        display: block;
-        padding: 0 .3em !important;
-        font-size: 3em;
-        margin: 0;
-        cursor: pointer;
-        color: #fff;
-        transform: translate(-50%, -50%);
+        background-color: #434343c7 !important;
+        color: #fff !important;
+        font-size: 22px !important;
+        border-radius: 50% !important;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+    .product__item {
+        border: 1px solid #DED8D3;
+    }
+
+    .product__item:hover {
+        border: 1px solid #2a4e72;
+    }
+
+    .product__item__content {
+        border: none;
+        padding: 0.24px 17px 20px !important;
+    }
+
+    span.discount {
+        position: absolute;
+        right: 7px;
+        top: 7px;
+        z-index: 2;
+        background: #C7844F;
+        color: #fff !important;
+        padding: 2px 8px;
+        border-radius: 18px;
+    }
+
+    .product__item__price {
+        margin-bottom: 12px;
+    }
+
+    .custom-button {
+        font-size: 14px !important;
+        padding: 12px 24px !important;
+    }
+
+    .addToCartBtn {
+        padding: 19px 24px !important;
     }
 </style>
 <div class="row gutter-y-30">
@@ -58,28 +100,49 @@
         <div class="col-xl-4 col-lg-6 col-md-6 ">
             <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                 @php
-                    $images = $product->images->filter(function ($image) {
-                        return in_array($image->type, ['gallery', 'thumbnail']);
+                    $productImages = $product->images; // This is already a Collection
+                    $variantImages = $product->variations->flatMap(function ($variation) {
+                        return $variation->images;
                     });
+
+                    $images = $productImages->merge($variantImages);
                 @endphp
+                @if ($product->sale_price && $product->regular_price > 0)
+                    @php
+                        $saving = (($product->regular_price - $product->sale_price) / $product->regular_price) * 100;
+                    @endphp
+                    <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                        Saving {{ number_format($saving, 0) }}%
+                    </span>
+                @else
+                    <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
+                @endif
                 <div class="product__item__image product-carousel owl-carousel">
                     @foreach ($images as $image)
-                        <img class="item"
-                            src="{{ ImageUploadHelper::getProductImageUrl($image?->image, 'products', 'thumbnail') }}"
-                            alt="Natural Stone Tiles">
+                        <img class="item" src="{{ asset($image->path) }}" alt="Natural Stone Tiles">
                     @endforeach
                 </div>
 
                 <div class="product__item__content">
-                    <h6 class="product__item__title"><a
+                    <h6 class="product__item__title">
+                        <a
                             href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
                     </h6><!-- /.product-title -->
-                    <div class="product__item__price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
-                    <!-- /.product-price -->
-                    {{-- <a href="#" class="py-3 floens-btn product__item__link">
-                        <span>Add to Cart</span>
-                        <i class="icon-cart"></i>
-                    </a> --}}
+                    <div class="product__item__price">
+                        @if ($product->sale_price && $product->regular_price > 0)
+                            <span
+                                style="text-decoration: line-through; color: #888; font-size: 16px; margin-right: 10px;">
+                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                            </span>
+                            <span style="color: #888; font-size: 16px;">
+                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                            </span>
+                        @else
+                            <span>
+                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                            </span>
+                        @endif
+                    </div>
 
                     <div class="d-flex align-items-center justify-content-center">
                         <a href="javascript:void(0);"

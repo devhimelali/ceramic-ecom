@@ -179,10 +179,10 @@
 
                         </div><!-- /.price-slider -->
                         <div class="product__categories product__sidebar__item">
-                            @foreach ($attributes as $attribute)
+                            @foreach ($attributes as $name => $values)
                                 @php
                                     // Retrieve and decode attribute values from request
-                                    $selectedValues = request()->input('attribute.' . $attribute->id, []);
+                                    $selectedValues = request()->input('attribute.' . $name, []);
 
                                     // Ensure it's an array and decode Base64 values
                                     $decodedValues = array_map(
@@ -192,18 +192,18 @@
                                 @endphp
                                 <div class="product__sidebar__attribute">
                                     <h3 class="product__sidebar__title product__categories__title"
-                                        data-attribute-id="{{ $attribute->id }}">
-                                        {{ $attribute->name }}
-                                        <span class="expand-icon" id="expand-icon-{{ $attribute->id }}">
+                                        data-attribute-id="{{ $name }}">
+                                        {{ $name }}
+                                        <span class="expand-icon" id="expand-icon-{{ $name }}">
                                             <i class="fas fa-plus"></i>
                                         </span>
                                     </h3>
-                                    <div class="product__sidebar__values" id="values-{{ $attribute->id }}"
+                                    <div class="product__sidebar__values" id="values-{{ $name }}"
                                         style="display: none;">
-                                        @foreach ($attribute->values as $attributeValue)
+                                        @foreach ($values as $attributeValue)
                                             <div class="product__sidebar__value">
                                                 <input type="checkbox" id="attribute_value-{{ $attributeValue->id }}"
-                                                    name="attribute[{{ $attribute->id }}][]"
+                                                    name="attribute[{{ $name }}][]"
                                                     value="{{ $attributeValue->id }}" class="product__sidebar__checkbox">
                                                 <label for="attribute_value-{{ $attributeValue->id }}"
                                                     class="product__sidebar__label">
