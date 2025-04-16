@@ -218,6 +218,7 @@
 
         $(document).ready(function() {
             $('.select2').select2();
+            renderVariations();
             let attrIndex = $('#attributesWrapper .row').length;
 
             window.addAttribute = function() {
