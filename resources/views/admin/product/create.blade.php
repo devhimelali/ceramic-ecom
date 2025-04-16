@@ -1,5 +1,6 @@
 {{-- resources/views/products/create.blade.php --}}
 @extends('layouts.app')
+@section('title', 'Create Product')
 @section('content')
     {{--  Start breadcrumb  --}}
     <div class="row">
