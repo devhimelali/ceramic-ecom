@@ -45,27 +45,30 @@ class FrontendController extends Controller
 
 
         if ($request->has('attribute')) {
-            dd($request->input('attribute'));
-            // $decryptedValues = array_filter(array_map(function ($value) {
-            //     $decoded = base64_decode($value, true);
-            //     return $decoded !== false ? $decoded : null;
-            // }, explode(',', $request->input('attribute'))));
-            // // dd($decryptedValues);
-            // if (!empty($decryptedValues)) {
-            //     $attributes = $decryptedValues;
-            //     // dd($attributes);
-            //     foreach ($attributes as $key => $value) {
-            //         // dd($value);
-            //         $query->whereHas('attributes', function ($query) use ($value) {
-            //             $query->where('product_attribute_values.attribute_value_id', $value);
-            //         });
-            //     }
-            // }
+            $decryptedValues = array_filter(array_map(function ($value) {
+                $decoded = base64_decode($value, true);
+                return $decoded !== false ? $decoded : null;
+            }, explode(',', $request->input('attribute'))));
+            if (!empty($decryptedValues)) {
+                $attributes = $decryptedValues;
+
+                $query->whereHas('variations', function ($q) use ($attributes) {
+                    foreach ($attributes as $index => $value) {
+                        if ($index === 0) {
+                            $q->where('attribute_string', 'like', '%' . $value . '%');
+                        } else {
+                            $q->orWhere('attribute_string', 'like', '%' . $value . '%');
+                        }
+                    }
+                });
+            }
         }
 
         if ($request->has('min_price') && $request->has('max_price')) {
-            $priceRange = [$request->min_price, $request->max_price];
-            $query->whereBetween('price', $priceRange);
+            $min = $request->min_price;
+            $max = $request->max_price;
+
+            $query->whereRaw('COALESCE(sale_price, regular_price) BETWEEN ? AND ?', [$min, $max]);
         }
 
 

@@ -183,7 +183,7 @@
                                 @php
                                     // Retrieve and decode attribute values from request
                                     $selectedValues = request()->input('attribute.' . $name, []);
-
+                                    // dd($selectedValues);
                                     // Ensure it's an array and decode Base64 values
                                     $decodedValues = array_map(
                                         fn($value) => base64_decode($value),
