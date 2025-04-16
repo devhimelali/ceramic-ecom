@@ -1,6 +1,3 @@
-@php
-    use App\Helpers\ImageUploadHelper;
-@endphp
 <style>
     /* Style the submit button */
     .custom-button {
@@ -60,6 +57,7 @@
 
     .product__item {
         border: 1px solid #DED8D3;
+        border-radius: 4px;
     }
 
     .product__item:hover {
@@ -93,6 +91,10 @@
 
     .addToCartBtn {
         padding: 19px 24px !important;
+    }
+
+    .product__item__image {
+        border-radius: 4px;
     }
 </style>
 <div class="row gutter-y-30">

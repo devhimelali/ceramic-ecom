@@ -44,27 +44,31 @@ class FrontendController extends Controller
         $query = Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE);
 
 
-        // if ($request->has('attribute')) {
-        //     $decryptedValues = array_filter(array_map(function ($value) {
-        //         $decoded = base64_decode($value, true);
-        //         return $decoded !== false ? $decoded : null;
-        //     }, explode(',', $request->input('attribute'))));
-        //     // dd($decryptedValues);
-        //     if (!empty($decryptedValues)) {
-        //         $attributes = $decryptedValues;
-        //         // dd($attributes);
-        //         foreach ($attributes as $key => $value) {
-        //             // dd($value);
-        //             $query->whereHas('attributes', function ($query) use ($value) {
-        //                 $query->where('product_attribute_values.attribute_value_id', $value);
-        //             });
-        //         }
-        //     }
-        // }
+        if ($request->has('attribute')) {
+            $decryptedValues = array_filter(array_map(function ($value) {
+                $decoded = base64_decode($value, true);
+                return $decoded !== false ? $decoded : null;
+            }, explode(',', $request->input('attribute'))));
+            if (!empty($decryptedValues)) {
+                $attributes = $decryptedValues;
+
+                $query->whereHas('variations', function ($q) use ($attributes) {
+                    foreach ($attributes as $index => $value) {
+                        if ($index === 0) {
+                            $q->where('attribute_string', 'like', '%' . $value . '%');
+                        } else {
+                            $q->orWhere('attribute_string', 'like', '%' . $value . '%');
+                        }
+                    }
+                });
+            }
+        }
 
         if ($request->has('min_price') && $request->has('max_price')) {
-            $priceRange = [$request->min_price, $request->max_price];
-            $query->whereBetween('price', $priceRange);
+            $min = $request->min_price;
+            $max = $request->max_price;
+
+            $query->whereRaw('COALESCE(sale_price, regular_price) BETWEEN ? AND ?', [$min, $max]);
         }
 
 
@@ -112,39 +116,22 @@ class FrontendController extends Controller
 
     function productDetails($slug)
     {
-        $product = Product::with('attributes')->where('slug', $slug)->first();
+        $product = Product::with('images', 'attributes', 'variations.images')->where('slug', $slug)->first();
+        $attributes = Attribute::with('values')
+            ->where('product_id', $product->id)
+            ->get()
+            ->groupBy('name')
+            ->map(function ($group, $name) {
+                return [
+                    'attribute' => $name,
+                    'values' => $group->flatMap->values->pluck('value')->unique()->values(),
+                ];
+            })->values();
 
-        $result = [];
-
-        // Iterate over the product's attributes
-        foreach ($product->attributes as $attribute) {
-            // Get the attribute name
-            $attributeName = $attribute->name;
-
-            // Get the value from the pivot table
-            $pivotValueId = $attribute->pivot->attribute_value_id; // This will now be available
-
-            // Find the corresponding value from the attribute values
-            $selectedValue = $attribute->values->firstWhere('id', $pivotValueId);
-
-            if ($selectedValue) {
-                if (!isset($result[$attributeName])) {
-                    $result[$attributeName] = [
-                        'attribute' => $attributeName,
-                        'values' => [],
-                    ];
-                }
-
-                // Append the value if not already added
-                if (!in_array($selectedValue->value, $result[$attributeName]['values'])) {
-                    $result[$attributeName]['values'][] = $selectedValue->value;
-                }
-            }
-        }
         $data = [
             'active' => 'products',
             'product' => $product,
-            'attributes' => $result
+            'attributes' => $attributes
         ];
         return view('frontend.products.details', $data);
     }
