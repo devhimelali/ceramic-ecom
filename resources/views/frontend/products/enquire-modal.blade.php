@@ -199,22 +199,41 @@
     $('#enquireForm').on('submit', function(e) {
         e.preventDefault(); // Prevent default submission for testing
 
-        var selectedVariants = {};
+        // var selectedVariants = {};
 
-        // Collect the selected variation values
+        // // Collect the selected variation values
+        // $('input[name^="variation_values"]').each(function() {
+        //     var match = $(this).attr('name').match(
+        //         /\[([^\]]+)\]/); // Extract text inside square brackets
+        //     if (match) {
+        //         var key = match[1]; // Get the extracted key
+        //         var value = $(this).val();
+        //         selectedVariants[key] = value;
+        //     }
+        // });
+        let selectedVariants = {};
+
+        // Loop through each input with name starting with variation_values
         $('input[name^="variation_values"]').each(function() {
-            var match = $(this).attr('name').match(
-                /\[([^\]]+)\]/); // Extract text inside square brackets
+            var match = $(this).attr('name').match(/\[([^\]]+)\]/); // extract key from [key]
             if (match) {
-                var key = match[1]; // Get the extracted key
-                var value = $(this).val();
+                var key = match[1]; // e.g., Color, Size, etc.
+                var value = $(this).val(); // selected value
                 selectedVariants[key] = value;
             }
         });
 
+        // Convert to attribute_string format
+        let attributeString = Object.entries(selectedVariants)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(' / ');
+
+
+
         // Include the product ID and other form data
         var id = $('#products_id').val();
         var formData = new FormData(document.getElementById('enquireForm'));
+        formData.append('variation', attributeString);
         var actionUrl = "{{ route('submit.single.product.query', $product->id) }}";
 
         $.ajax({

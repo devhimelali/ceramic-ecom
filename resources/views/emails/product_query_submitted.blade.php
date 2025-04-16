@@ -19,9 +19,7 @@
         <li><strong>Message:</strong> {{ $queryData['message'] }}</li>
         <li><strong>Selected Product Variation:</strong>
             <ol>
-                @foreach ($queryData['variations'] as $variation => $value)
-                    <li><strong>{{ ucfirst($variation) }}:</strong> {{ $value }}</li>
-                @endforeach
+                <li style="text-transform: capitalize">{{ ucfirst($queryData['variations']) }}</li>
             </ol>
         </li>
 

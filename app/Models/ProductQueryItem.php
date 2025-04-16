@@ -11,6 +11,7 @@ class ProductQueryItem extends Model
         'product_query_id',
         'product_id',
         'quantity',
+        'variation_name'
     ];
 
 
@@ -27,8 +28,7 @@ class ProductQueryItem extends Model
     public function variations()
     {
         return $this->belongsToMany(Product::class, 'product_query_item_variation')
-                    ->withPivot('attribute_id', 'attribute_value_id')
-                    ->withTimestamps();
+            ->withPivot('attribute_id', 'attribute_value_id')
+            ->withTimestamps();
     }
-
 }
