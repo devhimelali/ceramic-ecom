@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Edit Product')
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -217,6 +218,7 @@
 
         $(document).ready(function() {
             $('.select2').select2();
+            renderVariations();
             let attrIndex = $('#attributesWrapper .row').length;
 
             window.addAttribute = function() {
