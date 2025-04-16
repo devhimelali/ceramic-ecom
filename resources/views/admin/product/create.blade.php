@@ -36,77 +36,94 @@
 
                 <div class="card-body">
                     <form action="{{ route('products.store') }}" method="POST" id="createProductForm"
-                          enctype="multipart/form-data">
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-md-9">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" id="name" name="name"
-                                           placeholder="Name">
+                                        placeholder="Name">
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="category" class="form-label">Category</label>
+                                        <select class="form-control select2" data-choice id="category" name="category">
+                                            <option value="" selected disabled>Select Category</option>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="brand" class="form-label">Brand</label>
+                                        <select class="form-control select2" data-choice id="brand" name="brand">
+                                            <option value="" selected disabled>Select Brand</option>
+                                            @foreach ($brands as $brand)
+                                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label for="regular_price" class="form-label">Regular Price</label>
+                                            <input type="text" class="form-control" id="regular_price"
+                                                name="regular_price" placeholder="Price">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label for="sale_price" class="form-label">Sale Price</label>
+                                            <input type="text" class="form-control" id="sale_price" name="sale_price"
+                                                placeholder="Price">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label for="status" class="form-label">Status</label>
+                                            <select class="form-control select2" id="productStatus" name="status">
+                                                <option value="" selected disabled>Select Status</option>
+                                                @foreach ($statuses as $status)
+                                                    <option value="{{ $status->value }}">{{ $status->description() }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="category" class="form-label">Category</label>
-                                    <select class="form-control select2" data-choice id="category" name="category"
-                                            required>
-                                        <option value="" selected disabled>Select Category</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="brand" class="form-label">Brand</label>
-                                    <select class="form-control select2" data-choice id="brand" name="brand">
-                                        <option value="" selected disabled>Select Brand</option>
-                                        @foreach ($brands as $brand)
-                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label for="regular_price" class="form-label">Regular Price</label>
-                                    <input type="text" class="form-control" id="regular_price" name="regular_price"
-                                           placeholder="Price">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label for="sale_price" class="form-label">Sale Price</label>
-                                    <input type="text" class="form-control" id="sale_price" name="sale_price"
-                                           placeholder="Price">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Status</label>
-                                    <select class="form-control select2" id="productStatus" name="status" required>
-                                        <option value="" selected disabled>Select Status</option>
-                                        @foreach ($statuses as $status)
-                                            <option value="{{ $status->value }}">{{ $status->description() }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                            <div class="pt-4 col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="text-center">
+                                        <div class="custom-upload-box">
+                                            <img src="{{ asset('assets/placeholder-image-2.png') }}" class="preview-img"
+                                                alt="Image Preview">
+                                            <button type="button" class="remove-btn removeImage"
+                                                style="display:none;">&times;
+                                            </button>
+                                        </div>
+                                        <input type="file" name="image" class="d-none hidden-input" accept="image/*">
 
+                                        <button type="button" class="px-4 mt-1 btn btn-dark"
+                                            onclick="setupImagePreview('.hidden-input', '.preview-img')"><i
+                                                class="bx bx-cloud-upload fs-3"></i>Thumbnail Image
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="short_description" class="form-label">Short Description</label>
-                                    <textarea class="form-control" id="short_description" name="short_description"
-                                              rows="4"></textarea>
+                                    <textarea class="form-control" id="short_description" name="short_description" rows="4"></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control ckeditor-classic" id="description" name="description"
-                                              rows="4"></textarea>
+                                    <textarea class="form-control ckeditor-classic" id="description" name="description" rows="4"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -116,11 +133,11 @@
                             <div class="row gy-5">
                                 <div class="col-lg-3">
                                     <div class="nav flex-column custom-nav nav-pills" role="tablist"
-                                         aria-orientation="vertical">
+                                        aria-orientation="vertical">
                                         {{-- Tab 1 --}}
                                         <button class="nav-link active" id="variation-tab" data-bs-toggle="pill"
-                                                data-bs-target="#v-pills-bill-info" type="button" role="tab"
-                                                aria-controls="v-pills-bill-info" aria-selected="true">
+                                            data-bs-target="#v-pills-bill-info" type="button" role="tab"
+                                            aria-controls="v-pills-bill-info" aria-selected="true">
                                             <span class="step-title me-2">
                                                 <i class="ri-close-circle-fill step-icon me-2"></i> Step 1
                                             </span>
@@ -128,8 +145,8 @@
                                         </button>
                                         {{-- Tab 2 --}}
                                         <button class="nav-link" id="attribute-tab"
-                                                data-bs-target="#v-pills-bill-address" type="button" role="tab"
-                                                aria-controls="v-pills-bill-address" aria-selected="false">
+                                            data-bs-target="#v-pills-bill-address" type="button" role="tab"
+                                            aria-controls="v-pills-bill-address" aria-selected="false">
                                             <span class="step-title me-2">
                                                 <i class="ri-close-circle-fill step-icon me-2"></i> Step 2
                                             </span>
@@ -142,23 +159,22 @@
                                     <div class="px-lg-4">
                                         <div class="tab-content">
                                             {{-- Tab 1 --}}
-                                            <div class="tab-pane fade show active" id="v-pills-bill-info"
-                                                 role="tabpanel"
-                                                 aria-labelledby="variation-tab">
+                                            <div class="tab-pane fade show active" id="v-pills-bill-info" role="tabpanel"
+                                                aria-labelledby="variation-tab">
                                                 <div id="attributesWrapper">
                                                     <div class="row mb-2">
                                                         <div class="col-md-5">
                                                             <input name="attributes[0][name]" type="text"
-                                                                   class="form-control" placeholder="Attribute Name">
+                                                                class="form-control" placeholder="Attribute Name">
                                                         </div>
                                                         <div class="col-md-5">
                                                             <input name="attributes[0][values]" type="text"
-                                                                   class="form-control"
-                                                                   placeholder="Comma separated values (e.g. Red, Blue)">
+                                                                class="form-control"
+                                                                placeholder="Comma separated values (e.g. Red, Blue)">
                                                         </div>
                                                         <div class="col-md-2">
                                                             <button type="button" class="btn btn-success"
-                                                                    onclick="addAttribute()">+
+                                                                onclick="addAttribute()">+
                                                             </button>
                                                         </div>
                                                     </div>
@@ -166,8 +182,8 @@
 
                                                 <div class="d-flex align-items-start gap-3 mt-4">
                                                     <button type="button"
-                                                            class="btn btn-success btn-label right ms-auto nexttab nexttab"
-                                                            data-nexttab="attribute-tab"><i
+                                                        class="btn btn-success btn-label right ms-auto nexttab nexttab"
+                                                        data-nexttab="attribute-tab"><i
                                                             class="ri-arrow-right-line label-icon align-middle fs-lg ms-2"></i>Step
                                                         2
                                                     </button>
@@ -176,7 +192,7 @@
                                             <!-- end tab pane -->
                                             {{-- Tab 2 --}}
                                             <div class="tab-pane fade" id="v-pills-bill-address" role="tabpanel"
-                                                 aria-labelledby="attribute-tab">
+                                                aria-labelledby="attribute-tab">
                                                 <p class="text-muted">Based on the attribute combinations, you can
                                                     define
                                                     each variation's
@@ -194,37 +210,7 @@
                                 <!-- end col -->
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="pt-4 col-md-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="text-center">
-                                        <div class="custom-upload-box">
-                                            <img src="{{ asset('assets/placeholder-image-2.png') }}" class="preview-img"
-                                                 alt="Image Preview">
-                                            <button type="button" class="remove-btn removeImage"
-                                                    style="display:none;">&times;
-                                            </button>
-                                        </div>
-                                        <input type="file" name="image" class="d-none hidden-input"
-                                               accept="image/*">
 
-                                        <button type="button" class="px-4 mt-1 btn btn-dark"
-                                                onclick="setupImagePreview('.hidden-input', '.preview-img')"><i
-                                                class="bx bx-cloud-upload fs-3"></i>Thumbnail Image
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pt-4 col-md-9">
-                                <div id="dropZone" class="drop-zone">
-                                    Drag & Drop Images Here or Click to Select
-                                    <input type="file" id="imageInput" name="images[]" class="form-control d-none"
-                                           accept="image/*" multiple>
-                                </div>
-
-                                <div class="image-preview" id="imagePreview"></div>
-                            </div>
-                        </div>
                         <button type="submit" class="btn btn-primary mt-4">Save Product</button>
                     </form>
                 </div>
@@ -234,14 +220,27 @@
 @endsection
 
 @section('page-script')
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/js/pages/form-wizard.init.js') }}"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
     <script>
-        $('document').ready(function () {
+        const variationFiles = {};
+        $('#description').summernote({
+            placeholder: 'Write your description here',
+            tabsize: 2,
+            height: 280,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+        $('document').ready(function() {
             $('.select2').select2();
-            ClassicEditor.create(document.querySelector('#description')).catch(error => {
-            });
         });
 
         function setupImagePreview(inputSelector, previewSelector) {
@@ -261,30 +260,6 @@
 
         let selectedFiles = [];
 
-        document.getElementById("dropZone").addEventListener("click", () => {
-            document.getElementById("imageInput").click();
-        });
-
-        document.getElementById("imageInput").addEventListener("change", function(event) {
-            handleFiles(event.target.files);
-        });
-
-        document.getElementById("dropZone").addEventListener("dragover", function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            this.style.backgroundColor = "#e3f2fd";
-        });
-
-        document.getElementById("dropZone").addEventListener("dragleave", function(event) {
-            this.style.backgroundColor = "#f8f9fa";
-        });
-
-        document.getElementById("dropZone").addEventListener("drop", function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            this.style.backgroundColor = "#f8f9fa";
-            handleFiles(event.dataTransfer.files);
-        });
 
         function handleFiles(files) {
             let previewContainer = document.getElementById("imagePreview");
@@ -338,14 +313,14 @@
         }
 
         // Remove attribute row
-        $(document).on('click', '.remove-attr', function () {
+        $(document).on('click', '.remove-attr', function() {
             $(this).closest('.row').remove();
         });
 
-        $('#attribute-tab').on('click', function (e) {
+        $('#attribute-tab').on('click', function(e) {
             let hasEmpty = false;
 
-            $('#attributesWrapper .row').each(function () {
+            $('#attributesWrapper .row').each(function() {
                 const nameInput = $(this).find('input[name*="[name]"]').val().trim();
                 const valuesInput = $(this).find('input[name*="[values]"]').val().trim();
 
@@ -369,14 +344,14 @@
         });
 
         // If next button is clicked
-        $('[data-nexttab="attribute-tab"]').on('click', function () {
+        $('[data-nexttab="attribute-tab"]').on('click', function() {
             $('#attribute-tab').click();
         });
 
         function storeAttributesInLocalStorage() {
             const attributes = [];
 
-            $('#attributesWrapper .row').each(function () {
+            $('#attributesWrapper .row').each(function() {
                 const name = $(this).find('input[name*="[name]"]').val().trim();
                 const values = $(this).find('input[name*="[values]"]').val().split(',').map(v => v.trim()).filter(
                     Boolean);
@@ -420,62 +395,74 @@
                                 <input name="variations[${index}][price]" type="number" step="0.01" class="form-control">
                             </div>
                             <div class="col-12 mb-2">
-                                <label>Images</label>
-                                <input name="variations[${index}][images][]" type="file" class="form-control variation-image-input" data-index="${index}" multiple accept="image/*">
-                                <div id="imagePreview-${index}" class="d-flex flex-wrap mt-2 gap-2"></div>
+                                <div class="image-upload-wrapper mb-3">
+                                    <label class="form-label">Images</label>
+                                    <div class="custom-drop-area" data-index="${index}">
+                                        <div class="upload-text">
+                                            <i class="ph ph-image-square upload-icon"></i>
+                                            <p>Click here to upload</p>
+                                        </div>
+                                        <input type="file" class="form-control variation-image-input" data-index="${index}" multiple accept="image/*" hidden>
+                                         <div id="imagePreview-${index}" class="d-flex flex-wrap mt-2 gap-2"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>`;
                 container.append(html);
             });
         }
+        // ✅ FIXED: Prevent input recursion causing max stack error
+        $(document).on('click', '.custom-drop-area', function(e) {
+            // ⛔ Prevent opening file dialog when clicking the remove button or input itself
+            if (
+                $(e.target).is('input[type="file"]') ||
+                $(e.target).closest('.remove-image').length ||
+                $(e.target).closest('.remove-image-existing').length
+            ) {
+                return;
+            }
 
-        $(document).on('change', '.variation-image-input', function (e) {
+            // ✅ Trigger input file picker only when clicking outside those
+            $(this).find('input[type="file"]').trigger('click');
+        });
+        // Preview selected images
+        $(document).on('change', '.variation-image-input', function(e) {
             const index = $(this).data('index');
-            const previewContainer = $(`#imagePreview-${index}`);
-            previewContainer.html('');
-
             const files = Array.from(e.target.files);
-            const fileInput = this;
+            const previewContainer = $(`#imagePreview-${index}`);
 
-            // Store a clone of files to manipulate later
-            let dataTransfer = new DataTransfer();
+            if (!variationFiles[index]) variationFiles[index] = [];
 
-            files.forEach((file, fileIndex) => {
+            files.forEach((file, i) => {
+                const previewId = `preview-${index}-${Date.now()}-${i}`;
+                variationFiles[index].push({
+                    id: previewId,
+                    file
+                });
+
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    const previewWrapper = $(`
-                <div class="position-relative me-2 mb-2">
-                    <img src="${e.target.result}"style="width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid #e0e0e0; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-                    <button type="button" class="position-absolute top-0 end-0 m-1 remove-image" data-file-index="${fileIndex}" style="
-                            width: 24px;
-                            height: 24px;
-                            background-color: #ff4d4f;
-                            color: white;
-                            border: none;
-                            border-radius: 50%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                            cursor: pointer;
-                        "><i class="ph ph-x" style="font-size: 14px;"></i></button>
-                </div>
-                `);
-                    previewContainer.append(previewWrapper);
+                reader.onload = function(e) {
+                    const preview = $(`
+                                <div class="position-relative me-2 mb-2" data-preview-id="${previewId}">
+                                    <img src="${e.target.result}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid #e0e0e0;">
+                                    <button type="button" class="position-absolute top-0 end-0 m-1 remove-image" data-index="${index}" data-preview-id="${previewId}" style="
+                                        width: 24px; height: 24px; background-color: #ff4d4f; color: white;
+                                        border: none; border-radius: 50%; display: flex; align-items: center;
+                                        justify-content: center; cursor: pointer;">
+                                        <i class="ph ph-x" style="font-size: 14px;"></i>
+                                    </button>
+                                </div>
+                            `);
+                    previewContainer.append(preview);
                 };
-                dataTransfer.items.add(file);
                 reader.readAsDataURL(file);
             });
 
-            // Replace input files with the new DataTransfer object
-            fileInput.files = dataTransfer.files;
-
-            // Store the updated DataTransfer object for later use
-            $(fileInput).data('dt', dataTransfer);
+            $(this).val('');
         });
 
-        $(document).on('click', '.remove-image', function () {
+        $(document).on('click', '.remove-image', function() {
             const fileIndex = $(this).data('file-index');
             const previewDiv = $(this).closest('.position-relative');
             const fileInput = $(this).closest('.col-12').find('.variation-image-input')[0];
@@ -495,27 +482,78 @@
         }
 
 
-        $('#createProductForm').on('submit', function (e) {
+        $('#createProductForm').on('submit', function(e) {
             e.preventDefault();
-            let formData = new FormData(this);
+            const form = this;
+            const formData = new FormData(form);
             let actionUrl = $(this).attr('action');
+
+            // Clear previous errors
+            $('.validation-error').remove();
+
+            // Append variation images
+            Object.keys(variationFiles).forEach(index => {
+                variationFiles[index].forEach(({
+                    file
+                }) => {
+                    formData.append(`variations[${index}][images][]`, file);
+                });
+            });
+
             $.ajax({
                 url: actionUrl,
                 method: 'POST',
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function (response) {
-                    if (response.status === 'success') {
+                beforeSend: function() {
+                    $('button[type="submit"]').prop('disabled', true).text('Saving...');
+                },
+                success: function(response) {
+                    notify('success', "Product created successfully");
+                    setTimeout(() => {
+                        window.location.href = "{{ route('products.index') }}";
+                    }, 2000);
+                },
+                error: function(xhr) {
+                    $('button[type="submit"]').prop('disabled', false).text('Create Product');
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        for (let field in errors) {
+                            let errorMessages = errors[field].join(', ');
+                            let input = $(`[name="${field}"]`);
+                            if (input.length === 0) {
+                                input = $(`[name^="${field}"]`);
+                            }
+                            if (input.hasClass('select2-hidden-accessible')) {
+                                input.next('.select2').after(
+                                    `<div class="validation-error" style="color: red; font-size: 13px;">${errorMessages}</div>`
+                                );
+                            } else if (input.attr('type') === 'file') {
+                                input.after(
+                                    `<div class="validation-error" style="color: red; font-size: 13px;">${errorMessages}</div>`
+                                );
+                            } else {
+                                input.last().after(
+                                    `<div class="validation-error" style="color: red; font-size: 13px;">${errorMessages}</div>`
+                                );
+                            }
+                            notify('error', errorMessages);
+                        }
 
+                    } else {
+                        notify('error', 'Something went wrong. Please try again.');
                     }
+                },
+                complete: function() {
+                    $('button[type="submit"]').prop('disabled', false).text('Create Product');
                 }
-            })
+            });
         });
     </script>
 @endsection
 @section('page-css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .tab-content {
             max-height: 400px;
@@ -603,54 +641,31 @@
             justify-content: center;
         }
 
-        .drop-zone {
-            border: 2px dashed #007bff;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
+
+        .custom-drop-area {
+            border: 2px dashed #d0d0d0;
             border-radius: 10px;
-            background-color: #f8f9fa;
-            transition: background-color 0.3s ease;
-            height: 250px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .image-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .image-preview img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            padding: 5px;
-        }
-
-        .preview-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .remove-image-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
+            padding: 30px;
+            background-color: #f8f8f8;
             text-align: center;
             cursor: pointer;
+            position: relative;
+            transition: border-color 0.3s ease;
+        }
+
+        .custom-drop-area:hover {
+            border-color: #6366f1;
+        }
+
+        .custom-drop-area .upload-icon {
+            font-size: 40px;
+            color: #6366f1;
+        }
+
+        .custom-drop-area p {
+            margin-top: 10px;
+            color: #555;
+            font-weight: 500;
         }
     </style>
 @endsection
