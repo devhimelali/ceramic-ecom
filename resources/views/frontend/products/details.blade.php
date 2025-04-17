@@ -95,7 +95,11 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div id="price-wrapper"></div>
+                        <div id="price-wrapper">
+                            <span class="price"
+                                style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
+                            <span class="price">${{ $product->sale_price ?? $product->regular_price }}</span>
+                        </div>
 
                         <div class="product-details__buttons">
                             <div class="d-flex align-items-center justify-content-center">
