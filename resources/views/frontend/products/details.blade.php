@@ -42,22 +42,34 @@
                         </div>
                     </div>
                 </div><!-- /.column --> --}}
+                @php
+                    $productImages = $product->images; // This is already a Collection
+                    $variantImages = $product->variations->flatMap(function ($variation) {
+                        return $variation->images;
+                    });
+
+                    $images = $productImages->merge($variantImages);
+                @endphp
                 <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
                     <div class="product-details__img">
                         <div class="swiper product-details__gallery-top">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="{{ asset($product->images->first()->path) }}"
-                                        class="product-details__gallery-top__img">
-                                </div>
+
+                                @foreach ($images as $image)
+                                    <div class="swiper-slide">
+                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-top__img">
+                                    </div>
+                                @endforeach
+
                             </div>
                         </div>
                         <div class="swiper product-details__gallery-thumb">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide product-details__gallery-thumb-slide">
-                                    <img src="{{ asset($product->images->first()->path) }}"
-                                        class="product-details__gallery-thumb__img">
-                                </div>
+                                @foreach ($images as $image)
+                                    <div class="swiper-slide product-details__gallery-thumb-slide">
+                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

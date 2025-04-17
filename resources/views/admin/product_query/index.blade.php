@@ -218,6 +218,8 @@
         $('body').on('click', '.viewDetails', function() {
             var id = $(this).data('id');
             $("#modalHeading").html("View Product Enquiry Details");
+            // change modal size
+            $("#modal").addClass("modal-lg");
             $("#modal").modal("show");
             $.ajax({
                 url: "{{ route('product.query', 'id') }}".replace('id', id),
