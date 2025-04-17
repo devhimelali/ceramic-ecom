@@ -110,7 +110,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div id="price-wrapper">
+                        <div id="price-wrapper-ditails">
                             <span class="price"
                                 style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
                             <span class="price">${{ $product->sale_price ?? $product->regular_price }}</span>
@@ -215,7 +215,7 @@
                         },
                         beforeSend: function() {
                             // Price skeleton
-                            $('#price-wrapper').html(
+                            $('#price-wrapper-ditails').html(
                                 '<div id="loader" class="text-danger">Loading...</div>'
                             );
 
@@ -243,7 +243,7 @@
                             if (response.status === 'success') {
                                 updateSwiperGallery(response.data.images);
 
-                                $('#price-wrapper').html(
+                                $('#price-wrapper-ditails').html(
                                     `<span class="price">$ ${response.data.price}</span>`
                                 );
                             } else {

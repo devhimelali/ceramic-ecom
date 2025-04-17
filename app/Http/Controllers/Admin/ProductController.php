@@ -358,19 +358,26 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
-            $product = Product::with(['images', 'category', 'brand', 'attributes'])->findOrFail($id);
+            $product = Product::with(['images', 'variations'])->findOrFail($id);
+            foreach ($product->images as $image) {
+                $filePath = preg_replace('/^storage\//', '', $image->path);
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
+                $image->delete();
+            }
 
-            // Delete associated images
-            if ($product->images->isNotEmpty()) {
-                foreach ($product->images as $image) {
-                    ImageUploadHelper::deleteProductImage($image->image, 'products');
+            foreach ($product->variations as $variation) {
+                $images = Image::where('imageable_id', $variation->id)->where('imageable_type', Variation::class)->get();
+                foreach ($images as $image) {
+                    $filePath = preg_replace('/^storage\//', '', $image->path);
+                    // Delete image file
+                    if (Storage::disk('public')->exists($filePath)) {
+                        Storage::disk('public')->delete($filePath);
+                    }
                     $image->delete();
                 }
             }
-
-            // Detach related attributes
-            $product->attributes()->detach();
-
             // Delete the product
             $product->delete();
 

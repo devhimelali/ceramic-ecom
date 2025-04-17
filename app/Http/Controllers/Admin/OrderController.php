@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Attribute;
@@ -305,25 +306,6 @@ class OrderController extends Controller
         ]);
     }
 
-    // public function getProductVariationPrice(Request $request, $id)
-    // {
-    //     $variation = Variation::where('product_id', $id)
-    //         ->where('attribute_string', $request->variation)
-    //         ->first();
-
-    //     if ($variation) {
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'data' => $variation
-    //         ]);
-    //     }
-
-    //     return response()->json([
-    //         'status' => 'error',
-    //         'message' => 'Variation not found'
-    //     ]);
-    // }
-
     public function getProductVariationPrice(Request $request, $id)
     {
         $variationArray = explode(" / ", trim($request->variation));
@@ -331,21 +313,27 @@ class OrderController extends Controller
         sort($cleanedArray);
         $formatted = implode(" / ", $cleanedArray);
 
-        // $variation = Variation::where('product_id', $id)
-        //     ->where('attribute_string', $formatted)
-        //     ->first();
-        $variation = Variation::with('images')->where('product_id', $id)
-            ->where('attribute_string', $formatted)
+        $variation = Variation::with('images')
+            ->where('product_id', $id)
+            ->where(function ($query) use ($formatted, $request) {
+                $query->where('attribute_string', $formatted)
+                    ->orWhere('attribute_string', $request->variation);
+            })
             ->first();
 
         if ($variation) {
-            $images = $variation->images->pluck('path'); // Adjust if your column is different
+            $images = $variation->images->pluck('path');
+            $thumbnail = Image::where('imageable_id', $id)
+                ->where('imageable_type', Product::class)
+                ->pluck('path');
+
+            $new_image = $images->isNotEmpty() ? $images : $thumbnail;
 
             return response()->json([
                 'status' => 'success',
                 'data' => [
                     'price' => $variation->price,
-                    'images' => $images,
+                    'images' => $new_image,
                 ],
             ]);
         }

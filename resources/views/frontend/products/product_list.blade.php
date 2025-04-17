@@ -93,7 +93,7 @@
         padding: 19px 24px !important;
     }
 
-    .product_item_image {
+    .product__item__image {
         border-radius: 4px;
     }
 
