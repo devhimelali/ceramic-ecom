@@ -326,7 +326,6 @@ class OrderController extends Controller
 
     public function getProductVariationPrice(Request $request, $id)
     {
-        // dd($request->all());
         $variationArray = explode(" / ", trim($request->variation));
         $cleanedArray = array_map('trim', $variationArray);
         sort($cleanedArray);

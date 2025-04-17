@@ -20,17 +20,8 @@
         <div class="container">
             <!-- /.product-details -->
             <div class="row gutter-y-50">
-                <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
+                {{-- <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
                     <div class="product-details__img">
-                        @php
-                            $productImages = $product->images; // This is already a Collection
-                            $variantImages = $product->variations->flatMap(function ($variation) {
-                                return $variation->images;
-                            });
-
-                            $images = $productImages->merge($variantImages);
-
-                        @endphp
                         <div class="swiper product-details__gallery-top mySwiper">
                             <div class="swiper-wrapper">
                                 @foreach ($product->images as $image)
@@ -42,7 +33,7 @@
                         </div>
                         <div class="swiper product-details__gallery-thumb">
                             <div class="swiper-wrapper">
-                                @foreach ($product->images ?? [] as $image)
+                                @foreach ($product->images as $image)
                                     <div class="product-details__gallery-thumb-slide swiper-slide">
                                         <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
                                     </div>
@@ -50,7 +41,31 @@
                             </div>
                         </div>
                     </div>
-                </div><!-- /.column -->
+                </div><!-- /.column --> --}}
+                <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
+                    <div class="product-details__img">
+                        <div class="swiper product-details__gallery-top">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="{{ asset($product->images->first()->path) }}"
+                                        class="product-details__gallery-top__img">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper product-details__gallery-thumb">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide product-details__gallery-thumb-slide">
+                                    <img src="{{ asset($product->images->first()->path) }}"
+                                        class="product-details__gallery-thumb__img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
                 <div class="col-lg-6 col-xl-6 wow fadeInRight" data-wow-delay="300ms">
                     <div class="product-details__content">
                         <div class="product-details__excerpt">
@@ -126,198 +141,111 @@
 @section('page-script')
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script>
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     const totalAttributes = {{ count($attributes) }};
-        //     let swiper = new Swiper(".mySwiper", {
-        //         slidesPerView: 1,
-        //         loop: true,
-        //         autoplay: {
-        //             delay: 3000, // 3 seconds delay between slides
-        //             disableOnInteraction: false, // keeps autoplay running after user interaction
-        //         },
-        //         pagination: {
-        //             el: ".swiper-pagination",
-        //             clickable: true,
-        //         }
-        //     });
-
-        //     document.querySelectorAll('.attribute-input').forEach(input => {
-        //         input.addEventListener('change', () => {
-        //             let selectedAttributes = {};
-
-        //             document.querySelectorAll('.attribute-input:checked').forEach(selected => {
-        //                 selectedAttributes[selected.name] = selected.value;
-        //             });
-
-        //             if (Object.keys(selectedAttributes).length === totalAttributes) {
-        //                 // Build variation string: "Color: Red / Size: M"
-        //                 let attributeString = Object.entries(selectedAttributes)
-        //                     .map(([key, value]) => `${key}: ${value}`)
-        //                     .join(' / ');
-
-        //                 $.ajax({
-        //                     url: "{{ route('get.product.variation.price', $product->id) }}",
-        //                     method: 'GET',
-        //                     data: {
-        //                         variation: attributeString
-        //                     },
-        //                     beforeSend: function() {
-        //                         $('#price-wrapper').html(
-        //                             '<div id="loader" class="text-danger">Loading...</div>'
-        //                         );
-        //                     },
-        //                     success: function(response) {
-        //                         $('#loader').hide();
-        //                         if (response.status === 'success') {
-        //                             // ✅ Update price
-        //                             $('#price-wrapper').html(
-        //                                 `<span class="price">$ ${response.data.price}</span>`
-        //                             );
-
-        //                             // ✅ Update Swiper images if present
-        //                             if (response.data.images && response.data.images
-        //                                 .length > 0) {
-        //                                 swiper.removeAllSlides();
-        //                                 response.data.images.forEach(function(image) {
-        //                                     swiper.appendSlide(`
-    //                                         <div class="swiper-slide">
-    //                                             <img src="/${image}" alt="Variation Image">
-    //                                         </div>
-    //                                     `);
-        //                                 });
-        //                                 swiper.update();
-        //                             }
-        //                         } else {
-        //                             alert(response.message || 'Variation not found.');
-        //                         }
-        //                     },
-        //                     error: function() {
-        //                         $('#loader').hide();
-        //                         alert('Something went wrong.');
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     });
-        // });
-        document.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
             const totalAttributes = {{ count($attributes) }};
-            let swiperTop, swiperThumb;
+            // ✅ Init Swiper sliders
+            var galleryThumbs = new Swiper('.product-details__gallery-thumb', {
+                spaceBetween: 10,
+                slidesPerView: 4,
+                freeMode: true,
+                watchSlidesProgress: true,
+            });
 
-            // Initialize the main gallery swiper (product-details__gallery-top)
-            swiperTop = new Swiper(".mySwiper", {
-                slidesPerView: 1,
-                loop: true,
-                autoplay: {
-                    delay: 3000, // 3 seconds delay between slides
-                    disableOnInteraction: false, // keeps autoplay running after user interaction
-                },
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true,
+            var galleryTop = new Swiper('.product-details__gallery-top', {
+                spaceBetween: 10,
+                thumbs: {
+                    swiper: galleryThumbs
                 }
             });
 
-            // Initialize the thumbnails swiper (product-details__gallery-thumb)
-            swiperThumb = new Swiper(".product-details__gallery-thumb", {
-                slidesPerView: 4, // Adjust the number of visible thumbnails
-                spaceBetween: 10, // Adjust space between thumbnails
-                loop: true,
-                slideToClickedSlide: true, // Clicking thumbnail will change the main image
-            });
+            // ✅ Reusable function to update gallery
+            function updateSwiperGallery(images) {
+                galleryTop.removeAllSlides();
+                galleryThumbs.removeAllSlides();
 
-            document.querySelectorAll('.attribute-input').forEach(input => {
-                input.addEventListener('change', () => {
-                    let selectedAttributes = {};
+                $.each(images, function(index, imagePath) {
+                    const imageUrl = '/' + imagePath.replace(/^\/?/, '');
 
-                    document.querySelectorAll('.attribute-input:checked').forEach(selected => {
-                        selectedAttributes[selected.name] = selected.value;
-                    });
+                    galleryTop.appendSlide(`
+                    <div class="swiper-slide">
+                        <img src="${imageUrl}" class="product-details__gallery-top__img">
+                    </div>`);
 
-                    if (Object.keys(selectedAttributes).length === totalAttributes) {
-                        // Build variation string: "Color: Red / Size: M"
-                        let attributeString = Object.entries(selectedAttributes)
-                            .map(([key, value]) => `${key}: ${value}`)
-                            .join(' / ');
-
-                        $.ajax({
-                            url: "{{ route('get.product.variation.price', $product->id) }}",
-                            method: 'GET',
-                            data: {
-                                variation: attributeString
-                            },
-                            beforeSend: function() {
-                                $('#price-wrapper').html(
-                                    '<div id="loader" class="text-danger">Loading...</div>'
-                                );
-                            },
-                            success: function(response) {
-                                $('#loader').hide();
-                                if (response.status === 'success') {
-                                    // ✅ Update price
-                                    $('#price-wrapper').html(
-                                        `<span class="price">$ ${response.data.price}</span>`
-                                    );
-
-                                    // ✅ Update Swiper images (Main Gallery)
-                                    if (response.data.images && response.data.images
-                                        .length > 0) {
-                                        // Clear existing slides in main gallery (swiperTop)
-                                        swiperTop.removeAllSlides();
-
-                                        // Append new slides to the main gallery
-                                        response.data.images.forEach(function(image) {
-                                            swiperTop.appendSlide(`
-                                        <div class="swiper-slide">
-                                            <img src="/${image}" alt="Variation Image" class="product-details__gallery-top__img">
-                                        </div>
-                                    `);
-                                        });
-
-                                        // Update the swiper instance after adding slides
-                                        swiperTop.update();
-                                        swiperTop.autoplay
-                                            .start(); // Restart autoplay after update
-                                        // Clear existing thumbnail slides
-                                        swiperThumb.removeAllSlides();
-                                        response.data.images.forEach(function(image) {
-                                            swiperThumb.appendSlide(`
-                                        <div class="product-details__gallery-thumb-slide swiper-slide">
-                                            <img src="/${image}" alt="Variation Thumbnail" class="product-details__gallery-thumb__img">
-                                        </div>
-                                    `);
-                                        });
-
-                                        // Update the swiper instance after adding slides
-                                        swiperThumb.update();
-                                    }
-
-                                    // ✅ Update Thumbnails Swiper (product-details__gallery-thumb)
-                                    // if (response.data.images && response.data.images
-                                    //     .length > 0) {
-                                    //     // Clear existing thumbnail slides
-                                    //     swiperThumb.removeAllSlides();
-
-                                    //     // Append new thumbnail slides
-
-                                    // }
-                                } else {
-                                    alert(response.message || 'Variation not found.');
-                                }
-                            },
-                            error: function() {
-                                $('#loader').hide();
-                                alert('Something went wrong.');
-                            }
-                        });
-                    }
+                    galleryThumbs.appendSlide(`
+                    <div class="swiper-slide product-details__gallery-thumb-slide">
+                        <img src="${imageUrl}" class="product-details__gallery-thumb__img">
+                    </div>`);
                 });
-            });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function() {
+                // Optionally reset to first slide
+                galleryTop.slideTo(0);
+                galleryThumbs.slideTo(0);
+            }
+
+            // ✅ Listen to attribute changes
+            $('.attribute-input').on('change', function() {
+                let selectedAttributes = {};
+
+                $('.attribute-input:checked').each(function() {
+                    selectedAttributes[$(this).attr('name')] = $(this).val();
+                });
+
+                if (Object.keys(selectedAttributes).length === totalAttributes) {
+                    let variationString = $.map(selectedAttributes, function(val, key) {
+                        return key + ': ' + val;
+                    }).join(' / ');
+
+                    $.ajax({
+                        url: "{{ route('get.product.variation.price', $product->id) }}",
+                        method: 'GET',
+                        data: {
+                            variation: variationString
+                        },
+                        beforeSend: function() {
+                            // Price skeleton
+                            $('#price-wrapper').html(
+                                '<div id="loader" class="text-danger">Loading...</div>'
+                            );
+
+                            // Image skeleton (main + thumbs)
+                            const mainSkeleton =
+                                `<div class="swiper-slide">
+                                    <div class="skeleton-loader"></div>
+                                </div>`;
+
+                            const thumbSkeletons = Array(4).fill().map(() =>
+                                `<div class="swiper-slide product-details__gallery-thumb-slide">
+                                    <div class="skeleton-loader skeleton-thumb"></div>
+                                </div>`).join('');
+
+                            // Replace swiper wrappers with skeleton slides
+                            $('.product-details__gallery-top .swiper-wrapper').html(
+                                mainSkeleton);
+                            $('.product-details__gallery-thumb .swiper-wrapper').html(
+                                thumbSkeletons);
+                        },
+
+                        success: function(response) {
+                            $('#loader').hide();
+
+                            if (response.status === 'success') {
+                                updateSwiperGallery(response.data.images);
+
+                                $('#price-wrapper').html(
+                                    `<span class="price">$ ${response.data.price}</span>`
+                                );
+                            } else {
+                                alert(response.message || 'Variation not found.');
+                            }
+                        },
+                        error: function() {
+                            $('#loader').hide();
+                            alert('Something went wrong.');
+                        }
+                    });
+                }
+            });
+
             displayCartItems();
             $('.enquireBtn').click(function() {
                 var productId = $(this).data('id');
@@ -450,6 +378,29 @@
         .section-space {
             padding-top: var(--section-space, 120px);
             padding-bottom: 0;
+        }
+
+        .skeleton-loader {
+            background: linear-gradient(-90deg, #f0f0f0 0%, #e2e2e2 50%, #f0f0f0 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.2s infinite;
+            border-radius: 8px;
+            width: 100%;
+            height: 400px;
+        }
+
+        .skeleton-thumb {
+            height: 100px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
     </style>
 @endsection
