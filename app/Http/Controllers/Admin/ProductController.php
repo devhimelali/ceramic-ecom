@@ -103,6 +103,7 @@ class ProductController extends Controller
             'brands' => $brands,
             'statuses' => $statuses,
             'active' => 'products',
+            'labels' => ProductLabelEnum::cases(),
 
         ];
         return view('admin.product.create', $data);

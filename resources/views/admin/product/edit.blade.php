@@ -298,7 +298,7 @@
                 });
 
                 if (hasEmpty) {
-                    alert('Please fill out all attribute fields.');
+                    notify('error', 'Please fill all the required fields.');
                     return;
                 }
 
@@ -484,7 +484,7 @@
                             container.remove();
                         },
                         error: function() {
-                            alert('Failed to delete image');
+                            notify('error', 'Failed to delete image');
                         }
                     });
                 }

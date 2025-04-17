@@ -47,7 +47,7 @@
                                         placeholder="Name">
                                 </div>
                                 <div class="row">
-                                    <div class="mb-3 col-md-6">
+                                    <div class="mb-3 col-lg-4">
                                         <label for="category" class="form-label">Category</label>
                                         <select class="form-control select2" data-choice id="category" name="category">
                                             <option value="" selected disabled>Select Category</option>
@@ -56,7 +56,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="mb-3 col-md-6">
+                                    <div class="mb-3 col-lg-4">
                                         <label for="brand" class="form-label">Brand</label>
                                         <select class="form-control select2" data-choice id="brand" name="brand">
                                             <option value="" selected disabled>Select Brand</option>
@@ -65,6 +65,19 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="col-lg-4 my-3">
+                                        <label for="label" class="form-label">Product Label</label>
+                                        <select class="form-control select2" id="label" name="label">
+                                            <option value="" disabled>Select Brand</option>
+                                            @foreach ($labels as $label)
+                                                <option value="{{ $label->value }}">
+                                                    {{ $label->description() }}
+                                                </option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="regular_price" class="form-label">Regular Price</label>
@@ -181,14 +194,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="d-flex align-items-start gap-3 mt-4">
-                                                    <button type="button"
-                                                        class="btn btn-success btn-label right ms-auto nexttab nexttab"
-                                                        data-nexttab="attribute-tab"><i
-                                                            class="ri-arrow-right-line label-icon align-middle fs-lg ms-2"></i>Step
-                                                        2
-                                                    </button>
-                                                </div>
+
                                             </div>
                                             <!-- end tab pane -->
                                             {{-- Tab 2 --}}
@@ -211,8 +217,17 @@
                                 <!-- end col -->
                             </div>
                         </div>
-
-                        <button type="submit" class="btn btn-primary mt-4">Save Product</button>
+                        <div class="d-flex align-items-start gap-3 mt-4">
+                            <button type="button" id="step2Btn" class="btn btn-success btn-label right ms-auto nexttab"
+                                data-nexttab="attribute-tab">
+                                <i class="ri-arrow-right-line label-icon align-middle fs-lg ms-2"></i>
+                                Step 2
+                            </button>
+                            <button type="submit" id="saveProductBtn"
+                                class="btn btn-success btn-label right ms-auto d-none">
+                                Save Product
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div><!--end card-->
@@ -225,6 +240,7 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/js/pages/form-wizard.init.js') }}"></script>
+
     <script>
         const variationFiles = {};
         $('#description').summernote({
@@ -318,9 +334,8 @@
             $(this).closest('.row').remove();
         });
 
-        $('#attribute-tab').on('click', function(e) {
+        $('#attribute-tab, #step2Btn').on('click', function(e) {
             let hasEmpty = false;
-
             $('#attributesWrapper .row').each(function() {
                 const nameInput = $(this).find('input[name*="[name]"]').val().trim();
                 const valuesInput = $(this).find('input[name*="[values]"]').val().trim();
@@ -332,9 +347,11 @@
             });
 
             if (hasEmpty) {
-                alert('Please fill out all attribute names and values before continuing.');
+                notify('error', 'Please fill all the required fields.');
                 return;
             }
+            $('#step2Btn').addClass('d-none');
+            $('#saveProductBtn').removeClass('d-none');
 
             storeAttributesInLocalStorage();
             renderVariationsFromAttributes();
@@ -345,8 +362,9 @@
         });
 
         // If next button is clicked
-        $('[data-nexttab="attribute-tab"]').on('click', function() {
-            $('#attribute-tab').click();
+        $('#variation-tab').on('click', function() {
+            $('#step2Btn').removeClass('d-none');
+            $('#saveProductBtn').addClass('d-none');
         });
 
         function storeAttributesInLocalStorage() {
@@ -557,7 +575,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .tab-content {
-            max-height: 400px;
+            height: 400px;
             overflow-y: scroll;
             border: 1px dashed;
             padding: 15px;
