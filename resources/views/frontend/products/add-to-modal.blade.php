@@ -255,8 +255,6 @@
                             '<span class="text-danger">Error loading price</span>');
                     }
                 });
-            } else {
-                notify('warning', 'Not all attributes are selected yet.');
             }
         }
 

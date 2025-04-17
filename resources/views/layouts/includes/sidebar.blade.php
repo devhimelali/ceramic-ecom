@@ -61,13 +61,7 @@
                         <span data-key="t-dashboards">Orders</span>
                     </a>
                 </li> --}}
-                <li class="nav-item">
-                    <a href="{{ route('attributes.index') }}"
-                        class="nav-link menu-link {{ $active == 'attribute' ? 'active' : '' }}" aria-expanded="false">
-                        <i class="ph ph-circle-wavy"></i>
-                        <span data-key="t-dashboards">Attribute</span>
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a href="{{ route('products.index') }}"
                         class="nav-link menu-link {{ $active == 'products' ? 'active' : '' }}" aria-expanded="false">
@@ -133,7 +127,7 @@
     <div class="sidebar-background"></div>
 </div>
 <style>
-    .nav-item{
+    .nav-item {
         width: 100%;
     }
 </style>

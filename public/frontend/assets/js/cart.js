@@ -35,7 +35,6 @@ function addItem(id, name, price, quantity = 1, image = "", variation) {
     );
 
     if (existingItem) {
-        confirm("Item added to cart");
         existingItem.quantity += Number(quantity);
     } else {
         cart.push({

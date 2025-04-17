@@ -92,8 +92,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="text-center">
                                         <div class="custom-upload-box">
-                                            <img src="{{ asset('assets/placeholder-image-2.png') }}" class="preview-img"
-                                                alt="Image Preview">
+                                            <img src="{{ $product->images ? asset($product->images->where('imageable_id', $product->id)->where('imageable_type', 'App\Models\Product')->first()?->path) : asset('assets/placeholder-image-2.png') }}"
+                                                class="preview-img" alt="Image Preview">
                                             <button type="button" class="remove-btn removeImage"
                                                 style="display:none;">&times;
                                             </button>
@@ -168,12 +168,7 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <div class="d-flex align-items-start gap-3 mt-4">
-                                                <button type="button" class="btn btn-success ms-auto nexttab"
-                                                    data-nexttab="attribute-tab">
-                                                    Step 2 <i class="ri-arrow-right-line ms-2"></i>
-                                                </button>
-                                            </div>
+
                                         </div>
 
                                         {{-- Variations Tab --}}
@@ -185,8 +180,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="d-flex align-items-start gap-3 mt-4">
+                            <button type="submit" id="updateProductBtn"
+                                class="btn btn-success ms-auto d-none d-none">Update
+                                Product</button>
+                            <button type="button" id="step2Btn" class="btn btn-success ms-auto nexttab d-none"
+                                data-nexttab="attribute-tab">
+                                Step 2 <i class="ri-arrow-right-line ms-2"></i>
+                            </button>
 
-                        <button type="submit" class="btn btn-primary mt-4">Update Product</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -199,6 +202,29 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/js/pages/form-wizard.init.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            function toggleButtons(activeTabId) {
+                if (activeTabId === 'attributes-tab') {
+                    $('#step2Btn').removeClass('d-none');
+                    $('#updateProductBtn').addClass('d-none');
+                } else if (activeTabId === 'variations-tab') {
+                    $('#step2Btn').addClass('d-none');
+                    $('#updateProductBtn').removeClass('d-none');
+                }
+            }
+
+            // Initial check on page load
+            toggleButtons($('.tab-pane.active').attr('id'));
+
+            // On tab shown event
+            $('button[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
+                var activeTabId = $(e.target).data('bs-target').substring(1);
+                toggleButtons(activeTabId);
+            });
+        });
+    </script>
+
     <script>
         $('#description').summernote({
             placeholder: 'Write your description here',
@@ -509,7 +535,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .tab-content {
-            max-height: 400px;
+            height: 400px;
             overflow-y: scroll;
             border: 1px dashed;
             padding: 15px;
