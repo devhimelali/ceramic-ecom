@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\ProductLabelEnum;
 use App\Models\Brand;
 use App\Models\Image;
 use App\Models\Product;
@@ -202,6 +203,7 @@ class ProductController extends Controller
             'categories' => $categories,
             'brands' => $brands,
             'statuses' => $statuses,
+            'labels' => ProductLabelEnum::cases(),
             'active' => 'products',
         ];
 

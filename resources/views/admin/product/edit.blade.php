@@ -39,7 +39,7 @@
                                         value="{{ $product->name }}">
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-6 my-3">
+                                    <div class="col-lg-4 my-3">
                                         <label for="category" class="form-label">Category</label>
                                         <select class="form-control select2" id="category" name="category" required>
                                             <option value="" disabled>Select Category</option>
@@ -52,7 +52,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-6 my-3">
+                                    <div class="col-lg-4 my-3">
                                         <label for="brand" class="form-label">Brand</label>
                                         <select class="form-control select2" id="brand" name="brand">
                                             <option value="" disabled>Select Brand</option>
@@ -62,6 +62,20 @@
                                                     {{ $brand->name }}
                                                 </option>
                                             @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 my-3">
+                                        <label for="label" class="form-label">Product Label</label>
+                                        <select class="form-control select2" id="label" name="label">
+                                            <option value="" disabled
+                                                {{ is_null($product->label) ? 'selected' : '' }}>Select Brand</option>
+                                            @foreach ($labels as $label)
+                                                <option value="{{ $label->value }}"
+                                                    {{ $product->label === $label ? 'selected' : '' }}>
+                                                    {{ $label->description() }}
+                                                </option>
+                                            @endforeach
+
                                         </select>
                                     </div>
                                     <div class="col-lg-4 my-3">
@@ -80,7 +94,7 @@
                                             <option value="" disabled>Select Status</option>
                                             @foreach ($statuses as $status)
                                                 <option value="{{ $status->value }}"
-                                                    {{ $product->status === $status->value ? 'selected' : '' }}>
+                                                    {{ $product->status === $status ? 'selected' : '' }}>
                                                     {{ $status->description() }}
                                                 </option>
                                             @endforeach
