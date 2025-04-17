@@ -21,11 +21,7 @@
                     <li><strong>Product Quantity:</strong> {{ $item['quantity'] }}</li>
                     <li>
                         <strong>Selected Product Variation:</strong>
-                        <ol style="margin-top: 10px;">
-                            @foreach ($item['variation'] as $variation => $value)
-                                <li><strong>{{ ucfirst($variation) }}:</strong> {{ $value }}</li>
-                            @endforeach
-                        </ol>
+                        <span style="text-transform: capitalize">{{ $item['variation'] }}</span>
                     </li>
                 @endforeach
             </ul>

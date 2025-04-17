@@ -145,92 +145,132 @@
             <ul class="floens-breadcrumb list-unstyled">
                 <li><i class="icon-home text-white"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><span class="text-white">Products</span></li>
-            </ul><!-- /.thm-breadcrumb list-unstyled -->
-        </div><!-- /.container -->
-    </section><!-- /.page-header -->
+            </ul>
+        </div>
+    </section>
 
     <section class="product-page product-page--left section-space-bottom">
         <div class="container">
+            <!-- Mobile Filter Button -->
+            <div class="d-xl-none mb-3">
+                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+
             <div class="row gutter-y-60">
-                <div class="col-xl-3 col-lg-4">
-                    <aside class="product__sidebar">
-                        <div class="product__search-box product__sidebar__item">
-                            <form action="#" class="product__search" id="product__search">
-                                <input type="text" placeholder="search items" value="{{ request('search') }}"
-                                    id="searchQuery" />
-                                <button type="submit" aria-label="search submit">
-                                    <span class="icon-search"></span>
-                                </button>
-                            </form><!-- /.product__search -->
+                <!-- Sidebar: XL and above -->
+                <div class="col-xl-3 col-lg-4 d-none d-xl-block" id="sidebar-column">
+                    <div id="original-filter-sidebar">
+                        <aside class="product__sidebar">
+                            <!-- Search Box -->
+                            <div class="product__search-box product__sidebar__item">
+                                <form action="#" class="product__search" id="product__search">
+                                    <input type="text" placeholder="search items" value="{{ request('search') }}"
+                                        id="searchQuery" />
+                                    <button type="submit" aria-label="search submit">
+                                        <span class="icon-search"></span>
+                                    </button>
+                                </form>
+                            </div>
 
-                        </div><!-- /.search-widget -->
-                        <div class="product__price-ranger product__sidebar__item">
-                            {{-- <h3 class="product__sidebar__title">Filter by Price</h3> --}}
-                            <form action="#" class="price-ranger">
-                                <h3 class="product__sidebar__title">Filter by Price</h3>
-                                <input type="range" class="form-range" id="price-range" min="0" max="10000"
-                                    step="10" value="{{ request('max_price', 10000) }}">
-                                <div class="ranger-min-max-block">
-                                    <div><span id="min-price">0</span> - <span
-                                            id="max-price">{{ request('max_price', 10000) }}</span></div>
-                                </div>
-                            </form>
-
-
-                        </div><!-- /.price-slider -->
-                        <div class="product__categories product__sidebar__item">
-                            @foreach ($attributes as $name => $values)
-                                @php
-                                    // Retrieve and decode attribute values from request
-                                    $selectedValues = request()->input('attribute.' . $name, []);
-                                    // dd($selectedValues);
-                                    // Ensure it's an array and decode Base64 values
-                                    $decodedValues = array_map(
-                                        fn($value) => base64_decode($value),
-                                        (array) $selectedValues,
-                                    );
-                                @endphp
-                                <div class="product__sidebar__attribute">
-                                    <h3 class="product__sidebar__title product__categories__title"
-                                        data-attribute-id="{{ $name }}">
-                                        {{ $name }}
-                                        <span class="expand-icon" id="expand-icon-{{ $name }}">
-                                            <i class="fas fa-plus"></i>
-                                        </span>
-                                    </h3>
-                                    <div class="product__sidebar__values" id="values-{{ $name }}"
-                                        style="display: none;">
-                                        @foreach ($values as $attributeValue)
-                                            <div class="product__sidebar__value">
-                                                <input type="checkbox" id="attribute_value-{{ $attributeValue->id }}"
-                                                    name="attribute[{{ $name }}][]"
-                                                    value="{{ $attributeValue->value }}"
-                                                    class="product__sidebar__checkbox">
-                                                <label for="attribute_value-{{ $attributeValue->id }}"
-                                                    class="product__sidebar__label">
-                                                    {{ $attributeValue->value }}
-                                                </label>
-                                            </div>
-                                        @endforeach
+                            <!-- Price Filter -->
+                            <div class="product__price-ranger product__sidebar__item">
+                                <form action="#" class="price-ranger">
+                                    <h3 class="product__sidebar__title">Filter by Price</h3>
+                                    <input type="range" class="form-range" id="price-range" min="0" max="10000"
+                                        step="10" value="{{ request('max_price', 10000) }}">
+                                    <div class="ranger-min-max-block">
+                                        <div><span id="min-price">0</span> - <span
+                                                id="max-price">{{ request('max_price', 10000) }}</span></div>
                                     </div>
-                                </div>
-                            @endforeach
-                        </div><!-- /.category-widget -->
-                    </aside><!-- /.shop-sidebar -->
-                </div><!-- /.col-xl-3 col-lg-4 -->
+                                </form>
+                            </div>
+
+                            <!-- Attribute Filters -->
+                            <div class="product__categories product__sidebar__item">
+                                @foreach ($attributes as $name => $values)
+                                    @php
+                                        $selectedValues = request()->input('attribute.' . $name, []);
+                                        $decodedValues = array_map(
+                                            fn($value) => base64_decode($value),
+                                            (array) $selectedValues,
+                                        );
+                                    @endphp
+                                    <div class="product__sidebar__attribute">
+                                        <h3 class="product__sidebar__title product__categories__title"
+                                            data-attribute-id="{{ $name }}">
+                                            {{ $name }}
+                                            <span class="expand-icon" id="expand-icon-{{ $name }}">
+                                                <i class="fas fa-plus"></i>
+                                            </span>
+                                        </h3>
+                                        <div class="product__sidebar__values" id="values-{{ $name }}"
+                                            style="display: none;">
+                                            @foreach ($values as $attributeValue)
+                                                <div class="product__sidebar__value">
+                                                    <input type="checkbox" id="attribute_value-{{ $attributeValue->id }}"
+                                                        name="attribute[{{ $name }}][]"
+                                                        value="{{ $attributeValue->value }}"
+                                                        class="product__sidebar__checkbox">
+                                                    <label for="attribute_value-{{ $attributeValue->id }}"
+                                                        class="product__sidebar__label">
+                                                        {{ $attributeValue->value }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </aside>
+                    </div>
+                </div>
                 <div class="col-xl-9 col-lg-8">
                     <div id="loader" class="loader" style="display: none;">
                         <div class="spinner"></div>
                         <p>Loading...</p>
                     </div>
-                    <div id="products" class="mt-5 pt-4">
+                    <div class="product-wrapper" style="padding-top: 65px;">
+                        <div class="product__info-top">
+                            <div class="product__showing-text-box">
+
+                            </div>
+                            <div class="product__showing-sort">
+                                <select name="sort" id="sort" class="form-select">
+                                    <option value="">
+                                        Default Sorting</option>
+                                    <option value="low-to-high" {{ request('sort') == 'low-to-high' ? 'selected' : '' }}>
+                                        Low to High</option>
+                                    <option value="high-to-low" {{ request('sort') == 'high-to-low' ? 'selected' : '' }}>
+                                        High to Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="products">
+
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-
-                </div><!-- /.col-lxl9  col-lg-8-->
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </section><!-- /.product-page section-space-bottom -->
+    <!-- 🔥 Offcanvas HTML (Place near top of layout) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filters</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="my-3 text-end">
+                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;"
+                    data-bs-dismiss="offcanvas" aria-label="Close">Search</button>
+            </div>
+            <div id="mobile-filter-content"></div>
+        </div>
+    </div>
 @endsection
 @section('page-script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -331,7 +371,16 @@
                 }, '', newUrl);
                 checkQueryParams(urlParams);
             })
-
+            $('#sort').on('change', function() {
+                let urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('sort_by', $(this).val());
+                let newUrl = window.location.pathname + '?' + urlParams
+                    .toString();
+                window.history.pushState({
+                    path: newUrl
+                }, '', newUrl);
+                checkQueryParams(urlParams);
+            });
 
             function decodeValue(value) {
                 return atob(value);
@@ -423,4 +472,37 @@
             window.location.href = "{{ route('frontend.home') }}";
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            const $sidebar = $('#original-filter-sidebar');
+            const $desktopContainer = $('#sidebar-column');
+            const $mobileContainer = $('#mobile-filter-content');
+
+            function moveSidebar() {
+                const isMobile = $(window).width() < 992;
+
+                if (isMobile) {
+                    if (!$.contains($mobileContainer[0], $sidebar[0])) {
+                        $sidebar.detach().appendTo($mobileContainer);
+                    }
+                } else {
+                    if (!$.contains($desktopContainer[0], $sidebar[0])) {
+                        $sidebar.detach().appendTo($desktopContainer);
+                    }
+                }
+            }
+
+            // Initial call
+            moveSidebar();
+
+            // Resize event (with debounce)
+            let resizeTimeout;
+            $(window).on('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(moveSidebar, 150);
+            });
+        });
+    </script>
+
 @endsection

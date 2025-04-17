@@ -15,24 +15,31 @@
         <th>Message</th>
         <td>{{ $productQuery->message }}</td>
     </tr>
-    @foreach ($productQuery->items as $product)
-        <tr>
-            <th>Product Name</th>
-            <td>{{ $product->product->name }}</td>
-        </tr>
-        <tr>
-            <th>Product Quantity</th>
-            <td>
-                <span class="badge bg-success">{{ $product->quantity }}</span>
-            </td>
-        </tr>
-        <tr>
-            <th>Selected Product Variation:</th>
-            <td>
-                <ul>
-                    <li style="text-transform: capitalize">{{ ucfirst(string: $product->variation_name) }}</li>
-                </ul>
-            </td>
-        </tr>
-    @endforeach
+    <tr>
+        <th>Product Details:</th>
+        <td>
+            <table class="table table-bordered">
+                <thead>
+                    <th>Product Name</th>
+                    <th>Product Quantity</th>
+                    <th>Selected Product Variation:</th>
+                </thead>
+                <tbody>
+                    @foreach ($productQuery->items as $product)
+                        <tr>
+                            <td>{{ $product->product->name }}</td>
+                            <td style="text-align: center">
+                                <span class="badge bg-success">{{ $product->quantity }}</span>
+                            </td>
+                            <td>
+                                <span style="text-transform: capitalize">
+                                    {{ ucfirst(string: $product->variation_name) }}
+                                </span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </td>
+    </tr>
 </table>

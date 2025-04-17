@@ -20,43 +20,64 @@
         <div class="container">
             <!-- /.product-details -->
             <div class="row gutter-y-50">
-                <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
+                {{-- <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
                     <div class="product-details__img">
-                        @php
-                            $productImages = $product->images; // This is already a Collection
-                            $variantImages = $product->variations->flatMap(function ($variation) {
-                                return $variation->images;
-                            });
-
-                            $images = $productImages->merge($variantImages);
-                        @endphp
-                        <div class="swiper product-details__gallery-top">
+                        <div class="swiper product-details__gallery-top mySwiper">
                             <div class="swiper-wrapper">
-                                @forelse ($images as $image)
+                                @foreach ($product->images as $image)
                                     <div class="swiper-slide">
-                                        <img src="{{ asset($image->path) }}" alt="product details image"
-                                            class="product-details__gallery-top__img">
+                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-top__img">
                                     </div>
-                                @empty
-                                    <div class="swiper-slide">
-                                        <img src="{{ asset('frontend/assets/images/product-placeholder.png') }}"
-                                            alt="product details image" class="product-details__gallery-top__img">
-                                    </div>
-                                @endforelse
+                                @endforeach
                             </div>
                         </div>
                         <div class="swiper product-details__gallery-thumb">
                             <div class="swiper-wrapper">
-                                @foreach ($images as $image)
+                                @foreach ($product->images as $image)
                                     <div class="product-details__gallery-thumb-slide swiper-slide">
-                                        <img src="{{ asset($image->path) }}" alt="product details thumb"
-                                            class="product-details__gallery-thumb__img">
+                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
                                     </div>
                                 @endforeach
                             </div>
                         </div>
                     </div>
-                </div><!-- /.column -->
+                </div><!-- /.column --> --}}
+                @php
+                    $productImages = $product->images; // This is already a Collection
+                    $variantImages = $product->variations->flatMap(function ($variation) {
+                        return $variation->images;
+                    });
+
+                    $images = $productImages->merge($variantImages);
+                @endphp
+                <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
+                    <div class="product-details__img">
+                        <div class="swiper product-details__gallery-top">
+                            <div class="swiper-wrapper">
+
+                                @foreach ($images as $image)
+                                    <div class="swiper-slide">
+                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-top__img">
+                                    </div>
+                                @endforeach
+
+                            </div>
+                        </div>
+                        <div class="swiper product-details__gallery-thumb">
+                            <div class="swiper-wrapper">
+                                @foreach ($images as $image)
+                                    <div class="swiper-slide product-details__gallery-thumb-slide">
+                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
                 <div class="col-lg-6 col-xl-6 wow fadeInRight" data-wow-delay="300ms">
                     <div class="product-details__content">
                         <div class="product-details__excerpt">
@@ -75,18 +96,12 @@
                                     <div class="col-12">
                                         <h6 class="mb-2">{{ $group['attribute'] }}:</h6>
                                         <div class="flex-wrap gap-2 d-flex">
-                                            {{-- @foreach ($group['values'] as $value)
-                                                <label class="attribute-option">
-                                                    <input type="radio"
-                                                        name="attribute_{{ Str::slug($group['attribute']) }}"
-                                                        value="{{ $value }}" class="d-none attribute-input">
-                                                    <span class="badge bg-secondary">{{ $value }}</span>
-                                                </label>
-                                            @endforeach --}}
                                             @foreach ($group['values'] as $value)
                                                 <label class="attribute-option">
                                                     <input type="radio" class="attribute-input d-none"
-                                                        name="{{ $group['attribute'] }}" value="{{ $value }}">
+                                                        name="{{ $group['attribute'] }}"
+                                                        data-attribute="{{ $group['attribute'] }}"
+                                                        value="{{ $value }}">
                                                     <span class="badge bg-secondary">{{ $value }}</span>
                                                 </label>
                                             @endforeach
@@ -95,7 +110,11 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div id="price-wrapper"></div>
+                        <div id="price-wrapper-ditails">
+                            <span class="price"
+                                style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
+                            <span class="price">${{ $product->sale_price ?? $product->regular_price }}</span>
+                        </div>
 
                         <div class="product-details__buttons">
                             <div class="d-flex align-items-center justify-content-center">
@@ -134,56 +153,111 @@
 @section('page-script')
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const totalAttributes = {{ count($attributes) }};
-
-            document.querySelectorAll('.attribute-input').forEach(input => {
-                input.addEventListener('change', () => {
-                    let selectedAttributes = {};
-
-                    document.querySelectorAll('.attribute-input:checked').forEach(selected => {
-                        selectedAttributes[selected.name] = selected.value;
-                    });
-
-                    if (Object.keys(selectedAttributes).length === totalAttributes) {
-                        // Build attribute_string in the exact format
-                        let attributeString = Object.entries(selectedAttributes)
-                            .map(([key, value]) => `${key}: ${value}`)
-                            .join(' / ');
-
-                        $.ajax({
-                            url: "{{ route('get.product.variation.price', $product->id) }}",
-                            method: 'GET',
-                            data: {
-                                variation: attributeString
-                            },
-                            beforeSend: function() {
-                                $('#price-wrapper').html(
-                                    '<div id="loader" class="text-danger">Loading...</div>'
-                                );
-                            },
-                            success: function(response) {
-                                $('#loader').hide();
-                                if (response.status === 'success') {
-                                    let html =
-                                        `<span class="price">$ ${response.data.price}</span>`;
-                                    $('#price-wrapper').html(html);
-                                } else {
-                                    alert('Variation not found.');
-                                }
-                            },
-                            error: function() {
-                                $('#loader').hide();
-                                alert('Something went wrong.');
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
         $(document).ready(function() {
+            const totalAttributes = {{ count($attributes) }};
+            // ✅ Init Swiper sliders
+            var galleryThumbs = new Swiper('.product-details__gallery-thumb', {
+                spaceBetween: 10,
+                slidesPerView: 4,
+                freeMode: true,
+                watchSlidesProgress: true,
+            });
+
+            var galleryTop = new Swiper('.product-details__gallery-top', {
+                spaceBetween: 10,
+                thumbs: {
+                    swiper: galleryThumbs
+                }
+            });
+
+            // ✅ Reusable function to update gallery
+            function updateSwiperGallery(images) {
+                galleryTop.removeAllSlides();
+                galleryThumbs.removeAllSlides();
+
+                $.each(images, function(index, imagePath) {
+                    const imageUrl = '/' + imagePath.replace(/^\/?/, '');
+
+                    galleryTop.appendSlide(`
+                    <div class="swiper-slide">
+                        <img src="${imageUrl}" class="product-details__gallery-top__img">
+                    </div>`);
+
+                    galleryThumbs.appendSlide(`
+                    <div class="swiper-slide product-details__gallery-thumb-slide">
+                        <img src="${imageUrl}" class="product-details__gallery-thumb__img">
+                    </div>`);
+                });
+
+                // Optionally reset to first slide
+                galleryTop.slideTo(0);
+                galleryThumbs.slideTo(0);
+            }
+
+            // ✅ Listen to attribute changes
+            $('.attribute-input').on('change', function() {
+                let selectedAttributes = {};
+
+                $('.attribute-input:checked').each(function() {
+                    selectedAttributes[$(this).attr('name')] = $(this).val();
+                });
+
+                if (Object.keys(selectedAttributes).length === totalAttributes) {
+                    let variationString = $.map(selectedAttributes, function(val, key) {
+                        return key + ': ' + val;
+                    }).join(' / ');
+
+                    $.ajax({
+                        url: "{{ route('get.product.variation.price', $product->id) }}",
+                        method: 'GET',
+                        data: {
+                            variation: variationString
+                        },
+                        beforeSend: function() {
+                            // Price skeleton
+                            $('#price-wrapper-ditails').html(
+                                '<div id="loader" class="text-danger">Loading...</div>'
+                            );
+
+                            // Image skeleton (main + thumbs)
+                            const mainSkeleton =
+                                `<div class="swiper-slide">
+                                    <div class="skeleton-loader"></div>
+                                </div>`;
+
+                            const thumbSkeletons = Array(4).fill().map(() =>
+                                `<div class="swiper-slide product-details__gallery-thumb-slide">
+                                    <div class="skeleton-loader skeleton-thumb"></div>
+                                </div>`).join('');
+
+                            // Replace swiper wrappers with skeleton slides
+                            $('.product-details__gallery-top .swiper-wrapper').html(
+                                mainSkeleton);
+                            $('.product-details__gallery-thumb .swiper-wrapper').html(
+                                thumbSkeletons);
+                        },
+
+                        success: function(response) {
+                            $('#loader').hide();
+
+                            if (response.status === 'success') {
+                                updateSwiperGallery(response.data.images);
+
+                                $('#price-wrapper-ditails').html(
+                                    `<span class="price">$ ${response.data.price}</span>`
+                                );
+                            } else {
+                                alert(response.message || 'Variation not found.');
+                            }
+                        },
+                        error: function() {
+                            $('#loader').hide();
+                            alert('Something went wrong.');
+                        }
+                    });
+                }
+            });
+
             displayCartItems();
             $('.enquireBtn').click(function() {
                 var productId = $(this).data('id');
@@ -191,9 +265,15 @@
                 $.ajax({
                     url: url,
                     method: 'GET',
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
                     success: function(response) {
                         $('#enquireFormResponse').html(response.html);
                         $('#myModal').modal('show');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
                     }
                 })
             });
@@ -205,9 +285,15 @@
                 $.ajax({
                     url: url,
                     method: 'GET',
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
                     success: function(response) {
                         $('#addToCartResponse').html(response.html);
                         $('#addToCartModal').modal('show');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
                     }
                 })
             });
@@ -304,6 +390,29 @@
         .section-space {
             padding-top: var(--section-space, 120px);
             padding-bottom: 0;
+        }
+
+        .skeleton-loader {
+            background: linear-gradient(-90deg, #f0f0f0 0%, #e2e2e2 50%, #f0f0f0 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.2s infinite;
+            border-radius: 8px;
+            width: 100%;
+            height: 400px;
+        }
+
+        .skeleton-thumb {
+            height: 100px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
     </style>
 @endsection

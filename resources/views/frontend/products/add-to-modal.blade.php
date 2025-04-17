@@ -1,14 +1,13 @@
 @php
     use App\Helpers\ImageUploadHelper;
 @endphp
+
 <style>
-    /* Style each form group */
     .form-group {
         margin-bottom: 20px;
         position: relative;
     }
 
-    /* Style the labels */
     .form-group label {
         font-size: 14px;
         font-weight: bold;
@@ -17,7 +16,6 @@
         margin-bottom: 5px;
     }
 
-    /* Style the input fields */
     .form-group input,
     .form-group textarea {
         width: 100%;
@@ -30,7 +28,6 @@
         color: #333;
     }
 
-    /* Style the textarea separately */
     .form-group textarea {
         resize: none;
         height: 80px;
@@ -59,7 +56,6 @@
     .singleVariationContainer:not(:last-child) {
         border-bottom: 1px solid #d7d7d7;
         margin: 0 -12px 0 -12px;
-        /*padding: 3px 0;*/
     }
 
     .attribute-title {
@@ -134,9 +130,15 @@
             {{-- hidden product data --}}
             <input type="hidden" name="product_id" id="products_id" value="{{ $product->id }}">
             <input type="hidden" name="product_name" id="product_name" value="{{ $product->name }}">
-            <input type="hidden" name="product_price" id="product_price" value="{{ $product->price }}">
+            <input type="hidden" name="product_price" id="product_price"
+                value="{{ $product->sale_price ?? $product->regular_price }}">
             <input type="hidden" name="image" id="image"
-                value="{{ ImageUploadHelper::getProductImageUrl($product->images->where('type', 'thumbnail')->first()?->image) }}">
+                value="{{ asset($product->images->where('imageable_id', $product->id)->where('imageable_type', 'App\Models\Product')->first()?->path) }}">
+
+            {{-- price display --}}
+            <div class="col-md-12 mt-2" id="price-wrapper">
+                <span class="price">$ {{ $product->sale_price ?? $product->regular_price }}</span>
+            </div>
         </div>
     </div>
 
@@ -154,14 +156,15 @@
 
 <script>
     $(document).ready(function() {
-        // Increment Quantity
+        const totalAttributes = {{ count($attributes) }};
+
+        // Quantity Buttons
         $(".add").click(function() {
             let input = $("#product_quality");
             let currentValue = parseInt(input.val(), 10) || 1;
             input.val(currentValue + 1);
         });
 
-        // Decrement Quantity
         $(".sub").click(function() {
             let input = $("#product_quality");
             let currentValue = parseInt(input.val(), 10) || 1;
@@ -170,7 +173,6 @@
             }
         });
 
-        // Only numeric input allowed
         $("#product_quality").on("input", function() {
             this.value = this.value.replace(/[^0-9]/g, '');
             if (this.value === '' || parseInt(this.value) < 1) {
@@ -178,40 +180,99 @@
             }
         });
 
-        // Handle variation click
+        // Variation Click Event
         $('.variation_value_pointer').on('click', function() {
             var key = $(this).data('key');
             var value = $(this).data('value');
 
-            // Remove old input if exists
             $('input[name="variation_values[' + key + ']"]').remove();
 
-            // Add new input
             $('<input>').attr({
                 type: 'hidden',
                 name: 'variation_values[' + key + ']',
                 value: value
             }).appendTo('#cartForm');
 
-            // UI feedback
             $('.variation_value_pointer[data-key="' + key + '"]').removeClass('selected');
             $(this).addClass('selected');
-
-            // Optional: show selection next to attribute label
             $('.selectedValue-' + key).text(value);
+
+            // Fetch variation price
+            getVariationPrice();
         });
 
-        // Handle Form Submit
+        function getVariationPrice() {
+            let selectedAttributes = {};
+
+            $('input[name^="variation_values"]').each(function() {
+                const match = $(this).attr('name').match(/\[([^\]]+)]/);
+                if (match) {
+                    const key = match[1];
+                    const value = $(this).val();
+                    if (key && value) {
+                        selectedAttributes[key] = value;
+                    }
+                }
+            });
+
+            const selectedCount = Object.keys(selectedAttributes).length;
+
+            if (selectedCount === totalAttributes) {
+                const attributeString = Object.entries(selectedAttributes)
+                    .map(([key, value]) => `${key}: ${value}`)
+                    .join(' / ');
+                $.ajax({
+                    url: "{{ route('get.product.variation.price', $product->id) }}",
+                    method: 'GET',
+                    data: {
+                        variation: attributeString
+                    },
+                    beforeSend: function() {
+                        $('#price-wrapper').html(
+                            '<div id="loader" class="text-danger">Loading...</div>');
+                    },
+                    success: function(response) {
+                        $('#loader').remove();
+                        if (response.status === 'success' && response.data?.price) {
+                            const price = parseFloat(response.data.price);
+                            if (!isNaN(price)) {
+                                $('#product_price').val(price.toFixed(2));
+                                $('#price-wrapper').html(
+                                    `<span class="price">$ ${price.toFixed(2)}</span>`);
+                                $('#product_price').val(price.toFixed(2));
+                            } else {
+                                $('#price-wrapper').html(
+                                    '<span class="text-danger">Invalid price format</span>');
+                            }
+                        } else {
+                            $('#price-wrapper').html(
+                                '<span class="text-danger">Variation not found</span>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#loader').remove();
+                        $('#price-wrapper').html(
+                            '<span class="text-danger">Error loading price</span>');
+                    }
+                });
+            }
+        }
+
+
+
+
+        // Form Submit
         $('#cartForm').on('submit', function(e) {
             e.preventDefault();
 
-            var selectedVariants = {};
+            let selectedVariants = {};
             $('input[name^="variation_values"]').each(function() {
                 var match = $(this).attr('name').match(/\[([^\]]+)]/);
                 if (match) {
                     selectedVariants[match[1]] = $(this).val();
                 }
             });
+            let variationString = formatVariationString(selectedVariants);
 
             let productId = $('#products_id').val();
             let productName = $('#product_name').val();
@@ -219,21 +280,21 @@
             let productImage = $('#image').val();
             let productQuality = $('#product_quality').val();
 
-            // Perform your logic
-            addItem(productId, productName, productPrice, productQuality, productImage,
-                selectedVariants);
-            notify('success', 'Product added to cart.');
-
-            // Reset form (removes variation inputs too)
-            $('#cartForm')[0].reset();
-            $('#cartForm input[name^="variation_values"]').remove();
-            $('.variation_value_pointer').removeClass('selected');
-            $('.attribute-title span').text('');
-
-            // Hide Modal & Refresh cart view
-            $('#addToCartModal').modal('hide');
-            displayCartItems();
-            $('.totalCartItems').html(getTotalQuantity());
+            if (productId && productName && productPrice && productQuality && productImage &&
+                variationString) {
+                addItem(productId, productName, productPrice, productQuality, productImage,
+                    variationString);
+                notify('success', 'Product added to cart.');
+                $('#cartForm')[0].reset();
+                $('#cartForm input[name^="variation_values"]').remove();
+                $('.variation_value_pointer').removeClass('selected');
+                $('.attribute-title span').text('');
+                $('#addToCartModal').modal('hide');
+                displayCartItems();
+                $('.totalCartItems').html(getTotalQuantity());
+            } else {
+                notify('error', 'Please Select Variation');
+            }
         });
     });
 </script>

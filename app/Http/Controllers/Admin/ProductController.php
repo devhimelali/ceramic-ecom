@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\ProductLabelEnum;
 use App\Models\Brand;
+use App\Models\Image;
 use App\Models\Product;
 use App\Enum\StatusEnum;
 use App\Models\Category;
-use App\Models\Attribute;
 use App\Models\Variation;
 use Illuminate\Support\Str;
-use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Helpers\ImageUploadHelper;
@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
 use App\Http\Requests\Admin\Product\StoreRequest;
-use App\Http\Requests\Admin\Product\UpdateRequest;
 
 class ProductController extends Controller
 {
@@ -105,6 +103,7 @@ class ProductController extends Controller
             'brands' => $brands,
             'statuses' => $statuses,
             'active' => 'products',
+            'labels' => ProductLabelEnum::cases(),
 
         ];
         return view('admin.product.create', $data);
@@ -205,22 +204,20 @@ class ProductController extends Controller
             'categories' => $categories,
             'brands' => $brands,
             'statuses' => $statuses,
+            'labels' => ProductLabelEnum::cases(),
             'active' => 'products',
         ];
 
         return view('admin.product.edit', $data);
     }
 
-
-
+    /*************  ✨  Update method 🌟  *************/
     public function update(Request $request, Product $product)
     {
-        // dd($request->all());
-
         DB::beginTransaction();
 
         try {
-            // 1. Update Product Info
+            // 1. Update basic product information
             $product->update([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
@@ -233,73 +230,93 @@ class ProductController extends Controller
                 'description' => $request->description,
             ]);
 
-            // 2. Sync Attributes
-            //            $product->attributes()->delete();
-            if ($request['attributes'] != null) {
+            // 2. Sync attributes and values
+            if (!empty($request['attributes'])) {
+                // Extract new attribute IDs from request
+                $newAttributeIds = array_filter(array_column($request['attributes'], 'id'));
+                $existingAttributeIds = $product->attributes()->pluck('id')->toArray();
+
+                // Delete removed attributes
+                $attributesToDelete = array_diff($existingAttributeIds, $newAttributeIds);
+                $product->attributes()->whereIn('id', $attributesToDelete)->delete();
+
+                // Loop through each attribute
                 foreach ($request['attributes'] as $attr) {
-                    if (isset($attr['id']) && $attr['id'] != null) {
+                    // If attribute exists, update it
+                    if (!empty($attr['id'])) {
                         $attribute = $product->attributes()->find($attr['id']);
-                        $attribute->update([
-                            'name' => $attr['name']
-                        ]);
+                        if ($attribute) {
+                            $attribute->update(['name' => $attr['name']]);
+                        }
                     } else {
+                        // Create new attribute
                         $attribute = $product->attributes()->create([
                             'name' => $attr['name']
                         ]);
                     }
-                    $values = array_map('trim', explode(',', $attr['values']));
-                    $attribute->values()->delete();
-                    foreach ($values as $val) {
-                        if ($val !== '') {
-                            $attribute->values()->create([
-                                'value' => $val
+
+                    // Sync values
+                    if ($attribute) {
+                        $attribute->values()->delete(); // Clear old values
+                        $values = array_map('trim', explode(',', $attr['values']));
+                        foreach ($values as $value) {
+                            if ($value !== '') {
+                                $attribute->values()->create(['value' => $value]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3. Handle variations
+            $incomingVariationIds = array_filter(array_column($request->variations, 'variation_id'));
+            $newVariations = collect($request->variations)->filter(fn($item) => is_null($item['variation_id']))->values();
+
+            // Delete removed variations
+            foreach ($product->variations as $existingVar) {
+                if (!in_array($existingVar->id, $incomingVariationIds)) {
+                    $this->deleteVariations($existingVar);
+                }
+            }
+
+            // Update or create variations
+            foreach ($request->variations as $variationInput) {
+                if (!empty($variationInput['variation_id'])) {
+                    // Update existing variation
+                    $variation = $product->variations()->find($variationInput['variation_id']);
+                    if ($variation) {
+                        $variation->update([
+                            'attribute_string' => $variationInput['attributes'],
+                            'price' => $variationInput['price'],
+                        ]);
+
+                        // Handle image uploads
+                        if (!empty($variationInput['images'])) {
+                            foreach ($variationInput['images'] as $image) {
+                                $fileInfo = uploadImage($image, 'products');
+                                $variation->images()->create([
+                                    'name' => $fileInfo['name'],
+                                    'path' => $fileInfo['path'],
+                                ]);
+                            }
+                        }
+                    }
+                } else {
+                    // Create new variation
+                    $variation = $product->variations()->create([
+                        'attribute_string' => $variationInput['attributes'],
+                        'price' => $variationInput['price'],
+                    ]);
+
+                    // Upload images
+                    if (!empty($variationInput['images'])) {
+                        foreach ($variationInput['images'] as $image) {
+                            $fileInfo = uploadImage($image, 'products');
+                            $variation->images()->create([
+                                'name' => $fileInfo['name'],
+                                'path' => $fileInfo['path'],
                             ]);
                         }
-                    }
-                }
-            }
-
-            if ($this->hasNewVariations($request->variations)) {
-                // dd('has new variations');
-                $this->deleteVariations($product->variations);
-            }
-            $existing_variations = $product->variations()->pluck('id')->toArray();
-            $variationIds = collect($request->variations)->pluck('variation_id');
-            $notCommon = collect($existing_variations)->diff($variationIds)->values()->all();
-            if (count($notCommon) > 0) {
-                $variations = $product->variations()->whereIn('id', $notCommon)->get();
-                foreach ($variations as $variation) {
-                    foreach ($variation->images as $image) {
-                        $filePath = preg_replace('/^storage\//', '', $image->path);
-                        if (Storage::exists($filePath)) {
-                            Storage::delete($filePath);
-                        }
-                    }
-                    $variation->delete();
-                }
-            }
-
-
-            foreach ($request->variations ?? [] as $variation) {
-                if ($variation['variation_id'] != null) {
-                    $variation_data = $product->variations()->find($variation['variation_id']);
-                    $variation_data->update([
-                        'attribute_string' => $variation['attributes'],
-                        'price' => $variation['price']
-                    ]);
-                } else {
-                    $variation_data = $product->variations()->create([
-                        'attribute_string' => $variation['attributes'],
-                        'price' => $variation['price']
-                    ]);
-                }
-                if (isset($variation['images']) && $variation['images'] != null) {
-                    foreach ($variation['images'] as $image) {
-                        $fileInfo = uploadImage($image, 'products');
-                        $variation_data->images()->create([
-                            'name' => $fileInfo['name'],
-                            'path' => $fileInfo['path'],
-                        ]);
                     }
                 }
             }
@@ -321,319 +338,46 @@ class ProductController extends Controller
         }
     }
 
-    private function hasNewVariations($variations)
+    private function deleteVariations($variation)
     {
-        foreach ($variations as $variation) {
-            if ($variation['variation_id'] != null) {
-                return false;
-            }
-            return true;
-        }
-    }
-
-    private function deleteVariations($variations)
-    {
-        foreach ($variations as $variation) {
+        if ($variation->images->isNotEmpty()) {
             foreach ($variation->images as $image) {
                 $filePath = preg_replace('/^storage\//', '', $image->path);
-                if (Storage::exists($filePath)) {
-                    Storage::delete($filePath);
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
                 }
+                $image->delete();
             }
-            $variation->delete();
         }
+        $variation->delete();
+        return true;
     }
-
-
-
-
-    // public function update(Request $request, Product $product)
-    // {
-    //     DB::beginTransaction();
-
-    //     try {
-    //         // Step 1: Update core product info
-    //         $product->update([
-    //             'name' => $request->name,
-    //             'slug' => Str::slug($request->name),
-    //             'category_id' => $request->category,
-    //             'brand_id' => $request->brand,
-    //             'regular_price' => $request->regular_price,
-    //             'sale_price' => $request->sale_price,
-    //             'status' => $request->status,
-    //             'short_description' => $request->short_description,
-    //             'description' => $request->description,
-    //         ]);
-    //         // Step 2: Sync product attributes and their values
-    //         if (!empty($request['attributes'])) {
-    //             foreach ($request['attributes'] as $attr) {
-    //                 $attribute = !empty($attr['id'])
-    //                     ? $product->attributes()->find($attr['id'])
-    //                     : $product->attributes()->create(['name' => $attr['name']]);
-
-    //                 if ($attribute) {
-    //                     $attribute->update(['name' => $attr['name']]);
-    //                     $attribute->values()->delete();
-
-    //                     $values = array_map('trim', explode(',', $attr['values']));
-    //                     foreach ($values as $val) {
-    //                         if ($val !== '') {
-    //                             $attribute->values()->create(['value' => $val]);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-
-    //         // Step 3: Handle variation logic
-    //         $existingVariationIds = $product->variations()->pluck('id')->toArray();
-    //         $requestVariationIds = collect($request->variations)->pluck('variation_id')->filter()->toArray();
-
-    //         $variationsToDelete = array_diff($existingVariationIds, $requestVariationIds);
-    //         $newVariationsExist = $this->hasNewVariations($request->variations);
-
-    //         // Delete all existing variations if entirely new variations are sent
-    //         if ($newVariationsExist) {
-    //             $this->deleteVariations($product->variations);
-    //         } elseif (!empty($variationsToDelete)) {
-    //             $variations = $product->variations()->whereIn('id', $variationsToDelete)->get();
-    //             $this->deleteVariations($variations);
-    //         }
-
-    //         // Step 4: Update or create variations
-    //         foreach ($request->variations ?? [] as $variation) {
-    //             $variationData = !empty($variation['variation_id'])
-    //                 ? $product->variations()->find($variation['variation_id'])
-    //                 : null;
-
-    //             if ($variationData) {
-    //                 $variationData->update([
-    //                     'attribute_string' => $variation['attributes'],
-    //                     'price' => $variation['price']
-    //                 ]);
-    //             } else {
-    //                 $variationData = $product->variations()->create([
-    //                     'attribute_string' => $variation['attributes'],
-    //                     'price' => $variation['price']
-    //                 ]);
-    //             }
-
-    //             // Attach images if available
-    //             if (!empty($variation['images'])) {
-    //                 foreach ($variation['images'] as $image) {
-    //                     $fileInfo = uploadImage($image, 'products');
-    //                     $variationData->images()->create([
-    //                         'name' => $fileInfo['name'],
-    //                         'path' => $fileInfo['path'],
-    //                     ]);
-    //                 }
-    //             }
-    //         }
-
-    //         DB::commit();
-
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'message' => 'Product updated successfully',
-    //             'product' => $product,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         Log::error('Product Update Failed: ' . $e->getMessage());
-
-    //         return response()->json([
-    //             'error' => 'An unexpected error occurred: ' . $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }
-
-    // private function hasNewVariations($variations)
-    // {
-    //     foreach ($variations as $variation) {
-    //         if (empty($variation['variation_id'])) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
-
-    // private function deleteVariations($variations)
-    // {
-    //     foreach ($variations as $variation) {
-    //         foreach ($variation->images as $image) {
-    //             $filePath = preg_replace('/^storage\//', '', $image->path);
-    //             if (Storage::exists($filePath)) {
-    //                 Storage::delete($filePath);
-    //             }
-    //         }
-    //         $variation->delete();
-    //     }
-    // }
-
-
-
-    // public function update(Request $request, Product $product)
-    // {
-    //     DB::beginTransaction();
-
-    //     try {
-    //         // Step 1: Update core product info
-    //         $product->update([
-    //             'name' => $request->name,
-    //             'slug' => Str::slug($request->name),
-    //             'category_id' => $request->category,
-    //             'brand_id' => $request->brand,
-    //             'regular_price' => $request->regular_price,
-    //             'sale_price' => $request->sale_price,
-    //             'status' => $request->status,
-    //             'short_description' => $request->short_description,
-    //             'description' => $request->description,
-    //         ]);
-
-    //         // Step 2: Sync product attributes
-    //         $existingAttrIds = $product->attributes()->pluck('id')->toArray();
-    //         $requestAttrIds = collect($request['attributes'])->pluck('id')->filter()->toArray();
-    //         $attributesToDelete = array_diff($existingAttrIds, $requestAttrIds);
-
-    //         // Delete removed attributes and their values
-    //         if (!empty($attributesToDelete)) {
-    //             foreach ($attributesToDelete as $attrId) {
-    //                 $attribute = $product->attributes()->find($attrId);
-    //                 if ($attribute) {
-    //                     $attribute->values()->delete(); // Delete child values first
-    //                     $attribute->delete();           // Then delete the attribute
-    //                 }
-    //             }
-    //         }
-
-    //         // Update or create attributes from request
-    //         if (!empty($request['attributes'])) {
-    //             foreach ($request['attributes'] as $attr) {
-    //                 $attribute = !empty($attr['id'])
-    //                     ? $product->attributes()->find($attr['id'])
-    //                     : $product->attributes()->create(['name' => $attr['name']]);
-
-    //                 if ($attribute) {
-    //                     $attribute->update(['name' => $attr['name']]);
-    //                     $attribute->values()->delete();
-
-    //                     $values = array_map('trim', explode(',', $attr['values']));
-    //                     foreach ($values as $val) {
-    //                         if ($val !== '') {
-    //                             $attribute->values()->create(['value' => $val]);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-
-    //         // Step 3: Handle variation logic
-    //         $existingVariationIds = $product->variations()->pluck('id')->toArray();
-    //         $requestVariationIds = collect($request->variations)->pluck('variation_id')->filter()->toArray();
-
-    //         $variationsToDelete = array_diff($existingVariationIds, $requestVariationIds);
-    //         $newVariationsExist = $this->hasNewVariations($request->variations);
-    //         // Delete all existing variations if new ones are replacing them
-    //         if ($newVariationsExist) {
-    //             $this->deleteVariations($product->variations);
-    //         } elseif (!empty($variationsToDelete)) {
-    //             $variations = $product->variations()->whereIn('id', $variationsToDelete)->get();
-    //             $this->deleteVariations($variations);
-    //         }
-    //         // Step 4: Update or create variations
-    //         foreach ($request->variations ?? [] as $variation) {
-    //             $variationData = !empty($variation['variation_id'])
-    //                 ? $product->variations()->find($variation['variation_id'])
-    //                 : null;
-
-    //             if ($variationData) {
-    //                 $variationData->update([
-    //                     'attribute_string' => $variation['attributes'],
-    //                     'price' => $variation['price']
-    //                 ]);
-    //             } else {
-    //                 $variationData = $product->variations()->create([
-    //                     'attribute_string' => $variation['attributes'],
-    //                     'price' => $variation['price']
-    //                 ]);
-    //             }
-
-    //             // Upload and attach images if present
-    //             if (!empty($variation['images'])) {
-    //                 foreach ($variation['images'] as $image) {
-    //                     $fileInfo = uploadImage($image, 'products');
-    //                     $variationData->images()->create([
-    //                         'name' => $fileInfo['name'],
-    //                         'path' => $fileInfo['path'],
-    //                     ]);
-    //                 }
-    //             }
-    //         }
-
-    //         DB::commit();
-
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'message' => 'Product updated successfully',
-    //             'product' => $product,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         Log::error('Product Update Failed: ' . $e->getMessage());
-
-    //         return response()->json([
-    //             'error' => 'An unexpected error occurred: ' . $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }
-
-    // // Check if any new variation is being added (no variation_id)
-    // private function hasNewVariations($variations)
-    // {
-    //     foreach ($variations as $variation) {
-    //         if (empty($variation['variation_id'])) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
-
-    // // Delete variations along with their images
-    // private function deleteVariations($variations)
-    // {
-    //     foreach ($variations as $variation) {
-    //         foreach ($variation->images as $image) {
-    //             $filePath = preg_replace('/^storage\//', '', $image->path);
-    //             if (Storage::exists($filePath)) {
-    //                 Storage::delete($filePath);
-    //             }
-    //         }
-    //         $variation->delete();
-    //     }
-    // }
-
-
-
-
-
+    /*************  ✨  Update method End 🌟  *************/
 
     public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            $product = Product::with(['images', 'category', 'brand', 'attributes'])->findOrFail($id);
+            $product = Product::with(['images', 'variations'])->findOrFail($id);
+            foreach ($product->images as $image) {
+                $filePath = preg_replace('/^storage\//', '', $image->path);
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
+                $image->delete();
+            }
 
-            // Delete associated images
-            if ($product->images->isNotEmpty()) {
-                foreach ($product->images as $image) {
-                    ImageUploadHelper::deleteProductImage($image->image, 'products');
+            foreach ($product->variations as $variation) {
+                $images = Image::where('imageable_id', $variation->id)->where('imageable_type', Variation::class)->get();
+                foreach ($images as $image) {
+                    $filePath = preg_replace('/^storage\//', '', $image->path);
+                    // Delete image file
+                    if (Storage::disk('public')->exists($filePath)) {
+                        Storage::disk('public')->delete($filePath);
+                    }
                     $image->delete();
                 }
             }
-
-            // Detach related attributes
-            $product->attributes()->detach();
-
             // Delete the product
             $product->delete();
 
@@ -656,7 +400,6 @@ class ProductController extends Controller
         $request->validate([
             'id' => 'required|integer|exists:images,id'
         ]);
-
         $image =  Image::findOrFail($request->id);
         $filePath = preg_replace('/^storage\//', '', $image->path);
         // Delete image file

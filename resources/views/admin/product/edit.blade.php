@@ -39,7 +39,7 @@
                                         value="{{ $product->name }}">
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-6 my-3">
+                                    <div class="col-lg-4 my-3">
                                         <label for="category" class="form-label">Category</label>
                                         <select class="form-control select2" id="category" name="category" required>
                                             <option value="" disabled>Select Category</option>
@@ -52,7 +52,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-6 my-3">
+                                    <div class="col-lg-4 my-3">
                                         <label for="brand" class="form-label">Brand</label>
                                         <select class="form-control select2" id="brand" name="brand">
                                             <option value="" disabled>Select Brand</option>
@@ -62,6 +62,20 @@
                                                     {{ $brand->name }}
                                                 </option>
                                             @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 my-3">
+                                        <label for="label" class="form-label">Product Label</label>
+                                        <select class="form-control select2" id="label" name="label">
+                                            <option value="" disabled
+                                                {{ is_null($product->label) ? 'selected' : '' }}>Select Brand</option>
+                                            @foreach ($labels as $label)
+                                                <option value="{{ $label->value }}"
+                                                    {{ $product->label === $label ? 'selected' : '' }}>
+                                                    {{ $label->description() }}
+                                                </option>
+                                            @endforeach
+
                                         </select>
                                     </div>
                                     <div class="col-lg-4 my-3">
@@ -80,7 +94,7 @@
                                             <option value="" disabled>Select Status</option>
                                             @foreach ($statuses as $status)
                                                 <option value="{{ $status->value }}"
-                                                    {{ $product->status === $status->value ? 'selected' : '' }}>
+                                                    {{ $product->status === $status ? 'selected' : '' }}>
                                                     {{ $status->description() }}
                                                 </option>
                                             @endforeach
@@ -92,8 +106,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="text-center">
                                         <div class="custom-upload-box">
-                                            <img src="{{ asset('assets/placeholder-image-2.png') }}" class="preview-img"
-                                                alt="Image Preview">
+                                            <img src="{{ $product->images ? asset($product->images->where('imageable_id', $product->id)->where('imageable_type', 'App\Models\Product')->first()?->path) : asset('assets/placeholder-image-2.png') }}"
+                                                class="preview-img" alt="Image Preview">
                                             <button type="button" class="remove-btn removeImage"
                                                 style="display:none;">&times;
                                             </button>
@@ -168,12 +182,7 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                            <div class="d-flex align-items-start gap-3 mt-4">
-                                                <button type="button" class="btn btn-success ms-auto nexttab"
-                                                    data-nexttab="attribute-tab">
-                                                    Step 2 <i class="ri-arrow-right-line ms-2"></i>
-                                                </button>
-                                            </div>
+
                                         </div>
 
                                         {{-- Variations Tab --}}
@@ -185,8 +194,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="d-flex align-items-start gap-3 mt-4">
+                            <button type="submit" id="updateProductBtn"
+                                class="btn btn-success ms-auto d-none d-none">Update
+                                Product</button>
+                            <button type="button" id="step2Btn" class="btn btn-success ms-auto nexttab d-none"
+                                data-nexttab="attribute-tab">
+                                Step 2 <i class="ri-arrow-right-line ms-2"></i>
+                            </button>
 
-                        <button type="submit" class="btn btn-primary mt-4">Update Product</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -199,6 +216,29 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/js/pages/form-wizard.init.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            function toggleButtons(activeTabId) {
+                if (activeTabId === 'attributes-tab') {
+                    $('#step2Btn').removeClass('d-none');
+                    $('#updateProductBtn').addClass('d-none');
+                } else if (activeTabId === 'variations-tab') {
+                    $('#step2Btn').addClass('d-none');
+                    $('#updateProductBtn').removeClass('d-none');
+                }
+            }
+
+            // Initial check on page load
+            toggleButtons($('.tab-pane.active').attr('id'));
+
+            // On tab shown event
+            $('button[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
+                var activeTabId = $(e.target).data('bs-target').substring(1);
+                toggleButtons(activeTabId);
+            });
+        });
+    </script>
+
     <script>
         $('#description').summernote({
             placeholder: 'Write your description here',
@@ -258,7 +298,7 @@
                 });
 
                 if (hasEmpty) {
-                    alert('Please fill out all attribute fields.');
+                    notify('error', 'Please fill all the required fields.');
                     return;
                 }
 
@@ -444,7 +484,7 @@
                             container.remove();
                         },
                         error: function() {
-                            alert('Failed to delete image');
+                            notify('error', 'Failed to delete image');
                         }
                     });
                 }
@@ -509,7 +549,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .tab-content {
-            max-height: 400px;
+            height: 400px;
             overflow-y: scroll;
             border: 1px dashed;
             padding: 15px;

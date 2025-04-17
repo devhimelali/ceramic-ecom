@@ -11,12 +11,13 @@
         /* Style the submit button */
         .custom-button {
             /* width: 100%; */
-            padding: 10px;
             border: none;
             background: var(--floens-base, #C7844F);
             color: white;
             font-size: 16px;
             cursor: pointer;
+            font-size: 12px;
+            padding: 13px 24px !important
         }
 
         .custom-button:hover {
@@ -27,24 +28,8 @@
             width: 70%;
         }
 
-
-        /* Style the submit button */
-        .custom-button {
-            /* width: 100%; */
-            padding: 10px;
-            border: none;
-            background: var(--floens-base, #C7844F);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
         .custom-button:hover {
             background: #9a6e4b;
-        }
-
-        .enquireBtn {
-            width: 70%;
         }
 
         .sec_1_prev_3 {
@@ -72,33 +57,7 @@
             height: 463px
         }
 
-        @media screen and (max-width: 480px) {
-            .sec_1_prev_3 {
-                height: 364px !important;
-                width: auto !important;
-            }
 
-            .sec_1_prev_2 {
-                height: 186px;
-                width: auto !important;
-            }
-
-            .sec_1_prev_1 {
-                height: 170px;
-                width: auto !important;
-            }
-
-            img.reliable-one__image__two.sec_2_prev_2 {
-                height: 300px;
-                width: auto !important;
-
-            }
-
-            img.reliable-one__image__one.sec_2_prev_1 {
-                height: 300px;
-                width: auto !important;
-            }
-        }
 
         .product__item__content {
             border: none;
@@ -121,17 +80,6 @@
             padding: 10px !important;
             overflow: hidden;
         }
-
-        /* .enquireBtn {
-                                                            width: 70%;
-                                                            padding: 9px !important;
-                                                        }
-
-                                                        a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
-                                                            padding: 16px !important;
-                                                        } */
-
-
 
         .owl-carousel .owl-nav button.owl-prev,
         .owl-carousel .owl-nav button.owl-prev,
@@ -209,30 +157,6 @@
             z-index: 1;
         }
 
-        @media screen and (max-width: 480px) {
-            .product__item__image img {
-                height: 142px !important;
-                width: 100% !important;
-            }
-
-            .product__item__title a {
-                font-size: 0.75rem !important;
-            }
-
-            .product__item__title {
-                height: 51px;
-                overflow: hidden;
-            }
-
-            .product__item__price {
-                font-size: 14px !important;
-            }
-
-            .product_item {
-                padding: 5px !important;
-            }
-        }
-
         .product__item {
             border: 1px solid #DED8D3;
             border-radius: 4px;
@@ -252,7 +176,7 @@
             right: 7px;
             top: 7px;
             z-index: 2;
-            background: #C7844F;
+            background: #D94F4F;
             color: #fff !important;
             padding: 2px 8px;
             border-radius: 18px;
@@ -262,17 +186,155 @@
             margin-bottom: 12px;
         }
 
-        .custom-button {
-            font-size: 14px !important;
-            padding: 12px 24px !important;
-        }
-
         .addToCartBtn {
             padding: 19px 24px !important;
         }
 
         .product__item__image {
             border-radius: 4px;
+        }
+
+        .label {
+            position: absolute;
+            right: 7px;
+            top: 34px;
+            z-index: 2;
+            color: red;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+            text-transform: capitalize;
+            font-size: 10px;
+        }
+
+        .top_selling {
+            background: #2a4e72
+        }
+
+        .new-arrival {
+            background: #4FC79A
+        }
+
+        .featured {
+            background: #C7844F
+        }
+
+        .product__item__title {
+            overflow: hidden;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* media query */
+        @media screen and (max-width: 480px) {
+            .sec_1_prev_3 {
+                height: 364px !important;
+                width: auto !important;
+            }
+
+            .sec_1_prev_2 {
+                height: 186px;
+                width: auto !important;
+            }
+
+            .sec_1_prev_1 {
+                height: 170px;
+                width: auto !important;
+            }
+
+            img.reliable-one__image__two.sec_2_prev_2 {
+                height: 300px;
+                width: auto !important;
+
+            }
+
+            img.reliable-one__image__one.sec_2_prev_1 {
+                height: 300px;
+                width: auto !important;
+            }
+
+            .product__item__image img {
+                height: 142px !important;
+                width: 100% !important;
+            }
+
+            .product__item__title a {
+                font-size: 0.75rem !important;
+            }
+
+            .product__item__title {
+                overflow: hidden;
+            }
+
+            .product__item__price {
+                font-size: 14px !important;
+            }
+
+            .product__item__price span {
+                font-size: 13px !important;
+            }
+
+            .product_item {
+                padding: 5px !important;
+            }
+
+            .product__item__content {
+                border: none;
+                padding: 0.24px 7px 20px !important;
+            }
+
+            .mobile-btn {
+                padding: 8px 0px !important;
+            }
+
+            .addToCartBtn {
+                padding: 14px 21px !important;
+            }
+
+            .addToCartBtn i {
+                font-size: 12px !important;
+            }
+
+            span.discount {
+                font-size: 8px !important;
+                padding: 1px 7px;
+            }
+
+            .label {
+                font-size: 8px !important;
+                padding: 1px 7px;
+                top: 26px;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev {
+                width: 20px;
+                height: 20px;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev {
+                font-size: 14px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel button.owl-dot.owl-nav {
+                left: 7px;
+            }
+
+            .owl-carousel .owl-nav button.owl-next {
+                font-size: 13px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-next {
+                width: 20px;
+                height: 20px;
+            }
+
+            .owl-carousel .owl-nav button.owl-next,
+            .owl-carousel .owl-nav button.owl-next,
+            .owl-carousel button.owl-dot.owl-nav {
+                right: -30px;
+            }
         }
     </style>
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
@@ -513,6 +575,22 @@
         </div><!-- /.container -->
     </section><!-- /.reliable-one section-space-bottom -->
     <!-- reliable end -->
+    <style>
+        .product-home-top-selling {
+            padding-top: 30px;
+            padding-bottom: 60px;
+            position: relative;
+        }
+
+        .product-home-top-selling .sec-title {
+            margin-bottom: 60px;
+        }
+
+        .product-home {
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
+        }
+    </style>
 
     <!-- shop start -->
     <section class="product-home">
@@ -541,6 +619,13 @@
                                 });
 
                                 $images = $productImages->merge($variantImages);
+                                $label = $product->label->value;
+                                $labelClass =
+                                    $label == 'new arrival'
+                                        ? 'new-arrival'
+                                        : ($label == 'featured'
+                                            ? 'featured'
+                                            : 'top_selling');
                             @endphp
                             @if ($product->sale_price && $product->regular_price > 0)
                                 @php
@@ -554,6 +639,9 @@
                             @else
                                 <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
                             @endif
+                            <span class="label {{ $labelClass }}">
+                                {{ $product->label->value }}
+                            </span>
                             <div class="product__item__image product-carousel owl-carousel">
                                 @foreach ($images as $image)
                                     <img class="item" src="{{ asset($image->path) }}" loading="lazy"
@@ -581,7 +669,7 @@
 
                                 <div class="d-flex align-items-center justify-content-between">
                                     <a href="javascript:void(0);"
-                                        class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
+                                        class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
                                         data-id="{{ $product->id }}"
                                         data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
@@ -601,6 +689,99 @@
         </div><!-- /.container -->
     </section><!-- /.product-home -->
     <!-- shop end -->
+    <!-- shop start -->
+    <section class="product-home-top-selling">
+        <!-- /.product-home__bg -->
+        <div class="container">
+            <div class="sec-title sec-title--center">
+
+                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
+
+                <h3 class="sec-title__title">Top Selling Products in Shop</h3>
+                <!-- /.sec-title__title -->
+            </div><!-- /.sec-title -->
+            <div class="row">
+                @foreach ($topSellingProducts as $product)
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
+                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
+                            @php
+                                $productImages = $product->images; // This is already a Collection
+                                $variantImages = $product->variations->flatMap(function ($variation) {
+                                    return $variation->images;
+                                });
+
+                                $images = $productImages->merge($variantImages);
+                                $label = $product->label->value;
+                                $labelClass =
+                                    $label == 'new arrival'
+                                        ? 'new-arrival'
+                                        : ($label == 'featured'
+                                            ? 'featured'
+                                            : 'top_selling');
+                            @endphp
+                            @if ($product->sale_price && $product->regular_price > 0)
+                                @php
+                                    $saving =
+                                        (($product->regular_price - $product->sale_price) / $product->regular_price) *
+                                        100;
+                                @endphp
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                    Saving {{ number_format($saving, 0) }}%
+                                </span>
+                            @else
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
+                            @endif
+                            <span class="label {{ $labelClass }}">
+                                {{ $product->label->value }}
+                            </span>
+                            <div class="product__item__image product-carousel owl-carousel">
+                                @foreach ($images as $image)
+                                    <img class="item" src="{{ asset($image->path) }}" loading="lazy"
+                                        alt="{{ $product->name }}">
+                                @endforeach
+                            </div>
+                            <div class="product__item__content">
+                                <p class="product__item__title"><a
+                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
+                                <div class="product__item__price">
+                                    @if ($product->sale_price && $product->regular_price > 0)
+                                        <span
+                                            style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                        <span style="color: #888; font-size: 16px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                        </span>
+                                    @else
+                                        <span>
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a href="javascript:void(0);"
+                                        class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
+                                        data-id="{{ $product->id }}"
+                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                    <a href="javascript:void(0);"
+                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                        data-product-id="{{ $product->id }}"
+                                        data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                        <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
+                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                    </a>
+                                </div>
+                            </div><!-- /.product-content -->
+                        </div><!-- /.product-item -->
+                    </div><!-- /.col-md-6 col-lg-4 -->
+                @endforeach
+            </div><!-- /.row -->
+        </div><!-- /.container -->
+    </section><!-- /.product-home -->
+    <!-- shop end -->
+
 
 
     <!-- client carousel start -->
@@ -680,23 +861,22 @@
 
             displayCartItems();
             $('.enquireBtn').click(function() {
-                $('#myModal').modal('show');
                 var productId = $(this).data('id');
                 var url = $(this).data('url');
                 $.ajax({
                     url: url,
                     method: 'GET',
                     beforeSend: function() {
-                        $('#myModal .modal-body').html(
-                            '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
-                        );
-                        $('.enquireSubmitBtn').prop('disabled', true)
-                        $('.enquireSubmitBtn').html('Processing...')
+                        $('#loader').show();
                     },
                     success: function(response) {
                         $('.enquireSubmitBtn').prop('disabled', false)
                         $('.enquireSubmitBtn').html('Submit')
                         $('#enquireFormResponse').html(response.html);
+                        $('#myModal').modal('show');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
                     }
                 })
             });
@@ -704,21 +884,21 @@
             $('.addToCartBtn').click(function() {
                 var productId = $(this).data('product-id');
                 var url = $(this).data('url');
-                $('#addToCartModal').modal('show');
+
                 $.ajax({
                     url: url,
                     method: 'GET',
                     beforeSend: function() {
-                        $('#addToCartModal .modal-body').html(
-                            '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
-                        );
-                        $('.enquireSubmitBtn').prop('disabled', true)
-                        $('.enquireSubmitBtn').html('Processing...')
+                        $('#loader').show();
                     },
                     success: function(response) {
                         $('.enquireSubmitBtn').prop('disabled', false)
                         $('.enquireSubmitBtn').html('Add To Cart')
                         $('#addToCartResponse').html(response.html);
+                        $('#addToCartModal').modal('show');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
                     }
                 })
             });

@@ -240,6 +240,16 @@
         </div><!-- /.sidebar__content -->
     </aside><!-- /.sidebar-one -->
 
+    <div id="loader"
+        style="display: none; position: fixed; top: 50%; left: 50%;
+transform: translate(-50%, -50%); z-index: 1051; background-color: rgba(208,208,208,0.3); width: 100% ; height: 100%;">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
     <a href="#" data-target="html" class="scroll-to-target scroll-to-top">
         <span class="scroll-to-top__text">back top</span>
         <span class="scroll-to-top__wrapper"><span class="scroll-to-top__inner"></span></span>
@@ -300,12 +310,15 @@
             const options = {
                 title: '{{ $toast['title'] ?? '' }}',
                 message: '{{ $toast['message'] ?? 'No message provided' }}',
-                position: '{{ $toast['position'] ?? 'topRight' }}',
+                position: '{{ $toast['position'] ?? 'toast-bottom-right' }}',
             };
             show('{{ $toast['type'] ?? 'info' }}', options);
         @endforeach
 
-        function notify(type, msg, position = 'topRight') {
+        function notify(type, msg, position = 'toast-bottom-right') {
+            toastr.options.positionClass = position;
+            toastr.options.progressBar = true;
+            toastr.options.closeButton = true;
             toastr[type](msg);
         }
 
