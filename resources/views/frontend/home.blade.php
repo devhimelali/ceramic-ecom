@@ -31,12 +31,12 @@
         /* Style the submit button */
         .custom-button {
             /* width: 100%; */
-            padding: 10px;
             border: none;
             background: var(--floens-base, #C7844F);
             color: white;
             font-size: 16px;
             cursor: pointer;
+            padding: 12px !important;
         }
 
         .custom-button:hover {
@@ -123,13 +123,13 @@
         }
 
         /* .enquireBtn {
-                                                                                    width: 70%;
-                                                                                    padding: 9px !important;
-                                                                                }
+                                                                                                                                width: 70%;
+                                                                                                                                padding: 9px !important;
+                                                                                                                            }
 
-                                                                                a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
-                                                                                    padding: 16px !important;
-                                                                                } */
+                                                                                                                            a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
+                                                                                                                                padding: 16px !important;
+                                                                                                                            } */
 
 
 
@@ -231,6 +231,11 @@
             .product_item {
                 padding: 5px !important;
             }
+
+            .custom-button {
+                padding: 12px 1px !important;
+
+            }
         }
 
         .product__item {
@@ -264,7 +269,7 @@
 
         .custom-button {
             font-size: 14px !important;
-            padding: 12px 24px !important;
+            padding: 12px 24px;
         }
 
         .addToCartBtn {

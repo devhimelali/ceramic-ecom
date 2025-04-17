@@ -161,7 +161,7 @@
 
             <div class="row gutter-y-60">
                 <!-- Sidebar: XL and above -->
-                <div class="col-xl-3 col-lg-4 d-none d-xl-block">
+                <div class="col-xl-3 col-lg-4 d-none d-xl-block" id="sidebar-column">
                     <div id="original-filter-sidebar">
                         <aside class="product__sidebar">
                             <!-- Search Box -->
@@ -241,7 +241,7 @@
 
 
 
-    <!-- Offcanvas Filter Sidebar -->
+    {{-- <!-- Offcanvas Filter Sidebar -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filters</h5>
@@ -255,8 +255,23 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
+
+    <!-- 🔥 Offcanvas HTML (Place near top of layout) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filters</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="my-3 text-end">
+                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;" data-bs-dismiss="offcanvas"
+                    aria-label="Close">Search</button>
+            </div>
+            <div id="mobile-filter-content"></div>
+        </div>
+    </div>
 @endsection
 @section('page-script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -452,16 +467,20 @@
 
     <script>
         $(document).ready(function() {
-            function moveSidebar() {
-                const $sidebar = $('#original-filter-sidebar');
+            const $sidebar = $('#original-filter-sidebar');
+            const $desktopContainer = $('#sidebar-column');
+            const $mobileContainer = $('#mobile-filter-content');
 
-                if ($(window).width() < 992) {
-                    if (!$('#mobile-filter-content').find($sidebar).length) {
-                        $sidebar.appendTo('#mobile-filter-content');
+            function moveSidebar() {
+                const isMobile = $(window).width() < 992;
+
+                if (isMobile) {
+                    if (!$.contains($mobileContainer[0], $sidebar[0])) {
+                        $sidebar.detach().appendTo($mobileContainer);
                     }
                 } else {
-                    if (!$('.col-xl-3').find($sidebar).length) {
-                        $('.col-xl-3').append($sidebar);
+                    if (!$.contains($desktopContainer[0], $sidebar[0])) {
+                        $sidebar.detach().appendTo($desktopContainer);
                     }
                 }
             }
@@ -469,9 +488,11 @@
             // Initial call
             moveSidebar();
 
-            // On resize
+            // Resize event (with debounce)
+            let resizeTimeout;
             $(window).on('resize', function() {
-                moveSidebar();
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(moveSidebar, 150);
             });
         });
     </script>

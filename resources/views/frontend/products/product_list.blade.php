@@ -86,7 +86,7 @@
 
     .custom-button {
         font-size: 14px !important;
-        padding: 12px 24px !important;
+        padding: 12px 24px;
     }
 
     .addToCartBtn {
@@ -96,10 +96,17 @@
     .product__item__image {
         border-radius: 4px;
     }
+
+    @media screen and (max-width: 480px) {
+        .custom-button {
+            /* padding: 12px 1px !important; */
+
+        }
+    }
 </style>
 <div class="row gutter-y-30">
     @forelse ($products as $product)
-        <div class="col-xl-4 col-lg-6 col-md-6 ">
+        <div class="col-xl-4 col-lg-4 col-md-6 col-6 product_item">
             <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                 @php
                     $productImages = $product->images;
