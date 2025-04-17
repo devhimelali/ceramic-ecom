@@ -172,7 +172,17 @@
         {{ $products->links('pagination::bootstrap-4') }}
     </div>
 </div>
-
+<script>
+    const productVariations = @json(
+        $product->variations->mapWithKeys(function ($variation) {
+            return [
+                $variation->id => [
+                    'images' => $variation->images->pluck('path'),
+                    'attributes' => $variation->attribute_values->pluck('value'), // optional
+                ],
+            ];
+        }));
+</script>
 <script>
     $(document).ready(function() {
 
