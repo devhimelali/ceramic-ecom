@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\ProductLabelEnum;
 use App\Enum\StatusEnum;
 use App\Helpers\ImageUploadHelper;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,7 @@ class Product extends Model
         'regular_price',
         'sale_price',
         'status',
+        'label',
     ];
 
     /**
@@ -34,6 +36,7 @@ class Product extends Model
     {
         return [
             'status' => StatusEnum::class,
+            'label' => ProductLabelEnum::class,
         ];
     }
 

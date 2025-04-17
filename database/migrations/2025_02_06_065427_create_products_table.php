@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('regular_price', 8, 2);
             $table->decimal('sale_price', 8, 2);
             $table->string('status');
+            $table->string('label')->default('new arrival');
             $table->timestamps();
         });
     }
