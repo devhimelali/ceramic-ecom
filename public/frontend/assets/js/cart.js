@@ -10,10 +10,32 @@ function saveCart() {
     }
 }
 
+function formatVariationString(variants) {
+    return Object.keys(variants)
+        .sort()
+        .map((key) => `${key}: ${variants[key]}`)
+        .join(" / ");
+}
+function normalizeVariation(variationString) {
+    return variationString
+        .split(" / ")
+        .map((pair) => pair.trim())
+        .sort()
+        .join(" / ");
+}
+
 // Add item to cart
-function addItem(id, name, price, quantity = 1, image = "", variation = {}) {
-    let existingItem = cart.find((item) => item.id === id);
+function addItem(id, name, price, quantity = 1, image = "", variation) {
+    const normalizedVariation = normalizeVariation(variation);
+    console.log(normalizedVariation);
+    let existingItem = cart.find(
+        (item) =>
+            item.id === id &&
+            normalizeVariation(item.variation) === normalizedVariation
+    );
+
     if (existingItem) {
+        confirm("Item added to cart");
         existingItem.quantity += Number(quantity);
     } else {
         cart.push({
@@ -22,15 +44,18 @@ function addItem(id, name, price, quantity = 1, image = "", variation = {}) {
             price: parseFloat(price),
             quantity: Number(quantity),
             image: image,
-            variation: variation,
+            variation: normalizedVariation,
         });
     }
+
     saveCart();
 }
 
 // Remove item from cart
-function removeCartItem(id) {
-    cart = cart.filter((item) => item.id !== id);
+function removeCartItem(id, variation) {
+    cart = cart.filter(
+        (item) => !(item.id === id && item.variation === variation)
+    );
     saveCart();
     displayCartItems();
 }
@@ -38,12 +63,10 @@ function removeCartItem(id) {
 // Update item quantity
 function updateQuantity(id, quantity) {
     let existingItem = cart.find((item) => item.id === id);
-
     if (existingItem) {
         let newQuantity = existingItem.quantity + Number(quantity);
-
         if (newQuantity < 1) {
-            removeCartItem(id);
+            removeCartItem(id, variation);
         } else {
             existingItem.quantity = newQuantity;
         }
@@ -71,66 +94,6 @@ function clearCart() {
     cart = [];
     saveCart();
 }
-
-// Display cart items
-// function displayCartItems() {
-//     let cartItemsContainer = document.querySelector(
-//         ".offcanvas__cart-products"
-//     );
-//     let subtotalContainer = document.querySelector(".offcanvas__total-price");
-
-//     if (!cartItemsContainer || !subtotalContainer) return;
-
-//     cartItemsContainer.innerHTML = "";
-//     let subtotal = 0;
-
-//     cart.forEach((item) => {
-//         let variationHTML =
-//             Object.entries(item.variation)
-//                 .map(
-//                     ([key, value]) =>
-//                         `<span class="variation-item">${value}</span>`
-//                 )
-//                 .join("/") || "Default";
-
-//         let cartItem = document.createElement("div");
-//         cartItem.classList.add("offcanvas__cart-product");
-//         cartItem.innerHTML = `
-//             <div class="offcanvas__cart-product__content__wrapper">
-//                 <div class="offcanvas__cart-product__image">
-//                     <img src="${item.image}" alt="${item.name}">
-//                 </div>
-//                 <div class="offcanvas__cart-product__content">
-//                     <h3 class="offcanvas__cart-product__title">
-//                         <a href="javascript:void(0);">${item.name}</a>
-//                     </h3>
-//                     <div class="offcanvas__cart-product__variation">${variationHTML}</div>
-//                 </div>
-//             </div>
-//             <div class="offcanvas__cart-product__remove">
-//                 <a href="javascript:void(0);" class="offcanvas__cart-product__remove remove-item" data-id="${
-//                     item.id
-//                 }">
-//                     <i class="fas fa-times"></i>
-//                 </a>
-//                 <span class="offcanvas__cart-product__quantity">${
-//                     item.quantity
-//                 } x $${parseFloat(item.price).toFixed(2)}</span>
-//             </div>
-//         `;
-//         cartItemsContainer.appendChild(cartItem);
-//         subtotal += item.quantity * parseFloat(item.price);
-//     });
-
-//     subtotalContainer.textContent = `$${subtotal.toFixed(2)}`;
-
-//     document.querySelectorAll(".remove-item").forEach((button) => {
-//         button.addEventListener("click", function (e) {
-//             e.preventDefault();
-//             removeCartItem(this.dataset.id);
-//         });
-//     });
-// }
 
 function displayCartItems() {
     let cartItemsContainer = document.querySelector(
@@ -169,14 +132,6 @@ function displayCartItems() {
     }
 
     cart.forEach((item) => {
-        let variationHTML =
-            Object.entries(item.variation)
-                .map(
-                    ([key, value]) =>
-                        `<span class="variation-item">${value}</span>`
-                )
-                .join("/") || "Default";
-
         let cartItem = document.createElement("div");
         cartItem.classList.add("offcanvas__cart-product");
         cartItem.innerHTML = `
@@ -188,13 +143,14 @@ function displayCartItems() {
                     <h3 class="offcanvas__cart-product__title">
                         <a href="javascript:void(0);">${item.name}</a>
                     </h3>
-                    <div class="offcanvas__cart-product__variation">${variationHTML}</div>
+                    <div class="offcanvas__cart-product__variation"><span class="variation-item">${
+                        item.variation
+                    }</span></div>
                 </div>
             </div>
             <div class="offcanvas__cart-product__remove">
-                <a href="javascript:void(0);" class="offcanvas__cart-product__remove remove-item" data-id="${
-                    item.id
-                }">
+                <a href="javascript:void(0);" class="offcanvas__cart-product__remove remove-item"
+                data-variation="${item.variation}" data-id="${item.id}">
                     <i class="fas fa-times"></i>
                 </a>
                 <span class="offcanvas__cart-product__quantity">${
@@ -211,7 +167,7 @@ function displayCartItems() {
     document.querySelectorAll(".remove-item").forEach((button) => {
         button.addEventListener("click", function (e) {
             e.preventDefault();
-            removeCartItem(this.dataset.id);
+            removeCartItem(this.dataset.id, this.dataset.variation);
         });
     });
 }

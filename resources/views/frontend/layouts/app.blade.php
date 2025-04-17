@@ -300,12 +300,15 @@
             const options = {
                 title: '{{ $toast['title'] ?? '' }}',
                 message: '{{ $toast['message'] ?? 'No message provided' }}',
-                position: '{{ $toast['position'] ?? 'topRight' }}',
+                position: '{{ $toast['position'] ?? 'toast-bottom-right' }}',
             };
             show('{{ $toast['type'] ?? 'info' }}', options);
         @endforeach
 
-        function notify(type, msg, position = 'topRight') {
+        function notify(type, msg, position = 'toast-bottom-right') {
+            toastr.options.positionClass = position;
+            toastr.options.progressBar = true;
+            toastr.options.closeButton = true;
             toastr[type](msg);
         }
 

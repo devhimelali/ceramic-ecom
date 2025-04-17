@@ -353,10 +353,34 @@ class OrderController extends Controller
         ]);
     }
 
+    // public function getProductVariationPrice(Request $request, $id)
+    // {
+    //     $variation = Variation::where('product_id', $id)
+    //         ->where('attribute_string', $request->variation)
+    //         ->first();
+
+    //     if ($variation) {
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'data' => $variation
+    //         ]);
+    //     }
+
+    //     return response()->json([
+    //         'status' => 'error',
+    //         'message' => 'Variation not found'
+    //     ]);
+    // }
+
     public function getProductVariationPrice(Request $request, $id)
     {
+        $variationArray = explode(" / ", trim($request->variation));
+        $cleanedArray = array_map('trim', $variationArray);
+        sort($cleanedArray);
+        $formatted = implode(" / ", $cleanedArray);
+
         $variation = Variation::where('product_id', $id)
-            ->where('attribute_string', $request->variation)
+            ->where('attribute_string', $formatted)
             ->first();
 
         if ($variation) {
