@@ -106,8 +106,7 @@
 </style>
 <div class="row gutter-y-30 mt-3">
     @forelse ($products as $product)
-        <div class="col-xl-4 col-lg-4 col-md-6
-    col-6 product_item">
+        <div class="col-xl-4 col-lg-4 col-md-6 col-6 product_item">
             <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                 @php
                     $productImages = $product->images;

@@ -45,6 +45,15 @@ class FrontendController extends Controller
     {
         $attributes = [];
         $query = Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE);
+        if (!empty($request->sort_by)) {
+            if ($request->sort_by == 'low-to-high') {
+                $query = $query->orderByRaw('COALESCE(sale_price, regular_price) ASC');
+            } else if ($request->sort_by == 'high-to-low') {
+                $query = $query->orderByRaw('COALESCE(sale_price, regular_price) DESC');
+            }
+        } else {
+            $query = $query->latest();
+        }
 
 
         if ($request->has('attribute')) {
