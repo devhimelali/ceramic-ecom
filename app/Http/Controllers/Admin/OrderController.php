@@ -168,29 +168,6 @@ class OrderController extends Controller
             'variation_name' => $request->variation
         ]);
 
-        // Remove null values from variation_values
-        // $filteredVariations = array_filter($request->variation_values, function ($value) {
-        //     return !is_null($value);
-        // });
-
-        // $selectedVariations = [];
-
-        // foreach ($filteredVariations as $key => $variation) {
-        //     $attribute = Attribute::where('name', $key)->first();
-        //     $attributeValue = AttributeValue::where('value', $variation)->first();
-
-        //     if ($attribute && $attributeValue) {
-        //         $selectedVariations[] = [
-        //             'attribute_id' => $attribute->id,
-        //             'attribute_value_id' => $attributeValue->id
-        //         ];
-        //     }
-        // }
-
-        // // Attach variations to the ProductQueryItem
-        // foreach ($selectedVariations as $variation) {
-        //     $productQueryItem->variations()->attach($product->id, $variation);
-        // }
 
         Mail::to($request->email)->send(new ProductQuerySubmittedMail([
             'name' => $request->name,
@@ -297,38 +274,13 @@ class OrderController extends Controller
         ]);
 
         foreach ($request->cartItems as $item) {
-            // dd($item);
             $product = Product::findOrFail($item['id']);
-
-
 
             $productQueryItem = $productQuery->items()->create([
                 'product_id' => $product->id,
-                'quantity' => $item['quantity']
+                'quantity' => $item['quantity'],
+                'variation_name' => $item['variation']
             ]);
-
-            $filteredVariations = array_filter($item['variation'], function ($value) {
-                return !is_null($value);
-            });
-
-            $selectedVariations = [];
-
-            foreach ($filteredVariations as $key => $variation) {
-                $attribute = Attribute::where('name', $key)->first();
-                $attributeValue = AttributeValue::where('value', $variation)->first();
-
-                if ($attribute && $attributeValue) {
-                    $selectedVariations[] = [
-                        'attribute_id' => $attribute->id,
-                        'attribute_value_id' => $attributeValue->id
-                    ];
-                }
-            }
-
-            // Attach variations to the ProductQueryItem
-            foreach ($selectedVariations as $variation) {
-                $productQueryItem->variations()->attach($product->id, $variation);
-            }
         }
 
         Mail::to($request->email)->send(new MultipleProductQuerySubmittedMail([
@@ -374,19 +326,28 @@ class OrderController extends Controller
 
     public function getProductVariationPrice(Request $request, $id)
     {
+        // dd($request->all());
         $variationArray = explode(" / ", trim($request->variation));
         $cleanedArray = array_map('trim', $variationArray);
         sort($cleanedArray);
         $formatted = implode(" / ", $cleanedArray);
 
-        $variation = Variation::where('product_id', $id)
+        // $variation = Variation::where('product_id', $id)
+        //     ->where('attribute_string', $formatted)
+        //     ->first();
+        $variation = Variation::with('images')->where('product_id', $id)
             ->where('attribute_string', $formatted)
             ->first();
 
         if ($variation) {
+            $images = $variation->images->pluck('path'); // Adjust if your column is different
+
             return response()->json([
                 'status' => 'success',
-                'data' => $variation
+                'data' => [
+                    'price' => $variation->price,
+                    'images' => $images,
+                ],
             ]);
         }
 

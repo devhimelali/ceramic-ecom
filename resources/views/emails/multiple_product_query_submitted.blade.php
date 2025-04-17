@@ -19,21 +19,16 @@
         <li><strong>Message:</strong> {{ $queryData['message'] }}</li>
         <li><strong>Inquiry Products Summery:</strong></strong>
             <ul>
-                @foreach ($queryData['cartItems'] as  $item)
+                @foreach ($queryData['cartItems'] as $item)
                     <li style="margin-top: 10px;"><strong>Product Name:</strong> {{ $item['name'] }}</li>
                     <li><strong>Product Quantity:</strong> {{ $item['quantity'] }}</li>
                     <li>
                         <strong>Selected Product Variation:</strong>
-                        <ol style="margin-top: 10px;">
-                            @foreach ($item['variation'] as $variation => $value)
-                                <li><strong>{{ ucfirst($variation) }}:</strong> {{ $value }}</li>
-                            @endforeach
-                        </ol>
+                        <span style="text-transform: capitalize">{{ $item['variation'] }}</span>
                     </li>
                 @endforeach
             </ul>
         </li>
-
     </ul>
 
     <p>Best regards,<br> {{ app_setting('site_name') }}</p>

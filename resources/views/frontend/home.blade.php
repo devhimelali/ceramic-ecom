@@ -123,13 +123,13 @@
         }
 
         /* .enquireBtn {
-                                                            width: 70%;
-                                                            padding: 9px !important;
-                                                        }
+                                                                                    width: 70%;
+                                                                                    padding: 9px !important;
+                                                                                }
 
-                                                        a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
-                                                            padding: 16px !important;
-                                                        } */
+                                                                                a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
+                                                                                    padding: 16px !important;
+                                                                                } */
 
 
 
@@ -680,23 +680,22 @@
 
             displayCartItems();
             $('.enquireBtn').click(function() {
-                $('#myModal').modal('show');
                 var productId = $(this).data('id');
                 var url = $(this).data('url');
                 $.ajax({
                     url: url,
                     method: 'GET',
                     beforeSend: function() {
-                        $('#myModal .modal-body').html(
-                            '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
-                        );
-                        $('.enquireSubmitBtn').prop('disabled', true)
-                        $('.enquireSubmitBtn').html('Processing...')
+                        $('#loader').show();
                     },
                     success: function(response) {
                         $('.enquireSubmitBtn').prop('disabled', false)
                         $('.enquireSubmitBtn').html('Submit')
                         $('#enquireFormResponse').html(response.html);
+                        $('#myModal').modal('show');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
                     }
                 })
             });
@@ -704,21 +703,21 @@
             $('.addToCartBtn').click(function() {
                 var productId = $(this).data('product-id');
                 var url = $(this).data('url');
-                $('#addToCartModal').modal('show');
+
                 $.ajax({
                     url: url,
                     method: 'GET',
                     beforeSend: function() {
-                        $('#addToCartModal .modal-body').html(
-                            '<div class="text-center d-flex align-items-center justify-content-center" style="height: 200px;"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
-                        );
-                        $('.enquireSubmitBtn').prop('disabled', true)
-                        $('.enquireSubmitBtn').html('Processing...')
+                        $('#loader').show();
                     },
                     success: function(response) {
                         $('.enquireSubmitBtn').prop('disabled', false)
                         $('.enquireSubmitBtn').html('Add To Cart')
                         $('#addToCartResponse').html(response.html);
+                        $('#addToCartModal').modal('show');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
                     }
                 })
             });
