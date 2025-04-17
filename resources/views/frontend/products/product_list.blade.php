@@ -74,7 +74,7 @@
         right: 7px;
         top: 7px;
         z-index: 2;
-        background: #C7844F;
+        background: #D94F4F;
         color: #fff !important;
         padding: 2px 8px;
         border-radius: 18px;
@@ -96,6 +96,31 @@
     .product__item__image {
         border-radius: 4px;
     }
+
+    .label {
+        position: absolute;
+        right: 7px;
+        top: 34px;
+        z-index: 2;
+        color: red;
+        color: #fff !important;
+        padding: 2px 8px;
+        border-radius: 18px;
+        text-transform: capitalize;
+        font-size: 10px;
+    }
+
+    .top_selling {
+        background: #2a4e72
+    }
+
+    .new-arrival {
+        background: #4FC79A
+    }
+
+    .featured {
+        background: #C7844F
+    }
 </style>
 <div class="row gutter-y-30">
     @forelse ($products as $product)
@@ -108,6 +133,9 @@
                     });
 
                     $images = $productImages->merge($variantImages);
+                    $label = $product->label->value;
+                    $labelClass =
+                        $label == 'new arrival' ? 'new-arrival' : ($label == 'featured' ? 'featured' : 'top_selling');
                 @endphp
                 @if ($product->sale_price && $product->regular_price > 0)
                     @php
@@ -119,6 +147,9 @@
                 @else
                     <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
                 @endif
+                <span class="label {{ $labelClass }}">
+                    {{ $product->label->value }}
+                </span>
                 <div class="product__item__image product-carousel owl-carousel">
                     @foreach ($images as $image)
                         <img class="item" src="{{ asset($image->path) }}" alt="Natural Stone Tiles">

@@ -122,17 +122,6 @@
             overflow: hidden;
         }
 
-        /* .enquireBtn {
-                                                                                    width: 70%;
-                                                                                    padding: 9px !important;
-                                                                                }
-
-                                                                                a.p-4.floens-btn.product__item__link.me-2.custom-button.addCartItemBtn.addToCartBtn {
-                                                                                    padding: 16px !important;
-                                                                                } */
-
-
-
         .owl-carousel .owl-nav button.owl-prev,
         .owl-carousel .owl-nav button.owl-prev,
         .owl-carousel button.owl-dot.owl-nav {
@@ -252,7 +241,7 @@
             right: 7px;
             top: 7px;
             z-index: 2;
-            background: #C7844F;
+            background: #D94F4F;
             color: #fff !important;
             padding: 2px 8px;
             border-radius: 18px;
@@ -273,6 +262,31 @@
 
         .product__item__image {
             border-radius: 4px;
+        }
+
+        .label {
+            position: absolute;
+            right: 7px;
+            top: 34px;
+            z-index: 2;
+            color: red;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+            text-transform: capitalize;
+            font-size: 10px;
+        }
+
+        .top_selling {
+            background: #2a4e72
+        }
+
+        .new-arrival {
+            background: #4FC79A
+        }
+
+        .featured {
+            background: #C7844F
         }
     </style>
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
@@ -513,25 +527,35 @@
         </div><!-- /.container -->
     </section><!-- /.reliable-one section-space-bottom -->
     <!-- reliable end -->
+    <style>
+        .product-home-top-selling {
+            padding-top: 30px;
+            padding-bottom: 60px;
+            position: relative;
+        }
 
+        .product-home-top-selling .sec-title {
+            margin-bottom: 60px;
+        }
+
+        .product-home {
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
+        }
+    </style>
     <!-- shop start -->
-    <section class="product-home">
-        <div class="product-home__bg"
-            style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/shop-bg-1.png);">
-        </div>
+    <section class="product-home-top-selling">
         <!-- /.product-home__bg -->
         <div class="container">
             <div class="sec-title sec-title--center">
 
                 <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
 
-                <h3 class="sec-title__title">Latest Products in Shop</h3>
+                <h3 class="sec-title__title">Top Selling Products in Shop</h3>
                 <!-- /.sec-title__title -->
             </div><!-- /.sec-title -->
-
-
             <div class="row">
-                @foreach ($products as $product)
+                @foreach ($topSellingProducts as $product)
                     <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                             @php
@@ -541,6 +565,13 @@
                                 });
 
                                 $images = $productImages->merge($variantImages);
+                                $label = $product->label->value;
+                                $labelClass =
+                                    $label == 'new arrival'
+                                        ? 'new-arrival'
+                                        : ($label == 'featured'
+                                            ? 'featured'
+                                            : 'top_selling');
                             @endphp
                             @if ($product->sale_price && $product->regular_price > 0)
                                 @php
@@ -554,6 +585,9 @@
                             @else
                                 <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
                             @endif
+                            <span class="label {{ $labelClass }}">
+                                {{ $product->label->value }}
+                            </span>
                             <div class="product__item__image product-carousel owl-carousel">
                                 @foreach ($images as $image)
                                     <img class="item" src="{{ asset($image->path) }}" loading="lazy"
@@ -601,6 +635,195 @@
         </div><!-- /.container -->
     </section><!-- /.product-home -->
     <!-- shop end -->
+    <!-- shop start -->
+    <section class="product-home">
+        <div class="product-home__bg"
+            style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/shop-bg-1.png);">
+        </div>
+        <!-- /.product-home__bg -->
+        <div class="container">
+            <div class="sec-title sec-title--center">
+
+                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
+
+                <h3 class="sec-title__title">Latest Products in Shop</h3>
+                <!-- /.sec-title__title -->
+            </div><!-- /.sec-title -->
+
+
+            <div class="row">
+                @foreach ($products as $product)
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
+                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
+                            @php
+                                $productImages = $product->images; // This is already a Collection
+                                $variantImages = $product->variations->flatMap(function ($variation) {
+                                    return $variation->images;
+                                });
+
+                                $images = $productImages->merge($variantImages);
+                                $label = $product->label->value;
+                                $labelClass =
+                                    $label == 'new arrival'
+                                        ? 'new-arrival'
+                                        : ($label == 'featured'
+                                            ? 'featured'
+                                            : 'top_selling');
+                            @endphp
+                            @if ($product->sale_price && $product->regular_price > 0)
+                                @php
+                                    $saving =
+                                        (($product->regular_price - $product->sale_price) / $product->regular_price) *
+                                        100;
+                                @endphp
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                    Saving {{ number_format($saving, 0) }}%
+                                </span>
+                            @else
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
+                            @endif
+                            <span class="label {{ $labelClass }}">
+                                {{ $product->label->value }}
+                            </span>
+                            <div class="product__item__image product-carousel owl-carousel">
+                                @foreach ($images as $image)
+                                    <img class="item" src="{{ asset($image->path) }}" loading="lazy"
+                                        alt="{{ $product->name }}">
+                                @endforeach
+                            </div>
+                            <div class="product__item__content">
+                                <p class="product__item__title"><a
+                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
+                                <div class="product__item__price">
+                                    @if ($product->sale_price && $product->regular_price > 0)
+                                        <span
+                                            style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                        <span style="color: #888; font-size: 16px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                        </span>
+                                    @else
+                                        <span>
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a href="javascript:void(0);"
+                                        class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
+                                        data-id="{{ $product->id }}"
+                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                    <a href="javascript:void(0);"
+                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                        data-product-id="{{ $product->id }}"
+                                        data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                        <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
+                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                    </a>
+                                </div>
+                            </div><!-- /.product-content -->
+                        </div><!-- /.product-item -->
+                    </div><!-- /.col-md-6 col-lg-4 -->
+                @endforeach
+            </div><!-- /.row -->
+        </div><!-- /.container -->
+    </section><!-- /.product-home -->
+    <!-- shop end -->
+    <section class="product-home-top-selling">
+        <!-- /.product-home__bg -->
+        <div class="container">
+            <div class="sec-title sec-title--center">
+
+                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
+
+                <h3 class="sec-title__title">Featured Products in Shop</h3>
+                <!-- /.sec-title__title -->
+            </div><!-- /.sec-title -->
+            <div class="row">
+                @foreach ($featuredProducts as $product)
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
+                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
+                            @php
+                                $productImages = $product->images; // This is already a Collection
+                                $variantImages = $product->variations->flatMap(function ($variation) {
+                                    return $variation->images;
+                                });
+
+                                $images = $productImages->merge($variantImages);
+                                $label = $product->label->value;
+                                $labelClass =
+                                    $label == 'new arrival'
+                                        ? 'new-arrival'
+                                        : ($label == 'featured'
+                                            ? 'featured'
+                                            : 'top_selling');
+                            @endphp
+                            @if ($product->sale_price && $product->regular_price > 0)
+                                @php
+                                    $saving =
+                                        (($product->regular_price - $product->sale_price) / $product->regular_price) *
+                                        100;
+                                @endphp
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                    Saving {{ number_format($saving, 0) }}%
+                                </span>
+                            @else
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
+                            @endif
+                            <span class="label {{ $labelClass }}">
+                                {{ $product->label->value }}
+                            </span>
+                            <div class="product__item__image product-carousel owl-carousel">
+                                @foreach ($images as $image)
+                                    <img class="item" src="{{ asset($image->path) }}" loading="lazy"
+                                        alt="{{ $product->name }}">
+                                @endforeach
+                            </div>
+                            <div class="product__item__content">
+                                <p class="product__item__title"><a
+                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
+                                <div class="product__item__price">
+                                    @if ($product->sale_price && $product->regular_price > 0)
+                                        <span
+                                            style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                        <span style="color: #888; font-size: 16px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                        </span>
+                                    @else
+                                        <span>
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a href="javascript:void(0);"
+                                        class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
+                                        data-id="{{ $product->id }}"
+                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                    <a href="javascript:void(0);"
+                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                        data-product-id="{{ $product->id }}"
+                                        data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                        <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
+                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                    </a>
+                                </div>
+                            </div><!-- /.product-content -->
+                        </div><!-- /.product-item -->
+                    </div><!-- /.col-md-6 col-lg-4 -->
+                @endforeach
+            </div><!-- /.row -->
+        </div><!-- /.container -->
+    </section><!-- /.product-home -->
+    <!-- shop end -->
+
 
 
     <!-- client carousel start -->
