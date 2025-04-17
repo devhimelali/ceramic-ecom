@@ -223,8 +223,27 @@
                         <div class="spinner"></div>
                         <p>Loading...</p>
                     </div>
-                    <div id="products" class="mt-5 pt-4">
+                    <div class="product-wrapper" style="padding-top: 65px;">
+                        <div class="product__info-top">
+                            <div class="product__showing-text-box">
+
+                            </div>
+                            <div class="product__showing-sort">
+                                <select name="sort" id="sort" class="form-select">
+                                    <option value="top-selling" {{ request('sort') == 'top-selling' ? 'selected' : '' }}>
+                                        Default Sorting</option>
+                                    <option value="low-to-high" {{ request('sort') == 'low-to-high' ? 'selected' : '' }}>
+                                        Low to High</option>
+                                    <option value="high-to-low" {{ request('sort') == 'high-to-low' ? 'selected' : '' }}>
+                                        High to Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="products">
+
+                        </div>
                     </div>
+
 
 
                 </div><!-- /.col-lxl9  col-lg-8-->

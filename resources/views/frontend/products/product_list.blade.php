@@ -64,7 +64,7 @@
         border: 1px solid #2a4e72;
     }
 
-    .product__item__content {
+    .product_item_content {
         border: none;
         padding: 0.24px 17px 20px !important;
     }
@@ -74,57 +74,40 @@
         right: 7px;
         top: 7px;
         z-index: 2;
-        background: #D94F4F;
+        background: #C7844F;
         color: #fff !important;
         padding: 2px 8px;
         border-radius: 18px;
     }
 
-    .product__item__price {
+    .product_item_price {
         margin-bottom: 12px;
     }
 
     .custom-button {
         font-size: 14px !important;
-        padding: 12px 24px !important;
+        padding: 12px 24px;
     }
 
     .addToCartBtn {
         padding: 19px 24px !important;
     }
 
-    .product__item__image {
+    .product_item_image {
         border-radius: 4px;
     }
 
-    .label {
-        position: absolute;
-        right: 7px;
-        top: 34px;
-        z-index: 2;
-        color: red;
-        color: #fff !important;
-        padding: 2px 8px;
-        border-radius: 18px;
-        text-transform: capitalize;
-        font-size: 10px;
-    }
+    @media screen and (max-width: 480px) {
+        .custom-button {
+            /* padding: 12px 1px !important; */
 
-    .top_selling {
-        background: #2a4e72
-    }
-
-    .new-arrival {
-        background: #4FC79A
-    }
-
-    .featured {
-        background: #C7844F
+        }
     }
 </style>
-<div class="row gutter-y-30">
+<div class="row gutter-y-30 mt-3">
     @forelse ($products as $product)
-        <div class="col-xl-4 col-lg-6 col-md-6 ">
+        <div class="col-xl-4 col-lg-4 col-md-6
+    col-6 product_item">
             <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                 @php
                     $productImages = $product->images;
@@ -133,9 +116,6 @@
                     });
 
                     $images = $productImages->merge($variantImages);
-                    $label = $product->label->value;
-                    $labelClass =
-                        $label == 'new arrival' ? 'new-arrival' : ($label == 'featured' ? 'featured' : 'top_selling');
                 @endphp
                 @if ($product->sale_price && $product->regular_price > 0)
                     @php
@@ -147,21 +127,18 @@
                 @else
                     <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
                 @endif
-                <span class="label {{ $labelClass }}">
-                    {{ $product->label->value }}
-                </span>
-                <div class="product__item__image product-carousel owl-carousel">
+                <div class="product_item_image product-carousel owl-carousel">
                     @foreach ($images as $image)
                         <img class="item" src="{{ asset($image->path) }}" alt="Natural Stone Tiles">
                     @endforeach
                 </div>
 
-                <div class="product__item__content">
-                    <h6 class="product__item__title">
+                <div class="product_item_content">
+                    <h6 class="product_item_title">
                         <a
                             href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
                     </h6><!-- /.product-title -->
-                    <div class="product__item__price">
+                    <div class="product_item_price">
                         @if ($product->sale_price && $product->regular_price > 0)
                             <span
                                 style="text-decoration: line-through; color: #888; font-size: 16px; margin-right: 10px;">
@@ -179,12 +156,12 @@
 
                     <div class="d-flex align-items-center justify-content-center">
                         <a href="javascript:void(0);"
-                            class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
+                            class="p-3 floens-btn product_item_link me-2 custom-button enquireBtn"
                             data-id="{{ $product->id }}"
                             data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                         <a href="javascript:void(0);"
-                            class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                            class="p-4 floens-btn product_item_link me-2 custom-button addCartItemBtn addToCartBtn"
                             data-product-id="{{ $product->id }}"
                             data-url="{{ route('add.to.cart.form', $product->id) }}">
                             <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>

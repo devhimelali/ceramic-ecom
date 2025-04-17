@@ -219,6 +219,12 @@
             background: #C7844F
         }
 
+        .product__item__title {
+            overflow: hidden;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
         /* media query */
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
