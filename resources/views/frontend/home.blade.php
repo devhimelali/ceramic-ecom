@@ -609,7 +609,7 @@
 
 
             <div class="row">
-                @foreach ($products as $product)
+                @forelse ($products as $product)
                     <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                             @php
@@ -684,7 +684,9 @@
                             </div><!-- /.product-content -->
                         </div><!-- /.product-item -->
                     </div><!-- /.col-md-6 col-lg-4 -->
-                @endforeach
+                @empty
+                    <h5 class="text-center">No products found.</h5>
+                @endforelse
             </div><!-- /.row -->
         </div><!-- /.container -->
     </section><!-- /.product-home -->
@@ -701,7 +703,7 @@
                 <!-- /.sec-title__title -->
             </div><!-- /.sec-title -->
             <div class="row">
-                @foreach ($topSellingProducts as $product)
+                @forelse ($topSellingProducts as $product)
                     <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                             @php
@@ -776,7 +778,9 @@
                             </div><!-- /.product-content -->
                         </div><!-- /.product-item -->
                     </div><!-- /.col-md-6 col-lg-4 -->
-                @endforeach
+                @empty
+                    <h5 class="text-center">No products found.</h5>
+                @endforelse
             </div><!-- /.row -->
         </div><!-- /.container -->
     </section><!-- /.product-home -->
