@@ -197,7 +197,7 @@ class OrderController extends Controller
     public function productQueries(Request $request)
     {
         if ($request->ajax()) {
-            $query = ProductQuery::query();
+            $query = ProductQuery::latest();
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('name', function ($row) {
