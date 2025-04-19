@@ -17,30 +17,30 @@
                         </a>
                         <p class="footer-widget__about-text">
                             {{ $settings->where('key', 'about_description')->first()->value ?? 'N/A' }}</p>
-                        <div class="mc-form__response"></div><!-- /.mc-form__response -->
-                    </div><!-- /.footer-widget -->
-                </div><!-- /.col-xl-4 col-lg-6 -->
+                        <div class="mc-form__response"></div>
+                    </div>
+                </div>
                 <div class="col-xl-2 col-lg-3 col-md-3 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
                     data-wow-delay="200ms">
                     <div class="footer-widget footer-widget--links footer-widget--links-one">
                         <div class="footer-widget__top">
-                            <div class="footer-widget__title-box"></div><!-- /.footer-widget__title-box -->
-                            <h2 class="footer-widget__title">Explore</h2><!-- /.footer-widget__title -->
-                        </div><!-- /.footer-widget__top -->
+                            <div class="footer-widget__title-box"></div>
+                            <h2 class="footer-widget__title">Explore</h2>
+                        </div>
                         <ul class="list-unstyled footer-widget__links">
                             <li><a href="{{ route('frontend.aboutUs') }}">About Us</a></li>
                             <li><a href="{{ route('frontend.contact') }}">Contact</a></li>
                             <li><a href="{{ route('term.and.condition') }}">Terms & Conditions</a></li>
                             <li><a href="{{ route('privacy.policy') }}">Privacy Policy</a></li>
-                        </ul><!-- /.list-unstyled footer-widget__links -->
-                    </div><!-- /.footer-widget -->
-                </div><!-- /.col-xl-2 col-lg-3 col-md-3 col-sm-6 -->
+                        </ul>
+                    </div>
+                </div>
                 <div class="col-xl-4 col-lg-6 col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="600ms">
                     <div class="footer-widget footer-widget--contact">
                         <div class="footer-widget__top">
-                            <div class="footer-widget__title-box"></div><!-- /.footer-widget__title-box -->
-                            <h2 class="footer-widget__title">Get inTouch</h2><!-- /.footer-widget__title -->
-                        </div><!-- /.footer-widget__top -->
+                            <div class="footer-widget__title-box"></div>
+                            <h2 class="footer-widget__title">Get inTouch</h2>
+                        </div>
                         <ul class="list-unstyled footer-widget__info">
                             @php
                                 $location = $settings->where('key', 'contact_address')->first()->value ?? 'N/A';
@@ -57,12 +57,12 @@
                             <li><span class="icon-phone-call"></span> <a
                                     href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                             </li>
-                        </ul><!-- /.list-unstyled -->
-                    </div><!-- /.footer-widget -->
-                </div><!-- /.col-xl-3 col-lg-6 col-md-5 -->
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </div><!-- /.main-footer__top -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="main-footer__bottom">
         <div class="container">
             <div class="main-footer__bottom__inner">
@@ -89,8 +89,8 @@
                                 <i class="text-white fa-brands fa-tiktok"></i>
                                 <span class="sr-only">Tiktok</span>
                             </a>
-                        </div><!-- /.main-footer__social -->
-                    </div><!-- /.col-md-5 -->
+                        </div>
+                    </div>
                     <div class="col-md-7 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
                         <div class="main-footer__bottom__copyright">
                             <p class="main-footer__copyright">
@@ -99,40 +99,14 @@
                                     developed by 4k Hoop pty Ltd <img style="height: 90px; width: 90px;"
                                         src="{{ asset('assets/design-by/4k-logo.png') }}" alt=""></a>
                             </p>
-                        </div><!-- /.main-footer__bottom__copyright -->
-                    </div><!-- /.col-md-7 -->
-                </div><!-- /.row -->
-            </div><!-- /.main-footer__inner -->
-        </div><!-- /.container -->
-    </div><!-- /.main-footer__bottom -->
-</footer><!-- /.main-footer -->
-
-{{-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Shopping cart</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column">
-        <div class="offcanvas__top flex-grow-1">
-            <div class="offcanvas__cart-products">
-                <div class="offcanvas__cart-product">
-                    <p class="no-items-message">Your cart is empty</p>
-                    <div class="offcanvas__cart-product__content__wrapper">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="offcanvas__bottom">
-            <div class="offcanvas__total">
-                <span class="offcanvas__total-text">Subtotal:</span>
-                <span class="offcanvas__total-price">$100.00</span>
-            </div>
-            <a href="javascript:void(0);" class="floens-btn cart-page__checkout-btn checkoutBtn"
-                data-bs-dismiss="offcanvas" aria-label="Close">Procced to checkout
-                <i class="icon-right-arrow"></i></a>
-        </div>
     </div>
-</div> --}}
+</footer>
+
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasRightLabel">Shopping Cart</h5>
@@ -140,7 +114,6 @@
     </div>
     <div class="offcanvas-body d-flex flex-column">
         <div class="offcanvas__top flex-grow-1">
-            <!-- Empty cart container -->
             <div class="offcanvas__cart-empty-container" style="display: none;">
                 <p class="no-items-message">Your cart is empty</p>
             </div>
@@ -154,7 +127,7 @@
                 <span class="offcanvas__total-price">$0.00</span>
             </div>
             <a href="javascript:void(0);" class="floens-btn cart-page__checkout-btn checkoutBtn"
-                data-bs-dismiss="offcanvas" aria-label="Close">Proceed to Checkout
+                data-bs-dismiss="offcanvas" aria-label="Close">Proceed to Enquiry
                 <i class="icon-right-arrow"></i></a>
         </div>
     </div>
@@ -270,9 +243,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div id="enquireFormResponse"></div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
 <div id="addToCartModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     style="display: none;">
     <div class="modal-dialog">
@@ -282,9 +255,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div id="addToCartResponse"></div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
 <div id="checkoutModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     style="display: none;">
     <div class="modal-dialog">
@@ -331,9 +304,9 @@
                     </button>
                 </div>
             </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function() {
         $('.checkoutBtn').click(function() {

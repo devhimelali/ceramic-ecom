@@ -28,10 +28,6 @@
             width: 70%;
         }
 
-        .custom-button:hover {
-            background: #9a6e4b;
-        }
-
         .sec_1_prev_3 {
             width: 270px;
             height: 617px !important;
@@ -569,18 +565,15 @@
                                         style="background-image: url('{{ asset('frontend') }}/assets/images/shapes/reliable-shape-1-1.png');">
                                         25
                                     </h3>
-                                    <!-- /.experience__year -->
                                     <p class="experience__text">years of <br> experience</p>
-                                    <!-- /.experience__text -->
-                                </div><!-- /.experience__inner -->
-                            </div><!-- /.experience -->
-                        </div><!-- /.reliable-one__image -->
-                    </div><!-- /.reliable-one__images -->
-                </div><!-- /.col-lg-6 -->
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </section><!-- /.reliable-one section-space-bottom -->
-    <!-- reliable end -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <style>
         .product-home-top-selling {
             padding-top: 30px;

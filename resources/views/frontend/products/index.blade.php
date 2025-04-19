@@ -130,6 +130,17 @@
             color: #333;
             /* Default color */
         }
+
+        @media (max-width: 767px) {
+            .product__info-top {
+                display: flex;
+                align-items: flex-start !important;
+            }
+        }
+
+        .product-page {
+            padding-top: 0px;
+        }
     </style>
     <!-- Include jQuery UI CSS -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -151,13 +162,7 @@
 
     <section class="product-page product-page--left section-space-bottom">
         <div class="container">
-            <!-- Mobile Filter Button -->
-            <div class="d-xl-none mb-3">
-                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;" type="button"
-                    data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
-                    <i class="fas fa-filter"></i> Filter
-                </button>
-            </div>
+
 
             <div class="row gutter-y-60">
                 <!-- Sidebar: XL and above -->
@@ -232,8 +237,14 @@
                         <div class="spinner"></div>
                         <p>Loading...</p>
                     </div>
-                    <div class="product-wrapper" style="padding-top: 65px;">
+                    <div class="product-wrapper" style="padding-top: 25px;">
                         <div class="product__info-top">
+                            <div class="d-xl-none mb-3">
+                                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;"
+                                    type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                            </div>
                             <div class="product__showing-text-box">
 
                             </div>
@@ -264,10 +275,6 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="my-3 text-end">
-                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;"
-                    data-bs-dismiss="offcanvas" aria-label="Close">Search</button>
-            </div>
             <div id="mobile-filter-content"></div>
         </div>
     </div>
@@ -457,6 +464,7 @@
                 },
                 success: function(response) {
                     $('#products').html(response.html);
+                    notify('success', 'Products loaded successfully');
                 },
                 complete: function() {
                     $('#loader').hide();

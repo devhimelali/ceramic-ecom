@@ -99,6 +99,14 @@
                 height: auto;
             }
         }
+
+        @media (max-width: 575px) {
+            .page-header {
+                padding-top: 44px;
+                padding-bottom: 89px;
+                height: 173px;
+            }
+        }
     </style>
     @yield('page-style')
 
