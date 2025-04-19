@@ -94,7 +94,10 @@
                     <div class="col-md-7 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
                         <div class="main-footer__bottom__copyright">
                             <p class="main-footer__copyright">
-                                &copy; {{ $settings->where('key', 'copy_right')->first()->value ?? 'N/A' }}
+                                &copy; <a href="https://4khoop.com.au/" target="_blank"
+                                    class="main-footer__copyright__link text-white">Design and
+                                    developed by 4k Hoop pty Ltd <img style="height: 90px; width: 90px;"
+                                        src="{{ asset('assets/design-by/4k-logo.png') }}" alt=""></a>
                             </p>
                         </div><!-- /.main-footer__bottom__copyright -->
                     </div><!-- /.col-md-7 -->

@@ -217,6 +217,21 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/js/pages/form-wizard.init.js') }}"></script>
     <script>
+        function setupImagePreview(inputSelector, previewSelector) {
+            // inputSelector means which input field to listen to
+            // previewSelector means which image to change
+            $(inputSelector).click();
+            $(inputSelector).change(function() {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $(previewSelector).attr("src", e.target.result);
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+
         $(document).ready(function() {
             function toggleButtons(activeTabId) {
                 if (activeTabId === 'attributes-tab') {

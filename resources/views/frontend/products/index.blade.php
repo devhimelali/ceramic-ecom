@@ -467,9 +467,18 @@
                 }
             });
         }
+        const previousUrl = document.referrer;
+        if (previousUrl && !previousUrl.includes(window.location.hostname + window.location.pathname)) {
+            localStorage.setItem("previous_page", previousUrl);
+        }
         history.pushState(null, null, location.href);
-        window.addEventListener('popstate', function(event) {
-            window.location.href = "{{ route('frontend.home') }}";
+        window.addEventListener('popstate', function() {
+            let storedPrevious = localStorage.getItem("previous_page");
+            if (storedPrevious !== null) {
+                window.location.href = storedPrevious;
+            } else {
+                window.location.href = "{{ route('frontend.home') }}";
+            }
         });
     </script>
 

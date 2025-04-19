@@ -128,11 +128,12 @@
                 @endif
                 <div class="product_item_image product-carousel owl-carousel">
                     @foreach ($images as $image)
-                        <img class="item" src="{{ asset($image->path) }}" alt="Natural Stone Tiles">
+                        <img class="item" src="{{ asset($image->path) }}" alt="Natural Stone Tiles"
+                            style="height: 300px;">
                     @endforeach
                 </div>
 
-                <div class="product_item_content">
+                <div class="product_item_content mt-3">
                     <h6 class="product_item_title">
                         <a
                             href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
@@ -153,7 +154,7 @@
                         @endif
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-center">
+                    <div class="d-flex justify-content-between">
                         <a href="javascript:void(0);"
                             class="p-3 floens-btn product_item_link me-2 custom-button enquireBtn"
                             data-id="{{ $product->id }}"

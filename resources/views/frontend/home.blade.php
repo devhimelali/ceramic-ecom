@@ -225,6 +225,12 @@
             margin-top: 10px;
         }
 
+        @media (max-width: 991px) {
+            .main-slider__item {
+                padding: 0 0 150px;
+            }
+        }
+
         /* media query */
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
@@ -650,7 +656,7 @@
                             </div>
                             <div class="product__item__content">
                                 <p class="product__item__title"><a
-                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
+                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
                                 <div class="product__item__price">
                                     @if ($product->sale_price && $product->regular_price > 0)
                                         <span
