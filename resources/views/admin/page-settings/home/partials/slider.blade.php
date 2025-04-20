@@ -1,7 +1,7 @@
 <section class="main-slider hero-slider">
     <div class="main-slider__bg">
         <img src="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}" alt="Main Banner" width="1920"
-            height="800" loading="eager" fetchpriority="high" style="object-fit: cover; width: 100%; height: 100%;">
+            height="800" style="object-fit: cover; width: 100%; height: 100%;">
     </div>
 
     <div class="hero-slider__social">

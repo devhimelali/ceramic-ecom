@@ -6,7 +6,7 @@
 @section('page-style')
     <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
         type="image/webp" fetchpriority="high" />
-
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
     <style>
         /* Style the submit button */
         .custom-button {
@@ -339,7 +339,6 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
 @endsection
 @section('content')
     <!-- main slider start -->
@@ -786,12 +785,12 @@
     <!-- shop end -->
 
 
-
-    <!-- client carousel start -->
-    <div class="client-carousel @@extraClassName">
-        <div class="container">
-            <div class="client-carousel__one floens-owl__carousel owl-theme owl-carousel"
-                data-owl-options='{
+    @if ($brands->count() > 0)
+        <!-- client carousel start -->
+        <div class="client-carousel @@extraClassName">
+            <div class="container">
+                <div class="client-carousel__one floens-owl__carousel owl-theme owl-carousel"
+                    data-owl-options='{
                     "items": 5,
                     "margin": 65,
                     "smartSpeed": 700,
@@ -823,17 +822,17 @@
                         }
                     }
                     }'>
-                @foreach ($brands as $barand)
-                    <div class="client-carousel__one__item">
-                        <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
-                            loading="lazy" alt="brand">
-                    </div><!-- /.owl-slide-item-->
-                @endforeach
-            </div><!-- /.thm-owl__slider -->
-        </div><!-- /.container -->
-    </div><!-- /.client-carousel -->
-    <!-- client carousel end -->
-
+                    @foreach ($brands as $barand)
+                        <div class="client-carousel__one__item">
+                            <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
+                                loading="lazy" alt="brand">
+                        </div><!-- /.owl-slide-item-->
+                    @endforeach
+                </div><!-- /.thm-owl__slider -->
+            </div><!-- /.container -->
+        </div><!-- /.client-carousel -->
+        <!-- client carousel end -->
+    @endif
 
 @endsection
 @section('page-script')

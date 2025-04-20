@@ -1,12 +1,12 @@
 <style>
+    /* === Buttons === */
     .custom-button {
         border: none;
         background: var(--floens-base, #C7844F);
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
+        color: #fff;
         font-size: 12px;
-        padding: 13px 24px !important
+        cursor: pointer;
+        padding: 13px 24px !important;
     }
 
     .custom-button:hover {
@@ -18,101 +18,11 @@
     }
 
     .mobile-btn {
-        padding: 8px 0px !important;
+        padding: 11px 0 !important;
     }
 
     .addToCartBtn {
         padding: 19px 24px !important;
-    }
-
-    .owl-carousel .owl-nav button.owl-prev,
-    .owl-carousel .owl-nav button.owl-prev,
-    .owl-carousel button.owl-dot.owl-nav {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        background-color: #434343c7 !important;
-        color: #fff !important;
-        font-size: 22px !important;
-        border-radius: 50% !important;
-        width: 25px;
-        height: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform: translateY(-50%);
-    }
-
-    .owl-carousel .owl-nav button.owl-next,
-    .owl-carousel .owl-nav button.owl-next,
-    .owl-carousel button.owl-dot.owl-nav {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        background-color: #434343c7 !important;
-        color: #fff !important;
-        font-size: 22px !important;
-        border-radius: 50% !important;
-        width: 25px;
-        height: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform: translateY(-50%);
-        z-index: 1;
-    }
-
-    .product__item {
-        border: 1px solid #DED8D3;
-        border-radius: 4px;
-    }
-
-    .product__item:hover {
-        border: 1px solid #2a4e72;
-    }
-
-    .product_item_content {
-        border: none;
-        padding: 0.24px 17px 20px !important;
-    }
-
-    span.discount {
-        position: absolute;
-        right: 7px;
-        top: 7px;
-        z-index: 2;
-        background: #C7844F;
-        color: #fff !important;
-        padding: 2px 8px;
-        border-radius: 18px;
-    }
-
-    .product_item_price {
-        margin-bottom: 12px;
-    }
-
-
-    .product__item__image {
-        border-radius: 4px;
-    }
-
-    .product-image {
-        height: 300px;
-    }
-
-    .product__item__price span {
-        font-size: 13px !important;
-    }
-
-    .product__item__price {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 14px !important;
-        color: var(--floens-text, #7A736A);
-        line-height: normal;
-        font-weight: 700;
-        margin-bottom: 17px !important;
     }
 
     @media screen and (max-width: 480px) {
@@ -123,10 +33,93 @@
         .addToCartBtn i {
             font-size: 12px !important;
         }
+    }
 
+    /* === Carousel Navigation === */
+    .owl-carousel .owl-nav button.owl-prev,
+    .owl-carousel .owl-nav button.owl-next {
+        position: absolute;
+        top: 50%;
+        background-color: #434343c7 !important;
+        color: #fff !important;
+        font-size: 22px !important;
+        border-radius: 50% !important;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-50%);
+    }
+
+    .owl-carousel .owl-nav button.owl-prev {
+        left: 15px;
+    }
+
+    .owl-carousel .owl-nav button.owl-next {
+        right: 12px;
+        z-index: 1;
+    }
+
+    /* === Product Item === */
+    .product__item {
+        border: 1px solid #DED8D3;
+        border-radius: 4px;
+    }
+
+    .product__item:hover {
+        border-color: #2a4e72;
+    }
+
+    .product_item_content {
+        border: none;
+        padding: 0.24px 17px 20px !important;
+    }
+
+    .product__item__image {
+        border-radius: 4px;
+    }
+
+    .product-image {
+        height: 300px;
+    }
+
+    @media screen and (max-width: 480px) {
         .product-image {
             height: 207px;
         }
+    }
+
+    /* === Discount Tag === */
+    span.discount {
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        z-index: 2;
+        background: #C7844F;
+        color: #fff !important;
+        padding: 2px 8px;
+        border-radius: 18px;
+    }
+
+    /* === Price Styling === */
+    .product_item_price {
+        margin-bottom: 12px;
+    }
+
+    .product__item__price {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px !important;
+        font-weight: 700;
+        color: var(--floens-text, #7A736A);
+        line-height: normal;
+        margin-bottom: 17px !important;
+    }
+
+    .product__item__price span {
+        font-size: 13px !important;
     }
 </style>
 <div class="row gutter-y-30">

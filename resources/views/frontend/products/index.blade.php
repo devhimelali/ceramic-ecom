@@ -2,6 +2,7 @@
 @section('title', 'Products')
 @section('page-style')
     <style>
+        /* === Product Sidebar Styles === */
         .product__sidebar__attribute {
             margin-bottom: 20px;
             padding: 10px 0;
@@ -47,6 +48,7 @@
             color: var(--floens-base, #C7844F);
         }
 
+        /* Expand Icon */
         .expand-icon {
             font-size: 20px;
             color: var(--floens-base, #C7844F);
@@ -54,54 +56,47 @@
             transition: transform 0.3s ease;
         }
 
-        .expand-icon.open i {
-            transform: rotate(183deg);
-        }
-
         .expand-icon i {
             transition: transform 0.3s ease;
         }
 
-        /* Container for Products */
-        #products {
-            position: relative;
-            /* Ensures the loader is positioned within this container */
+        .expand-icon.open i {
+            transform: rotate(183deg);
         }
 
-        /* Custom Loader Style */
+        /* === Loader Styles === */
+        #products {
+            position: relative;
+        }
+
         #loader {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 80%;
-            background: rgba(10, 10, 10, 0.141);
+            background: rgba(10, 10, 10, 0.14);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
         }
 
-        /* Spinner Style */
         .spinner {
+            width: 50px;
+            height: 50px;
             border: 8px solid #f3f3f3;
             border-top: 8px solid #dc7221;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
             animation: spin 1.5s linear infinite;
-            /* Spinner animation */
         }
 
-        /* Loader text style */
         #loader p {
             margin-top: 10px;
             font-size: 16px;
-            color: #ffffff;
-            /* White text for contrast */
+            color: #fff;
         }
 
-        /* Keyframes for spinner rotation */
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -112,6 +107,7 @@
             }
         }
 
+        /* === Misc Styles === */
         .no-products-message {
             display: flex;
             justify-content: center;
@@ -128,7 +124,6 @@
 
         .pagination .page-link {
             color: #333;
-            /* Default color */
         }
 
         @media (max-width: 767px) {
@@ -139,7 +134,7 @@
         }
 
         .product-page {
-            padding-top: 0px;
+            padding-top: 0;
         }
     </style>
     <!-- Include jQuery UI CSS -->
