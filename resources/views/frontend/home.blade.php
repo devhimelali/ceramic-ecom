@@ -6,7 +6,7 @@
 @section('page-style')
     <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
         type="image/webp" fetchpriority="high" />
-
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
     <style>
         /* Style the submit button */
         .custom-button {
@@ -26,10 +26,6 @@
 
         .enquireBtn {
             width: 70%;
-        }
-
-        .custom-button:hover {
-            background: #9a6e4b;
         }
 
         .sec_1_prev_3 {
@@ -225,6 +221,12 @@
             margin-top: 10px;
         }
 
+        @media (max-width: 991px) {
+            .main-slider__item {
+                padding: 0 0 150px;
+            }
+        }
+
         /* media query */
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
@@ -337,7 +339,6 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
 @endsection
 @section('content')
     <!-- main slider start -->
@@ -563,18 +564,15 @@
                                         style="background-image: url('{{ asset('frontend') }}/assets/images/shapes/reliable-shape-1-1.png');">
                                         25
                                     </h3>
-                                    <!-- /.experience__year -->
                                     <p class="experience__text">years of <br> experience</p>
-                                    <!-- /.experience__text -->
-                                </div><!-- /.experience__inner -->
-                            </div><!-- /.experience -->
-                        </div><!-- /.reliable-one__image -->
-                    </div><!-- /.reliable-one__images -->
-                </div><!-- /.col-lg-6 -->
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </section><!-- /.reliable-one section-space-bottom -->
-    <!-- reliable end -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <style>
         .product-home-top-selling {
             padding-top: 30px;
@@ -609,7 +607,7 @@
 
 
             <div class="row">
-                @foreach ($products as $product)
+                @forelse ($products as $product)
                     <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                             @php
@@ -650,7 +648,7 @@
                             </div>
                             <div class="product__item__content">
                                 <p class="product__item__title"><a
-                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
+                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
                                 <div class="product__item__price">
                                     @if ($product->sale_price && $product->regular_price > 0)
                                         <span
@@ -684,7 +682,9 @@
                             </div><!-- /.product-content -->
                         </div><!-- /.product-item -->
                     </div><!-- /.col-md-6 col-lg-4 -->
-                @endforeach
+                @empty
+                    <h5 class="text-center">No products found.</h5>
+                @endforelse
             </div><!-- /.row -->
         </div><!-- /.container -->
     </section><!-- /.product-home -->
@@ -701,7 +701,7 @@
                 <!-- /.sec-title__title -->
             </div><!-- /.sec-title -->
             <div class="row">
-                @foreach ($topSellingProducts as $product)
+                @forelse ($topSellingProducts as $product)
                     <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
                         <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                             @php
@@ -776,19 +776,21 @@
                             </div><!-- /.product-content -->
                         </div><!-- /.product-item -->
                     </div><!-- /.col-md-6 col-lg-4 -->
-                @endforeach
+                @empty
+                    <h5 class="text-center">No products found.</h5>
+                @endforelse
             </div><!-- /.row -->
         </div><!-- /.container -->
     </section><!-- /.product-home -->
     <!-- shop end -->
 
 
-
-    <!-- client carousel start -->
-    <div class="client-carousel @@extraClassName">
-        <div class="container">
-            <div class="client-carousel__one floens-owl__carousel owl-theme owl-carousel"
-                data-owl-options='{
+    @if ($brands->count() > 0)
+        <!-- client carousel start -->
+        <div class="client-carousel @@extraClassName">
+            <div class="container">
+                <div class="client-carousel__one floens-owl__carousel owl-theme owl-carousel"
+                    data-owl-options='{
                     "items": 5,
                     "margin": 65,
                     "smartSpeed": 700,
@@ -820,17 +822,17 @@
                         }
                     }
                     }'>
-                @foreach ($brands as $barand)
-                    <div class="client-carousel__one__item">
-                        <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
-                            loading="lazy" alt="brand">
-                    </div><!-- /.owl-slide-item-->
-                @endforeach
-            </div><!-- /.thm-owl__slider -->
-        </div><!-- /.container -->
-    </div><!-- /.client-carousel -->
-    <!-- client carousel end -->
-
+                    @foreach ($brands as $barand)
+                        <div class="client-carousel__one__item">
+                            <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
+                                loading="lazy" alt="brand">
+                        </div><!-- /.owl-slide-item-->
+                    @endforeach
+                </div><!-- /.thm-owl__slider -->
+            </div><!-- /.container -->
+        </div><!-- /.client-carousel -->
+        <!-- client carousel end -->
+    @endif
 
 @endsection
 @section('page-script')

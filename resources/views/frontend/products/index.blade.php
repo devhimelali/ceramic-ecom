@@ -2,6 +2,7 @@
 @section('title', 'Products')
 @section('page-style')
     <style>
+        /* === Product Sidebar Styles === */
         .product__sidebar__attribute {
             margin-bottom: 20px;
             padding: 10px 0;
@@ -47,6 +48,7 @@
             color: var(--floens-base, #C7844F);
         }
 
+        /* Expand Icon */
         .expand-icon {
             font-size: 20px;
             color: var(--floens-base, #C7844F);
@@ -54,54 +56,47 @@
             transition: transform 0.3s ease;
         }
 
-        .expand-icon.open i {
-            transform: rotate(183deg);
-        }
-
         .expand-icon i {
             transition: transform 0.3s ease;
         }
 
-        /* Container for Products */
-        #products {
-            position: relative;
-            /* Ensures the loader is positioned within this container */
+        .expand-icon.open i {
+            transform: rotate(183deg);
         }
 
-        /* Custom Loader Style */
+        /* === Loader Styles === */
+        #products {
+            position: relative;
+        }
+
         #loader {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 80%;
-            background: rgba(10, 10, 10, 0.141);
+            background: rgba(10, 10, 10, 0.14);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
         }
 
-        /* Spinner Style */
         .spinner {
+            width: 50px;
+            height: 50px;
             border: 8px solid #f3f3f3;
             border-top: 8px solid #dc7221;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
             animation: spin 1.5s linear infinite;
-            /* Spinner animation */
         }
 
-        /* Loader text style */
         #loader p {
             margin-top: 10px;
             font-size: 16px;
-            color: #ffffff;
-            /* White text for contrast */
+            color: #fff;
         }
 
-        /* Keyframes for spinner rotation */
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -112,6 +107,7 @@
             }
         }
 
+        /* === Misc Styles === */
         .no-products-message {
             display: flex;
             justify-content: center;
@@ -128,7 +124,17 @@
 
         .pagination .page-link {
             color: #333;
-            /* Default color */
+        }
+
+        @media (max-width: 767px) {
+            .product__info-top {
+                display: flex;
+                align-items: flex-start !important;
+            }
+        }
+
+        .product-page {
+            padding-top: 0;
         }
     </style>
     <!-- Include jQuery UI CSS -->
@@ -151,13 +157,7 @@
 
     <section class="product-page product-page--left section-space-bottom">
         <div class="container">
-            <!-- Mobile Filter Button -->
-            <div class="d-xl-none mb-3">
-                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;" type="button"
-                    data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
-                    <i class="fas fa-filter"></i> Filter
-                </button>
-            </div>
+
 
             <div class="row gutter-y-60">
                 <!-- Sidebar: XL and above -->
@@ -232,8 +232,14 @@
                         <div class="spinner"></div>
                         <p>Loading...</p>
                     </div>
-                    <div class="product-wrapper" style="padding-top: 65px;">
+                    <div class="product-wrapper" style="padding-top: 25px;">
                         <div class="product__info-top">
+                            <div class="d-xl-none mb-3">
+                                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;"
+                                    type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                            </div>
                             <div class="product__showing-text-box">
 
                             </div>
@@ -264,10 +270,6 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="my-3 text-end">
-                <button class="custom-button p-1" style="padding: 6px !important; width: 113px;"
-                    data-bs-dismiss="offcanvas" aria-label="Close">Search</button>
-            </div>
             <div id="mobile-filter-content"></div>
         </div>
     </div>
@@ -457,6 +459,7 @@
                 },
                 success: function(response) {
                     $('#products').html(response.html);
+                    notify('success', 'Products loaded successfully');
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -467,9 +470,18 @@
                 }
             });
         }
+        const previousUrl = document.referrer;
+        if (previousUrl && !previousUrl.includes(window.location.hostname + window.location.pathname)) {
+            localStorage.setItem("previous_page", previousUrl);
+        }
         history.pushState(null, null, location.href);
-        window.addEventListener('popstate', function(event) {
-            window.location.href = "{{ route('frontend.home') }}";
+        window.addEventListener('popstate', function() {
+            let storedPrevious = localStorage.getItem("previous_page");
+            if (storedPrevious !== null) {
+                window.location.href = storedPrevious;
+            } else {
+                window.location.href = "{{ route('frontend.home') }}";
+            }
         });
     </script>
 

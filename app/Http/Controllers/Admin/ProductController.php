@@ -230,6 +230,26 @@ class ProductController extends Controller
                 'description' => $request->description,
             ]);
 
+            if ($request->hasFile('image')) {
+                if ($product->images && $product->images->count() > 0) {
+                    foreach ($product->images as $image) {
+                        $filePath = preg_replace('/^storage\//', '', $image->path);
+
+                        if (Storage::disk('public')->exists($filePath)) {
+                            Storage::disk('public')->delete($filePath);
+                        }
+
+                        $image->delete();
+                    }
+                }
+                $fileInfo = uploadImage($request->file('image'), 'products');
+                $product->images()->create([
+                    'name' => $fileInfo['name'],
+                    'path' => $fileInfo['path'],
+                ]);
+            }
+
+
             // 2. Sync attributes and values
             if (!empty($request['attributes'])) {
                 // Extract new attribute IDs from request

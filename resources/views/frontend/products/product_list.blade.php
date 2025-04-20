@@ -1,13 +1,12 @@
 <style>
-    /* Style the submit button */
+    /* === Buttons === */
     .custom-button {
-        /* width: 100%; */
-        padding: 10px;
         border: none;
         background: var(--floens-base, #C7844F);
-        color: white;
-        font-size: 16px;
+        color: #fff;
+        font-size: 12px;
         cursor: pointer;
+        padding: 13px 24px !important;
     }
 
     .custom-button:hover {
@@ -18,11 +17,28 @@
         width: 70%;
     }
 
+    .mobile-btn {
+        padding: 11px 0 !important;
+    }
+
+    .addToCartBtn {
+        padding: 19px 24px !important;
+    }
+
+    @media screen and (max-width: 480px) {
+        .addToCartBtn {
+            padding: 14px 21px !important;
+        }
+
+        .addToCartBtn i {
+            font-size: 12px !important;
+        }
+    }
+
+    /* === Carousel Navigation === */
     .owl-carousel .owl-nav button.owl-prev,
-    .owl-carousel .owl-nav button.owl-prev,
-    .owl-carousel button.owl-dot.owl-nav {
+    .owl-carousel .owl-nav button.owl-next {
         position: absolute;
-        left: 15px;
         top: 50%;
         background-color: #434343c7 !important;
         color: #fff !important;
@@ -36,32 +52,23 @@
         transform: translateY(-50%);
     }
 
-    .owl-carousel .owl-nav button.owl-next,
-    .owl-carousel .owl-nav button.owl-next,
-    .owl-carousel button.owl-dot.owl-nav {
-        position: absolute;
+    .owl-carousel .owl-nav button.owl-prev {
+        left: 15px;
+    }
+
+    .owl-carousel .owl-nav button.owl-next {
         right: 12px;
-        top: 50%;
-        background-color: #434343c7 !important;
-        color: #fff !important;
-        font-size: 22px !important;
-        border-radius: 50% !important;
-        width: 25px;
-        height: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform: translateY(-50%);
         z-index: 1;
     }
 
+    /* === Product Item === */
     .product__item {
         border: 1px solid #DED8D3;
         border-radius: 4px;
     }
 
     .product__item:hover {
-        border: 1px solid #2a4e72;
+        border-color: #2a4e72;
     }
 
     .product_item_content {
@@ -69,10 +76,25 @@
         padding: 0.24px 17px 20px !important;
     }
 
+    .product__item__image {
+        border-radius: 4px;
+    }
+
+    .product-image {
+        height: 300px;
+    }
+
+    @media screen and (max-width: 480px) {
+        .product-image {
+            height: 207px;
+        }
+    }
+
+    /* === Discount Tag === */
     span.discount {
         position: absolute;
-        right: 7px;
         top: 7px;
+        right: 7px;
         z-index: 2;
         background: #C7844F;
         color: #fff !important;
@@ -80,31 +102,27 @@
         border-radius: 18px;
     }
 
+    /* === Price Styling === */
     .product_item_price {
         margin-bottom: 12px;
     }
 
-    .custom-button {
+    .product__item__price {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 14px !important;
-        padding: 12px 24px;
+        font-weight: 700;
+        color: var(--floens-text, #7A736A);
+        line-height: normal;
+        margin-bottom: 17px !important;
     }
 
-    .addToCartBtn {
-        padding: 19px 24px !important;
-    }
-
-    .product__item__image {
-        border-radius: 4px;
-    }
-
-    @media screen and (max-width: 480px) {
-        .custom-button {
-            /* padding: 12px 1px !important; */
-
-        }
+    .product__item__price span {
+        font-size: 13px !important;
     }
 </style>
-<div class="row gutter-y-30 mt-3">
+<div class="row gutter-y-30">
     @forelse ($products as $product)
         <div class="col-xl-4 col-lg-4 col-md-6 col-6 product_item">
             <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
@@ -128,22 +146,22 @@
                 @endif
                 <div class="product_item_image product-carousel owl-carousel">
                     @foreach ($images as $image)
-                        <img class="item" src="{{ asset($image->path) }}" alt="Natural Stone Tiles">
+                        <img class="item product-image" src="{{ asset($image->path) }}" alt="Natural Stone Tiles">
                     @endforeach
                 </div>
 
-                <div class="product_item_content">
+                <div class="product_item_content mt-3">
                     <h6 class="product_item_title">
                         <a
                             href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
-                    </h6><!-- /.product-title -->
+                    </h6>
                     <div class="product_item_price">
                         @if ($product->sale_price && $product->regular_price > 0)
                             <span
-                                style="text-decoration: line-through; color: #888; font-size: 16px; margin-right: 10px;">
+                                style="text-decoration: line-through; color: red; font-size: 12px; margin-right: 10px;">
                                 {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
                             </span>
-                            <span style="color: #888; font-size: 16px;">
+                            <span style="color: #888; font-size: 12px;">
                                 {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
                             </span>
                         @else
@@ -153,9 +171,9 @@
                         @endif
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-center">
+                    <div class="d-flex justify-content-between">
                         <a href="javascript:void(0);"
-                            class="p-3 floens-btn product_item_link me-2 custom-button enquireBtn"
+                            class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
                             data-id="{{ $product->id }}"
                             data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
@@ -165,9 +183,9 @@
                             data-url="{{ route('add.to.cart.form', $product->id) }}">
                             <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                     </div>
-                </div><!-- /.product-content -->
-            </div><!-- /.product-item -->
-        </div><!-- /.col-md-6 col-lg-4 -->
+                </div>
+            </div>
+        </div>
     @empty
         <div class="no-products-message">
             <h2 class="my-auto text-center text-danger">No products found</h2>
