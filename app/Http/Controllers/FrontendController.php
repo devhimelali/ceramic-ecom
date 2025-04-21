@@ -94,18 +94,18 @@ class FrontendController extends Controller
             $query->where('brand_id', $request->brand);
         }
         $products = $query->paginate(12);
-        if ($request->ajax()) {
-            // sleep(1);
-            $html = view('frontend.products.product_list', compact('products'))->render();
-            $pagination = $products->links('pagination::bootstrap-4')->toHtml();
-            return response()->json([
-                'status' => 'success',
-                'html'   => $html,
-                'pagination' => $pagination,
-                'result' => [],
-                'message' => 'Products updated successfully!',
-            ]);
-        }
+        // if ($request->ajax()) {
+        //     // sleep(1);
+        //     $html = view('frontend.products.product_list', compact('products'))->render();
+        //     $pagination = $products->links('pagination::bootstrap-4')->toHtml();
+        //     return response()->json([
+        //         'status' => 'success',
+        //         'html'   => $html,
+        //         'pagination' => $pagination,
+        //         'result' => [],
+        //         'message' => 'Products updated successfully!',
+        //     ]);
+        // }
 
         $allAttributes = Attribute::with('values')->get();
 
@@ -117,6 +117,7 @@ class FrontendController extends Controller
         return view('frontend.products.index', [
             'active'     => 'products',
             'attributes' => $groupedAttributes,
+            'products'   => $products,
             'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->get(),
         ]);
     }
