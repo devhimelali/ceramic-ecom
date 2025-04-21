@@ -104,7 +104,15 @@
             .page-header {
                 padding-top: 44px;
                 padding-bottom: 89px;
-                height: 173px;
+                height: 133px;
+            }
+
+            .page-header__bg {
+                height: 133px;
+            }
+
+            .page-header__title {
+                font-size: 24px;
             }
         }
     </style>

@@ -4,6 +4,9 @@
     <!-- Include jQuery UI CSS -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
+    {{-- Preload in <head> section of your layout file --}}
+    <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}">
+
     <style>
         /* === Product Sidebar Styles === */
         .product__sidebar__attribute {
@@ -139,8 +142,7 @@
         .product-page {
             padding-top: 0;
         }
-    </style>
-    <style>
+
         /* === Buttons === */
         .custom-button {
             border: none;
@@ -267,14 +269,29 @@
         div#filterOffcanvas {
             width: 82%;
         }
+
+        .product_item_image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            /* Makes it square */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product_item_image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
     </style>
 
 @endsection
 @section('content')
     <section class="page-header">
         <div class="page-header__bg"
-            style="background-image: url('{{ asset('frontend') }}/assets/images/backgrounds/page-header-bg-1-1.png');"></div>
-        <!-- /.page-header__bg -->
+            style="background-image: url('{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}');">
+        </div>
         <div class="container">
             <h2 class="page-header__title">Find Your Products</h2>
             <ul class="floens-breadcrumb list-unstyled">
@@ -283,6 +300,7 @@
             </ul>
         </div>
     </section>
+
 
     <section class="product-page product-page--left section-space-bottom">
         <div class="container">
@@ -521,17 +539,38 @@
         });
 
         $(document).ready(function() {
-            var owl = $('.product-carousel');
-            owl.owlCarousel({
-                items: 1,
-                loop: true,
-                margin: 10,
-                autoplay: true,
-                autoplayTimeout: 2000,
-                autoplayHoverPause: true,
-                nav: true,
-                dots: false,
+            $('.product-carousel').each(function() {
+                const $carousel = $(this);
+                const images = $carousel.find('img');
+                let imagesLoaded = 0;
+
+                images.each(function() {
+                    if (this.complete) {
+                        imagesLoaded++;
+                        if (imagesLoaded === images.length) {
+                            $carousel.owlCarousel({
+                                items: 1,
+                                loop: true,
+                                margin: 10,
+                                nav: true
+                            });
+                        }
+                    } else {
+                        $(this).on('load', function() {
+                            imagesLoaded++;
+                            if (imagesLoaded === images.length) {
+                                $carousel.owlCarousel({
+                                    items: 1,
+                                    loop: true,
+                                    margin: 10,
+                                    nav: true
+                                });
+                            }
+                        });
+                    }
+                });
             });
+
             $('.product__sidebar__title').on('click', function() {
                 let attributeId = $(this).data('attribute-id');
                 $('#values-' + attributeId).toggle();
