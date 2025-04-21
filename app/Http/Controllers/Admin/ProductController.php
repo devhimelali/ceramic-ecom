@@ -126,6 +126,7 @@ class ProductController extends Controller
                 'status' => $request->status,
                 'short_description' => $request->short_description,
                 'description' => $request->description,
+                'label' => $request->label
             ]);
             // 2. Handle upload product thumbnail image
             if ($request->hasFile('image')) {
@@ -165,7 +166,8 @@ class ProductController extends Controller
                 foreach ($request->variations as $variation) {
                     $variationData = $product->variations()->create([
                         'attribute_string' => $variation['attributes'],
-                        'price' => $variation['price'],
+                        'regular_price' => $variation['regular_price'],
+                        'sale_price' => $variation['sale_price'],
                     ]);
 
                     if (isset($variation['images'])) {
@@ -228,6 +230,7 @@ class ProductController extends Controller
                 'status' => $request->status,
                 'short_description' => $request->short_description,
                 'description' => $request->description,
+                'label' => $request->label,
             ]);
 
             if ($request->hasFile('image')) {
@@ -307,7 +310,8 @@ class ProductController extends Controller
                     if ($variation) {
                         $variation->update([
                             'attribute_string' => $variationInput['attributes'],
-                            'price' => $variationInput['price'],
+                            'regular_price' => $variationInput['regular_price'],
+                            'sale_price' => $variationInput['sale_price'],
                         ]);
 
                         // Handle image uploads
@@ -325,7 +329,8 @@ class ProductController extends Controller
                     // Create new variation
                     $variation = $product->variations()->create([
                         'attribute_string' => $variationInput['attributes'],
-                        'price' => $variationInput['price'],
+                        'regular_price' => $variationInput['regular_price'],
+                        'sale_price' => $variationInput['sale_price'],
                     ]);
 
                     // Upload images

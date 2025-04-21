@@ -242,10 +242,18 @@
 
                             if (response.status === 'success') {
                                 updateSwiperGallery(response.data.images);
+                                if (response.data.sale_price == null) {
+                                    $('#price-wrapper-ditails').html(
+                                        `<span class="price">$ ${response.data.regular_price}</span>`
+                                    );
+                                } else {
+                                    $('#price-wrapper-ditails').html(
+                                        `<span class="price"
+                                style="text-decoration: line-through; color: red; margin-right: 6px;">$ ${response.data.regular_price}</span>
+                            <span class="price">$ ${response.data.sale_price}</span>`
+                                    );
+                                }
 
-                                $('#price-wrapper-ditails').html(
-                                    `<span class="price">$ ${response.data.price}</span>`
-                                );
                             } else {
                                 alert(response.message || 'Variation not found.');
                             }

@@ -410,8 +410,12 @@
                                 <input type="text" value="${attrDisplay}" disabled class="form-control">
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label>Price</label>
-                                <input name="variations[${index}][price]" type="number" step="0.01" class="form-control">
+                                <label>Regular Price</label>
+                                <input name="variations[${index}][regular_price]" type="number" step="0.01" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>Sales Price</label>
+                                <input name="variations[${index}][sale_price]" type="number" step="0.01" class="form-control">
                             </div>
                             <div class="col-12 mb-2">
                                 <div class="image-upload-wrapper mb-3">
