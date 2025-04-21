@@ -33,7 +33,7 @@ class FrontendController extends Controller
 
     public function allCategories()
     {
-        $categories = Category::where('is_active', 1)->paginate(12);
+        $categories = Category::where('is_active', 1)->where('parent_id', null)->paginate(12);
 
         return view('frontend.categories', [
             'active' => 'allCategories',
