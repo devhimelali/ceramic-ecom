@@ -33,7 +33,7 @@ class FrontendController extends Controller
 
     public function allCategories()
     {
-        $categories = Category::where('is_active', 1)->paginate(10);
+        $categories = Category::where('is_active', 1)->paginate(12);
 
         return view('frontend.categories', [
             'active' => 'allCategories',
@@ -88,7 +88,8 @@ class FrontendController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
         if ($request->has('category')) {
-            $query->where('category_id', $request->category);
+            $category = Category::where('slug', $request->category)->first();
+            $query->where('category_id', $category->id);
         }
         if ($request->has('brand')) {
             $query->where('brand_id', $request->brand);
