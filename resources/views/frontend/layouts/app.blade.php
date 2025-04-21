@@ -104,7 +104,15 @@
             .page-header {
                 padding-top: 44px;
                 padding-bottom: 89px;
-                height: 173px;
+                height: 133px;
+            }
+
+            .page-header__bg {
+                height: 133px;
+            }
+
+            .page-header__title {
+                font-size: 24px;
             }
         }
     </style>
@@ -113,6 +121,9 @@
 </head>
 
 <body class="custom-cursor">
+
+    {{-- <div class="custom-cursor__cursor"></div>
+    <div class="custom-cursor__cursor-two"></div> --}}
 
     {{-- <div class="preloader">
         <div class="preloader__image" style="background-image: url({{ asset('frontend') }}/assets/images/loader.png);">
