@@ -4,8 +4,8 @@
     <!-- Include jQuery UI CSS -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
-    {{-- Preload in <head> section of your layout file --}}
     <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}">
+
 
     <style>
         /* === Product Sidebar Styles === */
@@ -292,6 +292,7 @@
         <div class="page-header__bg"
             style="background-image: url('{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}');">
         </div>
+
         <div class="container">
             <h2 class="page-header__title">Find Your Products</h2>
             <ul class="floens-breadcrumb list-unstyled">
@@ -436,7 +437,7 @@
                                             <div class="product_item_image product-carousel owl-carousel">
                                                 @foreach ($images as $image)
                                                     <img class="item product-image" src="{{ asset($image->path) }}"
-                                                        alt="Natural Stone Tiles">
+                                                        alt="{{ $product->name }}">
                                                 @endforeach
                                             </div>
 

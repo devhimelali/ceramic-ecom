@@ -102,7 +102,7 @@
 
         @media (max-width: 575px) {
             .page-header {
-                padding-top: 44px;
+                /* padding-top: 44px; */
                 padding-bottom: 89px;
                 height: 133px;
             }
@@ -112,7 +112,7 @@
             }
 
             .page-header__title {
-                font-size: 24px;
+                font-size: 20px;
             }
         }
     </style>

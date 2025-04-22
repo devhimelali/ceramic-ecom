@@ -7,41 +7,18 @@
         </div>
         <!-- /.page-header__bg -->
         <div class="container">
-            <h2 class="page-header__title">{{ $product->name }}</h2>
             <ul class="floens-breadcrumb list-unstyled">
                 <li><i class="text-white icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><span class="text-white">shop</span></li>
                 <li><span class="text-white">{{ $product->name }}</span></li>
-            </ul><!-- /.thm-breadcrumb list-unstyled -->
-        </div><!-- /.container -->
-    </section><!-- /.page-header -->
+            </ul>
+        </div>
+    </section>
 
     <section class="product-details section-space">
         <div class="container">
             <!-- /.product-details -->
             <div class="row gutter-y-50">
-                {{-- <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
-                    <div class="product-details__img">
-                        <div class="swiper product-details__gallery-top mySwiper">
-                            <div class="swiper-wrapper">
-                                @foreach ($product->images as $image)
-                                    <div class="swiper-slide">
-                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-top__img">
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="swiper product-details__gallery-thumb">
-                            <div class="swiper-wrapper">
-                                @foreach ($product->images as $image)
-                                    <div class="product-details__gallery-thumb-slide swiper-slide">
-                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- /.column --> --}}
                 @php
                     $productImages = $product->images; // This is already a Collection
                     $variantImages = $product->variations->flatMap(function ($variation) {
