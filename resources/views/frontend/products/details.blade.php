@@ -226,8 +226,8 @@
                                 } else {
                                     $('#price-wrapper-ditails').html(
                                         `<span class="price"
-                                style="text-decoration: line-through; color: red; margin-right: 6px;">$ ${response.data.regular_price}</span>
-                            <span class="price">$ ${response.data.sale_price}</span>`
+                                    style="text-decoration: line-through; color: red; margin-right: 6px;">$ ${response.data.regular_price}</span>
+                                    <span class="price">$ ${response.data.sale_price}</span>`
                                     );
                                 }
 
