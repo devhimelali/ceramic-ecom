@@ -57,24 +57,23 @@ class FrontendController extends Controller
 
 
         if ($request->has('attribute')) {
-            $decryptedValues = array_filter(array_map(function ($value) {
-                $decoded = base64_decode($value, true);
-                return $decoded !== false ? $decoded : null;
-            }, explode(',', $request->input('attribute'))));
-            if (!empty($decryptedValues)) {
-                $attributes = $decryptedValues;
+            // dd($request->input('attribute')); // Check the input
+            $attributes = $request->input('attribute'); // Get the full attribute data
 
-                $query->whereHas('variations', function ($q) use ($attributes) {
-                    foreach ($attributes as $index => $value) {
+            // Loop through each attribute type (e.g., "Size", "Color")
+            $query->whereHas('variations', function ($q) use ($attributes) {
+                foreach ($attributes as $attributeName => $values) {
+                    foreach ($values as $index => $value) {
                         if ($index === 0) {
                             $q->where('attribute_string', 'like', '%' . $value . '%');
                         } else {
                             $q->orWhere('attribute_string', 'like', '%' . $value . '%');
                         }
                     }
-                });
-            }
+                }
+            });
         }
+
 
         if ($request->has('min_price') && $request->has('max_price')) {
             $min = $request->min_price;

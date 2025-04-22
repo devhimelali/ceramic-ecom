@@ -150,13 +150,13 @@ class ProductController extends Controller
             if ($request['attributes'] != null) {
                 foreach ($request['attributes'] as $attr) {
                     $attribute = $product->attributes()->create([
-                        'name' => $attr['name'],
+                        'name' => strtoupper($attr['name']),
                     ]);
 
                     $values = array_map('trim', explode(',', $attr['values']));
                     foreach ($values as $val) {
                         $attribute->values()->create([
-                            'value' => $val
+                            'value' => is_numeric($val) ? $val : strtoupper($val),
                         ]);
                     }
                 }
@@ -269,12 +269,12 @@ class ProductController extends Controller
                     if (!empty($attr['id'])) {
                         $attribute = $product->attributes()->find($attr['id']);
                         if ($attribute) {
-                            $attribute->update(['name' => $attr['name']]);
+                            $attribute->update(['name' => strtoupper($attr['name'])]);
                         }
                     } else {
                         // Create new attribute
                         $attribute = $product->attributes()->create([
-                            'name' => $attr['name']
+                            'name' => strtoupper($attr['name'])
                         ]);
                     }
 
@@ -284,7 +284,7 @@ class ProductController extends Controller
                         $values = array_map('trim', explode(',', $attr['values']));
                         foreach ($values as $value) {
                             if ($value !== '') {
-                                $attribute->values()->create(['value' => $value]);
+                                $attribute->values()->create(['value' => is_numeric($value) ? $value : strtoupper($value),]);
                             }
                         }
                     }

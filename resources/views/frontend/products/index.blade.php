@@ -517,29 +517,39 @@
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
 
-            urlParams.forEach((valueString, attributeName) => {
-                const values = valueString.split(',');
-                values.forEach(val => {
-                    $(`.product__sidebar__checkbox[name="attribute[${attributeName}][]"][value="${val}"]`)
-                        .prop('checked', true);
-                    const valuesSection = $(`#values-${attributeName}`);
-                    const icon = $(`#expand-icon-${attributeName} i`);
-                    if (valuesSection.length) {
-                        valuesSection.show();
-                        icon.removeClass('fa-plus').addClass('fa-minus');
-                    }
-                });
+            // Restore selected filters from URL
+            urlParams.forEach((value, fullKey) => {
+                const match = fullKey.match(/^attribute\[(.+?)\]\[\]$/);
+                if (match) {
+                    const attributeName = match[1];
+
+                    // Handle multiple values
+                    const values = urlParams.getAll(fullKey);
+                    values.forEach(val => {
+                        $(`.product__sidebar__checkbox[name="attribute[${attributeName}][]"][value="${val}"]`)
+                            .prop('checked', true);
+
+                        const valuesSection = $(`#values-${attributeName}`);
+                        const icon = $(`#expand-icon-${attributeName} i`);
+                        if (valuesSection.length) {
+                            valuesSection.show();
+                            icon.removeClass('fa-plus').addClass('fa-minus');
+                        }
+                    });
+                }
             });
 
             if (urlParams.has('max_price')) {
                 $('#price-range').val(urlParams.get('max_price'));
                 $('#max-price').text(urlParams.get('max_price'));
             }
+
             if (urlParams.has('search')) $('#searchQuery').val(urlParams.get('search'));
             if (urlParams.has('sort_by')) $('#sort').val(urlParams.get('sort_by'));
         });
 
         $(document).ready(function() {
+            // Owl carousel loading after images are ready
             $('.product-carousel').each(function() {
                 const $carousel = $(this);
                 const images = $carousel.find('img');
@@ -549,29 +559,29 @@
                     if (this.complete) {
                         imagesLoaded++;
                         if (imagesLoaded === images.length) {
-                            $carousel.owlCarousel({
-                                items: 1,
-                                loop: true,
-                                margin: 10,
-                                nav: true
-                            });
+                            initCarousel($carousel);
                         }
                     } else {
                         $(this).on('load', function() {
                             imagesLoaded++;
                             if (imagesLoaded === images.length) {
-                                $carousel.owlCarousel({
-                                    items: 1,
-                                    loop: true,
-                                    margin: 10,
-                                    nav: true
-                                });
+                                initCarousel($carousel);
                             }
                         });
                     }
                 });
             });
 
+            function initCarousel($carousel) {
+                $carousel.owlCarousel({
+                    items: 1,
+                    loop: true,
+                    margin: 10,
+                    nav: true
+                });
+            }
+
+            // Toggle attribute values on title click
             $('.product__sidebar__title').on('click', function() {
                 let attributeId = $(this).data('attribute-id');
                 $('#values-' + attributeId).toggle();
@@ -582,40 +592,38 @@
                 let url = new URL(window.location.href);
                 let searchParams = new URLSearchParams();
 
+                // Add checked filters
                 $('.product__sidebar__checkbox:checked').each(function() {
-                    const name = $(this).attr('name');
+                    const name = $(this).attr('name'); // attribute[Size][]
                     const value = $(this).val();
-                    const match = name.match(/attribute\[(.+?)\]/);
-                    if (match) {
-                        const key = match[1];
-                        let existing = searchParams.get(key);
-                        if (existing) {
-                            searchParams.set(key, existing + ',' + value);
-                        } else {
-                            searchParams.set(key, value);
-                        }
-                    }
+                    searchParams.append(name, value);
                 });
 
+                // Add price if changed
                 const maxPrice = $('#price-range').val();
-                if (maxPrice) {
+                const defaultMax = $('#price-range').attr('max');
+                if (maxPrice && maxPrice !== defaultMax) {
                     searchParams.set('min_price', 0);
                     searchParams.set('max_price', maxPrice);
                 }
 
+                // Add search query if present
                 const query = $('#searchQuery').val().trim();
                 if (query !== '') {
                     searchParams.set('search', query);
                 }
 
+                // Add sort option if selected
                 const sort = $('#sort').val();
                 if (sort !== '') {
                     searchParams.set('sort_by', sort);
                 }
 
+                // Navigate to filtered URL
                 window.location.href = url.pathname + '?' + searchParams.toString();
             }
 
+            // Event listeners
             $('.product__sidebar__checkbox').on('change', updateUrl);
             $('#price-range').on('change', updateUrl);
             $('#sort').on('change', updateUrl);
@@ -628,7 +636,12 @@
             $('#price-range').on('input', function() {
                 $('#max-price').text($(this).val());
             });
+        });
 
+
+
+
+        $(document).ready(function() {
             $('.play').on('click', function() {
                 owl.trigger('play.owl.autoplay', [1000]);
             });
