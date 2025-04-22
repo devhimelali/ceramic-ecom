@@ -140,7 +140,13 @@ function displayCartItems() {
                 </div>
                 <div class="offcanvas__cart-product__content">
                     <h3 class="offcanvas__cart-product__title">
-                        <a href="javascript:void(0);">${item.name}</a>
+                        <a href="javascript:void(0);" title="${item.name}">
+                            ${
+                                item.name.length > 20
+                                    ? item.name.substring(0, 20) + "..."
+                                    : item.name
+                            }
+                        </a>
                     </h3>
                     <div class="offcanvas__cart-product__variation"><span class="variation-item">${
                         item.variation

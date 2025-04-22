@@ -237,14 +237,16 @@
                             console.log(response.data);
                             if (response.data.sale_price == null) {
                                 $('#price-wrapper').html(
+                                    $('#product_price').val(response.data.regular_price),
                                     `<span class="price">$ ${response.data.regular_price}</span>`
                                 );
                             } else {
-                                $('#price-wrapper').html(
-                                    `<span class="price"
+                                $('#product_price').val(response.data.sale_price),
+                                    $('#price-wrapper').html(
+                                        `<span class="price"
                                 style="text-decoration: line-through; color: red; margin-right: 6px;">$ ${response.data.regular_price}</span>
                             <span class="price">$ ${response.data.sale_price}</span>`
-                                );
+                                    );
                             }
                         } else {
                             $('#price-wrapper').html(
