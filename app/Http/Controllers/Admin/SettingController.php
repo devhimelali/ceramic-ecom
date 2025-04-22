@@ -38,8 +38,8 @@ class SettingController extends Controller
                     $file->move(public_path('assets/images/settings/'), $filename);
 
                     $setting->value = $filename;
-                    $setting->is_image = 1;
                 }
+                // Keep existing value if no file uploaded
             } else {
                 $setting->value = $request->$type;
             }

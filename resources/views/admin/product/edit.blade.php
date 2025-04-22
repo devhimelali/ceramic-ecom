@@ -369,7 +369,8 @@
                                 .join(' / ');
                             const safeAttrDisplay = attrDisplay.replace(/"/g, '&quot;');
                             const variation = response[attrDisplay] || {};
-                            const price = variation.price || '';
+                            const regular_price = variation.regular_price || '';
+                            const sale_price = variation.sale_price || '';
                             const imageObjs = variation.images || [];
                             const variation_id = variation.id || '';
 
@@ -395,8 +396,12 @@
                                             <input type="text" value="${attrDisplay}" disabled class="form-control">
                                         </div>
                                         <div class="col-md-6 mb-2">
-                                            <label>Price</label>
-                                            <input name="variations[${index}][price]" type="number" step="0.01" class="form-control" value="${price}">
+                                            <label>Regular Price</label>
+                                            <input name="variations[${index}][regular_price]" type="number" step="0.01" class="form-control" value="${regular_price}">
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label>Sales Price</label>
+                                            <input name="variations[${index}][sale_price]" type="number" step="0.01" class="form-control" value="${sale_price}">
                                         </div>
                                         <div class="col-12 mb-2">
                                             <div class="image-upload-wrapper mb-3">

@@ -233,16 +233,18 @@
                     },
                     success: function(response) {
                         $('#loader').remove();
-                        if (response.status === 'success' && response.data?.price) {
-                            const price = parseFloat(response.data.price);
-                            if (!isNaN(price)) {
-                                $('#product_price').val(price.toFixed(2));
+                        if (response.status === 'success') {
+                            console.log(response.data);
+                            if (response.data.sale_price == null) {
                                 $('#price-wrapper').html(
-                                    `<span class="price">$ ${price.toFixed(2)}</span>`);
-                                $('#product_price').val(price.toFixed(2));
+                                    `<span class="price">$ ${response.data.regular_price}</span>`
+                                );
                             } else {
                                 $('#price-wrapper').html(
-                                    '<span class="text-danger">Invalid price format</span>');
+                                    `<span class="price"
+                                style="text-decoration: line-through; color: red; margin-right: 6px;">$ ${response.data.regular_price}</span>
+                            <span class="price">$ ${response.data.sale_price}</span>`
+                                );
                             }
                         } else {
                             $('#price-wrapper').html(
