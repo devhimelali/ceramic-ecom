@@ -64,7 +64,7 @@
                         </div><!-- /.excerp-text -->
                         <div class="product-details__excerpt">
                             <p class="product-details__excerpt__text1">
-                                {{ $product->short_description ?? 'No Description' }}
+                                {!! nl2br($product->short_description) !!}
                             </p>
                         </div><!-- /.excerp-text -->
                         <div class="mt-3">
