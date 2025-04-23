@@ -86,24 +86,14 @@
                                         <ul class="attribute_list">
                                             @foreach ($group['values'] as $value)
                                                 <li class="attribute_list_item">
-                                                    @if (Str::slug($group['attribute']) == 'color')
-                                                        <span
-                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer color-variation"
-                                                            data-id="{{ Str::slug($value) }}"
-                                                            data-key="{{ Str::slug($group['attribute']) }}"
-                                                            data-value="{{ $value }}"
-                                                            style="border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px; background-color: {{ strtolower($value) }}; @if (strtolower($value) == 'white') border: 1px solid #ccc; @endif height: 25px; width: 25px; border-radius: 50%; display: inline-block; cursor: pointer;">
-                                                        </span>
-                                                    @else
-                                                        <span
-                                                            class="variation_{{ Str::slug($value) }} variation_value_pointer"
-                                                            data-id="{{ Str::slug($value) }}"
-                                                            data-key="{{ Str::slug($group['attribute']) }}"
-                                                            data-value="{{ $value }}"
-                                                            style="cursor: pointer; border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px;">
-                                                            {{ $value }}
-                                                        </span>
-                                                    @endif
+                                                    <span
+                                                        class="variation_{{ Str::slug($value) }} variation_value_pointer"
+                                                        data-id="{{ Str::slug($value) }}"
+                                                        data-key="{{ Str::slug($group['attribute']) }}"
+                                                        data-value="{{ $value }}"
+                                                        style="cursor: pointer; border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px;">
+                                                        {{ $value }}
+                                                    </span>
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -195,7 +185,7 @@
 
             $('.variation_value_pointer[data-key="' + key + '"]').removeClass('selected');
             $(this).addClass('selected');
-            $('.selectedValue-' + key).text(value);
+            // $('.selectedValue-' + key).text(value);
 
             // Fetch variation price
             getVariationPrice();
@@ -233,16 +223,20 @@
                     },
                     success: function(response) {
                         $('#loader').remove();
-                        if (response.status === 'success' && response.data?.price) {
-                            const price = parseFloat(response.data.price);
-                            if (!isNaN(price)) {
-                                $('#product_price').val(price.toFixed(2));
-                                $('#price-wrapper').html(
-                                    `<span class="price">$ ${price.toFixed(2)}</span>`);
-                                $('#product_price').val(price.toFixed(2));
+                        if (response.status === 'success') {
+                            console.log(response.data);
+                            if (response.data.sale_price == null) {
+                                $('#product_price').val(response.data.regular_price),
+                                    $('#price-wrapper').html(
+                                        `<span class="price">$ ${response.data.regular_price}</span>`
+                                    );
                             } else {
-                                $('#price-wrapper').html(
-                                    '<span class="text-danger">Invalid price format</span>');
+                                $('#product_price').val(response.data.sale_price),
+                                    $('#price-wrapper').html(
+                                        `<span class="price"
+                                style="text-decoration: line-through; color: red; margin-right: 6px;">$ ${response.data.regular_price}</span>
+                                <span class="price">$ ${response.data.sale_price}</span>`
+                                    );
                             }
                         } else {
                             $('#price-wrapper').html(

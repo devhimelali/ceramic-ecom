@@ -25,23 +25,24 @@ class SettingController extends Controller
     {
         foreach ($request->types as $type) {
             $setting = Setting::firstOrNew(['key' => $type]);
-            if ($setting->is_image) {
-                if ($request->hasFile($type)) {
-                    // Delete the old file if it exists
-                    if (!empty($setting->value) && file_exists(public_path('assets/images/settings/' . $setting->value))) {
-                        unlink(public_path('assets/images/settings/' . $setting->value));
-                    }
 
-                    // Store the new file
-                    $file = $request->file($type);
-                    $filename = 'setting_' . $type . '_' . time() . '.' . $file->getClientOriginalExtension();
-                    $file->move(public_path('assets/images/settings/'), $filename);
-
-                    $setting->value = $filename;
-                    $setting->is_image = 1;
+            if ($request->hasFile($type)) {
+                // Delete the old file if it exists
+                if (!empty($setting->value) && file_exists(public_path('assets/images/settings/' . $setting->value))) {
+                    unlink(public_path('assets/images/settings/' . $setting->value));
                 }
-            } else {
+
+                // Store the new file
+                $file = $request->file($type);
+                $filename = 'setting_' . $type . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('assets/images/settings/'), $filename);
+
+                $setting->value = $filename;
+                $setting->is_image = 1;
+            } elseif (!$setting->is_image) {
+                // Only update text if it's not an image setting
                 $setting->value = $request->$type;
+                $setting->is_image = 0;
             }
 
             $setting->save();
@@ -49,6 +50,8 @@ class SettingController extends Controller
 
         return redirect()->back()->withSuccess("Settings Updated Successfully");
     }
+
+
 
     public function aboutPage()
     {

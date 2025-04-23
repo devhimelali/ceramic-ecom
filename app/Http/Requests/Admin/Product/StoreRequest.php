@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
             'name' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'category' => 'required|exists:categories,id',
-            'brand' => 'required|exists:brands,id',
+            'brand' => 'nullable|exists:brands,id',
             'regular_price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0|lte:regular_price',
             'status' => 'required|in:active,inactive',
@@ -49,7 +49,8 @@ class StoreRequest extends FormRequest
 
             'variations' => 'required|array|min:1',
             'variations.*.attributes' => 'required|string|max:255',
-            'variations.*.price' => 'required|numeric|min:0',
+            'variations.*.regular_price' => 'required|numeric|min:0',
+            'variations.*.sale_price' => 'nullable|numeric|min:0|lte:variations.*.regular_price',
             'variations.*.image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'variations.*.description' => 'nullable|string|max:1000',
         ];

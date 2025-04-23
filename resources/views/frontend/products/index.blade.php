@@ -1,6 +1,12 @@
 @extends('frontend.layouts.app')
 @section('title', 'Products')
 @section('page-style')
+    <!-- Include jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
+    <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}">
+
+
     <style>
         /* === Product Sidebar Styles === */
         .product__sidebar__attribute {
@@ -136,16 +142,157 @@
         .product-page {
             padding-top: 0;
         }
+
+        /* === Buttons === */
+        .custom-button {
+            border: none;
+            background: var(--floens-base, #C7844F);
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 13px 24px !important;
+        }
+
+        .custom-button:hover {
+            background: #9a6e4b;
+        }
+
+        .enquireBtn {
+            width: 70%;
+        }
+
+        .mobile-btn {
+            padding: 11px 0 !important;
+        }
+
+        .addToCartBtn {
+            padding: 19px 24px !important;
+        }
+
+        @media screen and (max-width: 480px) {
+            .addToCartBtn {
+                padding: 14px 21px !important;
+            }
+
+            .addToCartBtn i {
+                font-size: 12px !important;
+            }
+        }
+
+        /* === Carousel Navigation === */
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-next {
+            position: absolute;
+            top: 50%;
+            background-color: #434343c7 !important;
+            color: #fff !important;
+            font-size: 22px !important;
+            border-radius: 50% !important;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+        }
+
+        .owl-carousel .owl-nav button.owl-prev {
+            left: 15px;
+        }
+
+        .owl-carousel .owl-nav button.owl-next {
+            right: 12px;
+            z-index: 1;
+        }
+
+        /* === Product Item === */
+        .product__item {
+            border: 1px solid #DED8D3;
+            border-radius: 4px;
+        }
+
+        .product__item:hover {
+            border-color: #2a4e72;
+        }
+
+        .product_item_content {
+            border: none;
+            padding: 0.24px 17px 20px !important;
+        }
+
+        .product__item__image {
+            border-radius: 4px;
+        }
+
+        .product-image {
+            height: 300px;
+        }
+
+        @media screen and (max-width: 480px) {
+            .product-image {
+                height: 207px;
+            }
+        }
+
+        /* === Discount Tag === */
+        span.discount {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            z-index: 2;
+            background: #C7844F;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+        }
+
+        /* === Price Styling === */
+        .product_item_price {
+            margin-bottom: 12px;
+        }
+
+        .product__item__price {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px !important;
+            font-weight: 700;
+            color: var(--floens-text, #7A736A);
+            line-height: normal;
+            margin-bottom: 17px !important;
+        }
+
+        .product__item__price span {
+            font-size: 13px !important;
+        }
+
+        div#filterOffcanvas {
+            width: 82%;
+        }
+
+        .product_item_image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            /* Makes it square */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product_item_image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
     </style>
-    <!-- Include jQuery UI CSS -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
+
 @endsection
 @section('content')
     <section class="page-header">
         <div class="page-header__bg"
-            style="background-image: url('{{ asset('frontend') }}/assets/images/backgrounds/page-header-bg-1-1.png');"></div>
-        <!-- /.page-header__bg -->
+            style="background-image: url('{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}');">
+        </div>
+
         <div class="container">
             <h2 class="page-header__title">Find Your Products</h2>
             <ul class="floens-breadcrumb list-unstyled">
@@ -154,6 +301,7 @@
             </ul>
         </div>
     </section>
+
 
     <section class="product-page product-page--left section-space-bottom">
         <div class="container">
@@ -165,6 +313,10 @@
                     <div id="original-filter-sidebar">
                         <aside class="product__sidebar">
                             <!-- Search Box -->
+                            <div class="product__search-box product__sidebar__item">
+                                <a href="{{ route('frontend.productsPage') }}" class="btn btn-danger w-100 rounded-0">Reset
+                                    Filters</a>
+                            </div>
                             <div class="product__search-box product__sidebar__item">
                                 <form action="#" class="product__search" id="product__search">
                                     <input type="text" placeholder="search items" value="{{ request('search') }}"
@@ -255,7 +407,88 @@
                             </div>
                         </div>
                         <div id="products">
+                            <div class="row gutter-y-30">
+                                @forelse ($products as $product)
+                                    <div class="col-xl-4 col-lg-4 col-md-6 col-6 product_item">
+                                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms'
+                                            data-wow-delay='000ms'>
+                                            @php
+                                                $productImages = $product->images;
+                                                $variantImages = $product->variations->flatMap(function ($variation) {
+                                                    return $variation->images;
+                                                });
 
+                                                $images = $productImages->merge($variantImages);
+                                            @endphp
+                                            @if ($product->sale_price && $product->regular_price > 0)
+                                                @php
+                                                    $saving =
+                                                        (($product->regular_price - $product->sale_price) /
+                                                            $product->regular_price) *
+                                                        100;
+                                                @endphp
+                                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                                    Saving {{ number_format($saving, 0) }}%
+                                                </span>
+                                            @else
+                                                <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving
+                                                    0%</span>
+                                            @endif
+                                            <div class="product_item_image product-carousel owl-carousel">
+                                                @foreach ($images as $image)
+                                                    <img class="item product-image" src="{{ asset($image->path) }}"
+                                                        alt="{{ $product->name }}">
+                                                @endforeach
+                                            </div>
+
+                                            <div class="product_item_content mt-3">
+                                                <h6 class="product_item_title">
+                                                    <a
+                                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
+                                                </h6>
+                                                <div class="product_item_price">
+                                                    @if ($product->sale_price && $product->regular_price > 0)
+                                                        <span
+                                                            style="text-decoration: line-through; color: red; font-size: 12px; margin-right: 10px;">
+                                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                                        </span>
+                                                        <span style="color: #888; font-size: 12px;">
+                                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                                        </span>
+                                                    @else
+                                                        <span>
+                                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+
+                                                <div class="d-flex justify-content-between">
+                                                    <a href="javascript:void(0);"
+                                                        class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
+                                                        data-id="{{ $product->id }}"
+                                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                                    <a href="javascript:void(0);"
+                                                        class="p-4 floens-btn product_item_link me-2 custom-button addCartItemBtn addToCartBtn"
+                                                        data-product-id="{{ $product->id }}"
+                                                        data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                                        <i style='font-size:17px; right: 15px'
+                                                            class='fas'>&#xf217;</i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="no-products-message">
+                                        <h2 class="my-auto text-center text-danger">No products found</h2>
+                                    </div>
+                                @endforelse
+                            </div><!-- /.row -->
+                            <div class="mt-5">
+                                <div class="mt-4 d-flex justify-content-center">
+                                    {{ $products->links('pagination::bootstrap-4') }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -274,226 +507,228 @@
         </div>
     </div>
 @endsection
+
 @section('page-script')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{ asset('frontend/assets/vendors/owl-carousel/js/owl.carousel.min.js') }}"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let urlParams = new URLSearchParams(window.location.search);
+            const urlParams = new URLSearchParams(window.location.search);
 
-            urlParams.forEach((values, attributeId) => {
-                if (attributeId.startsWith("attribute[")) {
-                    let decodedValues = values.split(",");
-                    decodedValues.forEach(value => {
-                        let checkbox = document.querySelector(`input[value="${value}"]`);
-                        if (checkbox) {
-                            checkbox.checked = true;
+            // Restore selected filters from URL
+            urlParams.forEach((value, fullKey) => {
+                const match = fullKey.match(/^attribute\[(.+?)\]\[\]$/);
+                if (match) {
+                    const attributeName = match[1];
+
+                    // Handle multiple values
+                    const values = urlParams.getAll(fullKey);
+                    values.forEach(val => {
+                        $(`.product__sidebar__checkbox[name="attribute[${attributeName}][]"][value="${val}"]`)
+                            .prop('checked', true);
+
+                        const valuesSection = $(`#values-${attributeName}`);
+                        const icon = $(`#expand-icon-${attributeName} i`);
+                        if (valuesSection.length) {
+                            valuesSection.show();
+                            icon.removeClass('fa-plus').addClass('fa-minus');
                         }
                     });
                 }
             });
 
-            checkQueryParams(urlParams);
+            if (urlParams.has('max_price')) {
+                $('#price-range').val(urlParams.get('max_price'));
+                $('#max-price').text(urlParams.get('max_price'));
+            }
+
+            if (urlParams.has('search')) $('#searchQuery').val(urlParams.get('search'));
+            if (urlParams.has('sort_by')) $('#sort').val(urlParams.get('sort_by'));
         });
 
         $(document).ready(function() {
-            $('.product__sidebar__title').on('click', function() {
-                let attributeId = $(this).data('attribute-id');
-                let valuesSection = $('#values-' + attributeId);
-                let expandIcon = $('#expand-icon-' + attributeId).find('i');
+            // Owl carousel loading after images are ready
+            $('.product-carousel').each(function() {
+                const $carousel = $(this);
+                const images = $carousel.find('img');
+                let imagesLoaded = 0;
 
-                valuesSection.toggle();
-                expandIcon.toggleClass('fa-plus fa-minus');
+                images.each(function() {
+                    if (this.complete) {
+                        imagesLoaded++;
+                        if (imagesLoaded === images.length) {
+                            initCarousel($carousel);
+                        }
+                    } else {
+                        $(this).on('load', function() {
+                            imagesLoaded++;
+                            if (imagesLoaded === images.length) {
+                                initCarousel($carousel);
+                            }
+                        });
+                    }
+                });
             });
 
-            function encryptValue(value) {
-                return btoa(value);
+            function initCarousel($carousel) {
+                $carousel.owlCarousel({
+                    items: 1,
+                    loop: true,
+                    margin: 10,
+                    nav: true
+                });
             }
 
+            // Toggle attribute values on title click
+            $('.product__sidebar__title').on('click', function() {
+                let attributeId = $(this).data('attribute-id');
+                $('#values-' + attributeId).toggle();
+                $('#expand-icon-' + attributeId).find('i').toggleClass('fa-plus fa-minus');
+            });
 
             function updateUrl() {
-                let selectedValues = [];
+                let url = new URL(window.location.href);
+                let searchParams = new URLSearchParams();
 
+                // Add checked filters
                 $('.product__sidebar__checkbox:checked').each(function() {
-                    let value = $(this).val();
-                    selectedValues.push(encryptValue(value));
+                    const name = $(this).attr('name'); // attribute[Size][]
+                    const value = $(this).val();
+                    searchParams.append(name, value);
                 });
 
-                let newUrl = window.location.origin + window.location.pathname;
-
-                if (selectedValues.length > 0) {
-                    let queryString = new URLSearchParams();
-                    queryString.append('attribute', selectedValues.join(
-                        ','));
-                    newUrl += '?' + queryString.toString();
+                // Add price if changed
+                const maxPrice = $('#price-range').val();
+                const defaultMax = $('#price-range').attr('max');
+                if (maxPrice && maxPrice !== defaultMax) {
+                    searchParams.set('min_price', 0);
+                    searchParams.set('max_price', maxPrice);
                 }
 
-                console.log(selectedValues);
+                // Add search query if present
+                const query = $('#searchQuery').val().trim();
+                if (query !== '') {
+                    searchParams.set('search', query);
+                }
 
-                window.history.pushState({
-                    path: newUrl
-                }, '', newUrl);
+                // Add sort option if selected
+                const sort = $('#sort').val();
+                if (sort !== '') {
+                    searchParams.set('sort_by', sort);
+                }
+
+                // Navigate to filtered URL
+                window.location.href = url.pathname + '?' + searchParams.toString();
             }
 
-            $('.product__sidebar__checkbox').on('change', function() {
-                updateUrl();
-                let urlParams = new URLSearchParams(window.location.search);
-                checkQueryParams(urlParams);
-            })
-            // checkQueryParams(new URLSearchParams(window.location.search));
-
-
+            // Event listeners
+            $('.product__sidebar__checkbox').on('change', updateUrl);
+            $('#price-range').on('change', updateUrl);
+            $('#sort').on('change', updateUrl);
 
             $('#product__search').on('submit', function(e) {
                 e.preventDefault();
-                var searchQuery = $('#searchQuery').val().trim();
-                let urlParams = new URLSearchParams(window.location.search);
-
-                urlParams.delete('search');
-
-                if (searchQuery) {
-                    urlParams.append('search', searchQuery);
-                }
-                var newUrl = window.location.pathname + '?' + urlParams
-                    .toString();
-
-                window.history.pushState({
-                    path: newUrl
-                }, '', newUrl);
-                checkQueryParams(new URLSearchParams(window.location.search));
-            });
-            $('#brand').on('change', function() {
-                let urlParams = new URLSearchParams(window.location.search);
-                urlParams.set('brand', $(this).val());
-                let newUrl = window.location.pathname + '?' + urlParams
-                    .toString();
-                window.history.pushState({
-                    path: newUrl
-                }, '', newUrl);
-                checkQueryParams(urlParams);
-            })
-            $('#sort').on('change', function() {
-                let urlParams = new URLSearchParams(window.location.search);
-                urlParams.set('sort_by', $(this).val());
-                let newUrl = window.location.pathname + '?' + urlParams
-                    .toString();
-                window.history.pushState({
-                    path: newUrl
-                }, '', newUrl);
-                checkQueryParams(urlParams);
+                updateUrl();
             });
 
-            function decodeValue(value) {
-                return atob(value);
-            }
+            $('#price-range').on('input', function() {
+                $('#max-price').text($(this).val());
+            });
+        });
 
-            function checkAttributesOnPageLoad() {
-                let urlParams = new URLSearchParams(window.location.search);
-                let attributeValues = urlParams.get('attribute') ? urlParams.get('attribute').split(',') : [];
 
-                attributeValues.forEach(function(encodedValue) {
-                    let decodedValue = decodeValue(encodedValue);
 
-                    let checkbox = $('#attribute_value-' + decodedValue);
-                    if (checkbox.length) {
-                        checkbox.prop('checked', true);
 
-                        let attributeDiv = checkbox.closest('.product__sidebar__attribute');
-                        let valuesDiv = attributeDiv.find('.product__sidebar__values');
-                        let expandIcon = attributeDiv.find('.expand-icon i');
+        $(document).ready(function() {
+            $('.play').on('click', function() {
+                owl.trigger('play.owl.autoplay', [1000]);
+            });
 
-                        attributeDiv.show();
-                        valuesDiv.show();
-                        expandIcon.removeClass('fa-plus').addClass('fa-minus');
+            $('.stop').on('click', function() {
+                owl.trigger('stop.owl.autoplay');
+            });
+
+            displayCartItems();
+
+            $('.enquireBtn').click(function() {
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    success: function(response) {
+                        $('.enquireSubmitBtn').prop('disabled', false).html('Submit');
+                        $('#enquireFormResponse').html(response.html);
+                        $('#myModal').modal('show');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
                     }
                 });
-            }
-            checkAttributesOnPageLoad();
-
-            let urlParams = new URLSearchParams(window.location.search);
-
-            // Set initial values
-            $("#min-price").text(0);
-            $("#max-price").text($("#price-range").val());
-
-            // Update max-price dynamically when slider moves
-            $("#price-range").on("input", function() {
-                $("#max-price").text($(this).val());
             });
 
-            // Trigger AJAX only when mouse is released
-            $("#price-range").on("change", function() {
-                let maxPrice = $(this).val();
-
-                urlParams.set("min_price", 0);
-                urlParams.set("max_price", maxPrice);
-
-                let newUrl = window.location.pathname + "?" + urlParams.toString();
-                window.history.pushState(null, "", newUrl);
-
-                checkQueryParams(urlParams); // Call AJAX to reload products
+            $('.addToCartBtn').click(function() {
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    success: function(response) {
+                        $('.enquireSubmitBtn').prop('disabled', false).html('Add To Cart');
+                        $('#addToCartResponse').html(response.html);
+                        $('#addToCartModal').modal('show');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    }
+                });
             });
-            $(document).on('click', '#pagination-wrapper a', function(e) {
+
+            $('#enquireForm').submit(function(e) {
                 e.preventDefault();
-                let url = $(this).attr('href');
-                if (url) {
-                    let urlParams = new URLSearchParams(new URL(url).search);
-                    checkQueryParams(urlParams);
-                }
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('enquire') }}",
+                    method: 'POST',
+                    data: formData,
+                    beforeSend: function() {
+                        $('.enquireSubmitBtn').prop('disabled', true).html(
+                            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
+                        );
+                    },
+                    success: function(response) {
+                        $('.enquireSubmitBtn').prop('disabled', false).html('Submit');
+                        if (response.status == 'success') {
+                            notify(response.status, response.message);
+                            $('#enquireForm')[0].reset();
+                            $('#myModal').modal('hide');
+                        }
+                    },
+                    error: function(xhr) {
+                        $('.enquireSubmitBtn').prop('disabled', false).html('Submit');
+                        let errors = xhr.responseJSON.errors;
+                        if (errors) {
+                            $.each(errors, function(key, value) {
+                                $('[name="' + key + '"]').addClass('is-invalid');
+                                notify('error', value[0]);
+                            });
+                        }
+                    }
+                });
             });
-        });
 
-        function checkQueryParams(urlParams) {
-            // Convert URLSearchParams to a plain object
-            let paramsObject = {};
-            urlParams.forEach((value, key) => {
-                paramsObject[key] = value;
-            });
-            $.ajax({
-                url: "{{ route('frontend.productsPage') }}",
-                data: paramsObject,
-                type: "GET",
-                beforeSend: function() {
-                    $('#loader').show();
-                },
-                success: function(response) {
-                    $('#products').html(response.html);
-                    notify('success', 'Products loaded successfully');
-                },
-                complete: function() {
-                    $('#loader').hide();
-                },
-                error: function(xhr, status, error) {
-                    // Handle errors (Optional)
-                    $('#loader').hide();
-                }
-            });
-        }
-        const previousUrl = document.referrer;
-        if (previousUrl && !previousUrl.includes(window.location.hostname + window.location.pathname)) {
-            localStorage.setItem("previous_page", previousUrl);
-        }
-        history.pushState(null, null, location.href);
-        window.addEventListener('popstate', function() {
-            let storedPrevious = localStorage.getItem("previous_page");
-            if (storedPrevious !== null) {
-                window.location.href = storedPrevious;
-            } else {
-                window.location.href = "{{ route('frontend.home') }}";
-            }
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
             const $sidebar = $('#original-filter-sidebar');
             const $desktopContainer = $('#sidebar-column');
             const $mobileContainer = $('#mobile-filter-content');
 
             function moveSidebar() {
-                const isMobile = $(window).width() < 992;
-
+                const isMobile = $(window).width() < 1199;
                 if (isMobile) {
                     if (!$.contains($mobileContainer[0], $sidebar[0])) {
                         $sidebar.detach().appendTo($mobileContainer);
@@ -505,10 +740,7 @@
                 }
             }
 
-            // Initial call
             moveSidebar();
-
-            // Resize event (with debounce)
             let resizeTimeout;
             $(window).on('resize', function() {
                 clearTimeout(resizeTimeout);
@@ -516,5 +748,4 @@
             });
         });
     </script>
-
 @endsection

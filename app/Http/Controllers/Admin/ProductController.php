@@ -126,6 +126,7 @@ class ProductController extends Controller
                 'status' => $request->status,
                 'short_description' => $request->short_description,
                 'description' => $request->description,
+                'label' => $request->label
             ]);
             // 2. Handle upload product thumbnail image
             if ($request->hasFile('image')) {
@@ -149,13 +150,13 @@ class ProductController extends Controller
             if ($request['attributes'] != null) {
                 foreach ($request['attributes'] as $attr) {
                     $attribute = $product->attributes()->create([
-                        'name' => $attr['name'],
+                        'name' => strtoupper($attr['name']),
                     ]);
 
                     $values = array_map('trim', explode(',', $attr['values']));
                     foreach ($values as $val) {
                         $attribute->values()->create([
-                            'value' => $val
+                            'value' => is_numeric($val) ? $val : strtoupper($val),
                         ]);
                     }
                 }
@@ -165,7 +166,8 @@ class ProductController extends Controller
                 foreach ($request->variations as $variation) {
                     $variationData = $product->variations()->create([
                         'attribute_string' => $variation['attributes'],
-                        'price' => $variation['price'],
+                        'regular_price' => $variation['regular_price'],
+                        'sale_price' => $variation['sale_price'],
                     ]);
 
                     if (isset($variation['images'])) {
@@ -228,6 +230,7 @@ class ProductController extends Controller
                 'status' => $request->status,
                 'short_description' => $request->short_description,
                 'description' => $request->description,
+                'label' => $request->label,
             ]);
 
             if ($request->hasFile('image')) {
@@ -266,12 +269,12 @@ class ProductController extends Controller
                     if (!empty($attr['id'])) {
                         $attribute = $product->attributes()->find($attr['id']);
                         if ($attribute) {
-                            $attribute->update(['name' => $attr['name']]);
+                            $attribute->update(['name' => strtoupper($attr['name'])]);
                         }
                     } else {
                         // Create new attribute
                         $attribute = $product->attributes()->create([
-                            'name' => $attr['name']
+                            'name' => strtoupper($attr['name'])
                         ]);
                     }
 
@@ -281,7 +284,7 @@ class ProductController extends Controller
                         $values = array_map('trim', explode(',', $attr['values']));
                         foreach ($values as $value) {
                             if ($value !== '') {
-                                $attribute->values()->create(['value' => $value]);
+                                $attribute->values()->create(['value' => is_numeric($value) ? $value : strtoupper($value),]);
                             }
                         }
                     }
@@ -307,7 +310,8 @@ class ProductController extends Controller
                     if ($variation) {
                         $variation->update([
                             'attribute_string' => $variationInput['attributes'],
-                            'price' => $variationInput['price'],
+                            'regular_price' => $variationInput['regular_price'],
+                            'sale_price' => $variationInput['sale_price'],
                         ]);
 
                         // Handle image uploads
@@ -325,7 +329,8 @@ class ProductController extends Controller
                     // Create new variation
                     $variation = $product->variations()->create([
                         'attribute_string' => $variationInput['attributes'],
-                        'price' => $variationInput['price'],
+                        'regular_price' => $variationInput['regular_price'],
+                        'sale_price' => $variationInput['sale_price'],
                     ]);
 
                     // Upload images

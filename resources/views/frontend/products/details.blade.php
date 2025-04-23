@@ -7,41 +7,18 @@
         </div>
         <!-- /.page-header__bg -->
         <div class="container">
-            <h2 class="page-header__title">{{ $product->name }}</h2>
             <ul class="floens-breadcrumb list-unstyled">
                 <li><i class="text-white icon-home"></i> <a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><span class="text-white">shop</span></li>
                 <li><span class="text-white">{{ $product->name }}</span></li>
-            </ul><!-- /.thm-breadcrumb list-unstyled -->
-        </div><!-- /.container -->
-    </section><!-- /.page-header -->
+            </ul>
+        </div>
+    </section>
 
     <section class="product-details section-space">
         <div class="container">
             <!-- /.product-details -->
             <div class="row gutter-y-50">
-                {{-- <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
-                    <div class="product-details__img">
-                        <div class="swiper product-details__gallery-top mySwiper">
-                            <div class="swiper-wrapper">
-                                @foreach ($product->images as $image)
-                                    <div class="swiper-slide">
-                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-top__img">
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="swiper product-details__gallery-thumb">
-                            <div class="swiper-wrapper">
-                                @foreach ($product->images as $image)
-                                    <div class="product-details__gallery-thumb-slide swiper-slide">
-                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- /.column --> --}}
                 @php
                     $productImages = $product->images; // This is already a Collection
                     $variantImages = $product->variations->flatMap(function ($variation) {
@@ -87,7 +64,7 @@
                         </div><!-- /.excerp-text -->
                         <div class="product-details__excerpt">
                             <p class="product-details__excerpt__text1">
-                                {{ $product->short_description ?? 'No Description' }}
+                                {!! nl2br($product->short_description) !!}
                             </p>
                         </div><!-- /.excerp-text -->
                         <div class="mt-3">
@@ -242,10 +219,18 @@
 
                             if (response.status === 'success') {
                                 updateSwiperGallery(response.data.images);
+                                if (response.data.sale_price == null) {
+                                    $('#price-wrapper-ditails').html(
+                                        `<span class="price">$ ${response.data.regular_price}</span>`
+                                    );
+                                } else {
+                                    $('#price-wrapper-ditails').html(
+                                        `<span class="price"
+                                    style="text-decoration: line-through; color: red; margin-right: 6px;">$ ${response.data.regular_price}</span>
+                                    <span class="price">$ ${response.data.sale_price}</span>`
+                                    );
+                                }
 
-                                $('#price-wrapper-ditails').html(
-                                    `<span class="price">$ ${response.data.price}</span>`
-                                );
                             } else {
                                 alert(response.message || 'Variation not found.');
                             }

@@ -33,7 +33,7 @@ class FrontendController extends Controller
 
     public function allCategories()
     {
-        $categories = Category::where('is_active', 1)->paginate(10);
+        $categories = Category::where('is_active', 1)->where('parent_id', null)->paginate(12);
 
         return view('frontend.categories', [
             'active' => 'allCategories',
@@ -57,24 +57,23 @@ class FrontendController extends Controller
 
 
         if ($request->has('attribute')) {
-            $decryptedValues = array_filter(array_map(function ($value) {
-                $decoded = base64_decode($value, true);
-                return $decoded !== false ? $decoded : null;
-            }, explode(',', $request->input('attribute'))));
-            if (!empty($decryptedValues)) {
-                $attributes = $decryptedValues;
+            // dd($request->input('attribute')); // Check the input
+            $attributes = $request->input('attribute'); // Get the full attribute data
 
-                $query->whereHas('variations', function ($q) use ($attributes) {
-                    foreach ($attributes as $index => $value) {
+            // Loop through each attribute type (e.g., "Size", "Color")
+            $query->whereHas('variations', function ($q) use ($attributes) {
+                foreach ($attributes as $attributeName => $values) {
+                    foreach ($values as $index => $value) {
                         if ($index === 0) {
                             $q->where('attribute_string', 'like', '%' . $value . '%');
                         } else {
                             $q->orWhere('attribute_string', 'like', '%' . $value . '%');
                         }
                     }
-                });
-            }
+                }
+            });
         }
+
 
         if ($request->has('min_price') && $request->has('max_price')) {
             $min = $request->min_price;
@@ -88,24 +87,25 @@ class FrontendController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
         if ($request->has('category')) {
-            $query->where('category_id', $request->category);
+            $category = Category::where('slug', $request->category)->first();
+            $query->where('category_id', $category->id);
         }
         if ($request->has('brand')) {
             $query->where('brand_id', $request->brand);
         }
         $products = $query->paginate(12);
-        if ($request->ajax()) {
-            // sleep(1);
-            $html = view('frontend.products.product_list', compact('products'))->render();
-            $pagination = $products->links('pagination::bootstrap-4')->toHtml();
-            return response()->json([
-                'status' => 'success',
-                'html'   => $html,
-                'pagination' => $pagination,
-                'result' => [],
-                'message' => 'Products updated successfully!',
-            ]);
-        }
+        // if ($request->ajax()) {
+        //     // sleep(1);
+        //     $html = view('frontend.products.product_list', compact('products'))->render();
+        //     $pagination = $products->links('pagination::bootstrap-4')->toHtml();
+        //     return response()->json([
+        //         'status' => 'success',
+        //         'html'   => $html,
+        //         'pagination' => $pagination,
+        //         'result' => [],
+        //         'message' => 'Products updated successfully!',
+        //     ]);
+        // }
 
         $allAttributes = Attribute::with('values')->get();
 
@@ -117,6 +117,7 @@ class FrontendController extends Controller
         return view('frontend.products.index', [
             'active'     => 'products',
             'attributes' => $groupedAttributes,
+            'products'   => $products,
             'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->get(),
         ]);
     }

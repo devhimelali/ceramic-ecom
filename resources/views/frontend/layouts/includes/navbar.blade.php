@@ -76,7 +76,7 @@
                                             <ul>
                                                 @foreach ($category->children as $childCategory)
                                                     <li><a
-                                                            href="{{ route('frontend.productsPage', [$childCategory->slug]) }}">{{ $childCategory->name }}</a>
+                                                            href="{{ route('frontend.productsPage', ['category' => $childCategory->slug]) }}">{{ $childCategory->name }}</a>
                                                     </li>
                                                 @endforeach
                                             </ul>

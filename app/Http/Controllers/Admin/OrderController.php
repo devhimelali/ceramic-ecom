@@ -332,7 +332,8 @@ class OrderController extends Controller
             return response()->json([
                 'status' => 'success',
                 'data' => [
-                    'price' => $variation->price,
+                    'regular_price' => $variation->regular_price,
+                    'sale_price' => $variation->sale_price,
                     'images' => $new_image,
                 ],
             ]);

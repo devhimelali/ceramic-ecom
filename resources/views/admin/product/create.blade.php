@@ -350,6 +350,28 @@
                 notify('error', 'Please fill all the required fields.');
                 return;
             }
+
+            const attributes = JSON.parse(localStorage.getItem('product_attributes') || '[]');
+            if (!attributes.length) return;
+
+            // Check for duplicate attribute names
+            const attrNames = attributes.map(attr => attr.name);
+            const hasDuplicate = new Set(attrNames).size !== attrNames.length;
+
+            if (hasDuplicate) {
+                alert('Each attribute name must be unique!');
+                return;
+            }
+
+            const allValues = attributes.flatMap(attr => attr.values);
+            const hasDuplicateValue = new Set(allValues).size !== allValues.length;
+
+            if (hasDuplicateValue) {
+                alert('Duplicate attribute values are not allowed!');
+                return;
+            }
+
+
             $('#step2Btn').addClass('d-none');
             $('#saveProductBtn').removeClass('d-none');
 
@@ -410,8 +432,12 @@
                                 <input type="text" value="${attrDisplay}" disabled class="form-control">
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label>Price</label>
-                                <input name="variations[${index}][price]" type="number" step="0.01" class="form-control">
+                                <label>Regular Price</label>
+                                <input name="variations[${index}][regular_price]" type="number" step="0.01" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>Sales Price</label>
+                                <input name="variations[${index}][sale_price]" type="number" step="0.01" class="form-control">
                             </div>
                             <div class="col-12 mb-2">
                                 <div class="image-upload-wrapper mb-3">

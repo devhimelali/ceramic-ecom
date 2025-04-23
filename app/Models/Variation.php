@@ -11,7 +11,8 @@ class Variation extends Model
     protected $fillable = [
         'product_id',
         'attribute_string',
-        'price',
+        'regular_price',
+        'sale_price',
     ];
 
     public function product(): BelongsTo
