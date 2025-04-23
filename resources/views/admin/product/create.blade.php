@@ -42,21 +42,33 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name"
+                                    <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                                    <input type="text" required class="form-control" id="name" name="name"
                                         placeholder="Name">
                                 </div>
                                 <div class="row">
-                                    <div class="mb-3 col-lg-4">
-                                        <label for="category" class="form-label">Category</label>
-                                        <select class="form-control select2" data-choice id="category" name="category">
+                                    <div class="mb-3 col-lg-3">
+                                        <label for="category" class="form-label">Category <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control select2" required data-choice id="category"
+                                            name="category">
                                             <option value="" selected disabled>Select Category</option>
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="mb-3 col-lg-4">
+                                    {{-- sub category --}}
+                                    <div class="mb-3 col-lg-3">
+                                        <label for="category" class="form-label">Sub Category</label>
+                                        <select class="form-control select2" data-choice id="sub_category"
+                                            name="sub_category">
+                                            <option value="" selected disabled>Select Sub Category</option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3 col-lg-3">
                                         <label for="brand" class="form-label">Brand</label>
                                         <select class="form-control select2" data-choice id="brand" name="brand">
                                             <option value="" selected disabled>Select Brand</option>
@@ -65,7 +77,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-lg-4 my-3">
+                                    <div class="col-lg-3 my-3">
                                         <label for="label" class="form-label">Product Label</label>
                                         <select class="form-control select2" id="label" name="label">
                                             <option value="" disabled>Select Brand</option>
@@ -80,8 +92,9 @@
 
                                     <div class="col-lg-4">
                                         <div class="mb-3">
-                                            <label for="regular_price" class="form-label">Regular Price</label>
-                                            <input type="text" class="form-control" id="regular_price"
+                                            <label for="regular_price" class="form-label">Regular Price <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" required class="form-control" id="regular_price"
                                                 name="regular_price" placeholder="Price">
                                         </div>
                                     </div>
@@ -94,8 +107,9 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
-                                            <label for="status" class="form-label">Status</label>
-                                            <select class="form-control select2" id="productStatus" name="status">
+                                            <label for="status" class="form-label">Status <span
+                                                    class="text-danger">*</span></label>
+                                            <select class="form-control select2" required id="productStatus" name="status">
                                                 <option value="" selected disabled>Select Status</option>
                                                 @foreach ($statuses as $status)
                                                     <option value="{{ $status->value }}">{{ $status->description() }}
@@ -116,8 +130,12 @@
                                                 style="display:none;">&times;
                                             </button>
                                         </div>
-                                        <input type="file" name="image" class="d-none hidden-input" accept="image/*">
+                                        <input type="file" name="image" class="d-none hidden-input"
+                                            accept="image/*">
+                                        <div>
+                                            <small class="text-danger">Thumbnail Image is required *</small>
 
+                                        </div>
                                         <button type="button" class="px-4 mt-1 btn btn-dark"
                                             onclick="setupImagePreview('.hidden-input', '.preview-img')"><i
                                                 class="bx bx-cloud-upload fs-3"></i>Thumbnail Image
@@ -131,7 +149,7 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label for="short_description" class="form-label">Short Description</label>
-                                    <textarea class="form-control" id="short_description" name="short_description" rows="4"></textarea>
+                                    <textarea class="form-control" required id="short_description" name="short_description" rows="4"></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -178,13 +196,14 @@
                                                 <div id="attributesWrapper">
                                                     <div class="row mb-2">
                                                         <div class="col-md-5">
-                                                            <input name="attributes[0][name]" type="text"
-                                                                class="form-control" placeholder="Attribute Name">
+                                                            <input name="attributes[0][name]" type="text" required
+                                                                class="form-control"
+                                                                placeholder="Attribute Name * (e.g. Color)">
                                                         </div>
                                                         <div class="col-md-5">
                                                             <input name="attributes[0][values]" type="text"
-                                                                class="form-control"
-                                                                placeholder="Comma separated values (e.g. Red, Blue)">
+                                                                class="form-control" required
+                                                                placeholder="Comma separated values * (e.g. Red, Blue)">
                                                         </div>
                                                         <div class="col-md-2">
                                                             <button type="button" class="btn btn-success"
@@ -316,10 +335,10 @@
             const html = `
                 <div class="row mb-2">
                     <div class="col-md-5">
-                        <input name="attributes[${attrIndex}][name]" type="text" class="form-control" placeholder="Attribute Name">
+                        <input name="attributes[${attrIndex}][name]" type="text" class="form-control" placeholder="Attribute Name * (e.g. Color)">
                     </div>
                     <div class="col-md-5">
-                        <input name="attributes[${attrIndex}][values]" type="text" class="form-control" placeholder="Comma separated values">
+                        <input name="attributes[${attrIndex}][values]" type="text" class="form-control" placeholder="Comma separated values * (e.g. Red, Blue)">
                     </div>
                     <div class="col-md-2">
                         <button type="button" class="btn btn-danger remove-attr">x</button>
@@ -594,6 +613,47 @@
                     $('button[type="submit"]').prop('disabled', false).text('Create Product');
                 }
             });
+        });
+
+        $('#category').on('change', function() {
+            var categoryId = $(this).val();
+            if (categoryId) {
+                var url = "{{ route('get.subcategories', ':id') }}";
+                url = url.replace(':id', categoryId);
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#sub_category').empty().append(
+                            '<option value="" selected disabled>⏳ Please wait...</option>'
+                        );
+                        $('#step2Btn').prop('disabled', true);
+                    },
+
+                    success: function(data) {
+                        $('#sub_category').empty().append(
+                            '<option value="" selected disabled>Select Sub Category</option>');
+                        if (data.length > 0) {
+                            $.each(data, function(key, subcategory) {
+                                $('#sub_category').append('<option value="' + subcategory.id +
+                                    '">' + subcategory.name + '</option>');
+                            });
+                        }
+                    },
+                    error: function() {
+                        $('#sub_category').empty().append(
+                            '<option value="" selected disabled>Failed to load</option>');
+                    },
+                    complete: function() {
+                        $('#step2Btn').prop('disabled', false);
+                    }
+                });
+            } else {
+                $('#sub_category').empty().append(
+                    '<option value="" selected disabled>Select Sub Category</option>');
+            }
         });
     </script>
 @endsection

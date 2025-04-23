@@ -146,6 +146,13 @@ class CategoryController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function getSubcategories($category_id)
+    {
+        $subcategories = Category::where('parent_id', $category_id)->get();
+        return response()->json($subcategories);
+    }
+
+
     function frontShow($id)
     {
         $category = Category::find($id);

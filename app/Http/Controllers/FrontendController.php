@@ -88,7 +88,15 @@ class FrontendController extends Controller
         }
         if ($request->has('category')) {
             $category = Category::where('slug', $request->category)->first();
-            $query->where('category_id', $category->id);
+
+            if ($category) {
+                // Get the selected category and its subcategory IDs
+                $categoryIds = Category::where('parent_id', $category->id)
+                    ->pluck('id')
+                    ->push($category->id); // Include the selected category ID
+
+                $query->whereIn('category_id', $categoryIds);
+            }
         }
         if ($request->has('brand')) {
             $query->where('brand_id', $request->brand);

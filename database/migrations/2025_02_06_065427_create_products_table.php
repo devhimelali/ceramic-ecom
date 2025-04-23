@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('short_description')->nullable();
             $table->longText('description')->nullable();
             $table->decimal('regular_price', 8, 2);
-            $table->decimal('sale_price', 8, 2);
+            $table->decimal('sale_price', 8, 2)->nullable();
             $table->string('status');
             $table->string('label')->default('new arrival');
             $table->timestamps();
