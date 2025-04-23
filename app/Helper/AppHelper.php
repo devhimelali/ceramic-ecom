@@ -60,6 +60,7 @@ function sendMarketingMessage($to, $message)
             'headers' => $headers,
             'body' => $body,
         ]);
+        Log::info($response->getBody()->getContents());
     } catch (\Exception $e) {
         Log::error($e->getMessage());
     }

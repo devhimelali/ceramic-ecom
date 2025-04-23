@@ -16,6 +16,6 @@ Route::middleware([
 
 use Illuminate\Support\Facades\Artisan;
 
-Route::get('storage-link', function () {
-    Artisan::call('storage:link');
+Route::get('optimize-clear', function () {
+    Artisan::call('optimize:clear');
 });

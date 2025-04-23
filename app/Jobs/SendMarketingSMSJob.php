@@ -31,7 +31,6 @@ class SendMarketingSMSJob implements ShouldQueue
      */
     public function handle()
     {
-        // Call your SMS sending function here
         sendMarketingMessage($this->phone, $this->message);
         // Log::info("SMS sent to: " . $this->phone . " " . $this->message);
     }
