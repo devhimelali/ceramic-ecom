@@ -181,4 +181,12 @@ class FrontendController extends Controller
         ];
         return view('frontend.privacy_policy', $data);
     }
+
+    public function returnPolicy()
+    {
+        $data = [
+            'active' => 'return-policy'
+        ];
+        return view('frontend.return_policy', $data);
+    }
 }
