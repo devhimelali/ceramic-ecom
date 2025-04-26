@@ -32,6 +32,7 @@
                             <li><a href="{{ route('frontend.contact') }}">Contact</a></li>
                             <li><a href="{{ route('term.and.condition') }}">Terms & Conditions</a></li>
                             <li><a href="{{ route('privacy.policy') }}">Privacy Policy</a></li>
+                            <li><a href="{{ route('return.policy') }}">Return Policy</a></li>
                         </ul>
                     </div>
                 </div>

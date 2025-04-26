@@ -34,25 +34,36 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name" name="name"
                                         value="{{ $product->name }}">
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-4 my-3">
-                                        <label for="category" class="form-label">Category</label>
-                                        <select class="form-control select2" id="category" name="category" required>
+                                    <div class="my-3 col-lg-3">
+                                        <label for="category" class="form-label">Category <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-control select2" required id="category" name="category">
                                             <option value="" disabled>Select Category</option>
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}"
-                                                    {{ $product->category_id == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name }}
+                                            @foreach ($categories as $cat)
+                                                <option value="{{ $cat->id }}"
+                                                    {{ $cat->id == optional($product->category->parent)->id ? 'selected' : '' }}>
+                                                    {{ $cat->name }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-4 my-3">
+                                    {{-- sub category --}}
+                                    <div class="my-3 col-lg-3">
+                                        <label for="sub_category" class="form-label">Sub Category</label>
+                                        <select class="form-control select2" id="sub_category" name="sub_category">
+                                            <option value="" selected disabled>Loading...</option>
+                                            {{-- Will be replaced via JS --}}
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-lg-3 my-3">
                                         <label for="brand" class="form-label">Brand</label>
                                         <select class="form-control select2" id="brand" name="brand">
                                             <option value="" disabled>Select Brand</option>
@@ -64,7 +75,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-lg-4 my-3">
+                                    <div class="col-lg-3 my-3">
                                         <label for="label" class="form-label">Product Label</label>
                                         <select class="form-control select2" id="label" name="label">
                                             <option value="" disabled
@@ -79,9 +90,10 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-4 my-3">
-                                        <label for="regular_price" class="form-label">Regular Price</label>
-                                        <input type="text" class="form-control" id="regular_price" name="regular_price"
-                                            value="{{ $product->regular_price }}">
+                                        <label for="regular_price" class="form-label">Regular Price <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" required id="regular_price"
+                                            name="regular_price" value="{{ $product->regular_price }}">
                                     </div>
                                     <div class="col-lg-4 my-3">
                                         <label for="sale_price" class="form-label">Sale Price</label>
@@ -89,7 +101,8 @@
                                             value="{{ $product->sale_price }}">
                                     </div>
                                     <div class="col-lg-4 my-3">
-                                        <label for="status" class="form-label">Status</label>
+                                        <label for="status" class="form-label">Status <span
+                                                class="text-danger">*</span></label>
                                         <select class="form-control select2" id="productStatus" name="status" required>
                                             <option value="" disabled>Select Status</option>
                                             @foreach ($statuses as $status)
@@ -112,7 +125,8 @@
                                                 style="display:none;">&times;
                                             </button>
                                         </div>
-                                        <input type="file" name="image" class="d-none hidden-input" accept="image/*">
+                                        <input type="file" name="image" class="d-none hidden-input"
+                                            accept="image/*">
 
                                         <button type="button" class="px-4 mt-1 btn btn-dark"
                                             onclick="setupImagePreview('.hidden-input', '.preview-img')"><i
@@ -126,7 +140,8 @@
 
 
                             <div class="col-lg-12 mb-3">
-                                <label for="short_description" class="form-label">Short Description</label>
+                                <label for="short_description" class="form-label">Short Description <span
+                                        class="text-danger">*</span></label>
                                 <textarea class="form-control" name="short_description" rows="4">{{ $product->short_description }}</textarea>
                             </div>
                             <div class="col-lg-12 mb-3">
@@ -276,6 +291,11 @@
             renderVariations();
             let attrIndex = $('#attributesWrapper .row').length;
 
+            let selectedCategoryId = "{{ optional($product->category->parent)->id }}";
+            let selectedSubCategoryId = "{{ $product->category->id }}";
+            // Initial load for editing
+            loadSubcategories(selectedCategoryId, selectedSubCategoryId);
+
             window.addAttribute = function() {
                 const html = `
                     <div class="row mb-2">
@@ -363,17 +383,21 @@
                         product_id: productId,
                         combinations: comboStrings
                     },
+                    beforeSend: function() {
+                        $('#variationContainer').html(
+                            '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                        );
+                    },
                     success: function(response) {
                         combinations.forEach((combo, index) => {
-                            const attrDisplay = combo.map((val, i) => `${attrNames[i]}: ${val}`)
-                                .join(' / ');
+                            const attrDisplay =
+                                `${capitalize(attrNames[0])}: ${capitalize(combo[0])}`;
                             const safeAttrDisplay = attrDisplay.replace(/"/g, '&quot;');
                             const variation = response[attrDisplay] || {};
                             const regular_price = variation.regular_price || '';
                             const sale_price = variation.sale_price || '';
                             const imageObjs = variation.images || [];
                             const variation_id = variation.id || '';
-
                             const imagePreviewHTML = imageObjs.map(img => `
                                     <div class="position-relative me-2 mb-2">
                                         <img src="${img.path.startsWith('http') ? img.path : '/' + img.path}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid #e0e0e0;">
@@ -422,7 +446,14 @@
                                 </div>`;
                             container.append(html);
                         });
+                    },
+                    error: function(xhr, status, error) {
+                        notify('error', 'Something went wrong. Please check the inputs.');
+                    },
+                    complete: function() {
+                        $('#variationContainer .text-center').empty();
                     }
+
                 });
             }
 
@@ -441,6 +472,9 @@
                 $(this).find('input[type="file"]').trigger('click');
             });
 
+            function capitalize(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+            }
 
             // Preview selected images
             $(document).on('change', '.variation-image-input', function(e) {
@@ -562,7 +596,37 @@
                     }
                 });
             });
+
+
+            // Change event for normal selection
+            $('#category').on('change', function() {
+                loadSubcategories($(this).val());
+            });
         });
+
+        function loadSubcategories(categoryId, selectedId = null) {
+            if (categoryId) {
+                let url = "{{ route('get.subcategories', ':id') }}".replace(':id', categoryId);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#sub_category').html('<option selected disabled>⏳ Loading...</option>');
+                    },
+                    success: function(data) {
+                        $('#sub_category').empty().append(
+                            '<option value="" disabled>Select Sub Category</option>');
+                        $.each(data, function(key, subcategory) {
+                            let selected = subcategory.id == selectedId ? 'selected' : '';
+                            $('#sub_category').append(
+                                `<option value="${subcategory.id}" ${selected}>${subcategory.name}</option>`
+                            );
+                        });
+                    }
+                });
+            }
+        }
     </script>
 @endsection
 @section('page-css')

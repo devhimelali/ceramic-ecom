@@ -39,6 +39,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // Route::resource('attribute-values', AttributeValueController::class);
 
     Route::resource('products', ProductController::class);
+    Route::get('/get-subcategories/{category_id}', [CategoryController::class, 'getSubcategories'])->name('get.subcategories');
+
     Route::post('delete-product-image', [ProductController::class, 'deleteProductImage'])->name('delete.product.image');
     Route::post('/get-variations', [ProductController::class, 'getVariations'])->name('get.variations');
 

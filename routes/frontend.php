@@ -19,4 +19,5 @@ Route::get('add-to-cart/{id}', [OrderController::class, 'addToCart'])->name('add
 Route::post('submit-cart', [OrderController::class, 'submitCart'])->name('submit.cart');
 Route::get('terms-and-conditions', [FrontendController::class, 'termAndCondition'])->name('term.and.condition');
 Route::get('privacy-policy', [FrontendController::class, 'privacyPolicy'])->name('privacy.policy');
+Route::get('return-policy', [FrontendController::class, 'returnPolicy'])->name('return.policy');
 Route::get('get-product-variation-price/{id}', [OrderController::class, 'getProductVariationPrice'])->name('get.product.variation.price');

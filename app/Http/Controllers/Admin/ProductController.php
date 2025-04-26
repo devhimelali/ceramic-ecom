@@ -95,7 +95,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::orderBy('name', 'asc')->get();
+        $categories = Category::where('parent_id', null)->orderBy('name', 'asc')->get();
         $brands = Brand::orderBy('name', 'asc')->get();
         $statuses = StatusEnum::cases();
         $data = [
@@ -119,7 +119,7 @@ class ProductController extends Controller
             $product = Product::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
-                'category_id' => $request->category,
+                'category_id' => $request->sub_category ?? $request->category,
                 'brand_id' => $request->brand,
                 'regular_price' => $request->regular_price,
                 'sale_price' => $request->sale_price,
@@ -150,13 +150,13 @@ class ProductController extends Controller
             if ($request['attributes'] != null) {
                 foreach ($request['attributes'] as $attr) {
                     $attribute = $product->attributes()->create([
-                        'name' => strtoupper($attr['name']),
+                        'name' => ucfirst(strtolower($attr['name'])),
                     ]);
 
                     $values = array_map('trim', explode(',', $attr['values']));
                     foreach ($values as $val) {
                         $attribute->values()->create([
-                            'value' => is_numeric($val) ? $val : strtoupper($val),
+                            'value' => is_numeric($val) ? $val :  ucfirst(strtolower($val)),
                         ]);
                     }
                 }
@@ -197,8 +197,11 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::with(['category', 'brand', 'attributes.values', 'variations'])->findOrFail($id);
-        $categories = Category::orderBy('name', 'asc')->get();
+        $product = Product::with(['category' => function ($q1) {
+            $q1->with('parent');
+        }, 'brand', 'attributes.values', 'variations'])->findOrFail($id);
+
+        $categories = Category::where('parent_id', null)->orderBy('name', 'asc')->get();
         $brands = Brand::orderBy('name', 'asc')->get();
         $statuses = StatusEnum::cases();
         $data = [
@@ -223,7 +226,7 @@ class ProductController extends Controller
             $product->update([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
-                'category_id' => $request->category,
+                'category_id' => $request->sub_category ?? $request->category,
                 'brand_id' => $request->brand,
                 'regular_price' => $request->regular_price,
                 'sale_price' => $request->sale_price,
@@ -269,12 +272,12 @@ class ProductController extends Controller
                     if (!empty($attr['id'])) {
                         $attribute = $product->attributes()->find($attr['id']);
                         if ($attribute) {
-                            $attribute->update(['name' => strtoupper($attr['name'])]);
+                            $attribute->update(['name' => ucfirst(strtolower($attr['name']))]);
                         }
                     } else {
                         // Create new attribute
                         $attribute = $product->attributes()->create([
-                            'name' => strtoupper($attr['name'])
+                            'name' => ucfirst(strtolower($attr['name']))
                         ]);
                     }
 
@@ -284,7 +287,7 @@ class ProductController extends Controller
                         $values = array_map('trim', explode(',', $attr['values']));
                         foreach ($values as $value) {
                             if ($value !== '') {
-                                $attribute->values()->create(['value' => is_numeric($value) ? $value : strtoupper($value),]);
+                                $attribute->values()->create(['value' => is_numeric($value) ? $value : ucfirst(strtolower($value)),]);
                             }
                         }
                     }
