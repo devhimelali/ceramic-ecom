@@ -20,30 +20,37 @@
             <!-- /.product-details -->
             <div class="row gutter-y-50">
                 @php
-                    $productImages = $product->images; // This is already a Collection
+                    $productImages = $product->images;
                     $variantImages = $product->variations->flatMap(function ($variation) {
                         return $variation->images;
                     });
 
                     $images = $productImages->merge($variantImages);
                 @endphp
-                <div class="col-lg-6 col-xl-6 wow fadeInLeft" data-wow-delay="200ms">
+                <div class="col-lg-6 col-xl-6 wow fadeInLeft product-wrapper" data-wow-delay="200ms">
                     <div class="product-details__img">
+                        <style>
+
+                        </style>
                         <div class="swiper product-details__gallery-top">
                             <div class="swiper-wrapper">
-
                                 @foreach ($images as $image)
                                     <div class="swiper-slide">
                                         <img src="{{ asset($image->path) }}" class="product-details__gallery-top__img">
                                     </div>
                                 @endforeach
-
                             </div>
                         </div>
                         <div class="swiper product-details__gallery-thumb">
                             <div class="swiper-wrapper">
                                 @foreach ($images as $image)
-                                    <div class="swiper-slide product-details__gallery-thumb-slide">
+                                    @php
+                                        $imageable_id = $image->imageable_id;
+                                        $imageable_type = $image->imageable_type;
+                                        $string = $imageable_type . '-' . $imageable_id;
+                                    @endphp
+                                    <div class="swiper-slide product-details__gallery-thumb-slide"
+                                        data-image-id="{{ $imageable_id }}">
                                         <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
                                     </div>
                                 @endforeach
@@ -51,9 +58,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
 
                 <div class="col-lg-6 col-xl-6 wow fadeInRight" data-wow-delay="300ms">
                     <div class="product-details__content">
@@ -144,7 +148,9 @@
                 spaceBetween: 10,
                 thumbs: {
                     swiper: galleryThumbs
-                }
+                },
+                centeredSlides: true,
+                slidesPerView: 1,
             });
 
             // ✅ Reusable function to update gallery
@@ -191,34 +197,28 @@
                             variation: variationString
                         },
                         beforeSend: function() {
-                            // Price skeleton
-                            $('#price-wrapper-ditails').html(
-                                '<div id="loader" class="text-danger">Loading...</div>'
-                            );
-
-                            // Image skeleton (main + thumbs)
-                            const mainSkeleton =
-                                `<div class="swiper-slide">
-                                    <div class="skeleton-loader"></div>
-                                </div>`;
-
-                            const thumbSkeletons = Array(4).fill().map(() =>
-                                `<div class="swiper-slide product-details__gallery-thumb-slide">
-                                    <div class="skeleton-loader skeleton-thumb"></div>
-                                </div>`).join('');
-
-                            // Replace swiper wrappers with skeleton slides
-                            $('.product-details__gallery-top .swiper-wrapper').html(
-                                mainSkeleton);
-                            $('.product-details__gallery-thumb .swiper-wrapper').html(
-                                thumbSkeletons);
+                            $('#loader').show()
                         },
-
                         success: function(response) {
                             $('#loader').hide();
 
                             if (response.status === 'success') {
-                                updateSwiperGallery(response.data.images);
+                                let custom_string = response.data.images.imageable_type + '-' +
+                                    response.data.images.imageable_id;
+
+                                let swiperCustomId = $(
+                                    `[data-image-id="${response.data.images.imageable_id}"]`
+                                ).attr('data-swiper-slide-index');
+
+                                galleryThumbs.slideTo(swiperCustomId[0]);
+                                galleryTop.slideTo(swiperCustomId[0]);
+
+                                galleryTop.on('slideChange', function() {
+                                    galleryTop.update();
+                                    galleryThumbs.update();
+                                });
+
+                                // $('[data-image-id=' + custom_string + ']').click();
                                 if (response.data.sale_price == null) {
                                     $('#price-wrapper-ditails').html(
                                         `<span class="price">$ ${response.data.regular_price}</span>`
@@ -368,6 +368,30 @@
             height: 521px;
         }
 
+        .product-details__gallery-top {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-details__gallery-top .swiper-wrapper .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 550px;
+            background: #f9f9f9;
+        }
+
+        .product-details__gallery-top .swiper-wrapper .swiper-slide img {
+            width: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
         .floens-breadcrumb li:not(:last-of-type)::after {
             color: #fff;
         }
@@ -397,6 +421,16 @@
 
             100% {
                 background-position: -200% 0;
+            }
+        }
+
+        @media only screen and (max-width: 480px) {
+            .product-wrapper {
+                margin-top: -40px;
+            }
+
+            .product-details__gallery-top .swiper-wrapper .swiper-slide {
+                height: 350px;
             }
         }
     </style>

@@ -1,346 +1,101 @@
-@php
-    use App\Helpers\ImageUploadHelper;
-@endphp
 @extends('frontend.layouts.app')
 @section('title', 'Home')
-@section('page-style')
-    <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
-        type="image/webp" fetchpriority="high" />
-    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
-    <style>
-        /* Style the submit button */
-        .custom-button {
-            /* width: 100%; */
-            border: none;
-            background: var(--floens-base, #C7844F);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            font-size: 12px;
-            padding: 13px 24px !important
-        }
 
-        .custom-button:hover {
-            background: #9a6e4b;
-        }
-
-        .enquireBtn {
-            width: 70%;
-        }
-
-        .sec_1_prev_3 {
-            width: 270px;
-            height: 617px !important;
-        }
-
-        .sec_1_prev_2 {
-            width: 240px;
-            height: 347px
-        }
-
-        .sec_1_prev_1 {
-            width: 240px;
-            height: 240px
-        }
-
-        .sec_2_prev_1 {
-            width: 338px;
-            height: 463px
-        }
-
-        .sec_2_prev_2 {
-            width: 276px;
-            height: 463px
-        }
-
-
-
-        .product__item__content {
-            border: none;
-            padding: 0.24px 17px 20px !important;
-        }
-
-
-        .product__item__price {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            color: var(--floens-text, #7A736A);
-            line-height: normal;
-            font-weight: 700;
-            margin-bottom: 17px !important;
-        }
-
-        .product__item__content {
-            padding: 10px !important;
-            overflow: hidden;
-        }
-
-        .owl-carousel .owl-nav button.owl-prev,
-        .owl-carousel .owl-nav button.owl-prev,
-        .owl-carousel button.owl-dot.owl-nav {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            background-color: var(--base-color) !important;
-            display: block;
-            padding: 0 .3em !important;
-            font-size: 3em;
-            margin: 0;
-            cursor: pointer;
-            color: #fff;
-            transform: translate(-50%, -50%);
-        }
-
-        .owl-nav button {
-            font-size: 48px !important;
-        }
-
-        .owl-carousel .owl-nav button.owl-next,
-        .owl-carousel .owl-nav button.owl-prev,
-        .owl-carousel button.owl-dot {
-            margin-right: 37px !important;
-        }
-
-
-        .owl-carousel .owl-nav button.owl-next,
-        .owl-carousel .owl-nav button.owl-next,
-        .owl-carousel button.owl-dot.owl-nav {
-            position: absolute;
-            right: -23px;
-            top: 50%;
-            background-color: var(--base-color) !important;
-            display: block;
-            padding: 0 .3em !important;
-            font-size: 3em !important;
-            margin: 0;
-            cursor: pointer;
-            color: #fff;
-            transform: translate(-50%, -50%);
-        }
-
-        /* Owl Carousel Prev Button */
-        .owl-carousel .owl-nav button.owl-prev {
-            position: absolute;
-            background-color: #434343c7 !important;
-            color: #fff !important;
-            font-size: 22px !important;
-            border-radius: 50% !important;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: translateY(-50%);
-            z-index: 1;
-        }
-
-        /* Owl Carousel Next Button */
-        .owl-carousel .owl-nav button.owl-next {
-            position: absolute;
-            top: 50%;
-            background-color: #434343c7 !important;
-            color: #fff !important;
-            font-size: 22px !important;
-            border-radius: 50% !important;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: translateY(-50%);
-            z-index: 1;
-        }
-
-        .product__item {
-            border: 1px solid #DED8D3;
-            border-radius: 4px;
-        }
-
-        .product__item:hover {
-            border: 1px solid #2a4e72;
-        }
-
-        .product__item__content {
-            border: none;
-            padding: 0.24px 17px 20px !important;
-        }
-
-        span.discount {
-            position: absolute;
-            right: 7px;
-            top: 7px;
-            z-index: 2;
-            background: #D94F4F;
-            color: #fff !important;
-            padding: 2px 8px;
-            border-radius: 18px;
-        }
-
-        .product__item__price {
-            margin-bottom: 12px;
-        }
-
-        .addToCartBtn {
-            padding: 19px 24px !important;
-        }
-
-        .product__item__image {
-            border-radius: 4px;
-        }
-
-        .label {
-            position: absolute;
-            right: 7px;
-            top: 34px;
-            z-index: 2;
-            color: red;
-            color: #fff !important;
-            padding: 2px 8px;
-            border-radius: 18px;
-            text-transform: capitalize;
-            font-size: 10px;
-        }
-
-        .top_selling {
-            background: #2a4e72
-        }
-
-        .new-arrival {
-            background: #4FC79A
-        }
-
-        .featured {
-            background: #C7844F
-        }
-
-        .product__item__title {
-            overflow: hidden;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        @media (max-width: 991px) {
-            .main-slider__item {
-                padding: 0 0 150px;
-            }
-        }
-
-        /* media query */
-        @media screen and (max-width: 480px) {
-            .sec_1_prev_3 {
-                height: 364px !important;
-                width: auto !important;
-            }
-
-            .sec_1_prev_2 {
-                height: 186px;
-                width: auto !important;
-            }
-
-            .sec_1_prev_1 {
-                height: 170px;
-                width: auto !important;
-            }
-
-            img.reliable-one__image__two.sec_2_prev_2 {
-                height: 300px;
-                width: auto !important;
-
-            }
-
-            img.reliable-one__image__one.sec_2_prev_1 {
-                height: 300px;
-                width: auto !important;
-            }
-
-            .product__item__image img {
-                height: 142px !important;
-                width: 100% !important;
-            }
-
-            .product__item__title a {
-                font-size: 0.75rem !important;
-            }
-
-            .product__item__title {
-                overflow: hidden;
-            }
-
-            .product__item__price {
-                font-size: 14px !important;
-            }
-
-            .product__item__price span {
-                font-size: 13px !important;
-            }
-
-            .product_item {
-                padding: 5px !important;
-            }
-
-            .product__item__content {
-                border: none;
-                padding: 0.24px 7px 20px !important;
-            }
-
-            .mobile-btn {
-                padding: 8px 0px !important;
-            }
-
-            .addToCartBtn {
-                padding: 14px 21px !important;
-            }
-
-            .addToCartBtn i {
-                font-size: 12px !important;
-            }
-
-            span.discount {
-                font-size: 8px !important;
-                padding: 1px 7px;
-            }
-
-            .label {
-                font-size: 8px !important;
-                padding: 1px 7px;
-                top: 26px;
-            }
-
-            .owl-carousel .owl-nav button.owl-prev {
-                width: 20px;
-                height: 20px;
-            }
-
-            .owl-carousel .owl-nav button.owl-prev {
-                font-size: 14px !important;
-            }
-
-            .owl-carousel .owl-nav button.owl-prev,
-            .owl-carousel .owl-nav button.owl-prev,
-            .owl-carousel button.owl-dot.owl-nav {
-                left: 7px;
-            }
-
-            .owl-carousel .owl-nav button.owl-next {
-                font-size: 13px !important;
-            }
-
-            .owl-carousel .owl-nav button.owl-next {
-                width: 20px;
-                height: 20px;
-            }
-
-            .owl-carousel .owl-nav button.owl-next,
-            .owl-carousel .owl-nav button.owl-next,
-            .owl-carousel button.owl-dot.owl-nav {
-                right: -30px;
-            }
-        }
-    </style>
-@endsection
 @section('content')
+    <!-- shop start -->
+    <section class="product-home-top-selling">
+        <!-- /.product-home__bg -->
+        <div class="container products">
+            <div class="sec-title sec-title--center">
+
+                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
+
+                <h3 class="sec-title__title">Top Selling Products in Shop</h3>
+                <!-- /.sec-title__title -->
+            </div><!-- /.sec-title -->
+            <div class="row">
+                @forelse ($topSellingProducts as $product)
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
+                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
+                            @php
+                                $productImages = $product->images; // This is already a Collection
+                                $variantImages = $product->variations->flatMap(function ($variation) {
+                                    return $variation->images;
+                                });
+
+                                $images = $productImages->merge($variantImages);
+                                $label = $product->label->value;
+                                $labelClass =
+                                    $label == 'new arrival'
+                                        ? 'new-arrival'
+                                        : ($label == 'featured'
+                                            ? 'featured'
+                                            : 'top_selling');
+                            @endphp
+                            @if ($product->sale_price && $product->regular_price > 0)
+                                @php
+                                    $saving =
+                                        (($product->regular_price - $product->sale_price) / $product->regular_price) *
+                                        100;
+                                @endphp
+                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                    Saving {{ number_format($saving, 0) }}%
+                                </span>
+                            @endif
+                            <span class="label {{ $labelClass }}">
+                                {{ $product->label->value }}
+                            </span>
+                            <div class="product_item_image product-carousel owl-carousel">
+                                @foreach ($images as $image)
+                                    <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
+                                        alt="{{ $product->name }}">
+                                @endforeach
+                            </div>
+                            <div class="product_item_content">
+                                <h6 class="product_item_title">
+                                    <a
+                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                </h6>
+                                <div class="product_item_price">
+                                    @if ($product->sale_price && $product->regular_price > 0)
+                                        <span
+                                            style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                        <span style="color: #888; font-size: 16px;">
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                        </span>
+                                    @else
+                                        <span>
+                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="javascript:void(0);"
+                                        class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
+                                        data-id="{{ $product->id }}"
+                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                    <a href="javascript:void(0);"
+                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                        data-product-id="{{ $product->id }}"
+                                        data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                        <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
+                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                    </a>
+                                </div>
+                            </div><!-- /.product-content -->
+                        </div><!-- /.product-item -->
+                    </div><!-- /.col-md-6 col-lg-4 -->
+                @empty
+                    <h5 class="text-center">No products found.</h5>
+                @endforelse
+            </div><!-- /.row -->
+        </div><!-- /.container -->
+    </section><!-- /.product-home -->
+    <!-- shop end -->
     <!-- main slider start -->
     @include('admin.page-settings.home.partials.slider')
     <!-- main slider end -->
@@ -596,7 +351,7 @@
             style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/shop-bg-1.png);">
         </div>
         <!-- /.product-home__bg -->
-        <div class="container">
+        <div class="container products">
             <div class="sec-title sec-title--center">
 
                 <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
@@ -634,22 +389,22 @@
                                 <span class="discount" style="margin-left: 10px; font-size: 10px;">
                                     Saving {{ number_format($saving, 0) }}%
                                 </span>
-                            @else
-                                <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
                             @endif
                             <span class="label {{ $labelClass }}">
                                 {{ $product->label->value }}
                             </span>
-                            <div class="product__item__image product-carousel owl-carousel">
+                            <div class="product_item_image product-carousel owl-carousel">
                                 @foreach ($images as $image)
-                                    <img class="item" src="{{ asset($image->path) }}" loading="lazy"
+                                    <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
                                         alt="{{ $product->name }}">
                                 @endforeach
                             </div>
-                            <div class="product__item__content">
-                                <p class="product__item__title"><a
+                            <div class="product_item_content">
+                                <h6 class="product_item_title">
+                                    <a
                                         href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
-                                <div class="product__item__price">
+                                </h6>
+                                <div class="product_item_price">
                                     @if ($product->sale_price && $product->regular_price > 0)
                                         <span
                                             style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
@@ -665,7 +420,7 @@
                                     @endif
                                 </div>
 
-                                <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex justify-content-between">
                                     <a href="javascript:void(0);"
                                         class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
                                         data-id="{{ $product->id }}"
@@ -675,7 +430,6 @@
                                         class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
                                         data-product-id="{{ $product->id }}"
                                         data-url="{{ route('add.to.cart.form', $product->id) }}">
-                                        <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
                                         <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                     </a>
                                 </div>
@@ -689,100 +443,7 @@
         </div><!-- /.container -->
     </section><!-- /.product-home -->
     <!-- shop end -->
-    <!-- shop start -->
-    <section class="product-home-top-selling">
-        <!-- /.product-home__bg -->
-        <div class="container">
-            <div class="sec-title sec-title--center">
 
-                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
-
-                <h3 class="sec-title__title">Top Selling Products in Shop</h3>
-                <!-- /.sec-title__title -->
-            </div><!-- /.sec-title -->
-            <div class="row">
-                @forelse ($topSellingProducts as $product)
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
-                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                            @php
-                                $productImages = $product->images; // This is already a Collection
-                                $variantImages = $product->variations->flatMap(function ($variation) {
-                                    return $variation->images;
-                                });
-
-                                $images = $productImages->merge($variantImages);
-                                $label = $product->label->value;
-                                $labelClass =
-                                    $label == 'new arrival'
-                                        ? 'new-arrival'
-                                        : ($label == 'featured'
-                                            ? 'featured'
-                                            : 'top_selling');
-                            @endphp
-                            @if ($product->sale_price && $product->regular_price > 0)
-                                @php
-                                    $saving =
-                                        (($product->regular_price - $product->sale_price) / $product->regular_price) *
-                                        100;
-                                @endphp
-                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
-                                    Saving {{ number_format($saving, 0) }}%
-                                </span>
-                            @else
-                                <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving 0%</span>
-                            @endif
-                            <span class="label {{ $labelClass }}">
-                                {{ $product->label->value }}
-                            </span>
-                            <div class="product__item__image product-carousel owl-carousel">
-                                @foreach ($images as $image)
-                                    <img class="item" src="{{ asset($image->path) }}" loading="lazy"
-                                        alt="{{ $product->name }}">
-                                @endforeach
-                            </div>
-                            <div class="product__item__content">
-                                <p class="product__item__title"><a
-                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 50) }}</a>
-                                <div class="product__item__price">
-                                    @if ($product->sale_price && $product->regular_price > 0)
-                                        <span
-                                            style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                        </span>
-                                        <span style="color: #888; font-size: 16px;">
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
-                                        </span>
-                                    @else
-                                        <span>
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <a href="javascript:void(0);"
-                                        class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
-                                        data-id="{{ $product->id }}"
-                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
-
-                                    <a href="javascript:void(0);"
-                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                        data-product-id="{{ $product->id }}"
-                                        data-url="{{ route('add.to.cart.form', $product->id) }}">
-                                        <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
-                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
-                                    </a>
-                                </div>
-                            </div><!-- /.product-content -->
-                        </div><!-- /.product-item -->
-                    </div><!-- /.col-md-6 col-lg-4 -->
-                @empty
-                    <h5 class="text-center">No products found.</h5>
-                @endforelse
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </section><!-- /.product-home -->
-    <!-- shop end -->
 
 
     @if ($brands->count() > 0)
@@ -949,4 +610,264 @@
             $('[contenteditable="true"]').removeAttr('contenteditable');
         });
     </script>
+@endsection
+@section('page-style')
+    <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
+        type="image/webp" fetchpriority="high" />
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
+    <style>
+        /* ------------ Product CSS Start --------------- */
+        .product__item {
+            border: 1px solid #DED8D3;
+            border-radius: 4px;
+        }
+
+        .product__item:hover {
+            border: 1px solid #2a4e72;
+        }
+
+        .label {
+            position: absolute;
+            right: 7px;
+            top: 7px;
+            z-index: 2;
+            background: #D94F4F;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+            text-transform: capitalize;
+            font-size: 10px;
+        }
+
+
+        span.discount {
+            position: absolute;
+            right: 7px;
+            top: 34px;
+            z-index: 2;
+            background: #D94F4F;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+            text-transform: capitalize;
+            font-size: 10px;
+        }
+
+        .top_selling {
+            background: #2a4e72
+        }
+
+        .new-arrival {
+            background: #4FC79A
+        }
+
+        .featured {
+            background: #C7844F
+        }
+
+        .product_item_image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product_item_image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-image {
+            height: 300px;
+        }
+
+        .product_item_content {
+            border: none;
+            padding: 0.24px 17px 20px !important;
+        }
+
+        .product_item_price {
+            margin-bottom: 12px;
+        }
+
+        .custom-button {
+            border: none;
+            background: var(--floens-base, #C7844F);
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 13px 24px !important;
+        }
+
+        .custom-button:hover {
+            background: #9a6e4b;
+        }
+
+        .mobile-btn {
+            padding: 11px 0 !important;
+        }
+
+        .enquireBtn {
+            width: 70%;
+        }
+
+        .addToCartBtn {
+            padding: 19px 24px !important;
+        }
+
+        /* ------------ Product CSS End --------------- */
+
+        /* -------------- Owl Carousel CSS Start ------------ */
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-next {
+            position: absolute;
+            top: 50%;
+            background-color: #434343c7 !important;
+            color: #fff !important;
+            font-size: 22px !important;
+            border-radius: 50% !important;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+        }
+
+        .owl-carousel .owl-nav button.owl-prev {
+            left: 15px;
+        }
+
+        .owl-carousel .owl-nav button.owl-next {
+            right: 12px;
+            z-index: 1;
+        }
+
+        .product-carousel .owl-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 235px;
+            background: #f9f9f9;
+        }
+
+        .product-carousel .owl-item img {
+            width: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            margin-top: 0px;
+        }
+
+        /* -------------- Owl Carousel CSS End ------------ */
+
+
+        @media (max-width: 991px) {
+            .main-slider__item {
+                padding: 0 0 150px;
+            }
+        }
+
+        /* media query */
+        @media screen and (max-width: 480px) {
+            .sec_1_prev_3 {
+                height: 364px !important;
+                width: auto !important;
+            }
+
+            .sec_1_prev_2 {
+                height: 186px;
+                width: auto !important;
+            }
+
+            .sec_1_prev_1 {
+                height: 170px;
+                width: auto !important;
+            }
+
+            img.reliable-one__image__two.sec_2_prev_2 {
+                height: 300px;
+                width: auto !important;
+
+            }
+
+            img.reliable-one__image__one.sec_2_prev_1 {
+                height: 300px;
+                width: auto !important;
+            }
+
+
+            span.label {
+                padding: 1px 6px;
+                font-size: 8px !important;
+            }
+
+            span.discount {
+                top: 26px;
+                padding: 1px 6px;
+                font-size: 8px !important;
+            }
+
+            .addToCartBtn {
+                padding: 14px 21px !important;
+            }
+
+            .addToCartBtn i {
+                font-size: 12px !important;
+            }
+
+            .product-carousel .owl-item {
+                height: 150px;
+            }
+
+            .product-carousel .owl-item img {
+                margin: 0px;
+            }
+
+            .product_item_content {
+                margin-top: 0px !important;
+            }
+
+            .product_item_content {
+                padding: 0.24px 8px 8px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev {
+                width: 20px;
+                height: 20px;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev {
+                font-size: 14px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel button.owl-dot.owl-nav {
+                left: 7px;
+            }
+
+            .owl-carousel .owl-nav button.owl-next {
+                font-size: 13px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-next {
+                width: 20px;
+                height: 20px;
+            }
+
+            .owl-carousel .owl-nav button.owl-next,
+            .owl-carousel .owl-nav button.owl-next,
+            .owl-carousel button.owl-dot.owl-nav {
+                right: 8px;
+            }
+
+            .products .row {
+                --bs-gutter-x: 10px;
+            }
+        }
+    </style>
 @endsection

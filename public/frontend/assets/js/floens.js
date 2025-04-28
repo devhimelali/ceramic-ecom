@@ -491,16 +491,16 @@
             $(".services-one__cursor").fadeOut();
         });
 
-    $(".services-one__carousel").on("mousemove", function (e) {
-        var cursor = $(".services-one__cursor");
-        var posX = e.pageX - $(this).offset().left - cursor.width() / 2;
-        var posY = e.pageY - $(this).offset().top - cursor.height() / 2;
+    // $(".services-one__carousel").on("mousemove", function (e) {
+    //     var cursor = $(".services-one__cursor");
+    //     var posX = e.pageX - $(this).offset().left - cursor.width() / 2;
+    //     var posY = e.pageY - $(this).offset().top - cursor.height() / 2;
 
-        cursor.css({
-            left: posX + "px",
-            top: posY + "px",
-        });
-    });
+    //     cursor.css({
+    //         left: posX + "px",
+    //         top: posY + "px",
+    //     });
+    // });
 
     // team hover image
     $(".team-two__image--one").addClass("active");

@@ -323,11 +323,17 @@ class OrderController extends Controller
 
         if ($variation) {
             $images = $variation->images->pluck('path');
-            $thumbnail = Image::where('imageable_id', $id)
-                ->where('imageable_type', Product::class)
-                ->pluck('path');
+            $thumbnail = Image::where('imageable_id', $variation->id)
+                ->where('imageable_type', 'App\Models\Variation')
+                ->select('path', 'imageable_id', 'imageable_type', 'id')
+                ->first();
+            // $thumbnail = Image::where('imageable_id', $id)
+            //     ->where('imageable_type', Product::class)
+            //     ->pluck('path');
+            // dd($thumbnail);
 
-            $new_image = $images->isNotEmpty() ? $images : $thumbnail;
+            // $new_image = $images->isNotEmpty() ? $images : $thumbnail;
+            $new_image = $thumbnail;
 
             return response()->json([
                 'status' => 'success',

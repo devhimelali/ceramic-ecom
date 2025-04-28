@@ -1,292 +1,6 @@
 @extends('frontend.layouts.app')
 @section('title', 'Products')
-@section('page-style')
-    <!-- Include jQuery UI CSS -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
-    <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}">
 
-
-    <style>
-        /* === Product Sidebar Styles === */
-        .product__sidebar__attribute {
-            margin-bottom: 20px;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .product__sidebar__title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .product__sidebar__values {
-            padding-left: 20px;
-        }
-
-        .product__sidebar__value {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .product__sidebar__checkbox {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-            accent-color: var(--floens-base, #a36d43);
-        }
-
-        .product__sidebar__label {
-            font-size: 16px;
-            color: #555;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .product__sidebar__label:hover {
-            color: var(--floens-base, #C7844F);
-        }
-
-        /* Expand Icon */
-        .expand-icon {
-            font-size: 20px;
-            color: var(--floens-base, #C7844F);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .expand-icon i {
-            transition: transform 0.3s ease;
-        }
-
-        .expand-icon.open i {
-            transform: rotate(183deg);
-        }
-
-        /* === Loader Styles === */
-        #products {
-            position: relative;
-        }
-
-        #loader {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 80%;
-            background: rgba(10, 10, 10, 0.14);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #dc7221;
-            border-radius: 50%;
-            animation: spin 1.5s linear infinite;
-        }
-
-        #loader p {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #fff;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* === Misc Styles === */
-        .no-products-message {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: var(--floens-base, #C7844F) !important;
-            border-color: var(--floens-base, #C7844F) !important;
-            color: #fff !important;
-        }
-
-        .pagination .page-link {
-            color: #333;
-        }
-
-        @media (max-width: 767px) {
-            .product__info-top {
-                display: flex;
-                align-items: flex-start !important;
-            }
-        }
-
-        .product-page {
-            padding-top: 0;
-        }
-
-        /* === Buttons === */
-        .custom-button {
-            border: none;
-            background: var(--floens-base, #C7844F);
-            color: #fff;
-            font-size: 12px;
-            cursor: pointer;
-            padding: 13px 24px !important;
-        }
-
-        .custom-button:hover {
-            background: #9a6e4b;
-        }
-
-        .enquireBtn {
-            width: 70%;
-        }
-
-        .mobile-btn {
-            padding: 11px 0 !important;
-        }
-
-        .addToCartBtn {
-            padding: 19px 24px !important;
-        }
-
-        @media screen and (max-width: 480px) {
-            .addToCartBtn {
-                padding: 14px 21px !important;
-            }
-
-            .addToCartBtn i {
-                font-size: 12px !important;
-            }
-        }
-
-        /* === Carousel Navigation === */
-        .owl-carousel .owl-nav button.owl-prev,
-        .owl-carousel .owl-nav button.owl-next {
-            position: absolute;
-            top: 50%;
-            background-color: #434343c7 !important;
-            color: #fff !important;
-            font-size: 22px !important;
-            border-radius: 50% !important;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: translateY(-50%);
-        }
-
-        .owl-carousel .owl-nav button.owl-prev {
-            left: 15px;
-        }
-
-        .owl-carousel .owl-nav button.owl-next {
-            right: 12px;
-            z-index: 1;
-        }
-
-        /* === Product Item === */
-        .product__item {
-            border: 1px solid #DED8D3;
-            border-radius: 4px;
-        }
-
-        .product__item:hover {
-            border-color: #2a4e72;
-        }
-
-        .product_item_content {
-            border: none;
-            padding: 0.24px 17px 20px !important;
-        }
-
-        .product__item__image {
-            border-radius: 4px;
-        }
-
-        .product-image {
-            height: 300px;
-        }
-
-        @media screen and (max-width: 480px) {
-            .product-image {
-                height: 207px;
-            }
-        }
-
-        /* === Discount Tag === */
-        span.discount {
-            position: absolute;
-            top: 7px;
-            right: 7px;
-            z-index: 2;
-            background: #C7844F;
-            color: #fff !important;
-            padding: 2px 8px;
-            border-radius: 18px;
-        }
-
-        /* === Price Styling === */
-        .product_item_price {
-            margin-bottom: 12px;
-        }
-
-        .product__item__price {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 14px !important;
-            font-weight: 700;
-            color: var(--floens-text, #7A736A);
-            line-height: normal;
-            margin-bottom: 17px !important;
-        }
-
-        .product__item__price span {
-            font-size: 13px !important;
-        }
-
-        div#filterOffcanvas {
-            width: 82%;
-        }
-
-        .product_item_image {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            /* Makes it square */
-            overflow: hidden;
-            position: relative;
-        }
-
-        .product_item_image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-    </style>
-
-@endsection
 @section('content')
     <section class="page-header">
         <div class="page-header__bg"
@@ -419,6 +133,13 @@
                                                 });
 
                                                 $images = $productImages->merge($variantImages);
+                                                $label = $product->label->value;
+                                                $labelClass =
+                                                    $label == 'new arrival'
+                                                        ? 'new-arrival'
+                                                        : ($label == 'featured'
+                                                            ? 'featured'
+                                                            : 'top_selling');
                                             @endphp
                                             @if ($product->sale_price && $product->regular_price > 0)
                                                 @php
@@ -430,10 +151,10 @@
                                                 <span class="discount" style="margin-left: 10px; font-size: 10px;">
                                                     Saving {{ number_format($saving, 0) }}%
                                                 </span>
-                                            @else
-                                                <span class="discount" style="margin-left: 10px; font-size: 10px;">Saving
-                                                    0%</span>
                                             @endif
+                                            <span class="label {{ $labelClass }}">
+                                                {{ $product->label->value }}
+                                            </span>
                                             <div class="product_item_image product-carousel owl-carousel">
                                                 @foreach ($images as $image)
                                                     <img class="item product-image" src="{{ asset($image->path) }}"
@@ -441,10 +162,10 @@
                                                 @endforeach
                                             </div>
 
-                                            <div class="product_item_content mt-3">
+                                            <div class="product_item_content">
                                                 <h6 class="product_item_title">
                                                     <a
-                                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 15) }}</a>
+                                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 35) }}</a>
                                                 </h6>
                                                 <div class="product_item_price">
                                                     @if ($product->sale_price && $product->regular_price > 0)
@@ -577,7 +298,11 @@
                     items: 1,
                     loop: true,
                     margin: 10,
-                    nav: true
+                    nav: true,
+                    dots: false,
+                    autoplay: true,
+                    autoplayTimeout: 3000,
+                    autoplayHoverPause: true
                 });
             }
 
@@ -748,4 +473,391 @@
             });
         });
     </script>
+@endsection
+@section('page-style')
+    <!-- Include jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
+    <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}">
+
+    <style>
+        /* --------- Product Sidebar CSS Start --------- */
+        .product__sidebar__attribute {
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product__sidebar__title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product__sidebar__value {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-left: 20px;
+        }
+
+        .product__sidebar__checkbox {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--floens-base, #a36d43);
+        }
+
+        .product__sidebar__label {
+            font-size: 16px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .product__sidebar__label:hover {
+            color: var(--floens-base, #C7844F);
+        }
+
+        /* Expand Icon */
+        .expand-icon {
+            font-size: 20px;
+            color: var(--floens-base, #C7844F);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon i {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.open i {
+            transform: rotate(183deg);
+        }
+
+        /* --------- Product Sidebar CSS End --------- */
+
+        /* === Loader Styles === */
+        #products {
+            position: relative;
+        }
+
+        #loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80%;
+            background: rgba(10, 10, 10, 0.14);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #dc7221;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+
+        #loader p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .no-products-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--floens-base, #C7844F) !important;
+            border-color: var(--floens-base, #C7844F) !important;
+            color: #fff !important;
+        }
+
+        .pagination .page-link {
+            color: #333;
+        }
+
+        .product-page {
+            padding-top: 0;
+        }
+
+        /* ----------- Product CSS Start --------- */
+        .product__item {
+            border: 1px solid #DED8D3;
+            border-radius: 4px;
+        }
+
+        .product__item:hover {
+            border-color: #2a4e72;
+        }
+
+
+        .label {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            z-index: 2;
+            background: #D94F4F;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+            text-transform: capitalize;
+            font-size: 10px;
+        }
+
+        span.discount {
+            position: absolute;
+            right: 7px;
+            top: 34px;
+            z-index: 2;
+            background: #D94F4F;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+            text-transform: capitalize;
+            font-size: 10px;
+        }
+
+        .top_selling {
+            background: #2a4e72
+        }
+
+        .new-arrival {
+            background: #4FC79A
+        }
+
+        .featured {
+            background: #C7844F
+        }
+
+        .product_item_image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product_item_image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-image {
+            height: 300px;
+        }
+
+        .product_item_content {
+            border: none;
+            padding: 0.24px 17px 20px !important;
+        }
+
+        .product_item_price {
+            margin-bottom: 12px;
+        }
+
+        .custom-button {
+            border: none;
+            background: var(--floens-base, #C7844F);
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 13px 24px !important;
+        }
+
+        .custom-button:hover {
+            background: #9a6e4b;
+        }
+
+        .mobile-btn {
+            padding: 11px 0 !important;
+        }
+
+        .enquireBtn {
+            width: 70%;
+        }
+
+        .addToCartBtn {
+            padding: 19px 24px !important;
+        }
+
+        /* ----------- Product CSS End --------- */
+
+        .product__item__price {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px !important;
+            font-weight: 700;
+            color: var(--floens-text, #7A736A);
+            line-height: normal;
+            margin-bottom: 17px !important;
+        }
+
+        .product__item__price span {
+            font-size: 13px !important;
+        }
+
+        div#filterOffcanvas {
+            width: 82%;
+        }
+
+
+
+        /* -------------- Owl Carousel CSS Start ------------ */
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-next {
+            position: absolute;
+            top: 50%;
+            background-color: #434343c7 !important;
+            color: #fff !important;
+            font-size: 22px !important;
+            border-radius: 50% !important;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+        }
+
+        .owl-carousel .owl-nav button.owl-prev {
+            left: 15px;
+        }
+
+        .owl-carousel .owl-nav button.owl-next {
+            right: 12px;
+            z-index: 1;
+        }
+
+        .product-carousel .owl-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 235px;
+            background: #f9f9f9;
+        }
+
+        .product-carousel .owl-item img {
+            width: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            margin-top: 0px;
+        }
+
+        /* -------------- Owl Carousel CSS End ------------ */
+
+
+        @media (max-width: 767px) {
+            .product__info-top {
+                display: flex;
+                align-items: flex-start !important;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            span.label {
+                padding: 1px 6px;
+                font-size: 8px !important;
+            }
+
+            span.discount {
+                top: 26px;
+                padding: 1px 6px;
+                font-size: 8px !important;
+            }
+
+            .addToCartBtn {
+                padding: 14px 21px !important;
+            }
+
+            .addToCartBtn i {
+                font-size: 12px !important;
+            }
+
+            .product_item_image {
+                height: 165px;
+            }
+
+            .product-carousel .owl-item {
+                height: 153px;
+                margin-top: 2px;
+            }
+
+            .product-carousel .owl-item img {
+                margin: 0px;
+            }
+
+            .product_item_content {
+                margin-top: 0px !important;
+            }
+
+            .product_item_content {
+                padding: 0.24px 8px 10px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev {
+                width: 20px;
+                height: 20px;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev {
+                font-size: 14px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel button.owl-dot.owl-nav {
+                left: 7px;
+            }
+
+            .owl-carousel .owl-nav button.owl-next {
+                font-size: 13px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-next {
+                width: 20px;
+                height: 20px;
+            }
+
+            .owl-carousel .owl-nav button.owl-next,
+            .owl-carousel .owl-nav button.owl-next,
+            .owl-carousel button.owl-dot.owl-nav {
+                right: 8px;
+            }
+
+            #products .row {
+                --bs-gutter-x: 10px;
+            }
+        }
+    </style>
 @endsection
