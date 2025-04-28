@@ -173,6 +173,7 @@ function displayCartItems() {
         button.addEventListener("click", function (e) {
             e.preventDefault();
             removeCartItem(this.dataset.id, this.dataset.variation);
+            $(".totalCartItems").html(getTotalQuantity());
         });
     });
 }
