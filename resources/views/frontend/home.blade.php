@@ -13,86 +13,89 @@
                 <h3 class="sec-title__title">Top Selling Products in Shop</h3>
                 <!-- /.sec-title__title -->
             </div><!-- /.sec-title -->
-            <div class="row">
-                @forelse ($topSellingProducts as $product)
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
-                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                            @php
-                                $productImages = $product->images; // This is already a Collection
-                                $variantImages = $product->variations->flatMap(function ($variation) {
-                                    return $variation->images;
-                                });
-
-                                $images = $productImages->merge($variantImages);
-                                $label = $product->label->value;
-                                $labelClass =
-                                    $label == 'new arrival'
-                                        ? 'new-arrival'
-                                        : ($label == 'featured'
-                                            ? 'featured'
-                                            : 'top_selling');
-                            @endphp
-                            @if ($product->sale_price && $product->regular_price > 0)
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    @forelse ($topSellingProducts as $product)
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item swiper-slide">
+                            <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                                 @php
-                                    $saving =
-                                        (($product->regular_price - $product->sale_price) / $product->regular_price) *
-                                        100;
+                                    $productImages = $product->images; // This is already a Collection
+                                    $variantImages = $product->variations->flatMap(function ($variation) {
+                                        return $variation->images;
+                                    });
+
+                                    $images = $productImages->merge($variantImages);
+                                    $label = $product->label->value;
+                                    $labelClass =
+                                        $label == 'new arrival'
+                                            ? 'new-arrival'
+                                            : ($label == 'featured'
+                                                ? 'featured'
+                                                : 'top_selling');
                                 @endphp
-                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
-                                    Saving {{ number_format($saving, 0) }}%
+                                @if ($product->sale_price && $product->regular_price > 0)
+                                    @php
+                                        $saving =
+                                            (($product->regular_price - $product->sale_price) /
+                                                $product->regular_price) *
+                                            100;
+                                    @endphp
+                                    <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                        Saving {{ number_format($saving, 0) }}%
+                                    </span>
+                                @endif
+                                <span class="label {{ $labelClass }}">
+                                    {{ $product->label->value }}
                                 </span>
-                            @endif
-                            <span class="label {{ $labelClass }}">
-                                {{ $product->label->value }}
-                            </span>
-                            <div class="product_item_image product-carousel owl-carousel">
-                                @foreach ($images as $image)
-                                    <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
-                                        alt="{{ $product->name }}">
-                                @endforeach
-                            </div>
-                            <div class="product_item_content">
-                                <h6 class="product_item_title">
-                                    <a
-                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
-                                </h6>
-                                <div class="product_item_price">
-                                    @if ($product->sale_price && $product->regular_price > 0)
-                                        <span
-                                            style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                        </span>
-                                        <span style="color: #888; font-size: 16px;">
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
-                                        </span>
-                                    @else
-                                        <span>
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                        </span>
-                                    @endif
+                                <div class="product_item_image product-carousel owl-carousel">
+                                    @foreach ($images as $image)
+                                        <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
+                                            alt="{{ $product->name }}">
+                                    @endforeach
                                 </div>
+                                <div class="product_item_content">
+                                    <h6 class="product_item_title">
+                                        <a
+                                            href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                    </h6>
+                                    <div class="product_item_price">
+                                        @if ($product->sale_price && $product->regular_price > 0)
+                                            <span
+                                                style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                            </span>
+                                            <span style="color: #888; font-size: 16px;">
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                            </span>
+                                        @else
+                                            <span>
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                            </span>
+                                        @endif
+                                    </div>
 
-                                <div class="d-flex justify-content-between">
-                                    <a href="javascript:void(0);"
-                                        class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
-                                        data-id="{{ $product->id }}"
-                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="javascript:void(0);"
+                                            class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
+                                            data-id="{{ $product->id }}"
+                                            data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
-                                    <a href="javascript:void(0);"
-                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                        data-product-id="{{ $product->id }}"
-                                        data-url="{{ route('add.to.cart.form', $product->id) }}">
-                                        <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
-                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
-                                    </a>
-                                </div>
-                            </div><!-- /.product-content -->
-                        </div><!-- /.product-item -->
-                    </div><!-- /.col-md-6 col-lg-4 -->
-                @empty
-                    <h5 class="text-center">No products found.</h5>
-                @endforelse
-            </div><!-- /.row -->
+                                        <a href="javascript:void(0);"
+                                            class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                            data-product-id="{{ $product->id }}"
+                                            data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                            <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
+                                            <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                        </a>
+                                    </div>
+                                </div><!-- /.product-content -->
+                            </div><!-- /.product-item -->
+                        </div><!-- /.col-md-6 col-lg-4 -->
+                    @empty
+                        <h5 class="text-center">No products found.</h5>
+                    @endforelse
+                </div><!-- /.row -->
+            </div>
         </div><!-- /.container -->
     </section><!-- /.product-home -->
     <!-- shop end -->
@@ -360,86 +363,92 @@
                 <!-- /.sec-title__title -->
             </div><!-- /.sec-title -->
 
-
-            <div class="row">
-                @forelse ($products as $product)
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
-                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                            @php
-                                $productImages = $product->images; // This is already a Collection
-                                $variantImages = $product->variations->flatMap(function ($variation) {
-                                    return $variation->images;
-                                });
-
-                                $images = $productImages->merge($variantImages);
-                                $label = $product->label->value;
-                                $labelClass =
-                                    $label == 'new arrival'
-                                        ? 'new-arrival'
-                                        : ($label == 'featured'
-                                            ? 'featured'
-                                            : 'top_selling');
-                            @endphp
-                            @if ($product->sale_price && $product->regular_price > 0)
+            <div class="swiper mySwiper">
+                <div class=" swiper-wrapper">
+                    @forelse ($products as $product)
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item swiper-slide">
+                            <div class="product__item wow fadeInUp item" data-wow-duration='1500ms'
+                                data-wow-delay='000ms'>
                                 @php
-                                    $saving =
-                                        (($product->regular_price - $product->sale_price) / $product->regular_price) *
-                                        100;
+                                    $productImages = $product->images; // This is already a Collection
+                                    $variantImages = $product->variations->flatMap(function ($variation) {
+                                        return $variation->images;
+                                    });
+
+                                    $images = $productImages->merge($variantImages);
+                                    $label = $product->label->value;
+                                    $labelClass =
+                                        $label == 'new arrival'
+                                            ? 'new-arrival'
+                                            : ($label == 'featured'
+                                                ? 'featured'
+                                                : 'top_selling');
                                 @endphp
-                                <span class="discount" style="margin-left: 10px; font-size: 10px;">
-                                    Saving {{ number_format($saving, 0) }}%
+                                @if ($product->sale_price && $product->regular_price > 0)
+                                    @php
+                                        $saving =
+                                            (($product->regular_price - $product->sale_price) /
+                                                $product->regular_price) *
+                                            100;
+                                    @endphp
+                                    <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                        Saving {{ number_format($saving, 0) }}%
+                                    </span>
+                                @endif
+                                <span class="label {{ $labelClass }}">
+                                    {{ $product->label->value }}
                                 </span>
-                            @endif
-                            <span class="label {{ $labelClass }}">
-                                {{ $product->label->value }}
-                            </span>
-                            <div class="product_item_image product-carousel owl-carousel">
-                                @foreach ($images as $image)
-                                    <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
-                                        alt="{{ $product->name }}">
-                                @endforeach
-                            </div>
-                            <div class="product_item_content">
-                                <h6 class="product_item_title">
-                                    <a
-                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
-                                </h6>
-                                <div class="product_item_price">
-                                    @if ($product->sale_price && $product->regular_price > 0)
-                                        <span
-                                            style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                        </span>
-                                        <span style="color: #888; font-size: 16px;">
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
-                                        </span>
-                                    @else
-                                        <span>
-                                            {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                        </span>
-                                    @endif
+                                <div class="product_item_image product-carousel owl-carousel">
+                                    @foreach ($images as $image)
+                                        <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
+                                            alt="{{ $product->name }}">
+                                    @endforeach
                                 </div>
+                                <div class="product_item_content">
+                                    <h6 class="product_item_title">
+                                        <a
+                                            href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                    </h6>
+                                    <div class="product_item_price">
+                                        @if ($product->sale_price && $product->regular_price > 0)
+                                            <span
+                                                style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                            </span>
+                                            <span style="color: #888; font-size: 16px;">
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                            </span>
+                                        @else
+                                            <span>
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                            </span>
+                                        @endif
+                                    </div>
 
-                                <div class="d-flex justify-content-between">
-                                    <a href="javascript:void(0);"
-                                        class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
-                                        data-id="{{ $product->id }}"
-                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="javascript:void(0);"
+                                            class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
+                                            data-id="{{ $product->id }}"
+                                            data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
-                                    <a href="javascript:void(0);"
-                                        class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                        data-product-id="{{ $product->id }}"
-                                        data-url="{{ route('add.to.cart.form', $product->id) }}">
-                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
-                                    </a>
-                                </div>
-                            </div><!-- /.product-content -->
-                        </div><!-- /.product-item -->
-                    </div><!-- /.col-md-6 col-lg-4 -->
-                @empty
-                    <h5 class="text-center">No products found.</h5>
-                @endforelse
-            </div><!-- /.row -->
+                                        <a href="javascript:void(0);"
+                                            class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                            data-product-id="{{ $product->id }}"
+                                            data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                            <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                        </a>
+                                    </div>
+                                </div><!-- /.product-content -->
+                            </div><!-- /.product-item -->
+                        </div><!-- /.col-md-6 col-lg-4 -->
+                    @empty
+                        <h5 class="text-center">No products found.</h5>
+                    @endforelse
+                </div><!-- /.row -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
         </div><!-- /.container -->
     </section><!-- /.product-home -->
     <!-- shop end -->
@@ -497,9 +506,48 @@
 
 @endsection
 @section('page-script')
-    <script src="{{ asset('frontend/assets/vendors/owl-carousel/js/owl.carousel.min.js') }}"></script>
+    {{-- <script src="{{ asset('frontend/assets/vendors/owl-carousel/js/owl.carousel.min.js') }}"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         $(document).ready(function() {
+
+
+            var swiper = new Swiper(".mySwiper", {
+                slidesPerView: 4,
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+                breakpoints: {
+                    320: {
+                        slidesPerView: 2,
+                        spaceBetween: 10,
+                    },
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 40,
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 50,
+                    },
+                },
+            });
 
             var owl = $('.product-carousel');
             owl.owlCarousel({
@@ -614,8 +662,16 @@
 @section('page-style')
     <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
         type="image/webp" fetchpriority="high" />
-    <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}"> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
+        :root {
+            --swiper-navigation-size: 24px !important;
+        }
+
         /* ------------ Product CSS Start --------------- */
         .product__item {
             border: 1px solid #DED8D3;
@@ -763,7 +819,15 @@
         }
 
         /* -------------- Owl Carousel CSS End ------------ */
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #2a4e72 !important;
+        }
 
+        ::ng-deep .swiper-button-prev:after,
+        ::ng-deep .swiper-button-next:after {
+            --swiper-navigation-size: 15px;
+        }
 
         @media (max-width: 991px) {
             .main-slider__item {
