@@ -344,7 +344,7 @@
 
         .product-home {
             padding-top: 60px !important;
-            padding-bottom: 60px !important;
+            padding-bottom: 20px !important;
         }
     </style>
 
@@ -445,8 +445,6 @@
                         <h5 class="text-center">No products found.</h5>
                     @endforelse
                 </div><!-- /.row -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
                 <div class="swiper-pagination"></div>
             </div>
         </div><!-- /.container -->
@@ -524,10 +522,7 @@
                 pagination: {
                     el: ".swiper-pagination",
                     clickable: true,
-                },
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
+                    dynamicBullets: true,
                 },
                 breakpoints: {
                     320: {
@@ -670,6 +665,13 @@
     <style>
         :root {
             --swiper-navigation-size: 24px !important;
+            --swiper-theme-color: #2a4e72;
+            --swiper-pagination-bullet-inactive-color: #fff;
+            --swiper-pagination-bullet-inactive-opacity: .8;
+        }
+
+        .swiper {
+            padding: 0 0 60px 0;
         }
 
         /* ------------ Product CSS Start --------------- */
