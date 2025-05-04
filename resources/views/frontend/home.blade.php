@@ -461,7 +461,7 @@
 
                     <h6 class="sec-title__tagline">our shop</h6>
 
-                    <h3 class="sec-title__title">Featured Products Products in Shop</h3>
+                    <h3 class="sec-title__title">Featured Products in Shop</h3>
                 </div>
                 <div class="swiper mySwiper">
                     <div class="swiper-wrapper">
