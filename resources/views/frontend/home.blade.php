@@ -97,7 +97,7 @@
                 </div><!-- /.row -->
             </div>
         </div><!-- /.container -->
-    </section><!-- /.product-home -->
+    </section>
     <!-- shop end -->
     <!-- main slider start -->
     @include('admin.page-settings.home.partials.slider')
@@ -453,53 +453,102 @@
 
 
 
-    @if ($brands->count() > 0)
-        <!-- client carousel start -->
-        <div class="client-carousel @@extraClassName">
-            <div class="container">
-                <div class="client-carousel__one floens-owl__carousel owl-theme owl-carousel"
-                    data-owl-options='{
-                    "items": 5,
-                    "margin": 65,
-                    "smartSpeed": 700,
-                    "loop":true,
-                    "autoplay": 6000,
-                    "nav":false,
-                    "dots":false,
-                    "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
-                    "responsive":{
-                        "0":{
-                            "items": 2,
-                            "margin": 30
-                        },
-                        "500":{
-                            "items": 3,
-                            "margin": 40
-                        },
-                        "768":{
-                            "items": 4,
-                            "margin": 50
-                        },
-                        "992":{
-                            "items": 5,
-                            "margin": 70
-                        },
-                        "1200":{
-                            "items": 6,
-                            "margin": 149
-                        }
-                    }
-                    }'>
-                    @foreach ($brands as $barand)
-                        <div class="client-carousel__one__item">
-                            <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
-                                loading="lazy" alt="brand">
-                        </div><!-- /.owl-slide-item-->
-                    @endforeach
-                </div><!-- /.thm-owl__slider -->
+    @if ($featuredProducts->count() > 0)
+        <section class="product-home-top-selling">
+            <!-- /.product-home__bg -->
+            <div class="container products">
+                <div class="sec-title sec-title--center">
+
+                    <h6 class="sec-title__tagline">our shop</h6>
+
+                    <h3 class="sec-title__title">Featured Products in Shop</h3>
+                </div>
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        @forelse ($featuredProducts as $product)
+                            <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item swiper-slide">
+                                <div class="product__item wow fadeInUp" data-wow-duration='1500ms'
+                                    data-wow-delay='000ms'>
+                                    @php
+                                        $productImages = $product->images; // This is already a Collection
+                                        $variantImages = $product->variations->flatMap(function ($variation) {
+                                            return $variation->images;
+                                        });
+
+                                        $images = $productImages->merge($variantImages);
+                                        $label = $product->label->value;
+                                        $labelClass =
+                                            $label == 'new arrival'
+                                                ? 'new-arrival'
+                                                : ($label == 'featured'
+                                                    ? 'featured'
+                                                    : 'top_selling');
+                                    @endphp
+                                    @if ($product->sale_price && $product->regular_price > 0)
+                                        @php
+                                            $saving =
+                                                (($product->regular_price - $product->sale_price) /
+                                                    $product->regular_price) *
+                                                100;
+                                        @endphp
+                                        <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                            Saving {{ number_format($saving, 0) }}%
+                                        </span>
+                                    @endif
+                                    <span class="label {{ $labelClass }}">
+                                        {{ $product->label->value }}
+                                    </span>
+                                    <div class="product_item_image product-carousel owl-carousel">
+                                        @foreach ($images as $image)
+                                            <img class="item product-image" src="{{ asset($image->path) }}"
+                                                loading="lazy" alt="{{ $product->name }}">
+                                        @endforeach
+                                    </div>
+                                    <div class="product_item_content">
+                                        <h6 class="product_item_title">
+                                            <a
+                                                href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                        </h6>
+                                        <div class="product_item_price">
+                                            @if ($product->sale_price && $product->regular_price > 0)
+                                                <span
+                                                    style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                                </span>
+                                                <span style="color: #888; font-size: 16px;">
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                                </span>
+                                            @else
+                                                <span>
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <a href="javascript:void(0);"
+                                                class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
+                                                data-id="{{ $product->id }}"
+                                                data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                            <a href="javascript:void(0);"
+                                                class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                                data-product-id="{{ $product->id }}"
+                                                data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                                <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
+                                                <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                            </a>
+                                        </div>
+                                    </div><!-- /.product-content -->
+                                </div><!-- /.product-item -->
+                            </div><!-- /.col-md-6 col-lg-4 -->
+                        @empty
+                            <h5 class="text-center">No products found.</h5>
+                        @endforelse
+                    </div><!-- /.row -->
+                </div>
             </div><!-- /.container -->
-        </div><!-- /.client-carousel -->
-        <!-- client carousel end -->
+        </section>
     @endif
 
 @endsection

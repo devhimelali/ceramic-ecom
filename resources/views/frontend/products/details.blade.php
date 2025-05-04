@@ -92,9 +92,14 @@
                             @endforeach
                         </div>
                         <div id="price-wrapper-ditails">
-                            <span class="price"
-                                style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
-                            <span class="price">${{ $product->sale_price ?? $product->regular_price }}</span>
+                            @if ($product->sale_price && $product->regular_price > 0)
+                                <span class="price"
+                                    style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
+                                <span class="price">${{ $product->sale_price ?? $product->regular_price }}</span>
+                            @else
+                                <span class="price">${{ $product->regular_price ?? $product->regular_price }}</span>
+                            @endif
+
                         </div>
 
                         <div class="product-details__buttons">

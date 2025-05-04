@@ -1,73 +1,3 @@
-@php
-    use App\Helpers\ImageUploadHelper;
-@endphp
-
-<style>
-    .form-group {
-        margin-bottom: 20px;
-        position: relative;
-    }
-
-    .form-group label {
-        font-size: 14px;
-        font-weight: bold;
-        color: #333;
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-        border: none;
-        border-bottom: 2px solid #b2835e;
-        outline: none;
-        background: transparent;
-        color: #333;
-    }
-
-    .form-group textarea {
-        resize: none;
-        height: 80px;
-        background: #f6f3ef;
-    }
-
-    .attribute_list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        align-items: center;
-    }
-
-    span.color-variation.selected {
-        transform: scale(1.14) !important;
-    }
-
-    .variationContainer {
-        border: 1px solid #d7d7d7;
-        padding: 0px 12px 0px 12px;
-    }
-
-    .singleVariationContainer:not(:last-child) {
-        border-bottom: 1px solid #d7d7d7;
-        margin: 0 -12px 0 -12px;
-    }
-
-    .attribute-title {
-        display: inline-block;
-        float: left;
-        margin-right: 30px;
-        color: black;
-        font-size: 14px !important;
-        line-height: 26px;
-    }
-</style>
-
 <form action="" method="post" id="cartForm">
     @csrf
     <div class="modal-body">
@@ -292,3 +222,69 @@
         });
     });
 </script>
+
+<style>
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: none;
+        border-bottom: 2px solid #b2835e;
+        outline: none;
+        background: transparent;
+        color: #333;
+    }
+
+    .form-group textarea {
+        resize: none;
+        height: 80px;
+        background: #f6f3ef;
+    }
+
+    .attribute_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+    }
+
+    span.color-variation.selected {
+        transform: scale(1.14) !important;
+    }
+
+    .variationContainer {
+        border: 1px solid #d7d7d7;
+        padding: 0px 12px 0px 12px;
+    }
+
+    .singleVariationContainer:not(:last-child) {
+        border-bottom: 1px solid #d7d7d7;
+        margin: 0 -12px 0 -12px;
+    }
+
+    .attribute-title {
+        display: inline-block;
+        float: left;
+        margin-right: 30px;
+        color: black;
+        font-size: 14px !important;
+        line-height: 26px;
+    }
+</style>
