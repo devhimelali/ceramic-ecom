@@ -64,8 +64,7 @@
                         <li>
                             <a href="{{ route('frontend.home') }}">Home</a>
                         </li>
-
-                        <li class="dropdown">
+                        {{-- <li class="dropdown">
                             <a href="#">Categories</a>
                             <ul>
                                 @foreach (category_show()->where('parent_id', null) as $category)
@@ -88,11 +87,50 @@
                                         href="{{ route('frontend.allCategories') }}">View all</a></li>
 
                             </ul>
-                        </li>
+                        </li> --}}
+                        @foreach (category_show()->where('parent_id', null)->take(5) as $category)
+                            <li class="dropdown">
+                                <a href="#">
+                                    {{ $category->name }}
+                                    <i class="fa-solid fa-angle-down d-none d-sm-inline"></i>
+                                </a>
 
-                        <li class="{{ $active == 'products' ? 'current' : '' }}">
+                                @if ($category->children->count() > 0)
+                                    <ul>
+                                        @foreach ($category->children as $childCategory)
+                                            <li>
+                                                <a
+                                                    href="{{ route('frontend.productsPage', ['category' => $childCategory->slug]) }}">
+                                                    {{ $childCategory->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
+                        @endforeach
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        {{-- <li class="{{ $active == 'products' ? 'current' : '' }}">
                             <a href="{{ route('frontend.productsPage') }}">Products</a>
-                        </li>
+                        </li> --}}
                         <li class="{{ $active == 'about-us' ? 'current' : '' }}">
                             <a href="{{ route('frontend.aboutUs') }}">About us</a>
                         </li>
@@ -182,9 +220,6 @@
         margin-right: 20px;
     }
 
-
-
-
     .mobile-nav__btn {
         width: 24px;
         display: flex;
@@ -221,5 +256,19 @@
     .main-header--two .main-menu .main-menu__list>li {
         padding-top: 35px !important;
         padding-bottom: 35px !important;
+    }
+
+    .main-menu .main-menu__list>li+li {
+        margin-left: 26px;
+    }
+
+    .main-menu .main-menu__list>li>a {
+        color: #000000;
+    }
+
+    @media (min-width: 447px) {
+        .main-header--two .main-header__left {
+            margin-left: 96px;
+        }
     }
 </style>
