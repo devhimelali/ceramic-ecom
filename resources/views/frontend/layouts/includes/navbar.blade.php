@@ -1,4 +1,4 @@
-<div class="topbar-one">
+[<div class="topbar-one">
     <div class="container-fluid">
         <div class="topbar-one__inner">
             <ul class="list-unstyled topbar-one__info">
@@ -179,7 +179,7 @@
         }
 
         .main-header__logo a img {
-            max-height: 52px;
+            max-height: 68px;
             width: auto;
         }
 
@@ -211,7 +211,7 @@
         }
 
         .main-header__logo a img {
-            max-height: 52px;
+            max-height: 68px;
             width: auto;
         }
 
@@ -283,3 +283,4 @@
         }
     }
 </style>
+]
