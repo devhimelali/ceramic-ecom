@@ -1,4 +1,4 @@
-<div class="topbar-one">
+[<div class="topbar-one">
     <div class="container-fluid">
         <div class="topbar-one__inner">
             <ul class="list-unstyled topbar-one__info">
@@ -16,7 +16,7 @@
                     <span class="icon-location"></span>
                     <address>{{ $settings->where('key', 'contact_address')->first()->value ?? 'N/A' }}</address>
                 </li>
-            </ul><!-- /.list-unstyled topbar-one__info -->
+            </ul>
             <div class="topbar-one__right">
                 <div class="topbar-one__social">
                     <a target="_blank" href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
@@ -35,21 +35,22 @@
                         <i class="text-white fa-brands fa-tiktok"></i>
                         <span class="sr-only">Tiktok</span>
                     </a>
-                </div><!-- /.topbar-one__social -->
-            </div><!-- /.topbar-one__right -->
-        </div><!-- /.topbar-one__inner -->
-    </div><!-- /.container-fluid -->
-</div><!-- /.topbar-one -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <header class="main-header main-header--two sticky-header sticky-header--normal">
     <div class="container-fluid">
         <div class="main-header__inner">
             <div class="main-header__left">
                 <div class="mobile-nav__btn mobile-nav__toggler">
+                    {{-- <span></span>
                     <span></span>
-                    <span></span>
-                    <span></span>
-                </div><!-- /.mobile-nav__toggler -->
+                    <span></span> --}}
+                    <i class="fa-solid fa-bars"></i>
+                </div>
                 <div class="main-header__logo">
                     <a href="{{ route('frontend.home') }}">
                         @php
@@ -58,14 +59,13 @@
                         <img src="{{ $app_logo ? asset('assets/images/settings/' . $app_logo->value) : '#' }}"
                             alt="{{ $app_logo->value }}" class="img-fluid app_logo" loading="lazy">
                     </a>
-                </div><!-- /.main-header__logo -->
+                </div>
                 <nav class="main-header__nav main-menu">
                     <ul class="main-menu__list">
                         <li>
                             <a href="{{ route('frontend.home') }}">Home</a>
                         </li>
-
-                        <li class="dropdown">
+                        {{-- <li class="dropdown">
                             <a href="#">Categories</a>
                             <ul>
                                 @foreach (category_show()->where('parent_id', null) as $category)
@@ -88,11 +88,31 @@
                                         href="{{ route('frontend.allCategories') }}">View all</a></li>
 
                             </ul>
-                        </li>
+                        </li> --}}
+                        @foreach (category_show()->where('parent_id', null)->take(5) as $category)
+                            <li class="dropdown">
+                                <a href="#">
+                                    {{ $category->name }}
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </a>
 
-                        <li class="{{ $active == 'products' ? 'current' : '' }}">
+                                @if ($category->children->count() > 0)
+                                    <ul>
+                                        @foreach ($category->children as $childCategory)
+                                            <li>
+                                                <a
+                                                    href="{{ route('frontend.productsPage', ['category' => $childCategory->slug]) }}">
+                                                    {{ $childCategory->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
+                        @endforeach
+                        {{-- <li class="{{ $active == 'products' ? 'current' : '' }}">
                             <a href="{{ route('frontend.productsPage') }}">Products</a>
-                        </li>
+                        </li> --}}
                         <li class="{{ $active == 'about-us' ? 'current' : '' }}">
                             <a href="{{ route('frontend.aboutUs') }}">About us</a>
                         </li>
@@ -100,29 +120,54 @@
                             <a href="{{ route('frontend.contact') }}">Contact</a>
                         </li>
                     </ul>
-                </nav><!-- /.main-header__nav -->
-            </div><!-- /.main-header__left -->
+                </nav>
+            </div>
             <div class="main-header__right">
                 <a href="javascript:void(0);" class="search-toggler main-header__search">
                     <i class="icon-search" aria-hidden="true"></i>
                     <span class="sr-only">Search</span>
-                </a><!-- /.search-toggler -->
+                </a>
                 <a href="javascript:void(0);" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                     aria-controls="offcanvasRight" class="main-header__cart">
                     <i class="icon-cart" aria-hidden="true"></i>
                     <span class="sr-only">Cart</span>
                     <span class="totalCartItems"></span>
-                </a><!-- /.shopping card -->
-            </div><!-- /.main-header__right -->
-        </div><!-- /.main-header__inner -->
-    </div><!-- /.container-fluid -->
-</header><!-- /.main-header -->
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
 <script>
     $(document).ready(function() {
         $('.totalCartItems').html(getTotalQuantity())
     })
 </script>
 <style>
+    .fa-bars {
+        font-size: 30px;
+        color: #0d0d0d;
+    }
+
+    .mobile-nav__btn {
+        display: block !important;
+        cursor: pointer;
+    }
+
+    .fa-solid.fa-angle-down {
+        display: none;
+    }
+
+    @media (min-width: 1200px) {
+        .mobile-nav__btn {
+            display: none !important;
+        }
+
+        .fa-solid.fa-angle-down {
+            display: block;
+        }
+    }
+
+
     @media (max-width: 425px) {
         .logo-box a img {
             max-height: 60px;
@@ -134,7 +179,7 @@
         }
 
         .main-header__logo a img {
-            max-height: 60px;
+            max-height: 68px;
             width: auto;
         }
 
@@ -166,13 +211,17 @@
         }
 
         .main-header__logo a img {
-            max-height: 60px;
+            max-height: 68px;
             width: auto;
         }
 
         .logo-box a img {
             max-height: 60px;
             width: auto;
+        }
+
+        .main-header__right {
+            margin-right: 30px;
         }
     }
 
@@ -181,9 +230,6 @@
         margin-left: 0px;
         margin-right: 20px;
     }
-
-
-
 
     .mobile-nav__btn {
         width: 24px;
@@ -222,4 +268,19 @@
         padding-top: 35px !important;
         padding-bottom: 35px !important;
     }
+
+    .main-menu .main-menu__list>li+li {
+        margin-left: 26px;
+    }
+
+    .main-menu .main-menu__list>li>a {
+        color: #000000;
+    }
+
+    @media (min-width: 447px) {
+        .main-header--two .main-header__left {
+            margin-left: 96px;
+        }
+    }
 </style>
+]
