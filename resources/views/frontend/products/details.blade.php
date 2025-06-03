@@ -3,7 +3,7 @@
 @section('content')
     <section class="page-header">
         <div class="page-header__bg"
-            style="background-image: url('{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}');">
+             style="background-image: url('{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}');">
         </div>
         <!-- /.page-header__bg -->
         <div class="container">
@@ -50,8 +50,9 @@
                                         $string = $imageable_type . '-' . $imageable_id;
                                     @endphp
                                     <div class="swiper-slide product-details__gallery-thumb-slide"
-                                        data-image-id="{{ $imageable_id }}">
-                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
+                                         data-image-id="{{ $imageable_id }}">
+                                        <img src="{{ asset($image->path) }}"
+                                             class="product-details__gallery-thumb__img">
                                     </div>
                                 @endforeach
                             </div>
@@ -80,9 +81,9 @@
                                             @foreach ($group['values'] as $value)
                                                 <label class="attribute-option">
                                                     <input type="radio" class="attribute-input d-none"
-                                                        name="{{ $group['attribute'] }}"
-                                                        data-attribute="{{ $group['attribute'] }}"
-                                                        value="{{ $value }}">
+                                                           name="{{ $group['attribute'] }}"
+                                                           data-attribute="{{ $group['attribute'] }}"
+                                                           value="{{ $value }}">
                                                     <span class="badge bg-secondary">{{ $value }}</span>
                                                 </label>
                                             @endforeach
@@ -94,7 +95,7 @@
                         <div id="price-wrapper-ditails">
                             @if ($product->sale_price && $product->regular_price > 0)
                                 <span class="price"
-                                    style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
+                                      style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
                                 <span class="price">${{ $product->sale_price ?? $product->regular_price }}</span>
                             @else
                                 <span class="price">${{ $product->regular_price ?? $product->regular_price }}</span>
@@ -105,14 +106,14 @@
                         <div class="product-details__buttons">
                             <div class="d-flex align-items-center justify-content-center">
                                 <a href="javascript:void(0);"
-                                    class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
-                                    data-id="{{ $product->id }}"
-                                    data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+                                   class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
+                                   data-id="{{ $product->id }}"
+                                   data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                 <a href="javascript:void(0);"
-                                    class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                    data-product-id="{{ $product->id }}"
-                                    data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                   class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                   data-product-id="{{ $product->id }}"
+                                   data-url="{{ route('add.to.cart.form', $product->id) }}">
                                     <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                             </div>
                         </div>
@@ -133,13 +134,128 @@
                 </div>
             </div>
         </div>
+
+        <section class="product-home-top-selling py-5">
+            <div class="container products">
+                <div class="sec-title">
+                    <h3 class="sec-title__title">You may also like</h3>
+                </div>
+                <div class="row pt-5">
+                    @forelse ($relatedProducts as $product)
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
+                            <div class="product__item wow fadeInUp" data-wow-duration='1500ms'
+                                 data-wow-delay='000ms'>
+                                @php
+                                    $productImages = $product->images;
+                                    $variantImages = $product->variations->flatMap(function ($variation) {
+                                        return $variation->images;
+                                    });
+
+                                    $images = $productImages->merge($variantImages);
+                                    $label = $product->label->value;
+                                    $labelClass =
+                                        $label == 'new arrival'
+                                            ? 'new-arrival'
+                                            : ($label == 'featured'
+                                                ? 'featured'
+                                                : 'top_selling');
+                                @endphp
+                                @if ($product->sale_price && $product->regular_price > 0)
+                                    @php
+                                        $saving =
+                                            (($product->regular_price - $product->sale_price) /
+                                                $product->regular_price) *
+                                            100;
+                                    @endphp
+                                    <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                            Saving {{ number_format($saving, 0) }}%
+                                        </span>
+                                @endif
+                                <span class="label {{ $labelClass }}">
+                                        {{ $product->label->value }}
+                                    </span>
+                                <div class="product_item_image product-carousel owl-carousel">
+                                    @foreach ($images as $image)
+                                        <img class="item product-image" src="{{ asset($image->path) }}"
+                                             loading="lazy" alt="{{ $product->name }}">
+                                    @endforeach
+                                </div>
+                                <div class="product_item_content">
+                                    <h6 class="product_item_title">
+                                        <a
+                                                href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                    </h6>
+                                    <div class="product_item_price">
+                                        @if ($product->sale_price && $product->regular_price > 0)
+                                            <span
+                                                    style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                                </span>
+                                            <span style="color: #888; font-size: 16px;">
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                                </span>
+                                        @else
+                                            <span>
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                                </span>
+                                        @endif
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <a href="javascript:void(0);"
+                                           class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
+                                           data-id="{{ $product->id }}"
+                                           data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                        <a href="javascript:void(0);"
+                                           class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                           data-product-id="{{ $product->id }}"
+                                           data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                            <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
+                                            <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                        </a>
+                                    </div>
+                                </div><!-- /.product-content -->
+                            </div><!-- /.product-item -->
+                        </div><!-- /.col-md-6 col-lg-4 -->
+                    @empty
+                        <h5 class="text-center">No products found.</h5>
+                    @endforelse
+                </div><!-- /.row -->
+
+            </div><!-- /.container -->
+        </section>
+
+
     </section>
     <!-- Products End -->
 @endsection
 @section('page-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+            var owl = $('.product-carousel');
+            owl.owlCarousel({
+                items: 1,
+                loop: true,
+                margin: 10,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                autoplayHoverPause: true,
+                nav: true,
+                dots: false,
+            });
+
+            $('.play').on('click', function() {
+                owl.trigger('play.owl.autoplay', [1000]);
+            });
+
+            $('.stop').on('click', function() {
+                owl.trigger('stop.owl.autoplay');
+            });
+
+
             const totalAttributes = {{ count($attributes) }};
             // ✅ Init Swiper sliders
             var galleryThumbs = new Swiper('.product-details__gallery-thumb', {
@@ -163,7 +279,7 @@
                 galleryTop.removeAllSlides();
                 galleryThumbs.removeAllSlides();
 
-                $.each(images, function(index, imagePath) {
+                $.each(images, function (index, imagePath) {
                     const imageUrl = '/' + imagePath.replace(/^\/?/, '');
 
                     galleryTop.appendSlide(`
@@ -183,15 +299,15 @@
             }
 
             // ✅ Listen to attribute changes
-            $('.attribute-input').on('change', function() {
+            $('.attribute-input').on('change', function () {
                 let selectedAttributes = {};
 
-                $('.attribute-input:checked').each(function() {
+                $('.attribute-input:checked').each(function () {
                     selectedAttributes[$(this).attr('name')] = $(this).val();
                 });
 
                 if (Object.keys(selectedAttributes).length === totalAttributes) {
-                    let variationString = $.map(selectedAttributes, function(val, key) {
+                    let variationString = $.map(selectedAttributes, function (val, key) {
                         return key + ': ' + val;
                     }).join(' / ');
 
@@ -201,10 +317,10 @@
                         data: {
                             variation: variationString
                         },
-                        beforeSend: function() {
+                        beforeSend: function () {
                             $('#loader').show()
                         },
-                        success: function(response) {
+                        success: function (response) {
                             $('#loader').hide();
 
                             if (response.status === 'success') {
@@ -212,13 +328,13 @@
                                     response.data.images.imageable_id;
 
                                 let swiperCustomId = $(
-                                    `[data-image-id="${response.data.images.imageable_id}"]`
+                                        `[data-image-id="${response.data.images.imageable_id}"]`
                                 ).attr('data-swiper-slide-index');
 
                                 galleryThumbs.slideTo(swiperCustomId[0]);
                                 galleryTop.slideTo(swiperCustomId[0]);
 
-                                galleryTop.on('slideChange', function() {
+                                galleryTop.on('slideChange', function () {
                                     galleryTop.update();
                                     galleryThumbs.update();
                                 });
@@ -240,7 +356,7 @@
                                 alert(response.message || 'Variation not found.');
                             }
                         },
-                        error: function() {
+                        error: function () {
                             $('#loader').hide();
                             alert('Something went wrong.');
                         }
@@ -249,59 +365,59 @@
             });
 
             displayCartItems();
-            $('.enquireBtn').click(function() {
+            $('.enquireBtn').click(function () {
                 var productId = $(this).data('id');
                 var url = $(this).data('url');
                 $.ajax({
                     url: url,
                     method: 'GET',
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $('#loader').show();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('#enquireFormResponse').html(response.html);
                         $('#myModal').modal('show');
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#loader').hide();
                     }
                 })
             });
 
-            $('.addToCartBtn').click(function() {
+            $('.addToCartBtn').click(function () {
                 var productId = $(this).data('product-id');
                 var url = $(this).data('url');
                 // $('#addToCartModal').modal('show');
                 $.ajax({
                     url: url,
                     method: 'GET',
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $('#loader').show();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('#addToCartResponse').html(response.html);
                         $('#addToCartModal').modal('show');
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#loader').hide();
                     }
                 })
             });
 
-            $('#enquireForm').submit(function(e) {
+            $('#enquireForm').submit(function (e) {
                 e.preventDefault();
                 var formData = $('#enquireForm').serialize();
                 $.ajax({
                     url: "{{ route('enquire') }}",
                     method: 'POST',
                     data: formData,
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $('.enquireSubmitBtn').prop('disabled', true);
                         $('.enquireSubmitBtn').html(
                             '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
                         );
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('.enquireSubmitBtn').prop('disabled', false);
                         $('.enquireSubmitBtn').html('Submit');
                         if (response.status == 'success') {
@@ -311,12 +427,12 @@
                         }
 
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         $('.enquireSubmitBtn').prop('disabled', false);
                         $('.enquireSubmitBtn').html('Submit');
                         let errors = xhr.responseJSON.errors;
                         if (errors) {
-                            $.each(errors, function(key, value) {
+                            $.each(errors, function (key, value) {
                                 let inputField = $('[name="' + key + '"]');
                                 inputField.addClass('is-invalid');
                                 notify('error', value[0]);
@@ -329,7 +445,9 @@
     </script>
 @endsection
 @section('page-style')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
     <style>
         span.price {
             font-size: 20px;
@@ -351,7 +469,7 @@
             transition: all 0.3s ease;
         }
 
-        .attribute-option input:checked+.badge {
+        .attribute-option input:checked + .badge {
             background-color: #e28245 !important;
             color: white;
             border-color: #db783b;
@@ -429,6 +547,148 @@
             }
         }
 
+        .product__item {
+            border: 1px solid #DED8D3;
+            border-radius: 4px;
+        }
+
+        .product__item:hover {
+            border: 1px solid #2a4e72;
+        }
+
+        .label {
+            position: absolute;
+            right: 7px;
+            top: 7px;
+            z-index: 2;
+            background: #D94F4F;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+            text-transform: capitalize;
+            font-size: 10px;
+        }
+
+
+        span.discount {
+            position: absolute;
+            right: 7px;
+            top: 34px;
+            z-index: 2;
+            background: #D94F4F;
+            color: #fff !important;
+            padding: 2px 8px;
+            border-radius: 18px;
+            text-transform: capitalize;
+            font-size: 10px;
+        }
+
+        .top_selling {
+            background: #2a4e72
+        }
+
+        .new-arrival {
+            background: #4FC79A
+        }
+
+        .featured {
+            background: #C7844F
+        }
+
+        .product_item_image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product_item_image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-image {
+            height: 300px;
+        }
+
+        .product_item_content {
+            border: none;
+            padding: 0.24px 17px 20px !important;
+        }
+
+        .product_item_price {
+            margin-bottom: 12px;
+        }
+
+        .custom-button {
+            border: none;
+            background: var(--floens-base, #C7844F);
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 13px 24px !important;
+        }
+
+        .custom-button:hover {
+            background: #9a6e4b;
+        }
+
+        .mobile-btn {
+            padding: 11px 0 !important;
+        }
+
+        .enquireBtn {
+            width: 70%;
+        }
+
+        .addToCartBtn {
+            padding: 19px 24px !important;
+        }
+
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-next {
+            position: absolute;
+            top: 50%;
+            background-color: #434343c7 !important;
+            color: #fff !important;
+            font-size: 22px !important;
+            border-radius: 50% !important;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+        }
+
+        .owl-carousel .owl-nav button.owl-prev {
+            left: 15px;
+        }
+
+        .owl-carousel .owl-nav button.owl-next {
+            right: 12px;
+            z-index: 1;
+        }
+
+        .product-carousel .owl-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 235px;
+            background: #f9f9f9;
+        }
+
+        .product-carousel .owl-item img {
+            width: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            margin-top: 0px;
+        }
+
         @media only screen and (max-width: 480px) {
             .product-wrapper {
                 margin-top: -40px;
@@ -436,6 +696,98 @@
 
             .product-details__gallery-top .swiper-wrapper .swiper-slide {
                 height: 350px;
+            }
+
+            .sec_1_prev_3 {
+                height: 364px !important;
+                width: auto !important;
+            }
+
+            .sec_1_prev_2 {
+                height: 186px;
+                width: auto !important;
+            }
+
+            .sec_1_prev_1 {
+                height: 170px;
+                width: auto !important;
+            }
+
+            img.reliable-one__image__two.sec_2_prev_2 {
+                height: 300px;
+                width: auto !important;
+
+            }
+
+            img.reliable-one__image__one.sec_2_prev_1 {
+                height: 300px;
+                width: auto !important;
+            }
+
+
+            span.label {
+                padding: 1px 6px;
+                font-size: 8px !important;
+            }
+
+            span.discount {
+                top: 26px;
+                padding: 1px 6px;
+                font-size: 8px !important;
+            }
+
+            .addToCartBtn {
+                padding: 14px 21px !important;
+            }
+
+            .addToCartBtn i {
+                font-size: 12px !important;
+            }
+
+            .product-carousel .owl-item {
+                height: 150px;
+            }
+
+            .product-carousel .owl-item img {
+                margin: 0px;
+            }
+
+            .product_item_content {
+                margin-top: 0px !important;
+            }
+
+            .product_item_content {
+                padding: 0.24px 8px 8px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev {
+                width: 20px;
+                height: 20px;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev {
+                font-size: 14px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel .owl-nav button.owl-prev,
+            .owl-carousel button.owl-dot.owl-nav {
+                left: 7px;
+            }
+
+            .owl-carousel .owl-nav button.owl-next {
+                font-size: 13px !important;
+            }
+
+            .owl-carousel .owl-nav button.owl-next {
+                width: 20px;
+                height: 20px;
+            }
+
+            .owl-carousel .owl-nav button.owl-next,
+            .owl-carousel .owl-nav button.owl-next,
+            .owl-carousel button.owl-dot.owl-nav {
+                right: 8px;
             }
         }
     </style>

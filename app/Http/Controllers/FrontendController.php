@@ -138,6 +138,11 @@ class FrontendController extends Controller
     function productDetails($slug)
     {
         $product = Product::with('images', 'attributes', 'variations.images')->where('slug', $slug)->firstOrFail();
+        $relatedProducts = Product::with('images', 'attributes', 'variations.images')
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->limit(4)
+            ->get();
 
         $attributes = Attribute::with('values')
             ->where('product_id', $product->id)
@@ -153,7 +158,8 @@ class FrontendController extends Controller
         $data = [
             'active' => 'products',
             'product' => $product,
-            'attributes' => $attributes
+            'attributes' => $attributes,
+            'relatedProducts' => $relatedProducts
         ];
         return view('frontend.products.details', $data);
     }
