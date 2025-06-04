@@ -19,3 +19,11 @@ use Illuminate\Support\Facades\Artisan;
 Route::get('optimize-clear', function () {
     Artisan::call('optimize:clear');
 });
+
+
+Route::get('/reviews', function(){
+    $data = [
+        'active' => 'reviews'
+    ];
+    return view('test', $data);
+});

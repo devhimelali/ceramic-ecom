@@ -73,3 +73,11 @@ function uploadImage($file, $folder)
     $image->storeAs($folder, $imageName, 'public');
     return ['name' => $imageName, 'path' => 'storage/' . $folder . '/' . $imageName];
 }
+
+function uploadVideo($file, $folder)
+{
+    $video = $file;
+    $videoName = uniqid() . time() . '.' . $video->getClientOriginalExtension();
+    $video->storeAs($folder, $videoName, 'public');
+    return ['name' => $videoName, 'path' => 'storage/' . $folder . '/' . $videoName];
+}

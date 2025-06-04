@@ -121,21 +121,85 @@
                 </div>
             </div>
         </div>
+
         <div class="product-details__description-wrapper">
             <div class="container">
                 <!-- /.product-description -->
                 <div class="product-details__description">
-                    <h3 class="product-details__description__title">product Description</h3>
-                    <div class="product-details__text__box wow fadeInUp" data-wow-delay="300ms">
-                        <p class="product-details__description__text">
-                            {!! $product->description !!}
-                        </p>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
+                                    data-bs-target="#description-tab-pane" type="button" role="tab"
+                                    aria-controls="description-tab-pane"
+                                    aria-selected="true">
+                                Description
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab"
+                                    data-bs-target="#reviews-tab-pane"
+                                    type="button" role="tab" aria-controls="reviews-tab-pane" aria-selected="false">
+                                Reviews
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active mb-3" id="description-tab-pane" role="tabpanel"
+                             aria-labelledby="description-tab"
+                             tabindex="0">
+                            <div class="mt-2 p-4 bg-white">
+                                {!! $product->description !!}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel" aria-labelledby="reviews-tab"
+                             tabindex="0">
+                            @php
+                                $roundedRating = round($avgRating, 1); // e.g. 4.2
+                            @endphp
+                            <div class="mt-2 p-4 bg-white">
+                                <h3 class="text-center">Customer Reviews</h3>
+                                <div class="d-flex align-items-center justify-content-center gap-4 py-3">
+                                    <div class="text-center">
+                                        <div class="rating-number fw-semibold fs-2">{{ $roundedRating }}</div>
+
+                                        <div class="d-flex justify-content-center gap-1">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @php
+                                                    $fillPercent = min(100, max(0, ($roundedRating - $i + 1) * 100));
+                                                @endphp
+                                                <i class="bi bi-star-fill"
+                                                   style="
+                            font-size: 1.5rem;
+                            background: linear-gradient(90deg, #ffc107 {{ $fillPercent }}%, #e4e5e9 {{ $fillPercent }}%);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            display: inline-block;
+                       "></i>
+                                            @endfor
+                                        </div>
+
+                                        <div class="text-muted small mt-1">
+                                            Based on {{ $totalRating }} {{ Str::plural('review', $totalRating) }}
+                                        </div>
+                                    </div>
+
+                                    <div style="height: 2rem; width: 1px; background-color: #ccc;"></div>
+
+                                    <div>
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#writeReviewModal"
+                                                class="btn btn-primary review-btn rounded-pill px-4">Write A
+                                            Review
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <section class="product-home-top-selling py-5">
+        <div class="product-home-top-selling py-5">
             <div class="container products">
                 <div class="sec-title">
                     <h3 class="sec-title__title">You may also like</h3>
@@ -224,9 +288,67 @@
                 </div><!-- /.row -->
 
             </div><!-- /.container -->
-        </section>
+        </div>
 
-
+        <div id="writeReviewModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+             style="display: none;">
+            <div class="modal-dialog">
+                <div class="p-4 modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Share your thoughts</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="" method="post">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Rate your experience <span
+                                            class="text-danger">*</span></label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Write a review <span
+                                            class="text-danger">*</span></label>
+                                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="headline" class="form-label">Add a headline <span
+                                            class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="headline" name="headline"
+                                       placeholder="Summarize your experience">
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Your Name <span
+                                            class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                       placeholder="Enter your name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Your email address <span
+                                            class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                       placeholder="Enter your email address">
+                            </div>
+                            <div class="mb-3">
+                                <label for="images" class="form-label">Upload images</label>
+                                <input type="file" multiple accept="image/*" class="form-control" id="images"
+                                       name="images[]">
+                                <p class="text-danger mt-1"><small>Maximum 10 images allowed</small></p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="videos" class="form-label">Upload videos</label>
+                                <input type="file" multiple accept="video/*" class="form-control" id="videos"
+                                       name="videos[]">
+                                <p class="text-danger mt-1"><small>Maximum 3 videos allowed</small></p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary reviewSubmitBtn">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- Products End -->
 @endsection
@@ -247,11 +369,11 @@
                 dots: false,
             });
 
-            $('.play').on('click', function() {
+            $('.play').on('click', function () {
                 owl.trigger('play.owl.autoplay', [1000]);
             });
 
-            $('.stop').on('click', function() {
+            $('.stop').on('click', function () {
                 owl.trigger('stop.owl.autoplay');
             });
 
@@ -447,7 +569,8 @@
 @section('page-style')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         span.price {
             font-size: 20px;
@@ -689,6 +812,57 @@
             margin-top: 0px;
         }
 
+        .nav-link {
+            color: #E28245 !important;
+        }
+
+        .rating-stars {
+            color: gold;
+            font-size: 1.5rem;
+        }
+
+        .rating-number {
+            font-size: 2rem;
+            font-weight: 500;
+            color: #E28245;
+        }
+
+        .review-summary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .divider {
+            height: 2rem;
+            width: 1px;
+            background-color: #ccc;
+        }
+
+        .review-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .review-btn {
+            background-color: #E28245 !important;
+            color: #fff !important;
+            border: none !important;
+            padding: 0.5rem 1.5rem !important;
+        }
+
+        .reviewSubmitBtn{
+            background-color: #E28245 !important;
+            color: #fff !important;
+            border: none !important;
+        }
+
+        .reviewSubmitBtn:hover{
+            background-color: #db783b !important;
+        }
+
         @media only screen and (max-width: 480px) {
             .product-wrapper {
                 margin-top: -40px;
@@ -790,5 +964,6 @@
                 right: 8px;
             }
         }
+
     </style>
 @endsection

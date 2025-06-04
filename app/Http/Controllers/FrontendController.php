@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enum\ProductLabelEnum;
+use App\Http\Requests\Frontend\ReviewRequest;
 use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Slider;
@@ -123,9 +124,9 @@ class FrontendController extends Controller
         });
 
         return view('frontend.products.index', [
-            'active'     => 'products',
+            'active' => 'products',
             'attributes' => $groupedAttributes,
-            'products'   => $products,
+            'products' => $products,
             'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->get(),
         ]);
     }
@@ -155,13 +156,58 @@ class FrontendController extends Controller
                 ];
             })->values();
 
+        $reviews = $product->reviews()->where('is_approved', 1)->latest()->paginate(10);
+        $avgRating = $product->reviews()->where('is_approved', 1)->avg('rating');
+        $totalRating = $product->reviews()->where('is_approved', 1)->count();
+
         $data = [
             'active' => 'products',
             'product' => $product,
             'attributes' => $attributes,
-            'relatedProducts' => $relatedProducts
+            'relatedProducts' => $relatedProducts,
+            'reviews' => $reviews,
+            'avgRating' => $avgRating,
+            'totalRating' => $totalRating
         ];
         return view('frontend.products.details', $data);
+    }
+
+    public function storeProductReview(ReviewRequest $request)
+    {
+        $product = Product::find($request->product_id);
+
+        $review = $product->reviews()->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+            'headline' => $request->headline
+        ]);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $fileInfo = uploadImage($image, 'products/reviews/images');
+                $review->images()->create([
+                    'name' => $fileInfo['name'],
+                    'path' => $fileInfo['path'],
+                ]);
+            }
+        }
+
+        if ($request->hasFile('videos')) {
+            foreach ($request->file('videos') as $video) {
+                $fileInfo = uploadVideo($video, 'products/reviews/videos');
+                $review->videos()->create([
+                    'title' => $fileInfo['name'],
+                    'url' => $fileInfo['path'],
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Review submitted successfully!',
+        ]);
     }
 
     function aboutUs()

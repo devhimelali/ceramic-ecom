@@ -90,4 +90,9 @@ class Product extends Model
             ->withPivot('attribute_id', 'attribute_value_id')
             ->withTimestamps();
     }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
 }
