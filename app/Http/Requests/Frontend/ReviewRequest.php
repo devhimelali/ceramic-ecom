@@ -31,7 +31,7 @@ class ReviewRequest extends FormRequest
             'images' => ['nullable', 'array', 'max:10'],
             'images.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp'],
             'videos' => ['nullable', 'array', 'max:3'],
-            'videos.*' => ['file', 'mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime']
+            'videos.*' => ['nullable', 'file', 'mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime']
         ];
     }
 }

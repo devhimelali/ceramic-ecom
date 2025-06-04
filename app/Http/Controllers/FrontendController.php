@@ -167,7 +167,8 @@ class FrontendController extends Controller
             'relatedProducts' => $relatedProducts,
             'reviews' => $reviews,
             'avgRating' => $avgRating,
-            'totalRating' => $totalRating
+            'totalRating' => $totalRating,
+            'product_id' => $product->id
         ];
         return view('frontend.products.details', $data);
     }

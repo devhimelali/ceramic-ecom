@@ -1,6 +1,6 @@
 <footer class="main-footer">
     <div class="main-footer__bg"
-        style="background-image: url({{ asset('frontend') }}/assets/images/shapes/footer-bg-1-1.png);">
+         style="background-image: url({{ asset('frontend') }}/assets/images/shapes/footer-bg-1-1.png);">
     </div>
     <!-- /.main-footer__bg -->
     <div class="main-footer__top">
@@ -13,7 +13,7 @@
                                 $app_logo = $settings->where('key', 'dark_logo')->first();
                             @endphp
                             <img src="{{ $app_logo ? asset('assets/images/settings/' . $app_logo->value) : '#' }}"
-                                width="123" alt="Logo">
+                                 width="123" alt="Logo">
                         </a>
                         <p class="footer-widget__about-text">
                             {{ $settings->where('key', 'about_description')->first()->value ?? 'N/A' }}</p>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="col-xl-2 col-lg-3 col-md-3 col-sm-6 wow fadeInUp" data-wow-duration="1500ms"
-                    data-wow-delay="200ms">
+                     data-wow-delay="200ms">
                     <div class="footer-widget footer-widget--links footer-widget--links-one">
                         <div class="footer-widget__top">
                             <div class="footer-widget__title-box"></div>
@@ -53,10 +53,10 @@
                                     {{ $location }}</a>
                             </li>
                             <li><span class="icon-paper-plane"></span> <a
-                                    href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
+                                        href="mailto:{{ $settings->where('key', 'contact_email')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_email')->first()->value ?? 'N/A' }}</a>
                             </li>
                             <li><span class="icon-phone-call"></span> <a
-                                    href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
+                                        href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                             </li>
                         </ul>
                     </div>
@@ -71,22 +71,22 @@
                     <div class="col-md-5 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="000ms">
                         <div class="main-footer__social floens-social">
                             <a target="_blank"
-                                href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
+                               href="{{ $settings->where('key', 'facebook_link')->first()->value ?? '#' }}">
                                 <i class="icon-facebook" aria-hidden="true"></i>
                                 <span class="sr-only">Facebook</span>
                             </a>
                             <a target="_blank"
-                                href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
+                               href="{{ $settings->where('key', 'threads_link')->first()->value ?? '#' }}">
                                 <i class="text-white fa-brands fa-threads"></i>
                                 <span class="sr-only">Threads</span>
                             </a>
                             <a target="_blank"
-                                href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
+                               href="{{ $settings->where('key', 'instagram_link')->first()->value ?? '#' }}">
                                 <i class="icon-instagram" aria-hidden="true"></i>
                                 <span class="sr-only">Instagram</span>
                             </a>
                             <a target="_blank"
-                                href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
+                               href="{{ $settings->where('key', 'tiktok_link')->first()->value ?? '#' }}">
                                 <i class="text-white fa-brands fa-tiktok"></i>
                                 <span class="sr-only">Tiktok</span>
                             </a>
@@ -96,9 +96,10 @@
                         <div class="main-footer__bottom__copyright">
                             <p class="main-footer__copyright">
                                 &copy; <a href="https://4khoop.com.au/" target="_blank"
-                                    class="main-footer__copyright__link text-white">Design and
+                                          class="main-footer__copyright__link text-white">Design and
                                     developed by 4k Hoop pty Ltd <img style="height: 90px; width: 90px;"
-                                        src="{{ asset('assets/design-by/4k-logo.png') }}" alt=""></a>
+                                                                      src="{{ asset('assets/design-by/4k-logo.png') }}"
+                                                                      alt=""></a>
                             </p>
                         </div>
                     </div>
@@ -128,7 +129,7 @@
                 <span class="offcanvas__total-price">$0.00</span>
             </div>
             <a href="javascript:void(0);" class="floens-btn cart-page__checkout-btn checkoutBtn"
-                data-bs-dismiss="offcanvas" aria-label="Close">Proceed to Enquiry
+               data-bs-dismiss="offcanvas" aria-label="Close">Proceed to Enquiry
                 <i class="icon-right-arrow"></i></a>
         </div>
     </div>
@@ -236,36 +237,36 @@
 
 <!-- Default Modals -->
 <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-    style="display: none;">
+     style="display: none;">
     <div class="modal-dialog">
         <div class="p-4 modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalLabel">Product Enquiry</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="enquireFormResponse"></div>
         </div>
     </div>
 </div>
 <div id="addToCartModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-    style="display: none;">
+     style="display: none;">
     <div class="modal-dialog">
         <div class="p-4 modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalLabel">Add To Cart</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="addToCartResponse"></div>
         </div>
     </div>
 </div>
 <div id="checkoutModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-    style="display: none;">
+     style="display: none;">
     <div class="modal-dialog">
         <div class="p-4 modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="checkoutModalLabel">Products Enquiry Form</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" method="post" id="checkoutForm">
                 @csrf
@@ -297,11 +298,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="p-3 mb-3 rounded floens-btn product__item__link bg-danger"
-                        data-bs-dismiss="modal"><span>Close</span>
+                            data-bs-dismiss="modal"><span>Close</span>
                     </button>
 
                     <button type="submit"
-                        class="p-3 mb-3 rounded floens-btn product__item__link checkoutSubmitBtn"><span>Submit</span>
+                            class="p-3 mb-3 rounded floens-btn product__item__link checkoutSubmitBtn">
+                        <span>Submit</span>
                     </button>
                 </div>
             </form>
@@ -309,12 +311,57 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
-        $('.checkoutBtn').click(function() {
+    function handleAjaxErrors(xhr, status, error) {
+        switch (xhr.status) {
+            case 400:
+                notify('error', 'The request could not be processed due to invalid input. Please review your data and try again.');
+                break;
+            case 401:
+                notify('error', 'Your session has expired or you are not logged in. Please log in to continue.');
+                break;
+            case 403:
+                notify('error', 'You do not have permission to perform this action. Please contact your administrator if you believe this is an error.');
+                break;
+            case 404:
+                notify('error',);
+                message = 'The requested resource could not be found. It may have been moved or deleted.';
+                break;
+            case 422:
+                let errors = xhr.responseJSON.errors;
+                $.each(errors, function (key, value) {
+                    notify('error', value);
+                    let input = $('[name="' + key + '"]');
+                    input.addClass('is-invalid');
+                    if (input.closest('.auth-pass-inputgroup').length) {
+                        input.closest('.auth-pass-inputgroup').find('.invalid-feedback').text(value);
+                    } else {
+                        input.next('.invalid-feedback').text(value);
+                    }
+                });
+                break;
+            case 429:
+                notify('error', 'Too many requests. Please try again later.');
+                break;
+            case 500:
+                notify('error', 'An unexpected server error occurred. Please try again later or contact support if the issue persists.');
+                break;
+            case 0:
+                notify('error', 'Network connection lost or server is unreachable. Please check your internet connection and try again.');
+                break;
+            default:
+                notify('error', 'An unknown error occurred. Please try again or contact support.');
+                break;
+        }
+    }
+
+    $(document).ready(function () {
+
+
+        $('.checkoutBtn').click(function () {
             $('#checkoutModal').modal('show');
         });
 
-        $('#checkoutForm').submit(function(e) {
+        $('#checkoutForm').submit(function (e) {
             e.preventDefault();
 
             var formData = new FormData($('#checkoutForm')[0]); // ✅ Use FormData
@@ -331,12 +378,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     $('.checkoutSubmitBtn').prop('disabled', true).html(
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
                     );
                 },
-                success: function(response) {
+                success: function (response) {
                     $('.checkoutSubmitBtn').prop('disabled', false).html('Submit');
                     if (response.status == 'success') {
                         notify('success', response.message);
@@ -345,7 +392,7 @@
                         location.reload();
                     }
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     $('.checkoutSubmitBtn').prop('disabled', false).html('Submit');
                     notify('error', 'Something went wrong. Please try again.');
                 }

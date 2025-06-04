@@ -292,58 +292,72 @@
 
         <div id="writeReviewModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
              style="display: none;">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="p-4 modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="myModalLabel">Share your thoughts</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="" method="post">
+                    <form action="{{route('store.product.review')}}" method="post" id="writeReviewForm" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="product_id" id="product_id" value="{{$product_id}}">
                         <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="rating" class="form-label">Rate your experience <span
-                                            class="text-danger">*</span></label>
-                            </div>
-                            <div class="mb-3">
-                                <label for="comment" class="form-label">Write a review <span
-                                            class="text-danger">*</span></label>
-                                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="headline" class="form-label">Add a headline <span
-                                            class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="headline" name="headline"
-                                       placeholder="Summarize your experience">
-                            </div>
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Your Name <span
-                                            class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                       placeholder="Enter your name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Your email address <span
-                                            class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                       placeholder="Enter your email address">
-                            </div>
-                            <div class="mb-3">
-                                <label for="images" class="form-label">Upload images</label>
-                                <input type="file" multiple accept="image/*" class="form-control" id="images"
-                                       name="images[]">
-                                <p class="text-danger mt-1"><small>Maximum 10 images allowed</small></p>
-                            </div>
-                            <div class="mb-3">
-                                <label for="videos" class="form-label">Upload videos</label>
-                                <input type="file" multiple accept="video/*" class="form-control" id="videos"
-                                       name="videos[]">
-                                <p class="text-danger mt-1"><small>Maximum 3 videos allowed</small></p>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="rating" class="form-label">Rate your experience <span
+                                                class="text-danger">*</span></label>
+                                    <div id="star-rating" class="star-rating">
+                                        <span data-value="1">&#9733;</span>
+                                        <span data-value="2">&#9733;</span>
+                                        <span data-value="3">&#9733;</span>
+                                        <span data-value="4">&#9733;</span>
+                                        <span data-value="5">&#9733;</span>
+                                        <span id="rating-label" class="ms-2"></span>
+                                        <input type="hidden" id="rating" name="rating" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="headline" class="form-label">Add a headline <span
+                                                class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="headline" name="headline"
+                                           placeholder="Summarize your experience">
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="comment" class="form-label">Write a review <span
+                                                class="text-danger">*</span></label>
+                                    <textarea class="form-control" id="comment" name="comment" rows="4"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Your Name <span
+                                                class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                           placeholder="Enter your name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Your email address <span
+                                                class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                           placeholder="Enter your email address">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="images" class="form-label">Upload images</label>
+                                    <input type="file" multiple accept="image/*" class="form-control" id="images"
+                                           name="images[]">
+                                    <p class="text-danger mt-1"><small>Maximum 10 images allowed</small></p>
+                                    <div id="imagePreviewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="videos" class="form-label">Upload videos</label>
+                                    <input type="file" multiple accept="video/*" class="form-control" id="videos"
+                                           name="videos[]">
+                                    <p class="text-danger mt-1"><small>Maximum 3 videos allowed</small></p>
+                                    <div id="videoPreviewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary reviewSubmitBtn">Submit</button>
+                            <button type="submit" class="btn btn-primary reviewSubmitBtn" id="writeReviewSubmitBtn">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -355,6 +369,147 @@
 @section('page-script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script>
+        const stars = document.querySelectorAll("#star-rating span[data-value]");
+        const ratingInput = document.getElementById("rating");
+        const ratingLabel = document.getElementById("rating-label");
+
+        const labels = ["Poor", "Fair", "Average", "Good", "Excellent"];
+
+        stars.forEach((star, index) => {
+            star.addEventListener("click", () => {
+                const value = parseInt(star.getAttribute("data-value"));
+                ratingInput.value = value;
+
+                stars.forEach((s, i) => {
+                    if (i < value) {
+                        s.classList.add("filled");
+                    } else {
+                        s.classList.remove("filled");
+                    }
+                });
+
+                ratingLabel.textContent = labels[value - 1];
+            });
+        });
+        document.getElementById('images').addEventListener('change', function (e) {
+            const container = document.getElementById('imagePreviewContainer');
+            container.innerHTML = '';
+
+            Array.from(e.target.files).forEach((file, index) => {
+                if (!file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('position-relative');
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('rounded', 'shadow-sm');
+                    img.style.maxWidth = '80px';
+                    img.style.maxHeight = '80px';
+
+                    const btn = document.createElement('button');
+                    btn.innerHTML = '&times;';
+                    btn.type = 'button';
+                    btn.className = 'btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center position-absolute top-0 end-0';
+                    btn.style.width = '18px';
+                    btn.style.height = '18px';
+                    btn.onclick = () => {
+                        wrapper.remove();
+                        removeFileFromInput('images', index);
+                    };
+
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(btn);
+                    container.appendChild(wrapper);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        document.getElementById('videos').addEventListener('change', function (e) {
+            const container = document.getElementById('videoPreviewContainer');
+            container.innerHTML = '';
+
+            Array.from(e.target.files).forEach((file, index) => {
+                if (!file.type.startsWith('video/')) return;
+
+                const video = document.createElement('video');
+                video.controls = true;
+                video.style.maxWidth = '200px';
+                video.style.maxHeight = '100px';
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    video.src = e.target.result;
+
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('position-relative');
+
+                    const btn = document.createElement('button');
+                    btn.innerHTML = '&times;';
+                    btn.type = 'button';
+                    btn.className = 'btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center position-absolute top-0 end-0';
+                    btn.style.width = '18px';
+                    btn.style.height = '18px';
+                    btn.onclick = () => {
+                        wrapper.remove();
+                        removeFileFromInput('videos', index);
+                    };
+
+                    wrapper.appendChild(video);
+                    wrapper.appendChild(btn);
+                    container.appendChild(wrapper);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Helper to remove file from input
+        function removeFileFromInput(inputId, fileIndex) {
+            const input = document.getElementById(inputId);
+            const dt = new DataTransfer();
+
+            Array.from(input.files).forEach((file, index) => {
+                if (index !== fileIndex) {
+                    dt.items.add(file);
+                }
+            });
+
+            input.files = dt.files;
+        }
+
+        $('#writeReviewForm').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: new FormData(this),
+                contentType: false,
+                processData: false,
+                beforeSend: function () {
+                    $('#writeReviewSubmitBtn').prop('disabled', true);
+                    $('#writeReviewSubmitBtn').html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...'
+                    );
+                },
+                success: function (response) {
+                    if (response.status == 'success') {
+                        notify('success', response.message);
+                        $('#writeReviewForm')[0].reset();
+                    }
+                },
+                error: handleAjaxErrors,
+                complete: function () {
+                    $('#writeReviewSubmitBtn').prop('disabled', false);
+                    $('#writeReviewSubmitBtn').html('Submit');
+                }
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function () {
             var owl = $('.product-carousel');
@@ -853,14 +1008,31 @@
             padding: 0.5rem 1.5rem !important;
         }
 
-        .reviewSubmitBtn{
+        .reviewSubmitBtn {
             background-color: #E28245 !important;
             color: #fff !important;
             border: none !important;
         }
 
-        .reviewSubmitBtn:hover{
+        .reviewSubmitBtn:hover {
             background-color: #db783b !important;
+        }
+
+        .star-rating span {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating span.filled {
+            color: #ffcc00;
+        }
+
+        #rating-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
         }
 
         @media only screen and (max-width: 480px) {

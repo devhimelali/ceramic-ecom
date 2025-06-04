@@ -9,6 +9,7 @@ Route::get('/', [FrontendController::class, 'home'])->name('frontend.home');
 Route::get('/categories', [FrontendController::class, 'allCategories'])->name('frontend.allCategories');
 Route::get('/products', [FrontendController::class, 'productsPage'])->name('frontend.productsPage');
 Route::get('/products/{slug}', [FrontendController::class, 'productDetails'])->name('product.details');
+Route::post('/product-review', [FrontendController::class, 'storeProductReview'])->name('store.product.review');
 Route::get('/contact', [ContactController::class, 'contact'])->name('frontend.contact');
 Route::post('/contact', [ContactController::class, 'store']);
 Route::get('enquire-form/{productId}', [OrderController::class, 'enquireForm'])->name('enquireForm');
