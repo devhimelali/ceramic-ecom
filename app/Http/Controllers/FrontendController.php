@@ -161,6 +161,7 @@ class FrontendController extends Controller
         $reviews = $product->reviews()->where('is_approved', 1)->latest()->paginate(10);
         $avgRating = $product->reviews()->where('is_approved', 1)->avg('rating');
         $totalRating = $product->reviews()->where('is_approved', 1)->count();
+        $isReviewExists = $product->reviews()->where('is_approved', 1)->exists();
 
         $data = [
             'active' => 'products',
@@ -170,7 +171,8 @@ class FrontendController extends Controller
             'reviews' => $reviews,
             'avgRating' => $avgRating,
             'totalRating' => $totalRating,
-            'product_id' => $product->id
+            'product_id' => $product->id,
+            'isReviewExists' => $isReviewExists
         ];
         return view('frontend.products.details', $data);
     }
@@ -194,7 +196,7 @@ class FrontendController extends Controller
                     <div>' . $stars . '</div>
                     <p class="mb-0 fw-bold">' . e($review->headline) . '</p>
                 </div>
-                <p class="mb-0">' . e($review->comment) . '</p>';
+                <p class="mb-0" style="font-size: 12px;">' . e($review->comment) . '</p>';
             })
             ->filterColumn('review_details', function ($query, $keyword) {
                 $query->where(function ($q) use ($keyword) {
@@ -253,7 +255,7 @@ class FrontendController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Review submitted successfully!',
+            'message' => 'Review submitted successfully. Please wait for admin approval.',
         ]);
     }
 

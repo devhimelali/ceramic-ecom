@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Review;
 use Carbon\Carbon;
 use App\Models\Brand;
 use App\Models\Product;
@@ -47,8 +48,6 @@ class DashboardController extends Controller
         }
 
 
-
-
         $data = [
             'active' => 'dashboard',
             'totalProducts' => Product::count(),
@@ -68,7 +67,7 @@ class DashboardController extends Controller
     {
         $filter = $request->query('filter', '1M'); // Default to last 1 month
         $now = Carbon::now();
-    
+
         switch ($filter) {
             case '1M': // Last 1 month
                 $startDate = $now->subMonth();
@@ -81,15 +80,95 @@ class DashboardController extends Controller
                 $startDate = $now->subYear();
                 break;
         }
-    
+
         // Fetch product query data grouped by day
         $chartData = ProductQuery::whereBetween('created_at', [$startDate, Carbon::now()])
             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m-%d") as day, COUNT(*) as total')
             ->groupBy('day')
             ->orderBy('day', 'ASC')
             ->get();
-    
+
         return response()->json($chartData);
     }
-    
+
+    public function reviews(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Review::with('product', 'images')
+                ->latest();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('product', function ($row) {
+                    return $row->product->name ?? 'N/A';
+                })
+                ->addColumn('name', function ($row) {
+                    return $row->name ?? 'N/A';
+                })
+                ->addColumn('rating', function ($row) {
+                    return $row->rating ?? 'N/A';
+                })
+                ->addColumn('comment', function ($row) {
+                    return $row->comment ?? 'N/A';
+                })
+                ->addColumn('images', function ($row) {
+                    $images = $row->images ?? collect();
+                    $imageContainer = '<div class="d-flex align-items-center">';
+
+                    foreach ($images as $img) {
+                        $imageUrl = asset($img->path);
+                        $imageContainer .= '<img class="rounded-circle header-profile-user me-1" src="' . $imageUrl . '" alt="' . e($row->name) . '" width="50" height="50">';
+                    }
+                    $imageContainer .= '</div>';
+                    return $imageContainer;
+                })
+                ->addColumn('actions', function ($row) {
+                    $buttons = '<div class="btn-group">';
+                    if ($row->is_approved !== 1) {
+                        $buttons .= '
+                        <button type="button" class="btn btn-sm btn-secondary approvedBtn" data-id="' . $row->id . '">
+                            <i class="bi bi-check me-1"></i>Approve
+                        </button>';
+                    }
+
+                    if ($row->is_approved === 1) {
+                        $buttons .= '
+            <button type="button" class="btn btn-sm btn-danger delete-item-btn" data-id="' . $row->id . '">
+                <i class="bi bi-trash me-1"></i>Delete
+            </button>';
+                    }
+                    $buttons .= '</div>';
+                    return $buttons;
+                })
+                ->rawColumns(['actions', 'images'])
+                ->make(true);
+        }
+        $data = [
+            'active' => 'reviews',
+        ];
+        return view('admin.review.index', $data);
+    }
+
+    public function approved(Request $request)
+    {
+        $id = $request->id;
+        $review = Review::find($id);
+        $review->is_approved = 1;
+        $review->save();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Review approved successfully.'
+        ]);
+    }
+
+    public function destroy(Request $request)
+    {
+        $id = $request->id;
+        $review = Review::find($id);
+        $review->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Review deleted successfully.'
+        ]);
+    }
+
 }

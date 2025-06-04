@@ -194,18 +194,22 @@
 
 
                                 </div>
-                                <div class="table-responsive">
-                                    <table id="reviews-table" class="table align-middle w-100">
-                                        <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Review</th>
-                                            <th>Images</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
+                                @if($isReviewExists)
+                                    <div class="table-responsive">
+                                        <table id="reviews-table" class="table align-middle w-100">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Review</th>
+                                                <th>Images</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                @else
+                                    <p class="text-center mt-2">No reviews yet.</p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -389,7 +393,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.min.js"></script>
-    <script >
+    <script>
         function initGalleryForRow(galleryId) {
             const $galleryContainer = document.getElementById(galleryId);
             if (!$galleryContainer) return;
@@ -555,6 +559,7 @@
                     if (response.status == 'success') {
                         notify('success', response.message);
                         $('#writeReviewForm')[0].reset();
+                        $('#writeReviewModal').modal('hide');
                     }
                 },
                 error: handleAjaxErrors,
@@ -568,7 +573,6 @@
 
     <script>
         $(document).ready(function () {
-
 
 
             var owl = $('.product-carousel');

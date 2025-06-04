@@ -56,6 +56,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('marketing', [MarketingController::class, 'index'])->name('marketing.index');
     Route::post('send-sms-selected-users', [MarketingController::class, 'sendSMSSelectedUsers'])->name('send.sms.selected.users');
     Route::post('send-sms-all-users', [MarketingController::class, 'sendSMSAllUsers'])->name('send.sms.all.users');
+    Route::get('reviews', [DashboardController::class, 'reviews'])->name('reviews.index');
+    Route::get('reviews/approved/{id}', [DashboardController::class, 'approved'])->name('reviews.approve');
+    Route::delete('reviews/{id}', [DashboardController::class, 'destroy'])->name('reviews.destroy');
 });
 
 
