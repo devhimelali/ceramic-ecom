@@ -191,6 +191,20 @@
                                             Review
                                         </button>
                                     </div>
+
+
+                                </div>
+                                <div class="table-responsive">
+                                    <table id="reviews-table" class="table align-middle w-100">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Review</th>
+                                            <th>Images</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -298,7 +312,8 @@
                         <h5 class="modal-title" id="myModalLabel">Share your thoughts</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{route('store.product.review')}}" method="post" id="writeReviewForm" enctype="multipart/form-data">
+                    <form action="{{route('store.product.review')}}" method="post" id="writeReviewForm"
+                          enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="product_id" id="product_id" value="{{$product_id}}">
                         <div class="modal-body">
@@ -357,7 +372,9 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary reviewSubmitBtn" id="writeReviewSubmitBtn">Submit</button>
+                            <button type="submit" class="btn btn-primary reviewSubmitBtn" id="writeReviewSubmitBtn">
+                                Submit
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -367,8 +384,47 @@
     <!-- Products End -->
 @endsection
 @section('page-script')
+    <script src="{{ asset('assets/cdn/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.min.js"></script>
+    <script >
+        function initGalleryForRow(galleryId) {
+            const $galleryContainer = document.getElementById(galleryId);
+            if (!$galleryContainer) return;
+
+            lightGallery($galleryContainer, {
+                selector: '.lg-thumb',
+                speed: 500,
+                controls: true,
+                download: false,
+                fullscreen: true
+            });
+        }
+
+        window.initGalleries = function () {
+            document.querySelectorAll('.gallery-container').forEach(el => {
+                initGalleryForRow(el.id);
+            });
+        };
+
+        $(document).ready(function () {
+            $('#reviews-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route("reviews.data") }}?product_id={{ $product_id }}',
+                columns: [
+                    {data: 'name', name: 'name'},
+                    {data: 'review_details', name: 'review_details', orderable: false, searchable: true},
+                    {data: 'media', name: 'media', orderable: false, searchable: false}
+                ],
+                drawCallback: function () {
+                    initGalleries();
+                }
+            });
+        });
+    </script>
     <script>
         const stars = document.querySelectorAll("#star-rating span[data-value]");
         const ratingInput = document.getElementById("rating");
@@ -512,6 +568,9 @@
 
     <script>
         $(document).ready(function () {
+
+
+
             var owl = $('.product-carousel');
             owl.owlCarousel({
                 items: 1,
@@ -722,10 +781,13 @@
     </script>
 @endsection
 @section('page-style')
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css">
     <style>
         span.price {
             font-size: 20px;

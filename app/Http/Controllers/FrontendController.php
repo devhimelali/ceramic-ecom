@@ -6,6 +6,7 @@ use App\Enum\ProductLabelEnum;
 use App\Http\Requests\Frontend\ReviewRequest;
 use App\Models\AttributeValue;
 use App\Models\Brand;
+use App\Models\Review;
 use App\Models\Slider;
 use App\Models\Product;
 use App\Models\Setting;
@@ -13,6 +14,7 @@ use App\Enum\StatusEnum;
 use App\Models\Category;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class FrontendController extends Controller
 {
@@ -172,6 +174,50 @@ class FrontendController extends Controller
         ];
         return view('frontend.products.details', $data);
     }
+
+    public function getReviewsData(Request $request)
+    {
+        $reviews = Review::with('images')
+            ->where('is_approved', 1)
+            ->where('product_id', $request->product_id)
+            ->latest();
+
+        return DataTables::of($reviews)
+            ->addColumn('review_details', function ($review) {
+                $stars = '';
+                for ($i = 1; $i <= 5; $i++) {
+                    $stars .= '<i class="' . ($i <= $review->rating ? 'fas' : 'far') . ' fa-star text-warning" style="font-size: 12px;"></i>';
+                }
+
+                return '
+                <div class="d-flex align-items-center gap-2">
+                    <div>' . $stars . '</div>
+                    <p class="mb-0 fw-bold">' . e($review->headline) . '</p>
+                </div>
+                <p class="mb-0">' . e($review->comment) . '</p>';
+            })
+            ->filterColumn('review_details', function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('headline', 'like', "%$keyword%")
+                        ->orWhere('comment', 'like', "%$keyword%");
+                });
+            })
+            ->editColumn('media', function ($review) {
+                $galleryId = 'gallery-' . $review->id;
+                $output = '<div id="' . $galleryId . '" class="gallery-container d-flex">';
+                foreach ($review->images as $image) {
+                    $url = asset($image->path);
+                    $output .= '<a href="' . $url . '" class="lg-thumb">';
+                    $output .= '<img src="' . $url . '" class="img-fluid" style="width: 50px; height: 50px; object-fit: cover; margin-right: 5px;">';
+                    $output .= '</a>';
+                }
+                $output .= '</div>';
+                return $output;
+            })
+            ->rawColumns(['review_details', 'media'])
+            ->make(true);
+    }
+
 
     public function storeProductReview(ReviewRequest $request)
     {
