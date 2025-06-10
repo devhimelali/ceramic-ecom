@@ -14,6 +14,7 @@ use App\Enum\StatusEnum;
 use App\Models\Category;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class FrontendController extends Controller
@@ -179,10 +180,22 @@ class FrontendController extends Controller
 
     public function getReviewsData(Request $request)
     {
-        $reviews = Review::with('images')
-            ->where('is_approved', 1)
+        $reviews = Review::with(['images', 'videos']) // Ensure videos are eager loaded
+        ->where('is_approved', 1)
             ->where('product_id', $request->product_id)
             ->latest();
+
+        // Filter by rating if present and valid
+        if ($request->filled('rating') && is_numeric($request->rating)) {
+            $reviews = $reviews->where('rating', (int)$request->rating);
+        }
+
+        // Filter reviews that have media (images or videos)
+        if ($request->has('with_media')) {
+            $reviews = $reviews->where(function ($q) {
+                $q->whereHas('images')->orWhereHas('videos');
+            });
+        }
 
         return DataTables::of($reviews)
             ->addColumn('review_details', function ($review) {
@@ -211,38 +224,49 @@ class FrontendController extends Controller
                 <div class="d-flex align-items-center" style="min-width: 200px;">
                     <img src="' . $avatar . '" alt="' . e($review->name) . '" class="rounded-circle" width="30" height="30">
                     <div>
-                    <span class="ms-2">' . e($review->name) . '</span>
-                    <div class="text-success ms-2" style="font-size: 12px;">Verified Buyer</div>
+                        <span class="ms-2">' . e($review->name) . '</span>
+                        <div class="text-success ms-2" style="font-size: 12px;">Verified Buyer</div>
                     </div>
-                </div>' . '<span class="text-muted" style="font-size: 12px;">' . $date . '</span>';
+                </div>
+                <span class="text-muted" style="font-size: 12px;">' . $date . '</span>';
             })
             ->editColumn('media', function ($review) {
                 $galleryId = 'gallery-' . $review->id;
                 $output = '<div id="' . $galleryId . '" class="gallery-container">';
-                foreach ($review->images as $image) {
+                $images = $review->images->where('image_type', 'review-image');
+                foreach ($images as $image) {
                     $url = asset($image->path);
                     $output .= '<a href="' . $url . '" class="lg-thumb">';
-                    $output .= '<img src="' . $url . '" class="img-fluid" style="">';
+                    $output .= '<img src="' . $url . '" class="img-fluid">';
                     $output .= '</a>';
                 }
                 $output .= '</div>';
                 return $output;
             })
-            ->editColumn('video', function ($review) {
-                $output = '<div id="video-gallery-' . $review->id . '" class="video-gallery-container">';
-                foreach ($review->videos as $video) {
-                    $output .= '<a
-                        data-lg-size="1280-720"
-                        data-video=\'{"source": [{"src":"' . asset($video->url) . '", "type":"video/mp4"}], "tracks": [], "attributes": {"preload": false, "playsinline": true, "controls": true}}\' 
-                        data-poster="' . asset('assets/images/logo.jpg') . '"
-                        data-sub-html="' . e($review->comment) . '">
-                        <video class="lg-thumb" style="width: 100%; height: auto; max-width: 70px; margin-right: 10px;">
-                            <source src="' . asset($video->url) . '" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <i class="bi bi-play"></i>
-                    </a>';
+            ->addColumn('video', function ($review) {
+                $output = '<div id="video-gallery-' . $review->id . '" class="video-gallery-container d-flex gap-2 flex-wrap">';
+                $thumbnails = $review->images->where('image_type', 'video-thumbnail')->values();
+
+                foreach ($review->videos as $key => $video) {
+                    $thumbPath = isset($thumbnails[$key]) ? asset('storage/' . $thumbnails[$key]->path) : null;
+                    $videoPath = asset($video->url); // local mp4 or external video URL
+
+                    $output .= '<a href="' . $videoPath . '" class="glightbox" data-type="video" data-gallery="review-videos-' . $review->id . '" style="position: relative; display: inline-block;">';
+
+                    if ($thumbPath) {
+                        $output .= '<img src="' . $thumbPath . '" style="width: 100px; border-radius: 6px;">';
+                        $output .= '<span class="position-absolute top-50 start-50 translate-middle" style="pointer-events: none;">
+                            <i class="bi bi-play-circle-fill text-white" style="font-size: 2rem;"></i>
+                        </span>';
+                    } else {
+                        $output .= '<div class="bg-dark d-flex align-items-center justify-content-center" style="width: 100px; height: 60px;">
+                            <i class="bi bi-play-circle-fill text-white" style="font-size: 2rem;"></i>
+                        </div>';
+                    }
+
+                    $output .= '</a>';
                 }
+
                 $output .= '</div>';
                 return $output;
             })
@@ -263,7 +287,7 @@ class FrontendController extends Controller
             'headline' => $request->headline
         ]);
 
-        
+
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 if ($image instanceof \Illuminate\Http\UploadedFile && $image->isValid()) {
@@ -271,10 +295,27 @@ class FrontendController extends Controller
                     $review->images()->create([
                         'name' => $fileInfo['name'],
                         'path' => $fileInfo['path'],
+                        'image_type' => 'review-image'
                     ]);
                 } else {
                     // \Log::error('Invalid file detected', ['file' => $image]);
                 }
+            }
+        }
+
+        if ($request->has('video_thumbnails')) {
+            foreach ($request->video_thumbnails as $index => $base64) {
+                $data = explode(',', $base64);
+                $imageData = base64_decode($data[1]);
+                $imageName = 'thumb_' . time() . '_' . $index . '.jpg';
+                Storage::disk('public')->put('video-thumbnails/' . $imageName, $imageData);
+
+                $review->images()->create([
+                    'name' => $imageName,
+                    'path' => 'video-thumbnails/' . $imageName,
+                    'image_type' => 'video-thumbnail'
+                ]);
+
             }
         }
 
@@ -291,7 +332,7 @@ class FrontendController extends Controller
                 }
             }
         }
-        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Review submitted successfully. Please wait for admin approval.',

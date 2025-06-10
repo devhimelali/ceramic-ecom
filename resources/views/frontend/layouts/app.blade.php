@@ -6,10 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title') - {{ $settings->where('key', 'site_name')->first()->value ?? 'Laravel' }}</title>
     <!-- favicons Icons -->
-    {{-- <link rel="apple-touch-icon" sizes="180x180"
-        href="{{ asset('frontend') }}/assets/images/favicons/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32"
-        href="{{ asset('frontend') }}/assets/images/favicons/favicon-32x32.png" /> --}}
     @php
         $site_icon = $settings->where('key', 'site_icon')->first();
     @endphp

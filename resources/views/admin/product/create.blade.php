@@ -271,6 +271,7 @@
                 ['font', ['bold', 'underline', 'clear']],
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video']],
                 ['table', ['table']],
                 ['view', ['fullscreen', 'codeview', 'help']]
             ]
@@ -772,5 +773,6 @@
             color: #555;
             font-weight: 500;
         }
+
     </style>
 @endsection

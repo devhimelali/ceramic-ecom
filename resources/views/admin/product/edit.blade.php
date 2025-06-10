@@ -279,6 +279,7 @@
                 ['font', ['bold', 'underline', 'clear']],
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video']],
                 ['table', ['table']],
                 ['view', ['fullscreen', 'codeview', 'help']]
             ]
@@ -725,6 +726,14 @@
 
         .hidden-input {
             display: none;
+        }
+
+        .note-modal .note-form-label small {
+            display: none !important;
+        }
+
+        .note-modal-footer{
+            margin-bottom: 15px;
         }
     </style>
 @endsection

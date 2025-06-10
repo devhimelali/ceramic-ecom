@@ -62,16 +62,6 @@
 
                 <div class="col-lg-6 col-xl-6 wow fadeInRight" data-wow-delay="300ms">
                     <div class="product-details__content">
-                        <div class="product-details__excerpt">
-                            <h3 class="product-details__excerpt__text1">
-                                {{ $product->name ?? 'No Name' }}
-                            </h3>
-                        </div><!-- /.excerp-text -->
-                        <div class="product-details__excerpt">
-                            <p class="product-details__excerpt__text1">
-                                {!! nl2br($product->short_description) !!}
-                            </p>
-                        </div><!-- /.excerp-text -->
                         <div class="mt-3">
                             @foreach ($attributes as $group)
                                 <div class="mb-3 row" id="variation_{{ Str::slug($group['attribute']) }}">
@@ -117,6 +107,17 @@
                                     <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                             </div>
                         </div>
+                        <div class="product-details__excerpt">
+                            <h3 class="product-details__excerpt__text1">
+                                {{ $product->name ?? 'No Name' }}
+                            </h3>
+                        </div><!-- /.excerp-text -->
+                        <div class="product-details__excerpt">
+                            <p class="product-details__excerpt__text1">
+                                {!! nl2br($product->short_description) !!}
+                            </p>
+                        </div><!-- /.excerp-text -->
+
                     </div>
                 </div>
             </div>
@@ -191,7 +192,27 @@
                                             Review
                                         </button>
                                     </div>
-
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select name="filter_by_rating" id="filter_by_rating" class="form-control">
+                                            <option value="">All Ratings</option>
+                                            <option value="5">★★★★★ (5 Stars)</option>
+                                            <option value="4">★★★★☆ (4 Stars)</option>
+                                            <option value="3">★★★☆☆ (3 Stars)</option>
+                                            <option value="2">★★☆☆☆ (2 Stars)</option>
+                                            <option value="1">★☆☆☆☆ (1 Star)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex align-items-center">
+                                            <label for="has_media" class="form-label d-block mb-0">With Media</label>
+                                            <div class="form-check form-switch form-check-danger ms-2 pb-0">
+                                                <input class="form-check-input" type="checkbox" id="has_media" name="has_media">
+                                                <label class="form-check-label" for="has_media" id="media_label">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                                 @if($isReviewExists)
@@ -199,10 +220,10 @@
                                         <table id="reviews-table" class="table align-middle w-100">
                                             <thead>
                                             <tr>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
+                                                <th style="width: 20% !important; max-width: 20% !important"></th>
+                                                <th style="width: 20% !important; max-width: 20% !important"></th>
+                                                <th style="width: 30% !important; max-width: 30% !important"></th>
+                                                <th style="width: 30% !important; max-width: 30% !important"></th>
                                             </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -395,6 +416,22 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/video/lg-video.min.js"></script>
+    <script src="https://unpkg.com/mediabox/dist/mediabox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script>
+        // For initial load
+        document.addEventListener("DOMContentLoaded", function () {
+            GLightbox({ selector: '.glightbox' });
+        });
+
+        // For DataTables redraws
+        $('#reviews-table').on('draw.dt', function () {
+            GLightbox({ selector: '.glightbox' });
+        });
+
+
+    </script>
+
     <script>
         function initGalleryForRow(galleryId) {
             const $galleryContainer = document.getElementById(galleryId);
@@ -432,12 +469,24 @@
 
 
         $(document).ready(function () {
-            $('#reviews-table').DataTable({
+            var reviewsTable = $('#reviews-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route("reviews.data") }}?product_id={{ $product_id }}',
+                ajax: {
+                    url: '{{ route("reviews.data") }}?product_id={{ $product_id }}',
+                    dataSrc: function (json) {
+                        return json.data || []; // Always return array
+                    },
+                    error: function (xhr, error, thrown) {
+                        console.error('DataTables error:', error);
+                    }
+                },
+                language: {
+                    emptyTable: "No reviews found for this product.",
+                    processing: "Loading...",
+                },
                 columns: [
-                    {data: 'name', name: 'name',sortable: false, orderable: false, searchable: true},
+                    {data: 'name', name: 'name', orderable: false, searchable: true},
                     {data: 'review_details', name: 'review_details', orderable: false, searchable: true},
                     {data: 'media', name: 'media', orderable: false, searchable: false},
                     {data: 'video', name: 'video', orderable: false, searchable: false},
@@ -446,7 +495,37 @@
                     initGalleries();
                 }
             });
+
+
+            let productId = '{{ $product_id }}'; // reuse this in filterReviews()
+
+            function filterReviews() {
+                let rating = $('#filter_by_rating').val();
+                let with_media = $('#has_media').is(':checked') ? 1 : ''; // send 1 or empty
+
+                let url = '{{ route("reviews.data") }}'
+                    + '?product_id=' + productId
+                    + '&rating=' + rating
+                    + '&with_media=' + with_media;
+
+                reviewsTable.ajax.url(url).load();
+            }
+
+
+            $('#filter_by_rating').on('change', function () {
+                filterReviews();
+            });
+
+            $('#has_media').on('change', function () {
+                filterReviews();
+            });
         });
+        document.getElementById('has_media').addEventListener('change', function () {
+            document.getElementById('media_label').textContent = this.checked ? 'Yes' : 'No';
+        });
+
+
+
     </script>
     <script>
         const stars = document.querySelectorAll("#star-rating span[data-value]");
@@ -512,6 +591,9 @@
             const container = document.getElementById('videoPreviewContainer');
             container.innerHTML = '';
 
+            // Remove existing thumbnail inputs
+            document.querySelectorAll('input[name="video_thumbnails[]"]').forEach(input => input.remove());
+
             Array.from(e.target.files).forEach((file, index) => {
                 if (!file.type.startsWith('video/')) return;
 
@@ -519,10 +601,35 @@
                 video.controls = true;
                 video.style.maxWidth = '200px';
                 video.style.maxHeight = '100px';
+                video.muted = true;
+                video.playsInline = true;
 
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     video.src = e.target.result;
+
+                    video.onloadeddata = function () {
+                        video.currentTime = Math.min(1, video.duration / 2);
+                    };
+
+                    video.onseeked = function () {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        const thumbnailDataUrl = canvas.toDataURL('image/jpeg');
+
+                        // Create hidden input to store thumbnail
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'video_thumbnails[]';
+                        input.value = thumbnailDataUrl;
+
+                        document.getElementById('writeReviewForm').appendChild(input);
+                    };
 
                     const wrapper = document.createElement('div');
                     wrapper.classList.add('position-relative');
@@ -536,6 +643,10 @@
                     btn.onclick = () => {
                         wrapper.remove();
                         removeFileFromInput('videos', index);
+
+                        // Remove the corresponding thumbnail input
+                        const thumbs = document.querySelectorAll('input[name="video_thumbnails[]"]');
+                        if (thumbs[index]) thumbs[index].remove();
                     };
 
                     wrapper.appendChild(video);
@@ -802,6 +913,44 @@
                 });
             });
         });
+
+        $('body').append(`
+        <div class="lightbox">
+          <a href="#lightbox" class="lightbox-close lightbox-toggle">X</a>
+          <div class="lightbox-container">
+            <div class="row">
+              <div class="col-sm-12 lightbox-column">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        `);
+
+        $('.lightbox-toggle').on('click', (event) => {
+            event.preventDefault();
+            $('.lightbox').fadeToggle('fast');
+
+            let context = $(event.currentTarget).attr('data-lightbox-type');
+            let content = $(event.currentTarget).attr('data-lightbox-content');
+            console.log(event);
+            if (context == 'video') {
+                $('.lightbox-column').append(`
+        <div class="lightbox-video">
+        <iframe src="${content}" frameborder="0" allowfullscreen> </iframe>
+        </div>
+    `);
+            } else if (context == 'image') {
+                $('.lightbox-column').append(`
+        <img src="${content}" class="img-" frameborder="0" allowfullscreen>
+    `);
+            }
+        });
+
+        $('.lightbox-close').on('click', (event) => {
+            event.preventDefault();
+            $('.lightbox-column > *').remove();
+        });
     </script>
 @endsection
 @section('page-style')
@@ -812,6 +961,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css">
+{{--    <link rel="stylesheet" href="{{asset('assets/libs/mediabox/mediabox.css')}}">--}}
+    <link rel="stylesheet" href="https://unpkg.com/mediabox/dist/mediabox.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
     <style>
         table#reviews-table {
             width: 100% !important;
@@ -821,9 +973,11 @@
         table#reviews-table thead, table#reviews-table thead tr, table#reviews-table tbody {
             display: block;
         }
-        table.dataTable>thead .sorting_asc, table.dataTable>thead .sorting_desc{
+
+        table.dataTable > thead .sorting_asc, table.dataTable > thead .sorting_desc {
             display: none !important;
         }
+
         span.price {
             font-size: 20px;
             font-weight: 700;
@@ -1233,40 +1387,101 @@
                 right: 8px;
             }
         }
-  .gallery-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */
-    gap: 10px; /* space between items */
-    max-width: 400px; /* optional: constrain width */
-  }
 
-  .gallery-container a img {
-    width: 100%;
-    height: 50px;
-    object-fit: cover;
-    display: block;
-  }
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns */
+            gap: 10px; /* space between items */
+            max-width: 400px; /* optional: constrain width */
+        }
 
-  .gallery-container a {
-    display: block;
-  }
-  .video-gallery-container a {
-    position: relative;
-    display: inline-block;
-}
+        .gallery-container a img {
+            width: 100%;
+            height: 50px;
+            object-fit: cover;
+            display: block;
+        }
 
-.video-gallery-container i {
-    position: absolute;
-    font-size: 12px;
-    color: white;
-    z-index: 99;
-    border: 2px solid red;
-    left: calc(50% - 15px);
-    top: calc(50% - 16px);
-    width: 25px;
-    text-align: center;
-    border-radius: 10px;
-}
+        .gallery-container a {
+            display: block;
+        }
+
+        .video-gallery-container a {
+            position: relative;
+            display: inline-block;
+        }
+
+        /*.video-gallery-container i {*/
+        /*    position: absolute;*/
+        /*    font-size: 12px;*/
+        /*    color: white;*/
+        /*    z-index: 99;*/
+        /*    border: 2px solid red;*/
+        /*    left: calc(50% - 15px);*/
+        /*    top: calc(50% - 16px);*/
+        /*    width: 25px;*/
+        /*    text-align: center;*/
+        /*    border-radius: 10px;*/
+        /*}*/
+
+        /* LIGHTBOX STYLE */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox .lightbox-video {
+            width: 100%;
+            padding-bottom: 56%;
+        }
+
+        .lightbox iframe {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .lightbox img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .lightbox .lightbox-close {
+            position: absolute;
+            display: block;
+            top: 10px;
+            right: 10px;
+            color: #ffffff;
+            font-size: 26px;
+            height: 50px;
+            width: 50px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            line-height: 50px;
+            text-align: center;
+        }
+
+        .lightbox .lightbox-close:hover {
+            text-decoration: none;
+        }
+
+        .lightbox .lightbox-container {
+            max-width: 1024px;
+            margin: 100px auto 25px;
+        }
+
+        #reviews-table_length{
+            display: none;
+        }
 
     </style>
 @endsection

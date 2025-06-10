@@ -1,4 +1,4 @@
-[<div class="topbar-one">
+<div class="topbar-one">
     <div class="container-fluid">
         <div class="topbar-one__inner">
             <ul class="list-unstyled topbar-one__info">
@@ -65,30 +65,6 @@
                         <li>
                             <a href="{{ route('frontend.home') }}">Home</a>
                         </li>
-                        {{-- <li class="dropdown">
-                            <a href="#">Categories</a>
-                            <ul>
-                                @foreach (category_show()->where('parent_id', null) as $category)
-                                    <li>
-                                        <a
-                                            href="{{ route('frontend.productsPage', ['category' => $category->slug]) }}">{{ $category->name }}</a>
-                                        @if ($category->children->count() > 0)
-                                            <ul>
-                                                @foreach ($category->children as $childCategory)
-                                                    <li><a
-                                                            href="{{ route('frontend.productsPage', ['category' => $childCategory->slug]) }}">{{ $childCategory->name }}</a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-
-                                    </li>
-                                @endforeach
-                                <li class="{{ $active == 'allCategories' ? 'current' : '' }}"><a
-                                        href="{{ route('frontend.allCategories') }}">View all</a></li>
-
-                            </ul>
-                        </li> --}}
                         @foreach (category_show()->where('parent_id', null)->take(5) as $category)
                             <li class="dropdown">
                                 <a href="#">
