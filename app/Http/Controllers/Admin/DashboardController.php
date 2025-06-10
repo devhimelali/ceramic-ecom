@@ -94,21 +94,51 @@ class DashboardController extends Controller
     public function reviews(Request $request)
     {
         if ($request->ajax()) {
-            $data = Review::with('product', 'images')
+            $data = Review::select('reviews.*', 'products.name as product_name')
+                ->leftJoin('products', 'reviews.product_id', '=', 'products.id')
+                ->with('images')
                 ->latest();
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->filter(function ($query) use ($request) {
+                    if ($request->has('search') && $request->search['value']) {
+                        $keyword = strtolower($request->search['value']);
+                        $query->where(function ($q) use ($keyword) {
+                            $q->whereRaw('LOWER(reviews.name) like ?', ["%{$keyword}%"])
+                            ->orWhereRaw('LOWER(reviews.comment) like ?', ["%{$keyword}%"])
+                            ->orWhereRaw('LOWER(products.name) LIKE ?', ["%{$keyword}%"]);
+                        });
+                    }
+                })
                 ->addColumn('product', function ($row) {
-                    return $row->product->name ?? 'N/A';
+                    return $row->product_name ?? 'N/A';
                 })
                 ->addColumn('name', function ($row) {
-                    return $row->name ?? 'N/A';
-                })
-                ->addColumn('rating', function ($row) {
-                    return $row->rating ?? 'N/A';
+                    $name = $row->name ?? 'N/A';
+                    if (isset($row->rating)) {
+                        $stars = '';
+                        for ($i = 0; $i < $row->rating; $i++) {
+                            $stars .= '<i class="bi bi-star-fill text-warning"></i>';
+                        }
+                        for ($i = $row->rating; $i < 5; $i++) {
+                            $stars .= '<i class="bi bi-star text-secondary"></i>';
+                        }
+                        $name = '<div class="d-flex align-items-center"><span class="">' . e($name) . '</span></div><div>' . $stars . '</div>';
+                    } else {
+                        $name = '<span class="text-secondary">' . e($name) . '</span>';
+                    }
+                    return $name;
                 })
                 ->addColumn('comment', function ($row) {
-                    return $row->comment ?? 'N/A';
+                    $comment = "";
+                    if (isset($row->comment) && strlen($row->comment) > 100) {
+                        $comment = substr($row->comment, 0, 100) . '...';
+                    }
+                    if (is_null($row->comment)) {
+                        $comment = 'N/A';
+                    }
+                    $comment = $row->comment ?? 'N/A';
+                    return '<div class="text-truncate" style="max-width: 200px;"><small>' . e($comment) . '</small></div>';
                 })
                 ->addColumn('images', function ($row) {
                     $images = $row->images ?? collect();
@@ -123,23 +153,35 @@ class DashboardController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     $buttons = '<div class="btn-group">';
-                    if ($row->is_approved !== 1) {
+                    if ($row->is_approved === 0) {
                         $buttons .= '
-                        <button type="button" class="btn btn-sm btn-secondary approvedBtn" data-id="' . $row->id . '">
-                            <i class="bi bi-check me-1"></i>Approve
+                        <button type="button" class="btn btn-sm btn-primary approvedBtn" data-status="0" data-id="' . $row->id . '">
+                            Approve
                         </button>';
                     }
 
                     if ($row->is_approved === 1) {
                         $buttons .= '
-            <button type="button" class="btn btn-sm btn-danger delete-item-btn" data-id="' . $row->id . '">
-                <i class="bi bi-trash me-1"></i>Delete
-            </button>';
+                            <button type="button" class="btn btn-sm btn-secondary approvedBtn" data-status="1" data-id="' . $row->id . '">
+                                Reject
+                            </button>';
                     }
-                    $buttons .= '</div>';
+                    if ($row->is_approved === 2) {
+                        $buttons .= '
+                            <button type="button" class="btn btn-sm btn-warning approvedBtn" data-status="2" data-id="' . $row->id . '">
+                                Rejected
+                            </button>';
+                    }
+                    $buttons .= '
+                            <button type="button" class="btn btn-sm btn-danger delete-item-btn" data-id="' . $row->id . '">
+                                Delete
+                            </button>
+                            <a href="'.route('reviews.show', $row->id).'" class="btn btn-sm btn-info">
+                                View
+                            </a></div>';
                     return $buttons;
                 })
-                ->rawColumns(['actions', 'images'])
+                ->rawColumns(['actions', 'images', 'comment', 'name', 'product'])
                 ->make(true);
         }
         $data = [
@@ -148,15 +190,26 @@ class DashboardController extends Controller
         return view('admin.review.index', $data);
     }
 
+    public function show($id)
+    {
+        $review = Review::with('images')->findOrFail($id);
+        $active = 'reviews';
+        $data = [
+            'active' => $active,
+            'review' => $review,
+        ];
+        return view('admin.review.details', $data);
+    }
+
     public function approved(Request $request)
     {
         $id = $request->id;
         $review = Review::find($id);
-        $review->is_approved = 1;
+        $review->is_approved = $review->is_approved === 0 ? 1 : 2;
         $review->save();
         return response()->json([
             'status' => 'success',
-            'message' => 'Review approved successfully.'
+            'message' => 'Review ' . ($review->is_approved === 1 ? 'approved' : 'rejected') . ' successfully.'
         ]);
     }
 

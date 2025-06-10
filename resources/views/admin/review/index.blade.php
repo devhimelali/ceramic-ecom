@@ -29,7 +29,6 @@
                             <th>#</th>
                             <th style="width: 200px !important; max-width: 200px !important;">Product</th>
                             <th style="width: 200px !important; max-width: 200px !important;">Customer</th>
-                            <th style="width: 60px !important; max-width: 60px !important;">Rating</th>
                             <th style="width: 200px !important; max-width: 200px !important;">Comment</th>
                             <th>Images</th>
                             <th style="width: 160px !important; max-width: 160px !important;">Action</th>
@@ -39,7 +38,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div> 
         </div>
     </div>
 
@@ -86,19 +85,16 @@
                 columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    orderable: false
+                    orderable: false,
+                    searchable: false
                 },
                     {
                         data: 'product',
-                        name: 'product'
+                        name: 'product_name',
                     },
                     {
                         data: 'name',
                         name: 'name'
-                    },
-                    {
-                        data: 'rating',
-                        name: 'rating'
                     },
                     {
                         data: 'comment',

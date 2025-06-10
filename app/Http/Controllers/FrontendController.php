@@ -188,13 +188,13 @@ class FrontendController extends Controller
             ->addColumn('review_details', function ($review) {
                 $stars = '';
                 for ($i = 1; $i <= 5; $i++) {
-                    $stars .= '<i class="' . ($i <= $review->rating ? 'fas' : 'far') . ' fa-star text-warning" style="font-size: 12px;"></i>';
+                    $stars .= '<i class="' . ($i <= $review->rating ? 'fas' : 'far') . ' fa-star text-warning" style="font-size: 14px;"></i>';
                 }
 
                 return '
                 <div class="d-flex align-items-center gap-2">
-                    <div>' . $stars . '</div>
-                    <p class="mb-0 fw-bold">' . e($review->headline) . '</p>
+                    <div style="min-width: 70px">' . $stars . '</div>
+                    <p class="mb-0">' . e($review->headline) . '</p>
                 </div>
                 <p class="mb-0" style="font-size: 12px;">' . e($review->comment) . '</p>';
             })
@@ -204,19 +204,49 @@ class FrontendController extends Controller
                         ->orWhere('comment', 'like', "%$keyword%");
                 });
             })
+            ->addColumn('name', function ($review) {
+                $avatar = asset('frontend/assets/images/user-avatar-with-check-mark.png');
+                $date = $review->created_at->format('d/m/Y');
+                return '
+                <div class="d-flex align-items-center" style="min-width: 200px;">
+                    <img src="' . $avatar . '" alt="' . e($review->name) . '" class="rounded-circle" width="30" height="30">
+                    <div>
+                    <span class="ms-2">' . e($review->name) . '</span>
+                    <div class="text-success ms-2" style="font-size: 12px;">Verified Buyer</div>
+                    </div>
+                </div>' . '<span class="text-muted" style="font-size: 12px;">' . $date . '</span>';
+            })
             ->editColumn('media', function ($review) {
                 $galleryId = 'gallery-' . $review->id;
-                $output = '<div id="' . $galleryId . '" class="gallery-container d-flex">';
+                $output = '<div id="' . $galleryId . '" class="gallery-container">';
                 foreach ($review->images as $image) {
                     $url = asset($image->path);
                     $output .= '<a href="' . $url . '" class="lg-thumb">';
-                    $output .= '<img src="' . $url . '" class="img-fluid" style="width: 50px; height: 50px; object-fit: cover; margin-right: 5px;">';
+                    $output .= '<img src="' . $url . '" class="img-fluid" style="">';
                     $output .= '</a>';
                 }
                 $output .= '</div>';
                 return $output;
             })
-            ->rawColumns(['review_details', 'media'])
+            ->editColumn('video', function ($review) {
+                $output = '<div id="video-gallery-' . $review->id . '" class="video-gallery-container">';
+                foreach ($review->videos as $video) {
+                    $output .= '<a
+                        data-lg-size="1280-720"
+                        data-video=\'{"source": [{"src":"' . asset($video->url) . '", "type":"video/mp4"}], "tracks": [], "attributes": {"preload": false, "playsinline": true, "controls": true}}\' 
+                        data-poster="' . asset('assets/images/logo.jpg') . '"
+                        data-sub-html="' . e($review->comment) . '">
+                        <video class="lg-thumb" style="width: 100%; height: auto; max-width: 70px; margin-right: 10px;">
+                            <source src="' . asset($video->url) . '" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <i class="bi bi-play"></i>
+                    </a>';
+                }
+                $output .= '</div>';
+                return $output;
+            })
+            ->rawColumns(['review_details', 'media', 'name', 'video'])
             ->make(true);
     }
 
@@ -233,26 +263,35 @@ class FrontendController extends Controller
             'headline' => $request->headline
         ]);
 
+        
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $fileInfo = uploadImage($image, 'products/reviews/images');
-                $review->images()->create([
-                    'name' => $fileInfo['name'],
-                    'path' => $fileInfo['path'],
-                ]);
+                if ($image instanceof \Illuminate\Http\UploadedFile && $image->isValid()) {
+                    $fileInfo = uploadImage($image, 'products/reviews/images');
+                    $review->images()->create([
+                        'name' => $fileInfo['name'],
+                        'path' => $fileInfo['path'],
+                    ]);
+                } else {
+                    // \Log::error('Invalid file detected', ['file' => $image]);
+                }
             }
         }
 
         if ($request->hasFile('videos')) {
             foreach ($request->file('videos') as $video) {
-                $fileInfo = uploadVideo($video, 'products/reviews/videos');
-                $review->videos()->create([
-                    'title' => $fileInfo['name'],
-                    'url' => $fileInfo['path'],
-                ]);
+                if ($video instanceof \Illuminate\Http\UploadedFile && $video->isValid()) {
+                    $fileInfo = uploadVideo($video, 'products/reviews/videos');
+                    $review->videos()->create([
+                        'title' => $fileInfo['name'],
+                        'url' => $fileInfo['path'],
+                    ]);
+                } else {
+                    // \Log::error('Invalid file detected', ['file' => $video]);
+                }
             }
         }
-
+        
         return response()->json([
             'status' => 'success',
             'message' => 'Review submitted successfully. Please wait for admin approval.',

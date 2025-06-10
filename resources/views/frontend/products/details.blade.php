@@ -199,9 +199,10 @@
                                         <table id="reviews-table" class="table align-middle w-100">
                                             <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Review</th>
-                                                <th>Images</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -393,6 +394,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/video/lg-video.min.js"></script>
     <script>
         function initGalleryForRow(galleryId) {
             const $galleryContainer = document.getElementById(galleryId);
@@ -411,7 +413,23 @@
             document.querySelectorAll('.gallery-container').forEach(el => {
                 initGalleryForRow(el.id);
             });
+
+            document.querySelectorAll('.gallery-videos').forEach(el => {
+                lightGallery(el, {
+                    selector: 'a',
+                    videojs: true,
+                    plugins: [lgVideo],
+                    videoMaxWidth: '100%',
+                    videoMaxHeight: '100%',
+                    autoplayFirstVideo: true,
+                    download: false,
+                    zoomFromOrigin: false,
+                    allowMediaOverlap: true,
+                    toggleThumb: true,
+                });
+            });
         };
+
 
         $(document).ready(function () {
             $('#reviews-table').DataTable({
@@ -419,9 +437,10 @@
                 serverSide: true,
                 ajax: '{{ route("reviews.data") }}?product_id={{ $product_id }}',
                 columns: [
-                    {data: 'name', name: 'name'},
+                    {data: 'name', name: 'name',sortable: false, orderable: false, searchable: true},
                     {data: 'review_details', name: 'review_details', orderable: false, searchable: true},
-                    {data: 'media', name: 'media', orderable: false, searchable: false}
+                    {data: 'media', name: 'media', orderable: false, searchable: false},
+                    {data: 'video', name: 'video', orderable: false, searchable: false},
                 ],
                 drawCallback: function () {
                     initGalleries();
@@ -556,6 +575,7 @@
                     );
                 },
                 success: function (response) {
+                    console.log(response);
                     if (response.status == 'success') {
                         notify('success', response.message);
                         $('#writeReviewForm')[0].reset();
@@ -793,6 +813,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css">
     <style>
+        table#reviews-table {
+            width: 100% !important;
+            display: block;
+        }
+
+        table#reviews-table thead, table#reviews-table thead tr, table#reviews-table tbody {
+            display: block;
+        }
+        table.dataTable>thead .sorting_asc, table.dataTable>thead .sorting_desc{
+            display: none !important;
+        }
         span.price {
             font-size: 20px;
             font-weight: 700;
@@ -1202,6 +1233,40 @@
                 right: 8px;
             }
         }
+  .gallery-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 10px; /* space between items */
+    max-width: 400px; /* optional: constrain width */
+  }
+
+  .gallery-container a img {
+    width: 100%;
+    height: 50px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .gallery-container a {
+    display: block;
+  }
+  .video-gallery-container a {
+    position: relative;
+    display: inline-block;
+}
+
+.video-gallery-container i {
+    position: absolute;
+    font-size: 12px;
+    color: white;
+    z-index: 99;
+    border: 2px solid red;
+    left: calc(50% - 15px);
+    top: calc(50% - 16px);
+    width: 25px;
+    text-align: center;
+    border-radius: 10px;
+}
 
     </style>
 @endsection

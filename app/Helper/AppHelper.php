@@ -68,16 +68,53 @@ function sendMarketingMessage($to, $message)
 
 function uploadImage($file, $folder)
 {
-    $image = $file;
-    $imageName = uniqid() . time() . '.' . $image->getClientOriginalExtension();
-    $image->storeAs($folder, $imageName, 'public');
-    return ['name' => $imageName, 'path' => 'storage/' . $folder . '/' . $imageName];
+    if (!$file instanceof \Illuminate\Http\UploadedFile || !$file->isValid()) {
+        throw new \Exception("Invalid image upload");
+    }
+
+    $imageName = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+    $destinationPath = public_path('storage/' . $folder);
+    if (!\File::exists($destinationPath)) {
+        \File::makeDirectory($destinationPath, 0755, true, true);
+    }
+
+    $file->move($destinationPath, $imageName);
+
+    return [
+        'name' => $imageName,
+        'path' => 'storage/' . $folder . '/' . $imageName
+    ];
 }
 
-function uploadVideo($file, $folder)
-{
-    $video = $file;
-    $videoName = uniqid() . time() . '.' . $video->getClientOriginalExtension();
-    $video->storeAs($folder, $videoName, 'public');
-    return ['name' => $videoName, 'path' => 'storage/' . $folder . '/' . $videoName];
+if(!function_exists('uploadVideo')) {
+    function uploadVideo($file, $folder)
+    {
+        if (!$file instanceof \Illuminate\Http\UploadedFile || !$file->isValid()) {
+            throw new \Exception("Invalid video upload");
+        }
+
+        $videoName = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+        $destinationPath = public_path('storage/' . $folder);
+        if (!\File::exists($destinationPath)) {
+            \File::makeDirectory($destinationPath, 0755, true, true);
+        }
+
+        $file->move($destinationPath, $videoName);
+
+        return [
+            'name' => $videoName,
+            'path' => 'storage/' . $folder . '/' . $videoName
+        ];
+    }
 }
+
+
+// function uploadVideo($file, $folder)
+// {
+//     $video = $file;
+//     $videoName = uniqid() . time() . '.' . $video->getClientOriginalExtension();
+//     $video->storeAs($folder, $videoName, 'public');
+//     return ['name' => $videoName, 'path' => 'storage/' . $folder . '/' . $videoName];
+// }

@@ -85,6 +85,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('reviews.index') }}"
+                        class="nav-link menu-link {{ $active == 'reviews' ? 'active' : '' }}" aria-expanded="false">
+                        <i class="ph ph-sparkle"></i>
+                        <span data-key="t-dashboards">Reviews</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('marketing.index') }}"
                         class="nav-link menu-link {{ $active == 'marketing' ? 'active' : '' }}" aria-expanded="false">
                         <i class="ph ph-chat-dots"></i>

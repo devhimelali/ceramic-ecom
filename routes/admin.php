@@ -59,6 +59,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('reviews', [DashboardController::class, 'reviews'])->name('reviews.index');
     Route::get('reviews/approved/{id}', [DashboardController::class, 'approved'])->name('reviews.approve');
     Route::delete('reviews/{id}', [DashboardController::class, 'destroy'])->name('reviews.destroy');
+    Route::get('reviews/{id}', [DashboardController::class, 'show'])->name('reviews.show');
 });
 
 
