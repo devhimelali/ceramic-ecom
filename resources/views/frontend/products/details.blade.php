@@ -62,6 +62,16 @@
 
                 <div class="col-lg-6 col-xl-6 wow fadeInRight" data-wow-delay="300ms">
                     <div class="product-details__content">
+                        <div class="product-details__excerpt d-none d-md-block">
+                            <h3 class="product-details__excerpt__text1">
+                                {{ $product->name ?? 'No Name' }}
+                            </h3>
+                        </div>
+                        <div class="product-details__excerpt d-none d-md-block">
+                            <p class="product-details__excerpt__text1">
+                                {!! nl2br($product->short_description) !!}
+                            </p>
+                        </div>
                         <div class="mt-3">
                             @foreach ($attributes as $group)
                                 <div class="mb-3 row" id="variation_{{ Str::slug($group['attribute']) }}">
@@ -107,16 +117,18 @@
                                     <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                             </div>
                         </div>
-                        <div class="product-details__excerpt">
+                        <!-- Mobile only: keep original position -->
+                        <div class="product-details__excerpt d-block d-md-none">
                             <h3 class="product-details__excerpt__text1">
                                 {{ $product->name ?? 'No Name' }}
                             </h3>
-                        </div><!-- /.excerp-text -->
-                        <div class="product-details__excerpt">
+                        </div>
+                        <div class="product-details__excerpt d-block d-md-none">
                             <p class="product-details__excerpt__text1">
                                 {!! nl2br($product->short_description) !!}
                             </p>
-                        </div><!-- /.excerp-text -->
+                        </div>
+
 
                     </div>
                 </div>
@@ -208,8 +220,10 @@
                                         <div class="d-flex align-items-center">
                                             <label for="has_media" class="form-label d-block mb-0">With Media</label>
                                             <div class="form-check form-switch form-check-danger ms-2 pb-0">
-                                                <input class="form-check-input" type="checkbox" id="has_media" name="has_media">
-                                                <label class="form-check-label" for="has_media" id="media_label">No</label>
+                                                <input class="form-check-input" type="checkbox" id="has_media"
+                                                       name="has_media">
+                                                <label class="form-check-label" for="has_media"
+                                                       id="media_label">No</label>
                                             </div>
                                         </div>
                                     </div>
@@ -421,12 +435,12 @@
     <script>
         // For initial load
         document.addEventListener("DOMContentLoaded", function () {
-            GLightbox({ selector: '.glightbox' });
+            GLightbox({selector: '.glightbox'});
         });
 
         // For DataTables redraws
         $('#reviews-table').on('draw.dt', function () {
-            GLightbox({ selector: '.glightbox' });
+            GLightbox({selector: '.glightbox'});
         });
 
 
@@ -523,7 +537,6 @@
         document.getElementById('has_media').addEventListener('change', function () {
             document.getElementById('media_label').textContent = this.checked ? 'Yes' : 'No';
         });
-
 
 
     </script>
@@ -961,9 +974,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css">
-{{--    <link rel="stylesheet" href="{{asset('assets/libs/mediabox/mediabox.css')}}">--}}
+    {{--    <link rel="stylesheet" href="{{asset('assets/libs/mediabox/mediabox.css')}}">--}}
     <link rel="stylesheet" href="https://unpkg.com/mediabox/dist/mediabox.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
     <style>
         table#reviews-table {
             width: 100% !important;
@@ -1479,7 +1492,7 @@
             margin: 100px auto 25px;
         }
 
-        #reviews-table_length{
+        #reviews-table_length {
             display: none;
         }
 
