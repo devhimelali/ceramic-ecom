@@ -582,13 +582,29 @@
                         if (xhr.status === 422) {
                             let errors = xhr.responseJSON.errors;
                             for (let field in errors) {
-                                let errorMessage =
-                                    `<span class="validation-error" style="color:red; font-size:13px;">${errors[field][0]}</span>`;
-                                $(`[name="${field}"]`).after(errorMessage);
-                                notify('error', errorMessage);
+                                let errorMessages = errors[field].join(', ');
+                                let input = $(`[name="${field}"]`);
+                                if (input.length === 0) {
+                                    input = $(`[name^="${field}"]`);
+                                }
+                                if (input.hasClass('select2-hidden-accessible')) {
+                                    input.next('.select2').after(
+                                        `<div class="validation-error" style="color: red; font-size: 13px;">${errorMessages}</div>`
+                                    );
+                                } else if (input.attr('type') === 'file') {
+                                    input.after(
+                                        `<div class="validation-error" style="color: red; font-size: 13px;">${errorMessages}</div>`
+                                    );
+                                } else {
+                                    input.last().after(
+                                        `<div class="validation-error" style="color: red; font-size: 13px;">${errorMessages}</div>`
+                                    );
+                                }
+                                notify('error', errorMessages);
                             }
+
                         } else {
-                            notify('error', 'Something went wrong. Please check the inputs.');
+                            notify('error', 'Something went wrong. Please try again.');
                         }
                     },
                     complete: function() {
