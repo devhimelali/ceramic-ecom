@@ -206,10 +206,10 @@ class FrontendController extends Controller
 
                 return '
                 <div class="d-flex align-items-center gap-2">
-                    <div style="min-width: 70px">' . $stars . '</div>
-                    <p class="mb-0">' . e($review->headline) . '</p>
+                    <div style="min-width: 100px">' . $stars . '</div>
+                    <p class="mb-0" style="min-width: 250px; line-height: normal;">' . e($review->headline) . '</p>
                 </div>
-                <p class="mb-0" style="font-size: 12px;">' . e($review->comment) . '</p>';
+                <p class="mb-0" style="font-size: 12px; line-height: normal;">' . e($review->comment) . '</p>';
             })
             ->filterColumn('review_details', function ($query, $keyword) {
                 $query->where(function ($q) use ($keyword) {
@@ -226,13 +226,14 @@ class FrontendController extends Controller
                     <div>
                         <span class="ms-2">' . e($review->name) . '</span>
                         <div class="text-success ms-2" style="font-size: 12px;">Verified Buyer</div>
+                        <span class="text-muted ms-2" style="font-size: 12px;">' . $date . '</span>
                     </div>
                 </div>
-                <span class="text-muted" style="font-size: 12px;">' . $date . '</span>';
+                ';
             })
             ->editColumn('media', function ($review) {
                 $galleryId = 'gallery-' . $review->id;
-                $output = '<div id="' . $galleryId . '" class="gallery-container">';
+                $output = '<div id="' . $galleryId . '" class="gallery-container" style="min-width: 300px;">';
                 $images = $review->images->where('image_type', 'review-image');
                 foreach ($images as $image) {
                     $url = asset($image->path);
@@ -244,7 +245,7 @@ class FrontendController extends Controller
                 return $output;
             })
             ->addColumn('video', function ($review) {
-                $output = '<div id="video-gallery-' . $review->id . '" class="video-gallery-container d-flex gap-2 flex-wrap">';
+                $output = '<div id="video-gallery-' . $review->id . '" class="video-gallery-container d-flex gap-2 flex-wrap" style="min-width: 300px;">';
                 $thumbnails = $review->images->where('image_type', 'video-thumbnail')->values();
 
                 foreach ($review->videos as $key => $video) {
@@ -254,7 +255,7 @@ class FrontendController extends Controller
                     $output .= '<a href="' . $videoPath . '" class="glightbox" data-type="video" data-gallery="review-videos-' . $review->id . '" style="position: relative; display: inline-block;">';
 
                     if ($thumbPath) {
-                        $output .= '<img src="' . $thumbPath . '" style="width: 100px; border-radius: 6px;">';
+                        $output .= '<img src="' . $thumbPath . '" style="width: 100px; height: 60px; border-radius: 6px;">';
                         $output .= '<span class="position-absolute top-50 start-50 translate-middle" style="pointer-events: none;">
                             <i class="bi bi-play-circle-fill text-white" style="font-size: 2rem;"></i>
                         </span>';

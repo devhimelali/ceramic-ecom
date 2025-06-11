@@ -141,7 +141,7 @@ class DashboardController extends Controller
                     return '<div class="text-truncate" style="max-width: 200px;"><small>' . e($comment) . '</small></div>';
                 })
                 ->addColumn('images', function ($row) {
-                    $images = $row->images ?? collect();
+                    $images = $row->images->where('image_type', 'review-image') ?? collect();
                     $imageContainer = '<div class="d-flex align-items-center">';
 
                     foreach ($images as $img) {
