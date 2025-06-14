@@ -2,7 +2,173 @@
     use App\Helpers\ImageUploadHelper;
 @endphp
 @extends('frontend.layouts.app')
+@section('title', 'Home Page Settings')
+@section('content')
+    <!-- main slider start -->
+    @include('admin.page-settings.home.partials.slider')
+    <!-- main slider end -->
+
+    <!-- about Start -->
+    @include('admin.page-settings.home.partials.about')
+    <!-- about End -->
+
+    <!-- reliable start -->
+    @include('admin.page-settings.home.partials.reliable')
+    <!-- reliable end -->
+
+    <!-- client carousel start -->
+    <div class="client-carousel @@extraClassName">
+        <div class="container">
+            <div class="client-carousel_one floens-owl_carousel owl-theme owl-carousel"
+                data-owl-options='{
+                    "items": 5,
+                    "margin": 65,
+                    "smartSpeed": 700,
+                    "loop":true,
+                    "autoplay": 6000,
+                    "nav":false,
+                    "dots":false,
+                    "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
+                    "responsive":{
+                        "0":{
+                            "items": 2,
+                            "margin": 30
+                        },
+                        "500":{
+                            "items": 3,
+                            "margin": 40
+                        },
+                        "768":{
+                            "items": 4,
+                            "margin": 50
+                        },
+                        "992":{
+                            "items": 5,
+                            "margin": 70
+                        },
+                        "1200":{
+                            "items": 6,
+                            "margin": 149
+                        }
+                    }
+                    }'>
+                @foreach ($brands as $barand)
+                    <div class="client-carousel_one_item">
+                        <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
+                            alt="brand">
+                    </div><!-- /.owl-slide-item-->
+                @endforeach
+            </div><!-- /.thm-owl__slider -->
+        </div><!-- /.container -->
+    </div><!-- /.client-carousel -->
+    <!-- client carousel end -->
+    <!-- Default Modals -->
+    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="p-4 modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Product Enquiry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <div id="enquireFormResponse"></div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+@endsection
+@section('page-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        function setupImagePreview(inputSelector, previewSelector, minWidth, minHeight) {
+            $(inputSelector).click();
+
+            $(inputSelector).change(function() {
+                if (this.files && this.files[0]) {
+                    var file = this.files[0];
+
+                    validateImageSize(file, minWidth, minHeight, function(isValid, imageUrl) {
+                        if (isValid) {
+                            $(previewSelector).attr("src", imageUrl);
+                        }
+                    });
+                }
+            });
+        }
+
+        function validateImageSize(file, minWidth, minHeight, callback) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var image = new Image();
+                image.src = e.target.result;
+                image.onload = function() {
+                    if (image.width < minWidth || image.height < minHeight) {
+                        alert(`Image is too small!Minimum required size is ${minWidth} × ${minHeight}
+                            px.`, 'error');
+                        callback(false); // Image size is invalid
+                    } else {
+                        callback(true, e.target.result); // Image is valid
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // When content is edited
+            $('[contenteditable="true"]').on('blur', function() {
+                $(this).addClass('edited'); // Mark as edited
+            });
+        });
+
+        function saveChanges(cloneId, appendId, formId, buttonId) {
+            let fullContent = $(cloneId).clone();
+            // console.log(fullContent.html());
+            $(appendId).val(fullContent.html());
+
+            // Prepare the form data and CSRF token
+            let formData = new FormData($(formId)[0]);
+            let actionUrl = $(formId).attr('action');
+            $.ajax({
+                url: actionUrl,
+                method: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                },
+                beforeSend: function() {
+                    $(buttonId).prop('disabled', true);
+                    $(buttonId).html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving.....'
+                    )
+                },
+                success: function(response) {
+                    if (response.status === "success") {
+                        notify(response.status, response.message);
+                    }
+                },
+                error: function(xhr) {
+                    notify('error', 'Failed to save changes.');
+                },
+                complete: function() {
+                    $(buttonId).prop('disabled', false);
+                    $(buttonId).html('Save Changes');
+                }
+            });
+        }
+    </script>
+@endsection
 @section('page-style')
+    <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
+          type="image/webp" fetchpriority="high" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
         /* Style the submit button */
         .custom-button {
@@ -84,6 +250,7 @@
             height: 463px
         }
 
+
         @media screen and (max-width: 480px) {
             .sec_1_prev_3 {
                 height: 324px !important;
@@ -97,265 +264,6 @@
                 height: 190px;
             }
         }
+
     </style>
-@endsection
-@section('content')
-    <!-- main slider start -->
-    @include('admin.page-settings.home.partials.slider')
-    <!-- main slider end -->
-
-    <!-- about Start -->
-    @include('admin.page-settings.home.partials.about')
-    <!-- about End -->
-
-
-
-    <!-- services info start -->
-    <section class="mt-3 services-one__info">
-        <div class="container">
-            <div class="services-one_info_inner">
-                <div class="services-one_info_bg"
-                    style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/services-info-bg-1.png);">
-                </div>
-                <!-- /.services-one_info_bg -->
-                <div class="row gutter-y-40 align-items-center">
-                    <div class="col-lg-6">
-                        <div class="services-one_info_left">
-                            <h3 class="services-one_info_title">Get a Professional Services</h3>
-                            <!-- /.services-one_info_title -->
-                            <p class="services-one_info_text">Laminate flooring is a type of synthetic flooring
-                                that
-                                designed like hardwood, tile, or other natural materials</p>
-                            <!-- /.services-one_info_text -->
-                        </div><!-- /.services-one_info_left -->
-                    </div><!-- /.col-lg-6 -->
-                    <div class="col-lg-6">
-                        <div class="services-one_info_right">
-                            <div class="services-one_inforight_inner">
-                                <div class="services-one_info_icon">
-                                    <span class="icon-telephone"></span>
-                                </div><!-- /.services-one_info_icon -->
-                                <a href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}"
-                                    class="services-one_info_number">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
-                                <!-- /.services-one_info_number -->
-                            </div><!-- /.services-one_inforight_inner -->
-                        </div><!-- /.services-one_info_right -->
-                    </div><!-- /.col-lg-6 -->
-                </div><!-- /.row -->
-                <div class="services-one_infoshape-one"></div><!-- /.services-oneinfo_shape-one -->
-                <div class="services-one_infoshape-two"></div><!-- /.services-oneinfo_shape-two -->
-            </div><!-- /.services-one_info_inner -->
-        </div><!-- /.container -->
-    </section><!-- /.services-one__info -->
-    <!-- services info end -->
-
-    <!-- reliable start -->
-    @include('admin.page-settings.home.partials.reliable')
-    <!-- reliable end -->
-
-    <!-- shop start -->
-    <section class="product-home">
-        <div class="product-home__bg"
-            style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/shop-bg-1.png);">
-        </div>
-        <!-- /.product-home__bg -->
-        <div class="container">
-            <div class="sec-title sec-title--center">
-
-                <h6 class="sec-title_tagline">our shop</h6><!-- /.sec-title_tagline -->
-
-                <h3 class="sec-title__title">Let’s Explore Latest <br> Product in Shop</h3>
-                <!-- /.sec-title__title -->
-            </div><!-- /.sec-title -->
-
-
-            <div class="row gutter-y-30">
-                @foreach ($products as $product)
-                    <div class="col-xl-3 col-lg-4 col-md-6 ">
-                        <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
-                            <div class="product_item_image">
-                                @php
-                                    $images = $product->images->where('type', 'thumbnail')->first();
-                                @endphp
-                                <img src="{{ ImageUploadHelper::getProductImageUrl($images?->image) }}"
-                                    alt="Natural Stone Tiles">
-                            </div><!-- /.product-image -->
-                            <div class="product_item_content">
-                                <h4 class="product_item_title"><a href="#">{{ Str::limit($product->name, 15) }}</a>
-                                </h4><!-- /.product-title -->
-                                <div class="product_item_price">{{ env('CURRENCY_SYMBOL') }}{{ $product->price }}</div>
-
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <a href="javascript:void(0);"
-                                        class="p-3 floens-btn product_item_link me-2 custom-button enquireBtn"
-                                        data-id="{{ $product->id }}"
-                                        data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
-
-                                    <a href="javascript:void(0);"
-                                        class="p-4 floens-btn product_item_link me-2 custom-button addCartItemBtn"
-                                        data-product="{{ $product }}">
-                                        <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
-                                </div>
-
-
-
-                            </div><!-- /.product-content -->
-                        </div><!-- /.product-item -->
-                    </div><!-- /.col-md-6 col-lg-4 -->
-                @endforeach
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </section><!-- /.product-home -->
-    <!-- shop end -->
-
-
-    <!-- client carousel start -->
-    <div class="client-carousel @@extraClassName">
-        <div class="container">
-            <div class="client-carousel_one floens-owl_carousel owl-theme owl-carousel"
-                data-owl-options='{
-                    "items": 5,
-                    "margin": 65,
-                    "smartSpeed": 700,
-                    "loop":true,
-                    "autoplay": 6000,
-                    "nav":false,
-                    "dots":false,
-                    "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
-                    "responsive":{
-                        "0":{
-                            "items": 2,
-                            "margin": 30
-                        },
-                        "500":{
-                            "items": 3,
-                            "margin": 40
-                        },
-                        "768":{
-                            "items": 4,
-                            "margin": 50
-                        },
-                        "992":{
-                            "items": 5,
-                            "margin": 70
-                        },
-                        "1200":{
-                            "items": 6,
-                            "margin": 149
-                        }
-                    }
-                    }'>
-                @foreach ($brands as $barand)
-                    <div class="client-carousel_one_item">
-                        <img src="{{ $barand->image ? asset($barand->image) : asset('assets/placeholder-image-2.png') }}"
-                            alt="brand">
-                    </div><!-- /.owl-slide-item-->
-                @endforeach
-            </div><!-- /.thm-owl__slider -->
-        </div><!-- /.container -->
-    </div><!-- /.client-carousel -->
-    <!-- client carousel end -->
-    <!-- Default Modals -->
-    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog">
-            <div class="p-4 modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Product Enquiry</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
-                </div>
-                <div id="enquireFormResponse"></div>
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-@endsection
-@section('page-script')
-    <script>
-        function setupImagePreview(inputSelector, previewSelector, minWidth, minHeight) {
-            $(inputSelector).click();
-
-            $(inputSelector).change(function() {
-                if (this.files && this.files[0]) {
-                    var file = this.files[0];
-
-                    validateImageSize(file, minWidth, minHeight, function(isValid, imageUrl) {
-                        if (isValid) {
-                            $(previewSelector).attr("src", imageUrl);
-                        }
-                    });
-                }
-            });
-        }
-
-        function validateImageSize(file, minWidth, minHeight, callback) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var image = new Image();
-                image.src = e.target.result;
-                image.onload = function() {
-                    if (image.width < minWidth || image.height < minHeight) {
-                        alert(Image is too small!Minimum required size is $ {
-                                minWidth
-                            }×
-                            $ {
-                                minHeight
-                            }
-                            px.);
-                        callback(false); // Image size is invalid
-                    } else {
-                        callback(true, e.target.result); // Image is valid
-                    }
-                };
-            };
-            reader.readAsDataURL(file);
-        }
-    </script>
-    <script>
-        $(document).ready(function() {
-            // When content is edited
-            $('[contenteditable="true"]').on('blur', function() {
-                $(this).addClass('edited'); // Mark as edited
-            });
-        });
-
-        function saveChanges(cloneId, appendId, formId, buttonId) {
-            alert('Save Changes');
-            let fullContent = $(cloneId).clone();
-            // console.log(fullContent.html());
-            $(appendId).val(fullContent.html());
-
-            // Prepare the form data and CSRF token
-            let formData = new FormData($(formId)[0]);
-            let actionUrl = $(formId).attr('action');
-            $.ajax({
-                url: actionUrl,
-                method: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-                },
-                beforeSend: function() {
-                    $(buttonId).prop('disabled', true);
-                    $(buttonId).html(
-                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving.....'
-                    )
-                },
-                success: function(response) {
-                    if (response.status === "success") {
-                        notify(response.status, response.message);
-                    }
-                },
-                error: function(xhr) {
-                    notify('error', 'Failed to save changes.');
-                },
-                complete: function() {
-                    $(buttonId).prop('disabled', false);
-                    $(buttonId).html('Save Changes');
-                }
-            });
-        }
-    </script>
 @endsection

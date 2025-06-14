@@ -1,7 +1,7 @@
 <section class="reliable-one reliable-one--home section-space-bottom">
     <div class="container">
         <form action="{{ route('settings.homePageChange') }}" id="homeFormReliableSection" method="POST"
-            enctype="multipart/form-data">
+              enctype="multipart/form-data">
             @csrf
             <div class="row gutter-y-60">
                 <div class="col-lg-6">
@@ -64,6 +64,7 @@
                                 <i class="icon-right-arrow"></i>
                             </a><!-- /.floens-btn reliable-one__btn -->
                         @endif
+
                     </div><!-- /.reliable-one__content -->
                     <textarea name="home_reliable_one_content" class="d-none" id="home_reliable_one_content"></textarea>
                 </div><!-- /.col-lg-6 -->
@@ -71,55 +72,52 @@
                     <div class="reliable-one__images">
                         <div class="reliable-one__image">
                             @php
-                                $home_two_imageone = $settings->where('key', 'home_twoimage_one')->first();
+                                $home_two__image__one = $settings->where('key', 'home_two__image__one')->first();
                             @endphp
-                            <img src="{{ $home_two_imageone ? asset($home_twoimage_one->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
-                                alt="reliable" class="reliable-one_image_one sec_2_prev_1">
+                            <img src="{{ $home_two__image__one ? asset($home_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
+                                 alt="reliable" class="reliable-one__image__one sec_2_prev_1" loading="lazy">
 
                             <input type="file" class="image-upload home_sec_2_img_1 d-none"
-                                data-target="about-one_imageone" name="home_twoimage_one">
+                                   data-target="about-one_imageone" name="home_two__image__one">
                             <label class="upload-btn"
-                                onclick="setupImagePreview('.home_sec_2_img_1', '.sec_2_prev_1', '338', '463')">
+                                   onclick="setupImagePreview('.home_sec_2_img_1', '.sec_2_prev_1', '338', '463')">
                                 338 × 463 px <br>
                                 Upload
                             </label>
-                            <div class="reliable-one_image_inner">
+                            <div class="reliable-one__image__inner">
                                 @php
-                                    $images = $settings->where('key', 'home_two_image_two')->first();
+                                    $images = $settings->where('key', 'home_two__image__two')->first();
                                 @endphp
                                 <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/reliable/reliable-1-2.jpg') }}"
-                                    alt="reliable" class="reliable-one_image_two sec_2_prev_2">
+                                     alt="reliable" class="reliable-one__image__two sec_2_prev_2" loading="lazy">
 
                                 <input type="file" class="image-upload home_sec_2_img_2 d-none"
-                                    data-target="about-one_imageone" name="home_twoimage_two">
+                                       data-target="about-one_imageone" name="home_two__image__two">
                                 <label class="upload-btn"
-                                    onclick="setupImagePreview('.home_sec_2_img_2', '.sec_2_prev_2', '276', '463')">
+                                       onclick="setupImagePreview('.home_sec_2_img_2', '.sec_2_prev_2', '276', '463')">
                                     276 × 463 px <br>
                                     Upload
                                 </label>
-
-
-                            </div><!-- /.reliable-one_image_inner -->
+                            </div>
                             <div class="experience reliable-one__experience">
                                 <div class="experience__inner">
                                     <h3 class="experience__year"
                                         style="background-image: url('{{ asset('frontend') }}/assets/images/shapes/reliable-shape-1-1.png');">
                                         25
                                     </h3>
-                                    <!-- /.experience__year -->
                                     <p class="experience__text">years of <br> experience</p>
-                                    <!-- /.experience__text -->
-                                </div><!-- /.experience__inner -->
-                            </div><!-- /.experience -->
-                        </div><!-- /.reliable-one__image -->
-                    </div><!-- /.reliable-one__images -->
-                </div><!-- /.col-lg-6 -->
-            </div><!-- /.row -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
         <div class="mt-3 text-end">
             <button type="button" id="aboutButtonSectionTwo"
-                onclick="saveChanges('#home_reliable_one', '#home_reliable_one_content', '#homeFormReliableSection','#aboutButtonSectionTwo')"
-                class="btn btn-primary">Save Changes</button>
+                    onclick="saveChanges('#home_reliable_one', '#home_reliable_one_content', '#homeFormReliableSection','#aboutButtonSectionTwo')"
+                    class="btn btn-primary">Save Changes
+            </button>
         </div>
-    </div><!-- /.container -->
-</section><!-- /.reliable-one section-space-bottom -->
+    </div>
+</section>

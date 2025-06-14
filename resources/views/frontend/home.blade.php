@@ -706,7 +706,6 @@
 @section('page-style')
     <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
         type="image/webp" fetchpriority="high" />
-    {{-- <link rel="stylesheet" href="{{ asset('frontend/assets/vendors/owl-carousel/css/owl.carousel.min.css') }}"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
