@@ -50,18 +50,18 @@
                                 <div class="product_item_image product-carousel owl-carousel">
                                     @foreach ($images as $image)
                                         <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
-                                            alt="{{ $product->name }}">
+                                             alt="{{ $product->name }}">
                                     @endforeach
                                 </div>
                                 <div class="product_item_content">
                                     <h6 class="product_item_title">
                                         <a
-                                            href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                                href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
                                     </h6>
                                     <div class="product_item_price">
                                         @if ($product->sale_price && $product->regular_price > 0)
                                             <span
-                                                style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                    style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
                                                 {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
                                             </span>
                                             <span style="color: #888; font-size: 16px;">
@@ -76,14 +76,14 @@
 
                                     <div class="d-flex justify-content-between">
                                         <a href="javascript:void(0);"
-                                            class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
-                                            data-id="{{ $product->id }}"
-                                            data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+                                           class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
+                                           data-id="{{ $product->id }}"
+                                           data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                         <a href="javascript:void(0);"
-                                            class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                            data-product-id="{{ $product->id }}"
-                                            data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                           class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                           data-product-id="{{ $product->id }}"
+                                           data-url="{{ route('add.to.cart.form', $product->id) }}">
                                             <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
                                             <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                         </a>
@@ -95,6 +95,43 @@
                         <h5 class="text-center">No products found.</h5>
                     @endforelse
                 </div><!-- /.row -->
+            </div>
+        </div><!-- /.container -->
+    </section>
+    <section class="product-home-top-selling bg-light">
+        <!-- /.product-home__bg -->
+        <div class="container products">
+            <div class="sec-title sec-title--center">
+                <h3 class="sec-title__title">Featured Categories</h3>
+                <!-- /.sec-title__title -->
+            </div><!-- /.sec-title -->
+            <style>
+                .fixed-size {
+                    width: 300px;
+                    height: 400px;
+                    object-fit: cover;
+                    border-radius: 2px;
+                    display: block;
+                    margin: 0 auto;
+                }
+
+            </style>
+            <div class="row">
+                @forelse($featuredCategories as $category)
+                    <div class="col-md-3 text-center">
+                        <div class="featured-category-image">
+                            <a href="{{ route('frontend.productsPage', ['category' => $category->slug]) }}">
+                                <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" class="img-fluid fixed-size">
+                            </a>
+                            <h5 class="mt-2">{{ $category->name }}</h5>
+                        </div>
+                    </div>
+
+                @empty
+                    <div class="col-md-12">
+                        <h5 class="text-center">No featured category found.</h5>
+                    </div>
+                @endforelse
             </div>
         </div><!-- /.container -->
     </section>
@@ -114,12 +151,12 @@
                                 $home_one__image__one = $settings->where('key', 'home_one__image__one')->first();
                             @endphp
                             <img src="{{ $home_one__image__one ? asset($home_one__image__one->value) : asset('frontend/assets/images/about/about-1-3.png') }}"
-                                alt="about" class="about-one__image__one sec_1_prev_1" loading="lazy">
+                                 alt="about" class="about-one__image__one sec_1_prev_1" loading="lazy">
                             @php
                                 $home_one__image__two = $settings->where('key', 'home_one__image__two')->first();
                             @endphp
                             <img src="{{ $home_one__image__two ? asset($home_one__image__two->value) : asset('frontend/assets/images/about/about-1-2.jpg') }}"
-                                alt="about" class="about-one__image__two sec_1_prev_2" loading="lazy">
+                                 alt="about" class="about-one__image__two sec_1_prev_2" loading="lazy">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__image">
                             @php
@@ -127,18 +164,18 @@
                             @endphp
 
                             <img src="{{ $home_one__image__three ? asset($home_one__image__three->value) : asset('frontend/assets/images/about/about-1-1.jpg') }}"
-                                alt="about" class="about-one__image__three sec_1_prev_3" loading="lazy">
+                                 alt="about" class="about-one__image__three sec_1_prev_3" loading="lazy">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__circle-text">
                             <div class="about-one__circle-text__bg"
-                                style="background-image: url('{{ asset('frontend') }}/assets/images/resources/about-award-bg.jpg');">
+                                 style="background-image: url('{{ asset('frontend') }}/assets/images/resources/about-award-bg.jpg');">
                             </div>
                             <img src="{{ asset('frontend') }}/assets/images/resources/about-award-symbol.png"
-                                alt="award-symbole" class="about-one__circle-text__image" loading="lazy">
+                                 alt="award-symbole" class="about-one__circle-text__image" loading="lazy">
                             <div class="about-one__curved-circle curved-circle">
                                 <!-- curved-circle start-->
                                 <div class="about-one__curved-circle__item curved-circle__item"
-                                    data-circle-text-options='{
+                                     data-circle-text-options='{
                      "radius": 84,
                      "forceWidth": true,
                      "forceHeight": true}'>
@@ -161,16 +198,18 @@
                                 <!-- /.sec-title__title -->
                             </div><!-- /.sec-title -->
                             <div class="about-one__content__text wow fadeInUp" data-wow-duration="1500ms"
-                                data-wow-delay="00ms">
+                                 data-wow-delay="00ms">
                                 <h5 class="about-one__text-title">Welcome to Melbourne Building Products, your one-stop
                                     destination
                                     for high-quality building and renovation supplies in Melton, Victoria.</h5>
                                 <!-- /.about-one__text-title -->
                                 <p class="about-one__text">We’re providing the best quality tiles in town.
-                                    At Melbourne Building Products, we’re dedicated to helping you transform your home or
+                                    At Melbourne Building Products, we’re dedicated to helping you transform your home
+                                    or
                                     project into a masterpiece. Whether you’re updating a single room, renovating your
                                     entire
-                                    house, or working on a large-scale construction project. Tiles company, also known as a
+                                    house, or working on a large-scale construction project. Tiles company, also known
+                                    as a
                                     tile
                                     manufacturer or
                                     distributor,
@@ -180,7 +219,8 @@
                                     interior
                                     design industries by providing tiles for residential.</p><!-- /.about-one__text -->
                             </div><!-- /.about-one__content__text -->
-                            <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                            <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms"
+                                 data-wow-delay="00ms">
                                 <a href="{{ route('frontend.contact') }}" class="floens-btn">
                                     <span>get in touch</span>
                                     <i class="icon-right-arrow"></i>
@@ -194,9 +234,9 @@
         </div><!-- /.container -->
         <div class="about-one__shapes">
             <img src="{{ asset('frontend') }}/assets/images/shapes/about-shape-1-1.jpg" alt="about-shape"
-                class="about-one__shape about-one__shape--one" loading="lazy">
+                 class="about-one__shape about-one__shape--one" loading="lazy">
             <img src="{{ asset('frontend') }}/assets/images/shapes/about-shape-1-1.jpg" alt="about-shape"
-                class="about-one__shape about-one__shape--two" loading="lazy">
+                 class="about-one__shape about-one__shape--two" loading="lazy">
         </div><!-- /.about-one__shapes -->
     </section><!-- /.about-one section-space -->
     <!-- about End -->
@@ -208,7 +248,7 @@
         <div class="container">
             <div class="services-one__info__inner">
                 <div class="services-one__info__bg"
-                    style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/services-info-bg-1.png);">
+                     style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/services-info-bg-1.png);">
                 </div>
                 <!-- /.services-one__info__bg -->
                 <div class="row gutter-y-40 align-items-center">
@@ -229,7 +269,7 @@
                                     <span class="icon-telephone"></span>
                                 </div><!-- /.services-one__info__icon -->
                                 <a href="tel:{{ $settings->where('key', 'contact_phone')->first()->value ?? '#' }}"
-                                    class="services-one__info__number">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
+                                   class="services-one__info__number">{{ $settings->where('key', 'contact_phone')->first()->value ?? 'N/A' }}</a>
                                 <!-- /.services-one__info__number -->
                             </div><!-- /.services-one__info__right__inner -->
                         </div><!-- /.services-one__info__right -->
@@ -308,13 +348,13 @@
                                 $home_two__image__one = $settings->where('key', 'home_two__image__one')->first();
                             @endphp
                             <img src="{{ $home_two__image__one ? asset($home_two__image__one->value) : asset('frontend/assets/images/reliable/reliable-1-1.jpg') }}"
-                                loading="lazy" alt="reliable" class="reliable-one__image__one sec_2_prev_1">
+                                 loading="lazy" alt="reliable" class="reliable-one__image__one sec_2_prev_1">
                             <div class="reliable-one__image__inner">
                                 @php
                                     $images = $settings->where('key', 'home_two__image__two')->first();
                                 @endphp
                                 <img src="{{ $images ? asset($images->value) : asset('frontend/assets/images/reliable/reliable-1-2.jpg') }}"
-                                    alt="reliable" class="reliable-one__image__two sec_2_prev_2" loading="lazy">
+                                     alt="reliable" class="reliable-one__image__two sec_2_prev_2" loading="lazy">
                             </div>
                             <div class="experience reliable-one__experience">
                                 <div class="experience__inner">
@@ -351,7 +391,7 @@
     <!-- shop start -->
     <section class="product-home">
         <div class="product-home__bg"
-            style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/shop-bg-1.png);">
+             style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/shop-bg-1.png);">
         </div>
         <!-- /.product-home__bg -->
         <div class="container products">
@@ -368,7 +408,7 @@
                     @forelse ($products as $product)
                         <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item swiper-slide">
                             <div class="product__item wow fadeInUp item" data-wow-duration='1500ms'
-                                data-wow-delay='000ms'>
+                                 data-wow-delay='000ms'>
                                 @php
                                     $productImages = $product->images; // This is already a Collection
                                     $variantImages = $product->variations->flatMap(function ($variation) {
@@ -401,18 +441,18 @@
                                 <div class="product_item_image product-carousel owl-carousel">
                                     @foreach ($images as $image)
                                         <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
-                                            alt="{{ $product->name }}">
+                                             alt="{{ $product->name }}">
                                     @endforeach
                                 </div>
                                 <div class="product_item_content">
                                     <h6 class="product_item_title">
                                         <a
-                                            href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                                href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
                                     </h6>
                                     <div class="product_item_price">
                                         @if ($product->sale_price && $product->regular_price > 0)
                                             <span
-                                                style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                    style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
                                                 {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
                                             </span>
                                             <span style="color: #888; font-size: 16px;">
@@ -427,14 +467,14 @@
 
                                     <div class="d-flex justify-content-between">
                                         <a href="javascript:void(0);"
-                                            class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
-                                            data-id="{{ $product->id }}"
-                                            data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+                                           class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
+                                           data-id="{{ $product->id }}"
+                                           data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                         <a href="javascript:void(0);"
-                                            class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                            data-product-id="{{ $product->id }}"
-                                            data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                           class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                           data-product-id="{{ $product->id }}"
+                                           data-url="{{ route('add.to.cart.form', $product->id) }}">
                                             <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                         </a>
                                     </div>
@@ -468,7 +508,7 @@
                         @forelse ($featuredProducts as $product)
                             <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item swiper-slide">
                                 <div class="product__item wow fadeInUp" data-wow-duration='1500ms'
-                                    data-wow-delay='000ms'>
+                                     data-wow-delay='000ms'>
                                     @php
                                         $productImages = $product->images; // This is already a Collection
                                         $variantImages = $product->variations->flatMap(function ($variation) {
@@ -501,18 +541,18 @@
                                     <div class="product_item_image product-carousel owl-carousel">
                                         @foreach ($images as $image)
                                             <img class="item product-image" src="{{ asset($image->path) }}"
-                                                loading="lazy" alt="{{ $product->name }}">
+                                                 loading="lazy" alt="{{ $product->name }}">
                                         @endforeach
                                     </div>
                                     <div class="product_item_content">
                                         <h6 class="product_item_title">
                                             <a
-                                                href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                                    href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
                                         </h6>
                                         <div class="product_item_price">
                                             @if ($product->sale_price && $product->regular_price > 0)
                                                 <span
-                                                    style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                        style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
                                                     {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
                                                 </span>
                                                 <span style="color: #888; font-size: 16px;">
@@ -527,14 +567,14 @@
 
                                         <div class="d-flex justify-content-between">
                                             <a href="javascript:void(0);"
-                                                class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
-                                                data-id="{{ $product->id }}"
-                                                data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+                                               class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
+                                               data-id="{{ $product->id }}"
+                                               data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                             <a href="javascript:void(0);"
-                                                class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                                data-product-id="{{ $product->id }}"
-                                                data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                               class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                               data-product-id="{{ $product->id }}"
+                                               data-url="{{ route('add.to.cart.form', $product->id) }}">
                                                 <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
                                                 <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                             </a>
@@ -557,7 +597,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
 
             var swiper = new Swiper(".mySwiper", {
@@ -605,73 +645,73 @@
                 dots: false,
             });
 
-            $('.play').on('click', function() {
+            $('.play').on('click', function () {
                 owl.trigger('play.owl.autoplay', [1000]);
             });
 
-            $('.stop').on('click', function() {
+            $('.stop').on('click', function () {
                 owl.trigger('stop.owl.autoplay');
             });
 
 
             displayCartItems();
-            $('.enquireBtn').click(function() {
+            $('.enquireBtn').click(function () {
                 var productId = $(this).data('id');
                 var url = $(this).data('url');
                 $.ajax({
                     url: url,
                     method: 'GET',
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $('#loader').show();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('.enquireSubmitBtn').prop('disabled', false)
                         $('.enquireSubmitBtn').html('Submit')
                         $('#enquireFormResponse').html(response.html);
                         $('#myModal').modal('show');
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#loader').hide();
                     }
                 })
             });
 
-            $('.addToCartBtn').click(function() {
+            $('.addToCartBtn').click(function () {
                 var productId = $(this).data('product-id');
                 var url = $(this).data('url');
 
                 $.ajax({
                     url: url,
                     method: 'GET',
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $('#loader').show();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('.enquireSubmitBtn').prop('disabled', false)
                         $('.enquireSubmitBtn').html('Add To Cart')
                         $('#addToCartResponse').html(response.html);
                         $('#addToCartModal').modal('show');
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#loader').hide();
                     }
                 })
             });
 
-            $('#enquireForm').submit(function(e) {
+            $('#enquireForm').submit(function (e) {
                 e.preventDefault();
                 var formData = $('#enquireForm').serialize();
                 $.ajax({
                     url: "{{ route('enquire') }}",
                     method: 'POST',
                     data: formData,
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $('.enquireSubmitBtn').prop('disabled', true);
                         $('.enquireSubmitBtn').html(
                             '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
                         );
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('.enquireSubmitBtn').prop('disabled', false);
                         $('.enquireSubmitBtn').html('Submit');
                         if (response.status == 'success') {
@@ -681,12 +721,12 @@
                         }
 
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         $('.enquireSubmitBtn').prop('disabled', false);
                         $('.enquireSubmitBtn').html('Submit');
                         let errors = xhr.responseJSON.errors;
                         if (errors) {
-                            $.each(errors, function(key, value) {
+                            $.each(errors, function (key, value) {
                                 let inputField = $('[name="' + key + '"]');
                                 inputField.addClass('is-invalid');
                                 notify('error', value[0]);
@@ -698,18 +738,19 @@
         });
     </script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('[contenteditable="true"]').removeAttr('contenteditable');
         });
     </script>
 @endsection
 @section('page-style')
     <link rel="preload" as="image" href="{{ asset('frontend/assets/images/backgrounds/slider-1-1.webp') }}"
-        type="image/webp" fetchpriority="high" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+          type="image/webp" fetchpriority="high"/>
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <style>
         :root {
             --swiper-navigation-size: 24px !important;

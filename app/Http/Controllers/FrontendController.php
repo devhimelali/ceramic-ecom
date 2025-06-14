@@ -25,10 +25,10 @@ class FrontendController extends Controller
             'setting' => Setting::get(),
             'active' => 'home',
             'sliders' => Slider::get(),
-            // 'brands' => Brand::where('status', StatusEnum::ACTIVE)->latest()->limit(15)->get(),
             'products' => Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE)->latest()->limit(12)->get(),
             'topSellingProducts' => Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE)->where('label', ProductLabelEnum::TOP_SELLING)->latest()->limit(12)->get(),
             'featuredProducts' => Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE)->where('label', ProductLabelEnum::FEATURED)->latest()->limit(12)->get(),
+            'featuredCategories' => Category::where('is_featured', 1)->limit(4)->get(),
         ];
 
         return view('frontend.home', $data);
