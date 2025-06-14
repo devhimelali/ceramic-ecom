@@ -86,15 +86,16 @@
                     <div class="table-responsive mt-3 mb-1">
                         <table id="dataTable" class="table align-middle table-nowrap">
                             <thead class="table-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Image</th>
-                                    <th>Front Show</th>
-                                    <th>Parent</th>
-                                    <th>Status</th>
-                                    <th style="width: 40px">Actions</th>
-                                </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Front Show</th>
+                                <th>Is Featured</th>
+                                <th>Parent</th>
+                                <th>Status</th>
+                                <th style="width: 40px">Actions</th>
+                            </tr>
                             </thead>
 
                             <tbody>
@@ -115,22 +116,22 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('categories.store') }}" class="dynamic-form" method="POST" id="addForm"
-                        enctype="multipart/form-data">
+                          enctype="multipart/form-data">
                         @csrf
                         <div class="row g-3">
                             <div class="col-xl-6">
                                 <div class="my-4">
                                     <div>
                                         <label for="name" class="form-label">Category Name<span
-                                                class="text-danger">*</span></label>
+                                                    class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="name" id="name"
-                                            placeholder="Enter Category Name">
+                                               placeholder="Enter Category Name">
                                     </div>
                                 </div>
                                 <div class="my-4">
                                     <div>
                                         <label for="name" class="form-label">Parent Category<span
-                                                class="text-danger">*</span></label>
+                                                    class="text-danger">*</span></label>
                                         <select class="form-select" data-choices name="parent_id" id="parent_id">
                                             <option selected value="">Select Parent Category</option>
                                             @foreach ($categories as $parent_category)
@@ -143,7 +144,7 @@
                                 <div class="my-4">
                                     <div>
                                         <label for="name" class="form-label">Active/Inactive<span
-                                                class="text-danger">*</span></label>
+                                                    class="text-danger">*</span></label>
                                         <select class="form-select" name="is_active" id="is_active">
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
@@ -157,16 +158,18 @@
                                     <div class="text-center">
                                         <div class="custom-upload-box">
                                             <img src="{{ asset('assets/placeholder-image-2.png') }}" class="preview-img"
-                                                alt="Image Preview">
+                                                 alt="Image Preview">
                                             <button type="button" class="remove-btn removeImage"
-                                                style="display:none;">&times;</button>
+                                                    style="display:none;">&times;
+                                            </button>
                                         </div>
                                         <input type="file" name="image" class="d-none hidden-input" accept="image/*">
 
                                         <button type="button" class="btn btn-dark mt-1 px-4"
-                                            onclick="setupImagePreview('.hidden-input', '.preview-img')"><i
-                                                class="bx bx-cloud-upload fs-3"></i> Choose a
-                                            Category</button>
+                                                onclick="setupImagePreview('.hidden-input', '.preview-img')"><i
+                                                    class="bx bx-cloud-upload fs-3"></i> Choose a
+                                            Category
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -212,8 +215,8 @@
 @endsection
 @section('page-script')
     <script>
-        $(document).ready(function() {
-            $("#editModal").on("shown.bs.modal", function() {
+        $(document).ready(function () {
+            $("#editModal").on("shown.bs.modal", function () {
                 reinitializeChoices();
             });
             $('#dataTable').DataTable({
@@ -221,11 +224,11 @@
                 serverSide: true,
                 ajax: "{{ route('categories.index') }}",
                 columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
                     {
                         data: 'name',
                         name: 'name'
@@ -237,6 +240,10 @@
                     {
                         data: 'front_show',
                         name: 'front_show'
+                    },
+                    {
+                      data: 'is_featured',
+                      name: 'is_featured'
                     },
                     {
                         data: 'parent',
@@ -257,7 +264,7 @@
                 ]
             });
 
-            $("#addForm").on("submit", function(e) {
+            $("#addForm").on("submit", function (e) {
                 e.preventDefault();
                 let formData = new FormData(this);
                 let submitButton = $(".submit-btn");
@@ -277,7 +284,7 @@
                     headers: {
                         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.status === "success") {
                             notify(response.status, response.message);
                             $('#name').val('');
@@ -296,11 +303,11 @@
                             $('#addModal').modal('hide');
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         let errors = xhr.responseJSON.errors;
                         $(".text-danger").remove();
                         if (errors) {
-                            $.each(errors, function(key, value) {
+                            $.each(errors, function (key, value) {
                                 let inputField = $('[name="' + key + '"]');
                                 inputField.after('<small class="text-danger">' + value[
                                     0] + '</small>');
@@ -308,7 +315,7 @@
                             });
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         submitText.removeClass("d-none");
                         loader.addClass("d-none");
                         submitButton.prop("disabled", false);
@@ -316,7 +323,7 @@
                 });
             });
 
-            $('body').on('click', '.delete-employee', function(e) {
+            $('body').on('click', '.delete-employee', function (e) {
                 e.preventDefault();
                 var id = $(this).attr('employee-id');
                 var title = "Are you sure?";
@@ -341,11 +348,11 @@
                 url: "{{ route('categories.edit', 'slug') }}".replace('slug',
                     slug),
                 type: "GET",
-                success: function(response) {
+                success: function (response) {
                     $("#editModalContent").html(response); // Load the response (view) into modal
                     $("#editModal").modal("show"); // Show the modal
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     notify('error', "Failed to load the brand edit form.");
                 }
             });
@@ -374,7 +381,7 @@
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content'),
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         Swal.fire('Deleted!', 'The category has been deleted.', 'success');
                         $('#dataTable').DataTable().ajax.reload();
@@ -382,7 +389,7 @@
                         Swal.fire('Error!', 'There was a problem deleting the category.', 'error');
                     }
                 },
-                error: function() {
+                error: function () {
                     Swal.fire('Error!', 'There was a problem with the request.', 'error');
                 }
             });
@@ -392,7 +399,7 @@
             $.ajax({
                 url: url,
                 type: "GET",
-                success: function(response) {
+                success: function (response) {
                     if (response.status === 'success') {
                         notify('success', response.message);
                     } else {
@@ -400,7 +407,26 @@
                     }
                     $('#dataTable').DataTable().ajax.reload();
                 },
-                error: function() {
+                error: function () {
+                    $('#dataTable').DataTable().ajax.reload();
+                    notify('error', 'Something went wrong.');
+                }
+            })
+        }
+
+        function isFeatured(url) {
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function (response) {
+                    if (response.status === 'success') {
+                        notify('success', response.message);
+                    } else {
+                        notify('error', 'Failed to update is featured.');
+                    }
+                    $('#dataTable').DataTable().ajax.reload();
+                },
+                error: function () {
                     $('#dataTable').DataTable().ajax.reload();
                     notify('error', 'Something went wrong.');
                 }
@@ -413,10 +439,10 @@
             // inputSelector means which input field to listen to
             // previewSelector means which image to change
             $(inputSelector).click();
-            $(inputSelector).change(function() {
+            $(inputSelector).change(function () {
                 if (this.files && this.files[0]) {
                     var reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         $(previewSelector).attr("src", e.target.result);
                     };
                     reader.readAsDataURL(this.files[0]);

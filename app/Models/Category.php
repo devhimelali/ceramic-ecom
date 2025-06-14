@@ -13,6 +13,7 @@ class Category extends Model
         'parent_id',
         'is_active',
         'front_show',
+        'is_featured',
     ];
 
     public function parent()
@@ -26,5 +27,10 @@ class Category extends Model
     public function children()
     {
         return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', 1);
     }
 }

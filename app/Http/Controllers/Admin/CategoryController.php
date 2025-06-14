@@ -17,7 +17,7 @@ class CategoryController extends Controller
     {
         $categories = Category::with('children')->whereNull('parent_id')->orderBy('name', 'asc')->get();
         if ($request->ajax()) {
-            $categories = Category::with('parent')->select('id', 'name', 'slug', 'image', 'parent_id', 'is_active', 'front_show');
+            $categories = Category::with('parent')->select('id', 'name', 'slug', 'image', 'parent_id', 'is_active', 'front_show', 'is_featured');
             return DataTables::of($categories)
                 ->addIndexColumn()
                 ->addColumn('front_show', function ($row) {
@@ -30,6 +30,20 @@ class CategoryController extends Controller
                                 <input class="form-check-input front_show-toggle" type="checkbox" ' . $checked . '>
                             </div>
                         </a>
+                    ';
+                })
+                ->addColumn('is_featured', function ($row) {
+                    $url = route('category.is.featured', $row->id);
+                    $checked = $row->is_featured ? 'checked' : '';
+                    return '
+                        <div class="form-check form-switch form-switch-info">
+                            <input 
+                                class="form-check-input front_show-toggle" 
+                                type="checkbox" 
+                                ' . $checked . ' 
+                                onclick="return isFeatured(\'' . $url . '\')"
+                            >
+                        </div>
                     ';
                 })
                 ->addColumn('parent', function ($row) {
@@ -58,9 +72,7 @@ class CategoryController extends Controller
                         </div>
                     ';
                 })
-
-
-                ->rawColumns(['is_active', 'actions', 'image', 'front_show'])
+                ->rawColumns(['is_active', 'actions', 'image', 'front_show', 'is_featured'])
                 ->make(true);
         }
 
@@ -109,7 +121,7 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name,' . $category->id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
-        $imagePath  = null;
+        $imagePath = null;
         if ($request->image) {
             if ($category->image && file_exists(public_path($category->image))) {
                 unlink(public_path($category->image));
@@ -163,5 +175,17 @@ class CategoryController extends Controller
         }
         $category->save();
         return response()->json(['status' => 'success', 'message' => 'Status updated successfully!']);
+    }
+
+    function isFeatured($id)
+    {
+        $category = Category::find($id);
+        if ($category->is_featured == 1) {
+            $category->is_featured = 0;
+        } else {
+            $category->is_featured = 1;
+        }
+        $category->save();
+        return response()->json(['status' => 'success', 'message' => 'Is featured updated successfully!']);
     }
 }

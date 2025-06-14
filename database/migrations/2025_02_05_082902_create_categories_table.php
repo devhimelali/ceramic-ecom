@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(0);
             $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
             $table->boolean('front_show')->default(0);
+            $table->boolean('is_featured')->default(0);
             $table->timestamps();
         });
     }

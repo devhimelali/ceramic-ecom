@@ -19,6 +19,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('status-update/{encryptModelNameID}', [GeneralController::class, 'statusUpdate'])->name('status.update');
     Route::resource('categories', CategoryController::class);
     Route::get('categories/front-show/{id}', [CategoryController::class, 'frontShow'])->name('category.frontShow');
+    Route::get('categories/is-featured/{id}', [CategoryController::class, 'isFeatured'])->name('category.is.featured');
 
     Route::resource('brands', BrandController::class);
     // Route::resource('settings', SettingController::class);
