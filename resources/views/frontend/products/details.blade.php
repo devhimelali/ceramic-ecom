@@ -796,7 +796,7 @@
                     }).join(' / ');
 
                     $.ajax({
-                        url: "{{ route('get.product.variation.price', $product->id) }}",
+                        url: "{{ route('get.product.variation.price', $product_id) }}",
                         method: 'GET',
                         data: {
                             variation: variationString
