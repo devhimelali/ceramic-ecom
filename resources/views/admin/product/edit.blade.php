@@ -421,7 +421,8 @@
                                             <input type="text" value="${attrDisplay}" disabled class="form-control">
                                         </div>
                                         <div class="col-md-6 mb-2">
-                                            <label>Regular Price</label>
+                                            <label>Regular Price <span
+                                                    class="text-danger">*</span></label>
                                             <input name="variations[${index}][regular_price]" type="number" step="0.01" class="form-control" value="${regular_price}">
                                         </div>
                                         <div class="col-md-6 mb-2">
