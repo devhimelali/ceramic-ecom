@@ -113,7 +113,8 @@ class SettingController extends Controller
     {
         $settings = [
             'home_about_sec_1' => $request->home_about_sec_1,
-            'home_reliable_one_content' => $request->home_reliable_one_content
+            'home_reliable_one_content' => $request->home_reliable_one_content,
+            'home_service_one_content' => $request->home_service_one_content
         ];
 
         foreach ($settings as $key => $value) {
