@@ -164,9 +164,35 @@
 
                                             <div class="product_item_content">
                                                 <h6 class="product_item_title">
-                                                    <a
-                                                        href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 35) }}</a>
+                                                    <a href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
                                                 </h6>
+                                                @php
+                                                    $totalReviews = $product->reviews->count();
+                                                    $averageRating = $totalReviews > 0 ? $product->reviews->avg('rating') : 0;
+                                                @endphp
+
+                                                <div class="product-review mb-2">
+                                                    <div class="stars text-warning">
+                                                        @for ($i = 1; $i <= 5; $i++)
+                                                            @if ($totalReviews == 0)
+                                                                <i class="far fa-star"></i> {{-- unfilled --}}
+                                                            @elseif ($i <= floor($averageRating))
+                                                                <i class="fas fa-star"></i> {{-- filled --}}
+                                                            @elseif ($i - $averageRating <= 0.5)
+                                                                <i class="fas fa-star-half-alt"></i> {{-- half --}}
+                                                            @else
+                                                                <i class="far fa-star"></i> {{-- unfilled --}}
+                                                            @endif
+                                                        @endfor
+
+                                                        @if ($totalReviews > 0)
+                                                            <small class="text-muted ms-1">({{ $totalReviews }} review{{ $totalReviews > 1 ? 's' : '' }})</small>
+                                                        @else
+                                                            <small class="text-muted ms-1">(No reviews)</small>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
                                                 <div class="product_item_price">
                                                     @if ($product->sale_price && $product->regular_price > 0)
                                                         <span

@@ -25,12 +25,17 @@ class FrontendController extends Controller
             'setting' => Setting::get(),
             'active' => 'home',
             'sliders' => Slider::get(),
-            'products' => Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE)->latest()->limit(12)->get(),
-            'topSellingProducts' => Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE)->where('label', ProductLabelEnum::TOP_SELLING)->latest()->limit(12)->get(),
-            'featuredProducts' => Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE)->where('label', ProductLabelEnum::FEATURED)->latest()->limit(12)->get(),
+            'products' => Product::with(['images', 'variations.images', 'reviews' => function ($q) {
+                return $q->where('is_approved', 1);
+            }])->where('status', StatusEnum::ACTIVE)->latest()->limit(12)->get(),
+            'topSellingProducts' => Product::with(['images', 'variations.images', 'reviews' => function ($q) {
+                return $q->where('is_approved', 1);
+            }])->where('status', StatusEnum::ACTIVE)->where('label', ProductLabelEnum::TOP_SELLING)->latest()->limit(12)->get(),
+            'featuredProducts' => Product::with(['images', 'variations.images', 'reviews' => function ($q) {
+                return $q->where('is_approved', 1);
+            }])->where('status', StatusEnum::ACTIVE)->where('label', ProductLabelEnum::FEATURED)->latest()->limit(12)->get(),
             'featuredCategories' => Category::where('is_featured', 1)->limit(4)->get(),
         ];
-
         return view('frontend.home', $data);
     }
 
@@ -48,7 +53,9 @@ class FrontendController extends Controller
     public function productsPage(Request $request)
     {
         $attributes = [];
-        $query = Product::with('images', 'variations.images')->where('status', StatusEnum::ACTIVE);
+        $query = Product::with(['images', 'variations.images', 'reviews' => function ($q) {
+            return $q->where('is_approved', 1);
+        }])->where('status', StatusEnum::ACTIVE);
         if (!empty($request->sort_by)) {
             if ($request->sort_by == 'low-to-high') {
                 $query = $query->orderByRaw('COALESCE(sale_price, regular_price) ASC');
