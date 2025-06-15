@@ -102,7 +102,6 @@
     </section><!-- /.page-header -->
 
     @include('admin.page-settings.about.partials.section_one')
-    @include('admin.page-settings.about.partials.section_two')
 @endsection
 @section('page-script')
     <script>
