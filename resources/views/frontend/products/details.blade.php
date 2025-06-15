@@ -3,7 +3,7 @@
 @section('content')
     <section class="page-header">
         <div class="page-header__bg"
-             style="background-image: url('{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}');">
+            style="background-image: url('{{ asset('frontend/assets/images/backgrounds/page-header-bg-1-1.png') }}');">
         </div>
         <!-- /.page-header__bg -->
         <div class="container">
@@ -50,9 +50,8 @@
                                         $string = $imageable_type . '-' . $imageable_id;
                                     @endphp
                                     <div class="swiper-slide product-details__gallery-thumb-slide"
-                                         data-image-id="{{ $imageable_id }}">
-                                        <img src="{{ asset($image->path) }}"
-                                             class="product-details__gallery-thumb__img">
+                                        data-image-id="{{ $imageable_id }}">
+                                        <img src="{{ asset($image->path) }}" class="product-details__gallery-thumb__img">
                                     </div>
                                 @endforeach
                             </div>
@@ -81,9 +80,9 @@
                                             @foreach ($group['values'] as $value)
                                                 <label class="attribute-option">
                                                     <input type="radio" class="attribute-input d-none"
-                                                           name="{{ $group['attribute'] }}"
-                                                           data-attribute="{{ $group['attribute'] }}"
-                                                           value="{{ $value }}">
+                                                        name="{{ $group['attribute'] }}"
+                                                        data-attribute="{{ $group['attribute'] }}"
+                                                        value="{{ $value }}">
                                                     <span class="badge bg-secondary">{{ $value }}</span>
                                                 </label>
                                             @endforeach
@@ -95,7 +94,7 @@
                         <div id="price-wrapper-ditails">
                             @if ($product->sale_price && $product->regular_price > 0)
                                 <span class="price"
-                                      style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
+                                    style="text-decoration: line-through; color: red; margin-right: 6px;">${{ $product->regular_price }}</span>
                                 <span class="price">${{ $product->sale_price ?? $product->regular_price }}</span>
                             @else
                                 <span class="price">${{ $product->regular_price ?? $product->regular_price }}</span>
@@ -106,14 +105,14 @@
                         <div class="product-details__buttons">
                             <div class="d-flex align-items-center justify-content-center">
                                 <a href="javascript:void(0);"
-                                   class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
-                                   data-id="{{ $product->id }}"
-                                   data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+                                    class="p-3 floens-btn product__item__link me-2 custom-button enquireBtn"
+                                    data-id="{{ $product->id }}"
+                                    data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                 <a href="javascript:void(0);"
-                                   class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                   data-product-id="{{ $product->id }}"
-                                   data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                    class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                    data-product-id="{{ $product->id }}"
+                                    data-url="{{ route('add.to.cart.form', $product->id) }}">
                                     <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                             </div>
                         </div>
@@ -142,38 +141,36 @@
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                                    data-bs-target="#description-tab-pane" type="button" role="tab"
-                                    aria-controls="description-tab-pane"
-                                    aria-selected="true">
+                                data-bs-target="#description-tab-pane" type="button" role="tab"
+                                aria-controls="description-tab-pane" aria-selected="true">
                                 Description
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="reviews-tab" data-bs-toggle="tab"
-                                    data-bs-target="#reviews-tab-pane"
-                                    type="button" role="tab" aria-controls="reviews-tab-pane" aria-selected="false">
+                                data-bs-target="#reviews-tab-pane" type="button" role="tab"
+                                aria-controls="reviews-tab-pane" aria-selected="false">
                                 Reviews
                             </button>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active mb-3" id="description-tab-pane" role="tabpanel"
-                             aria-labelledby="description-tab"
-                             tabindex="0">
+                            aria-labelledby="description-tab" tabindex="0">
                             <div class="mt-2 p-4 bg-white">
                                 {!! $product->description !!}
                             </div>
                         </div>
                         <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel" aria-labelledby="reviews-tab"
-                             tabindex="0">
+                            tabindex="0">
                             @php
                                 $roundedRating = round($avgRating, 1); // e.g. 4.2
                             @endphp
                             <div class="mt-2 p-4 bg-white">
                                 <h3 class="text-center">Customer Reviews</h3>
-                                <div class="d-flex align-items-center justify-content-center gap-4 py-3">
+                                <div class="d-flex align-items-center justify-content-center gap-4 py-2">
                                     <div class="text-center">
-                                        <div class="rating-number fw-semibold fs-2">{{ $roundedRating }}</div>
+                                        <div class="rating-number fw-semibold fs-4">{{ $roundedRating }}</div>
 
                                         <div class="d-flex justify-content-center gap-1">
                                             @for ($i = 1; $i <= 5; $i++)
@@ -181,13 +178,13 @@
                                                     $fillPercent = min(100, max(0, ($roundedRating - $i + 1) * 100));
                                                 @endphp
                                                 <i class="bi bi-star-fill"
-                                                   style="
-                            font-size: 1.5rem;
-                            background: linear-gradient(90deg, #ffc107 {{ $fillPercent }}%, #e4e5e9 {{ $fillPercent }}%);
-                            -webkit-background-clip: text;
-                            -webkit-text-fill-color: transparent;
-                            display: inline-block;
-                       "></i>
+                                                    style="
+                                                        font-size: 1.5rem;
+                                                        background: linear-gradient(90deg, #ffc107 {{ $fillPercent }}%, #e4e5e9 {{ $fillPercent }}%);
+                                                        -webkit-background-clip: text;
+                                                        -webkit-text-fill-color: transparent;
+                                                        display: inline-block;
+                                                "></i>
                                             @endfor
                                         </div>
 
@@ -200,13 +197,13 @@
 
                                     <div>
                                         <button type="button" data-bs-toggle="modal" data-bs-target="#writeReviewModal"
-                                                class="btn btn-primary review-btn rounded-pill px-4">Write A
+                                            class="btn btn-primary review-btn rounded-pill px-4">Write A
                                             Review
                                         </button>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-6 col-sm-4">
                                         <select name="filter_by_rating" id="filter_by_rating" class="form-control">
                                             <option value="">All Ratings</option>
                                             <option value="5">★★★★★ (5 Stars)</option>
@@ -216,29 +213,29 @@
                                             <option value="1">★☆☆☆☆ (1 Star)</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-6 col-sm-4">
                                         <div class="d-flex align-items-center">
                                             <label for="has_media" class="form-label d-block mb-0">With Media</label>
                                             <div class="form-check form-switch form-check-danger ms-2 pb-0">
                                                 <input class="form-check-input" type="checkbox" id="has_media"
-                                                       name="has_media">
+                                                    name="has_media">
                                                 <label class="form-check-label" for="has_media"
-                                                       id="media_label">No</label>
+                                                    id="media_label">No</label>
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
-                                @if($isReviewExists)
+                                @if ($isReviewExists)
                                     <div class="table-responsive">
                                         <table id="reviews-table" class="table align-middle w-100">
                                             <thead>
-                                            <tr>
-                                                <th style="width: 20% !important; max-width: 20% !important"></th>
-                                                <th style="width: 20% !important; max-width: 20% !important"></th>
-                                                <th style="width: 30% !important; max-width: 30% !important"></th>
-                                                <th style="width: 30% !important; max-width: 30% !important"></th>
-                                            </tr>
+                                                <tr>
+                                                    <th style="width: 20% !important; max-width: 20% !important"></th>
+                                                    <th style="width: 20% !important; max-width: 20% !important"></th>
+                                                    <th style="width: 30% !important; max-width: 30% !important"></th>
+                                                    <th style="width: 30% !important; max-width: 30% !important"></th>
+                                                </tr>
                                             </thead>
                                             <tbody></tbody>
                                         </table>
@@ -261,8 +258,7 @@
                 <div class="row pt-5">
                     @forelse ($relatedProducts as $product)
                         <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item">
-                            <div class="product__item wow fadeInUp" data-wow-duration='1500ms'
-                                 data-wow-delay='000ms'>
+                            <div class="product__item wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='000ms'>
                                 @php
                                     $productImages = $product->images;
                                     $variantImages = $product->variations->flatMap(function ($variation) {
@@ -286,49 +282,49 @@
                                             100;
                                     @endphp
                                     <span class="discount" style="margin-left: 10px; font-size: 10px;">
-                                            Saving {{ number_format($saving, 0) }}%
-                                        </span>
+                                        Saving {{ number_format($saving, 0) }}%
+                                    </span>
                                 @endif
                                 <span class="label {{ $labelClass }}">
-                                        {{ $product->label->value }}
-                                    </span>
+                                    {{ $product->label->value }}
+                                </span>
                                 <div class="product_item_image product-carousel owl-carousel">
                                     @foreach ($images as $image)
-                                        <img class="item product-image" src="{{ asset($image->path) }}"
-                                             loading="lazy" alt="{{ $product->name }}">
+                                        <img class="item product-image" src="{{ asset($image->path) }}" loading="lazy"
+                                            alt="{{ $product->name }}">
                                     @endforeach
                                 </div>
                                 <div class="product_item_content">
                                     <h6 class="product_item_title">
                                         <a
-                                                href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                            href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
                                     </h6>
                                     <div class="product_item_price">
                                         @if ($product->sale_price && $product->regular_price > 0)
                                             <span
-                                                    style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
-                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                                </span>
+                                                style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                            </span>
                                             <span style="color: #888; font-size: 16px;">
-                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
-                                                </span>
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                            </span>
                                         @else
                                             <span>
-                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                                </span>
+                                                {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                            </span>
                                         @endif
                                     </div>
 
                                     <div class="d-flex justify-content-between">
                                         <a href="javascript:void(0);"
-                                           class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
-                                           data-id="{{ $product->id }}"
-                                           data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+                                            class="p-3 floens-btn product__item__link me-2 mobile-btn custom-button mobile-btn enquireBtn"
+                                            data-id="{{ $product->id }}"
+                                            data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
 
                                         <a href="javascript:void(0);"
-                                           class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                           data-product-id="{{ $product->id }}"
-                                           data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                            class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                            data-product-id="{{ $product->id }}"
+                                            data-url="{{ route('add.to.cart.form', $product->id) }}">
                                             <!--<i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i>-->
                                             <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
                                         </a>
@@ -345,22 +341,22 @@
         </div>
 
         <div id="writeReviewModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-             style="display: none;">
+            style="display: none;">
             <div class="modal-dialog modal-lg">
                 <div class="p-4 modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="myModalLabel">Share your thoughts</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{route('store.product.review')}}" method="post" id="writeReviewForm"
-                          enctype="multipart/form-data">
+                    <form action="{{ route('store.product.review') }}" method="post" id="writeReviewForm"
+                        enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="product_id" id="product_id" value="{{$product_id}}">
+                        <input type="hidden" name="product_id" id="product_id" value="{{ $product_id }}">
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="rating" class="form-label">Rate your experience <span
-                                                class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                     <div id="star-rating" class="star-rating">
                                         <span data-value="1">&#9733;</span>
                                         <span data-value="2">&#9733;</span>
@@ -373,38 +369,38 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="headline" class="form-label">Add a headline <span
-                                                class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="headline" name="headline"
-                                           placeholder="Summarize your experience">
+                                        placeholder="Summarize your experience">
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <label for="comment" class="form-label">Write a review <span
-                                                class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                     <textarea class="form-control" id="comment" name="comment" rows="4"></textarea>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="name" class="form-label">Your Name <span
-                                                class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name" name="name"
-                                           placeholder="Enter your name">
+                                        placeholder="Enter your name">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label">Your email address <span
-                                                class="text-danger">*</span></label>
+                                            class="text-danger">*</span></label>
                                     <input type="email" class="form-control" id="email" name="email"
-                                           placeholder="Enter your email address">
+                                        placeholder="Enter your email address">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="images" class="form-label">Upload images</label>
                                     <input type="file" multiple accept="image/*" class="form-control" id="images"
-                                           name="images[]">
+                                        name="images[]">
                                     <p class="text-danger mt-1"><small>Maximum 10 images allowed</small></p>
                                     <div id="imagePreviewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="videos" class="form-label">Upload videos</label>
                                     <input type="file" multiple accept="video/*" class="form-control" id="videos"
-                                           name="videos[]">
+                                        name="videos[]">
                                     <p class="text-danger mt-1"><small>Maximum 3 videos allowed</small></p>
                                     <div id="videoPreviewContainer" class="d-flex flex-wrap gap-2 mt-2"></div>
                                 </div>
@@ -434,16 +430,18 @@
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     <script>
         // For initial load
-        document.addEventListener("DOMContentLoaded", function () {
-            GLightbox({selector: '.glightbox'});
+        document.addEventListener("DOMContentLoaded", function() {
+            GLightbox({
+                selector: '.glightbox'
+            });
         });
 
         // For DataTables redraws
-        $('#reviews-table').on('draw.dt', function () {
-            GLightbox({selector: '.glightbox'});
+        $('#reviews-table').on('draw.dt', function() {
+            GLightbox({
+                selector: '.glightbox'
+            });
         });
-
-
     </script>
 
     <script>
@@ -460,7 +458,7 @@
             });
         }
 
-        window.initGalleries = function () {
+        window.initGalleries = function() {
             document.querySelectorAll('.gallery-container').forEach(el => {
                 initGalleryForRow(el.id);
             });
@@ -482,16 +480,16 @@
         };
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             var reviewsTable = $('#reviews-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route("reviews.data") }}?product_id={{ $product_id }}',
-                    dataSrc: function (json) {
+                    url: '{{ route('reviews.data') }}?product_id={{ $product_id }}',
+                    dataSrc: function(json) {
                         return json.data || []; // Always return array
                     },
-                    error: function (xhr, error, thrown) {
+                    error: function(xhr, error, thrown) {
                         console.error('DataTables error:', error);
                     }
                 },
@@ -499,13 +497,32 @@
                     emptyTable: "No reviews found for this product.",
                     processing: "Loading...",
                 },
-                columns: [
-                    {data: 'name', name: 'name', orderable: false, searchable: true},
-                    {data: 'review_details', name: 'review_details', orderable: false, searchable: true},
-                    {data: 'media', name: 'media', orderable: false, searchable: false},
-                    {data: 'video', name: 'video', orderable: false, searchable: false},
+                columns: [{
+                        data: 'name',
+                        name: 'name',
+                        orderable: false,
+                        searchable: true
+                    },
+                    {
+                        data: 'review_details',
+                        name: 'review_details',
+                        orderable: false,
+                        searchable: true
+                    },
+                    {
+                        data: 'media',
+                        name: 'media',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'video',
+                        name: 'video',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
-                drawCallback: function () {
+                drawCallback: function() {
                     initGalleries();
                 }
             });
@@ -517,28 +534,26 @@
                 let rating = $('#filter_by_rating').val();
                 let with_media = $('#has_media').is(':checked') ? 1 : ''; // send 1 or empty
 
-                let url = '{{ route("reviews.data") }}'
-                    + '?product_id=' + productId
-                    + '&rating=' + rating
-                    + '&with_media=' + with_media;
+                let url = '{{ route('reviews.data') }}' +
+                    '?product_id=' + productId +
+                    '&rating=' + rating +
+                    '&with_media=' + with_media;
 
                 reviewsTable.ajax.url(url).load();
             }
 
 
-            $('#filter_by_rating').on('change', function () {
+            $('#filter_by_rating').on('change', function() {
                 filterReviews();
             });
 
-            $('#has_media').on('change', function () {
+            $('#has_media').on('change', function() {
                 filterReviews();
             });
         });
-        document.getElementById('has_media').addEventListener('change', function () {
+        document.getElementById('has_media').addEventListener('change', function() {
             document.getElementById('media_label').textContent = this.checked ? 'Yes' : 'No';
         });
-
-
     </script>
     <script>
         const stars = document.querySelectorAll("#star-rating span[data-value]");
@@ -563,7 +578,7 @@
                 ratingLabel.textContent = labels[value - 1];
             });
         });
-        document.getElementById('images').addEventListener('change', function (e) {
+        document.getElementById('images').addEventListener('change', function(e) {
             const container = document.getElementById('imagePreviewContainer');
             container.innerHTML = '';
 
@@ -571,7 +586,7 @@
                 if (!file.type.startsWith('image/')) return;
 
                 const reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     const wrapper = document.createElement('div');
                     wrapper.classList.add('position-relative');
 
@@ -584,7 +599,8 @@
                     const btn = document.createElement('button');
                     btn.innerHTML = '&times;';
                     btn.type = 'button';
-                    btn.className = 'btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center position-absolute top-0 end-0';
+                    btn.className =
+                        'btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center position-absolute top-0 end-0';
                     btn.style.width = '18px';
                     btn.style.height = '18px';
                     btn.onclick = () => {
@@ -600,7 +616,7 @@
             });
         });
 
-        document.getElementById('videos').addEventListener('change', function (e) {
+        document.getElementById('videos').addEventListener('change', function(e) {
             const container = document.getElementById('videoPreviewContainer');
             container.innerHTML = '';
 
@@ -618,14 +634,14 @@
                 video.playsInline = true;
 
                 const reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     video.src = e.target.result;
 
-                    video.onloadeddata = function () {
+                    video.onloadeddata = function() {
                         video.currentTime = Math.min(1, video.duration / 2);
                     };
 
-                    video.onseeked = function () {
+                    video.onseeked = function() {
                         const canvas = document.createElement('canvas');
                         canvas.width = video.videoWidth;
                         canvas.height = video.videoHeight;
@@ -650,7 +666,8 @@
                     const btn = document.createElement('button');
                     btn.innerHTML = '&times;';
                     btn.type = 'button';
-                    btn.className = 'btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center position-absolute top-0 end-0';
+                    btn.className =
+                        'btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center position-absolute top-0 end-0';
                     btn.style.width = '18px';
                     btn.style.height = '18px';
                     btn.onclick = () => {
@@ -658,7 +675,8 @@
                         removeFileFromInput('videos', index);
 
                         // Remove the corresponding thumbnail input
-                        const thumbs = document.querySelectorAll('input[name="video_thumbnails[]"]');
+                        const thumbs = document.querySelectorAll(
+                            'input[name="video_thumbnails[]"]');
                         if (thumbs[index]) thumbs[index].remove();
                     };
 
@@ -684,7 +702,7 @@
             input.files = dt.files;
         }
 
-        $('#writeReviewForm').on('submit', function (e) {
+        $('#writeReviewForm').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
                 url: $(this).attr('action'),
@@ -692,13 +710,13 @@
                 data: new FormData(this),
                 contentType: false,
                 processData: false,
-                beforeSend: function () {
+                beforeSend: function() {
                     $('#writeReviewSubmitBtn').prop('disabled', true);
                     $('#writeReviewSubmitBtn').html(
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...'
                     );
                 },
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     if (response.status == 'success') {
                         notify('success', response.message);
@@ -707,7 +725,7 @@
                     }
                 },
                 error: handleAjaxErrors,
-                complete: function () {
+                complete: function() {
                     $('#writeReviewSubmitBtn').prop('disabled', false);
                     $('#writeReviewSubmitBtn').html('Submit');
                 }
@@ -716,7 +734,7 @@
     </script>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
 
             var owl = $('.product-carousel');
@@ -731,11 +749,11 @@
                 dots: false,
             });
 
-            $('.play').on('click', function () {
+            $('.play').on('click', function() {
                 owl.trigger('play.owl.autoplay', [1000]);
             });
 
-            $('.stop').on('click', function () {
+            $('.stop').on('click', function() {
                 owl.trigger('stop.owl.autoplay');
             });
 
@@ -763,7 +781,7 @@
                 galleryTop.removeAllSlides();
                 galleryThumbs.removeAllSlides();
 
-                $.each(images, function (index, imagePath) {
+                $.each(images, function(index, imagePath) {
                     const imageUrl = '/' + imagePath.replace(/^\/?/, '');
 
                     galleryTop.appendSlide(`
@@ -783,15 +801,15 @@
             }
 
             // ✅ Listen to attribute changes
-            $('.attribute-input').on('change', function () {
+            $('.attribute-input').on('change', function() {
                 let selectedAttributes = {};
 
-                $('.attribute-input:checked').each(function () {
+                $('.attribute-input:checked').each(function() {
                     selectedAttributes[$(this).attr('name')] = $(this).val();
                 });
 
                 if (Object.keys(selectedAttributes).length === totalAttributes) {
-                    let variationString = $.map(selectedAttributes, function (val, key) {
+                    let variationString = $.map(selectedAttributes, function(val, key) {
                         return key + ': ' + val;
                     }).join(' / ');
 
@@ -801,10 +819,10 @@
                         data: {
                             variation: variationString
                         },
-                        beforeSend: function () {
+                        beforeSend: function() {
                             $('#loader').show()
                         },
-                        success: function (response) {
+                        success: function(response) {
                             $('#loader').hide();
 
                             if (response.status === 'success') {
@@ -812,13 +830,13 @@
                                     response.data.images.imageable_id;
 
                                 let swiperCustomId = $(
-                                        `[data-image-id="${response.data.images.imageable_id}"]`
+                                    `[data-image-id="${response.data.images.imageable_id}"]`
                                 ).attr('data-swiper-slide-index');
 
                                 galleryThumbs.slideTo(swiperCustomId[0]);
                                 galleryTop.slideTo(swiperCustomId[0]);
 
-                                galleryTop.on('slideChange', function () {
+                                galleryTop.on('slideChange', function() {
                                     galleryTop.update();
                                     galleryThumbs.update();
                                 });
@@ -840,7 +858,7 @@
                                 alert(response.message || 'Variation not found.');
                             }
                         },
-                        error: function () {
+                        error: function() {
                             $('#loader').hide();
                             alert('Something went wrong.');
                         }
@@ -849,59 +867,59 @@
             });
 
             displayCartItems();
-            $('.enquireBtn').click(function () {
+            $('.enquireBtn').click(function() {
                 var productId = $(this).data('id');
                 var url = $(this).data('url');
                 $.ajax({
                     url: url,
                     method: 'GET',
-                    beforeSend: function () {
+                    beforeSend: function() {
                         $('#loader').show();
                     },
-                    success: function (response) {
+                    success: function(response) {
                         $('#enquireFormResponse').html(response.html);
                         $('#myModal').modal('show');
                     },
-                    complete: function () {
+                    complete: function() {
                         $('#loader').hide();
                     }
                 })
             });
 
-            $('.addToCartBtn').click(function () {
+            $('.addToCartBtn').click(function() {
                 var productId = $(this).data('product-id');
                 var url = $(this).data('url');
                 // $('#addToCartModal').modal('show');
                 $.ajax({
                     url: url,
                     method: 'GET',
-                    beforeSend: function () {
+                    beforeSend: function() {
                         $('#loader').show();
                     },
-                    success: function (response) {
+                    success: function(response) {
                         $('#addToCartResponse').html(response.html);
                         $('#addToCartModal').modal('show');
                     },
-                    complete: function () {
+                    complete: function() {
                         $('#loader').hide();
                     }
                 })
             });
 
-            $('#enquireForm').submit(function (e) {
+            $('#enquireForm').submit(function(e) {
                 e.preventDefault();
                 var formData = $('#enquireForm').serialize();
                 $.ajax({
                     url: "{{ route('enquire') }}",
                     method: 'POST',
                     data: formData,
-                    beforeSend: function () {
+                    beforeSend: function() {
                         $('.enquireSubmitBtn').prop('disabled', true);
                         $('.enquireSubmitBtn').html(
                             '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...'
                         );
                     },
-                    success: function (response) {
+                    success: function(response) {
                         $('.enquireSubmitBtn').prop('disabled', false);
                         $('.enquireSubmitBtn').html('Submit');
                         if (response.status == 'success') {
@@ -911,12 +929,12 @@
                         }
 
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         $('.enquireSubmitBtn').prop('disabled', false);
                         $('.enquireSubmitBtn').html('Submit');
                         let errors = xhr.responseJSON.errors;
                         if (errors) {
-                            $.each(errors, function (key, value) {
+                            $.each(errors, function(key, value) {
                                 let inputField = $('[name="' + key + '"]');
                                 inputField.addClass('is-invalid');
                                 notify('error', value[0]);
@@ -968,26 +986,29 @@
 @endsection
 @section('page-style')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/cdn/datatables/dataTables.bootstrap5.min.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css">
-    {{--    <link rel="stylesheet" href="{{asset('assets/libs/mediabox/mediabox.css')}}">--}}
+    {{--    <link rel="stylesheet" href="{{asset('assets/libs/mediabox/mediabox.css')}}"> --}}
     <link rel="stylesheet" href="https://unpkg.com/mediabox/dist/mediabox.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
     <style>
         table#reviews-table {
             width: 100% !important;
             display: block;
         }
 
-        table#reviews-table thead, table#reviews-table thead tr, table#reviews-table tbody {
+        table#reviews-table thead,
+        table#reviews-table thead tr,
+        table#reviews-table tbody {
             display: block;
         }
 
-        table.dataTable > thead .sorting_asc, table.dataTable > thead .sorting_desc {
+        table.dataTable>thead .sorting_asc,
+        table.dataTable>thead .sorting_desc {
             display: none !important;
         }
 
@@ -1011,7 +1032,7 @@
             transition: all 0.3s ease;
         }
 
-        .attribute-option input:checked + .badge {
+        .attribute-option input:checked+.badge {
             background-color: #e28245 !important;
             color: white;
             border-color: #db783b;
@@ -1399,13 +1420,43 @@
             .owl-carousel button.owl-dot.owl-nav {
                 right: 8px;
             }
+
+            .tab-pane div h3.text-center {
+                font-size: 16px !important;
+
+            }
+
+            button.btn.btn-primary.review-btn.rounded-pill.px-4 {
+                font-size: 10px;
+                padding: 4px 8px !important;
+            }
+
+            select#filter_by_rating {
+                font-size: 12px;
+            }
+
+            label.form-label.d-block.mb-0 {
+                font-size: 12px;
+            }
+
+            .d-flex.align-items-center div {
+                font-size: 12px !important;
+
+            }
+
+            #reviews-table_filter {
+                margin-top: 20px !important;
+            }
         }
 
         .gallery-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 columns */
-            gap: 10px; /* space between items */
-            max-width: 400px; /* optional: constrain width */
+            grid-template-columns: repeat(4, 1fr);
+            /* 4 columns */
+            gap: 10px;
+            /* space between items */
+            max-width: 400px;
+            /* optional: constrain width */
         }
 
         .gallery-container a img {
@@ -1495,6 +1546,5 @@
         #reviews-table_length {
             display: none;
         }
-
     </style>
 @endsection
