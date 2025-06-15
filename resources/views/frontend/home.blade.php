@@ -286,14 +286,21 @@
                 <!-- /.services-one__info__bg -->
                 <div class="row gutter-y-40 align-items-center">
                     <div class="col-lg-6">
-                        <div class="services-one__info__left">
-                            <h3 class="services-one__info__title">Get a Professional Services</h3>
-                            <!-- /.services-one__info__title -->
-                            <p class="services-one__info__text">Laminate flooring is a type of synthetic flooring
-                                that
-                                designed like hardwood, tile, or other natural materials</p>
-                            <!-- /.services-one__info__text -->
-                        </div><!-- /.services-one__info__left -->
+                        @php
+                            $home_service_one_content = $settings->where('key', 'home_service_one_content')->first();
+                        @endphp
+                        @if ($home_service_one_content != null)
+                            {!! $home_service_one_content->value !!}
+                        @else
+                            <div class="services-one__info__left">
+                                <h3 class="services-one__info__title">Get a Professional Services</h3>
+                                <!-- /.services-one__info__title -->
+                                <p class="services-one__info__text" >Laminate flooring is a type of synthetic flooring
+                                    that
+                                    designed like hardwood, tile, or other natural materials</p>
+                                <!-- /.services-one__info__text -->
+                            </div><!-- /.services-one__info__left -->
+                        @endif
                     </div><!-- /.col-lg-6 -->
                     <div class="col-lg-6">
                         <div class="services-one__info__right">
