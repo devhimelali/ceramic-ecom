@@ -181,13 +181,11 @@ class FrontendController extends Controller
             ->where('product_id', $request->product_id)
             ->latest();
 
-        // Filter by rating if present and valid
-        if ($request->filled('rating') && is_numeric($request->rating)) {
-            $reviews = $reviews->where('rating', (int)$request->rating);
+        if (!empty($request->rating)) {
+            $reviews = $reviews->where('rating', $request->rating);
         }
 
-        // Filter reviews that have media (images or videos)
-        if ($request->has('with_media')) {
+        if (!empty($request->with_media)) {
             $reviews = $reviews->where(function ($q) {
                 $q->whereHas('images')->orWhereHas('videos');
             });
