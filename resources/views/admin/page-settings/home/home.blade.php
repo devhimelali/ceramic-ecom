@@ -12,13 +12,13 @@
     @include('admin.page-settings.home.partials.about')
     <!-- about End -->
 
-    <!-- reliable start -->
-    @include('admin.page-settings.home.partials.reliable')
-    <!-- reliable end -->
-
     <!-- service start -->
     @include('admin.page-settings.home.partials.service')
     <!-- service end -->
+
+    <!-- reliable start -->
+    @include('admin.page-settings.home.partials.reliable')
+    <!-- reliable end -->
 
     <!-- client carousel start -->
     <div class="client-carousel @@extraClassName">
