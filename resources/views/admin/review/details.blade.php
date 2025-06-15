@@ -22,7 +22,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h5>Product Name:</h5>
-                            <a href="{{ route('products.edit', $review->product->id) }}" target="_blank" class="text-decoration-none">
+                            <a href="{{ route('products.edit', $review->product->id) }}" target="_blank"
+                               class="text-decoration-none">
                                 <p>{{ $review->product->name }}</p>
                             </a>
                             <h5>Rating:</h5>
@@ -44,7 +45,7 @@
                                     <span class="badge bg-warning">Pending</span>
                                 @else
                                     <span class="badge bg-danger">Rejected</span>
-                                @endif
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -58,9 +59,13 @@
                             <div class="col-md-12">
                                 <h5>Images:</h5>
                                 <div id="gallery-images" class="gallery-container">
-                                    @foreach($review->images as $image)
+                                    @php
+                                        $images = $review->images->where('image_type', 'review-image');
+                                    @endphp
+                                    @foreach($images as $image)
                                         <a href="{{ asset($image->path) }}" data-lg-size="1280-720" class="lg-thumb">
-                                            <img src="{{ asset($image->path) }}" alt="Review Image" style="width: 100%; height: auto; max-width: 300px; margin-right: 10px;">
+                                            <img src="{{ asset($image->path) }}" alt="Review Image"
+                                                 style="width: 100%; height: auto; max-width: 200px; margin-right: 10px; border-radius: 10px; border: 1px solid #ddd; padding: 5px; box-shadow: 0 0 10px rgba(0,0,0,.2); object-fit: cover; object-position: center;  max-height: 200px; overflow: hidden; margin-bottom: 10px;">
                                         </a>
                                     @endforeach
                                 </div>
@@ -72,21 +77,38 @@
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <h5>Videos:</h5>
-                                <div id="gallery-videos">
-                                    @foreach($review->videos as $video)
+                                <div id="video-gallery-{{$review->id}}"
+                                     class="video-gallery-container d-flex gap-2 flex-wrap"
+                                     style="min-width: 300px;">
+                                    @php
+                                        $thumbnails = $review->images->where('image_type', 'video-thumbnail')->values();
+                                    @endphp
 
-                                        <a
-                                            data-lg-size="1280-720"
-                                            data-video='{"source": [{"src":"{{ asset($video->url) }}", "type":"video/mp4"}], "tracks": [{"src": "{/videos/title.txt", "kind":"captions", "srclang": "en", "label": "English", "default": "true"}], "attributes": {"preload": false, "playsinline": true, "controls": true}}'
-                                            data-poster="{{ asset('assets/images/logo.jpg') }}"
-                                            data-sub-html="{{ $review->comment }}"
-                                        >                                            <video class="lg-thumb" style="width: 100%; height: auto; max-width: 300px; margin-right: 10px;">
-                                                <source src="{{ asset($video->url) }}" type="video/mp4">
-                                                Your browser does not support the video tag.
-                                            </video>
-                                            <i class="bi bi-play"></i>
-                                        </a>
+                                    @foreach ($review->videos as $key => $video)
+                                        @php
+                                            $thumbPath = isset($thumbnails[$key]) ? asset('storage/' .$thumbnails[$key]->path) : null;
+                                            $videoPath = asset($video->url);
+                                        @endphp
 
+                                        <a href="{{$videoPath}}" class="glightbox" data-type="video"
+                                           data-gallery="review-videos-{{$review->id}}"
+                                           style="position: relative; display: inline-block;">
+                                            @if ($thumbPath)
+                                                <img src="{{$thumbPath}}"
+                                                     style="width: 180px; height: 120px; object-fit: cover; object-position: center; margin-right: 10px; border-radius: 6px; border: 1px solid #ddd; padding: 5px; box-shadow: 0 0 10px rgba(0,0,0,.2);"
+                                                     alt="Video Thumbnail">
+                                                <span class="position-absolute top-50 start-50 translate-middle"
+                                                      style="pointer-events: none;">
+                                                    <i class="bi bi-play-circle-fill text-white" style="font-size: 2rem;"></i>
+                                                </span>
+                                            @else
+                                                <div class="bg-dark d-flex align-items-center justify-content-center"
+                                                     style="width: 100px; height: 60px;">
+                                                    <i class="bi bi-play-circle-fill text-white"
+                                                       style="font-size: 2rem;"></i>
+                                                </div>
+                                            @endif
+                                            </a>
                                     @endforeach
                                 </div>
                             </div>
@@ -99,10 +121,13 @@
 
 @endsection
 @section('page-script')
-   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/video/lg-video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     <script>
-
+        document.addEventListener("DOMContentLoaded", function () {
+            GLightbox({selector: '.glightbox'});
+        });
         lightGallery(document.getElementById('gallery-images'), {
             animateThumb: false,
             zoomFromOrigin: false,
@@ -129,24 +154,25 @@
 @endsection
 
 @section('page-css')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css">
-<style>
-#gallery-videos a {
-    position: relative;
-    display: inline-block;
-}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
+    <style>
+        #gallery-videos a {
+            position: relative;
+            display: inline-block;
+        }
 
-#gallery-videos i {
-    position: absolute;
-    font-size: 45px;
-    color: white;
-    z-index: 99;
-    border: 3px solid red;
-    left: calc(50% - 44px);
-    top: calc(50% - 42px);
-    width: 80px;
-    text-align: center;
-    border-radius: 10px;
-}
-</style>
+        #gallery-videos i {
+            position: absolute;
+            font-size: 45px;
+            color: white;
+            z-index: 99;
+            border: 3px solid red;
+            left: calc(50% - 44px);
+            top: calc(50% - 42px);
+            width: 80px;
+            text-align: center;
+            border-radius: 10px;
+        }
+    </style>
 @endsection

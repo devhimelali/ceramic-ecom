@@ -105,8 +105,8 @@ class DashboardController extends Controller
                         $keyword = strtolower($request->search['value']);
                         $query->where(function ($q) use ($keyword) {
                             $q->whereRaw('LOWER(reviews.name) like ?', ["%{$keyword}%"])
-                            ->orWhereRaw('LOWER(reviews.comment) like ?', ["%{$keyword}%"])
-                            ->orWhereRaw('LOWER(products.name) LIKE ?', ["%{$keyword}%"]);
+                                ->orWhereRaw('LOWER(reviews.comment) like ?', ["%{$keyword}%"])
+                                ->orWhereRaw('LOWER(products.name) LIKE ?', ["%{$keyword}%"]);
                         });
                     }
                 })
@@ -176,7 +176,7 @@ class DashboardController extends Controller
                             <button type="button" class="btn btn-sm btn-danger delete-item-btn" data-id="' . $row->id . '">
                                 Delete
                             </button>
-                            <a href="'.route('reviews.show', $row->id).'" class="btn btn-sm btn-info">
+                            <a href="' . route('reviews.show', $row->id) . '" class="btn btn-sm btn-info">
                                 View
                             </a></div>';
                     return $buttons;
@@ -192,11 +192,9 @@ class DashboardController extends Controller
 
     public function show($id)
     {
-        $review = Review::with('images')->findOrFail($id);
-        $active = 'reviews';
         $data = [
-            'active' => $active,
-            'review' => $review,
+            'active' => 'reviews',
+            'review' => Review::with('product', 'images', 'videos')->findOrFail($id),
         ];
         return view('admin.review.details', $data);
     }
