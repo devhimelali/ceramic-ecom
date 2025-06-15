@@ -121,7 +121,13 @@
                     <div class="col-md-3 text-center">
                         <div class="featured-category-image">
                             <a href="{{ route('frontend.productsPage', ['category' => $category->slug]) }}">
-                                <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" class="img-fluid fixed-size">
+                                @if($category->image)
+                                    <img src="{{ asset($category->image) }}" alt="{{ $category->name }}"
+                                         class="img-fluid fixed-size">
+                                @else
+                                    <img src="{{ asset('assets/placeholder-image-2.png') }}" alt="{{ $category->name }}"
+                                         class="img-fluid fixed-size">
+                                @endif
                             </a>
                             <h5 class="mt-2">{{ $category->name }}</h5>
                         </div>
