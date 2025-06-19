@@ -27,6 +27,12 @@
             height: 463px;
         }
 
+        img.about-one__circle-text__image
+        {
+            width: 115%;
+        }
+
+
         @media (max-width: 991px) {
             .about-one__image img {
                 width: 100% !important;
@@ -66,7 +72,7 @@
 @section('content')
     <section class="page-header">
         <div class="page-header__bg"
-            style="background-image: url('{{ asset('frontend') }}/assets/images/backgrounds/page-header-bg-1-1.png');">
+             style="background-image: url('{{ asset('frontend') }}/assets/images/backgrounds/page-header-bg-1-1.png');">
         </div><!-- /.page-header__bg -->
         <div class="container">
             <h2 class="page-header__title">About us</h2>
@@ -84,30 +90,31 @@
                     <div class="about-one__image-grid">
                         <div class="about-one__image">
                             <img src="{{ $settings->where('key', 'about_one__image__one')->first()->value ?? asset('frontend/assets/images/about/about-1-3.png') }}"
-                                alt="about" class="about-one__image__one sec_1_prev_1">
+                                 alt="about" class="about-one__image__one sec_1_prev_1">
                             <img src="{{ $settings->where('key', 'about_one__image__two')->first()->value ?? asset('frontend/assets/images/about/about-1-2.jpg') }}"
-                                alt="about" class="about-one__image__two sec_1_prev_2">
+                                 alt="about" class="about-one__image__two sec_1_prev_2">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__image">
                             <img src="{{ $settings->where('key', 'about_one__image__three')->first()->value ?? asset('frontend/assets/images/about/about-1-1.jpg') }}"
-                                alt="about" class="about-one__image__three sec_1_prev_3">
+                                 alt="about" class="about-one__image__three sec_1_prev_3">
                         </div><!-- /.about-one__image -->
                         <div class="about-one__circle-text">
                             <div class="about-one__circle-text__bg"
-                                style="background-image: url('{{ asset('frontend') }}/assets/images/resources/about-award-bg.jpg');">
+                                 style="background-color: #fff">
                             </div>
-                            <img src="{{ asset('frontend') }}/assets/images/resources/about-award-symbol.png"
-                                alt="award-symbole" class="about-one__circle-text__image">
-                            <div class="about-one__curved-circle curved-circle">
-                                <!-- curved-circle start-->
-                                <div class="about-one__curved-circle__item curved-circle__item"
-                                    data-circle-text-options='{
-                                    "radius": 84,
-                                    "forceWidth": true,
-                                    "forceHeight": true}'>
-                                    award winning flooring company
-                                </div>
-                            </div><!-- curved-circle end-->
+                            <img src="{{ asset('assets/images/about-logo.png') }}"
+                                 alt="award-symbole" class="about-one__circle-text__image">
+                            {{--                            <div class="about-one__curved-circle curved-circle">--}}
+                            {{--                                <!-- curved-circle start-->--}}
+                            {{--                                <div class="about-one__curved-circle__item curved-circle__item"--}}
+                            {{--                                    data-circle-text-options='{--}}
+                            {{--                                    "radius": 84,--}}
+                            {{--                                    "forceWidth": true,--}}
+                            {{--                                    "forceHeight": true}'>--}}
+                            {{--                                    award winning flooring company--}}
+                            {{--                                </div>--}}
+                            {{--                            </div><!-- curved-circle end-->--}}
+
                         </div><!-- /.about-one__circle-text -->
                     </div><!-- /.about-one__image-grid -->
                 </div><!-- /.col-lg-6 -->
@@ -126,12 +133,15 @@
 
 
                             <div class="about-one__content__text wow fadeInUp" data-wow-duration="1500ms"
-                                data-wow-delay="00ms">
+                                 data-wow-delay="00ms">
                                 <h5 class="about-one__text-title">We’re providing the best quality tiles in town.</h5>
                                 <!-- /.about-one__text-title -->
-                                <p class="about-one__text">Tiles company, also known as a tile manufacturer or distributor,
-                                    specializes in the production and distribution of various types of tiles used for a wide
-                                    range of applications. These companies play a crucial role in the construn and interior
+                                <p class="about-one__text">Tiles company, also known as a tile manufacturer or
+                                    distributor,
+                                    specializes in the production and distribution of various types of tiles used for a
+                                    wide
+                                    range of applications. These companies play a crucial role in the construn and
+                                    interior
                                     design industries by providing tiles for residential.</p><!-- /.about-one__text -->
                             </div><!-- /.about-one__content__text -->
                             <div class="row about-one__inner-row gutter-y-40">
@@ -162,7 +172,8 @@
                                     </div><!-- /.about-one__service -->
                                 </div><!-- /.col-xl-6 -->
                             </div><!-- /.row -->
-                            <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                            <div class="about-one__button wow fadeInUp" data-wow-duration="1500ms"
+                                 data-wow-delay="00ms">
                                 <a href="{{ route('frontend.contact') }}" class="floens-btn">
                                     <span>get in touch</span>
                                     <i class="icon-right-arrow"></i>
@@ -175,16 +186,16 @@
         </div><!-- /.container -->
         <div class="about-one__shapes">
             <img src="{{ asset('frontend') }}/assets/images/shapes/about-shape-1-1.jpg" alt="about-shape"
-                class="about-one__shape about-one__shape--one">
+                 class="about-one__shape about-one__shape--one">
             <img src="{{ asset('frontend') }}/assets/images/shapes/about-shape-1-1.jpg" alt="about-shape"
-                class="about-one__shape about-one__shape--two">
+                 class="about-one__shape about-one__shape--two">
         </div><!-- /.about-one__shapes -->
     </section><!-- /.about-one section-space -->
 
 @endsection
 @section('page-script')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('[contenteditable="true"]').removeAttr('contenteditable');
         });
     </script>

@@ -201,20 +201,20 @@
                         </div><!-- /.about-one__image -->
                         <div class="about-one__circle-text">
                             <div class="about-one__circle-text__bg"
-                                 style="background-image: url('{{ asset('frontend') }}/assets/images/resources/about-award-bg.jpg');">
+                                 style="background-color: #fff">
                             </div>
-                            <img src="{{ asset('frontend') }}/assets/images/resources/about-award-symbol.png"
+                            <img src="{{ asset('assets/images/about-logo.png') }}"
                                  alt="award-symbole" class="about-one__circle-text__image" loading="lazy">
-                            <div class="about-one__curved-circle curved-circle">
-                                <!-- curved-circle start-->
-                                <div class="about-one__curved-circle__item curved-circle__item"
-                                     data-circle-text-options='{
-                     "radius": 84,
-                     "forceWidth": true,
-                     "forceHeight": true}'>
-                                    award winning flooring company
-                                </div>
-                            </div><!-- curved-circle end-->
+{{--                            <div class="about-one__curved-circle curved-circle">--}}
+{{--                                <!-- curved-circle start-->--}}
+{{--                                <div class="about-one__curved-circle__item curved-circle__item"--}}
+{{--                                     data-circle-text-options='{--}}
+{{--                     "radius": 84,--}}
+{{--                     "forceWidth": true,--}}
+{{--                     "forceHeight": true}'>--}}
+{{--                                    award winning flooring company--}}
+{{--                                </div>--}}
+{{--                            </div><!-- curved-circle end-->--}}
                         </div><!-- /.about-one__circle-text -->
                     </div><!-- /.about-one__image-grid -->
                 </div><!-- /.col-lg-6 -->
@@ -1010,6 +1010,11 @@
         ::ng-deep .swiper-button-prev:after,
         ::ng-deep .swiper-button-next:after {
             --swiper-navigation-size: 15px;
+        }
+
+        img.about-one__circle-text__image
+        {
+            width: 115%;
         }
 
         @media (max-width: 991px) {
