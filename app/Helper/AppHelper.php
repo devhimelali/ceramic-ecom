@@ -49,7 +49,7 @@ function sendMarketingMessage($to, $message)
         "messages" => [
             [
                 "to" => $to,
-                "from" => env("APP_NAME"),
+                "from" => env("TOUCH_SMS_FROM"),
                 "body" => $message
             ]
         ]

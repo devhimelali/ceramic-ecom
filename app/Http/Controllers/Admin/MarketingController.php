@@ -105,9 +105,9 @@ class MarketingController extends Controller
                 continue;
             }
 
-            // if (!preg_match('/^(\+61|0)[2-478](\d{8})$/', $user->phone)) {
-            //     continue;
-            // }
+             if (!preg_match('/^(\+61|0)[2-478](\d{8})$/', $user->phone)) {
+                 continue;
+             }
 
             $message = str_replace("{customer_name}", $user->name, $message);
             $client = new Client();
@@ -126,7 +126,7 @@ class MarketingController extends Controller
                 "messages" => [
                     [
                         "to" => $user->phone,
-                        "from" => env("APP_NAME"),
+                        "from" => env("TOUCH_SMS_FROM"),
                         "body" => $message
                     ]
                 ]
