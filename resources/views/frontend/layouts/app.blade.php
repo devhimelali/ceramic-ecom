@@ -113,6 +113,7 @@
         }
     </style>
     @yield('page-style')
+    @stack('style')
 
 </head>
 
@@ -355,6 +356,7 @@ transform: translate(-50%, -50%); z-index: 1051; background-color: rgba(208,208,
         });
     </script>
     @yield('page-script')
+    @stack('scripts')
 </body>
 
 

@@ -21,7 +21,7 @@ Route::get('optimize-clear', function () {
 });
 
 
-Route::get('/reviews', function(){
+Route::get('/slider', function () {
     $data = [
         'active' => 'reviews'
     ];
