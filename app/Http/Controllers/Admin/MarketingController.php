@@ -150,14 +150,6 @@ class MarketingController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
     public function sendSMSAllUsers(Request $request)
     {
         $request->validate([
@@ -165,24 +157,25 @@ class MarketingController extends Controller
         ]);
 
         $users = ProductQuery::selectRaw("
-                    MIN(id) as id,
-                    phone,
-                    ANY_VALUE(name) as name,
-                    ANY_VALUE(email) as email,
-                    MIN(created_at) as created_at
-                ")
+            MIN(id) as id,
+            phone,
+            MAX(name) as name,
+            MAX(email) as email,
+            MIN(created_at) as created_at
+        ")
             ->groupBy("phone")
-            ->orderBy("created_at", "desc")->get();
+            ->orderByRaw("MIN(created_at) DESC")
+            ->get();
 
         foreach ($users as $user) {
-
             if (!$user->phone) {
                 continue;
             }
 
-            // if (!preg_match('/^(\+61|0)[2-478](\d{8})$/', $user->phone)) {
-            //     continue;
-            // }
+            // Optional: validate a phone format
+             if (!preg_match('/^(\+61|0)[2-478](\d{8})$/', $user->phone)) {
+                 continue;
+             }
 
             $message = str_replace("{customer_name}", $user->name, $request->message);
 
@@ -194,4 +187,5 @@ class MarketingController extends Controller
             "message" => "SMS sent successfully"
         ]);
     }
+
 }
