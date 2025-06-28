@@ -25,15 +25,11 @@ class FrontendController extends Controller
             'setting' => Setting::get(),
             'active' => 'home',
             'sliders' => Slider::get(),
-            'products' => Product::with(['images', 'variations.images', 'reviews' => function ($q) {
+            'products' => Product::with(['images', 'reviews' => function ($q) {
                 return $q->where('is_approved', 1);
             }])->where('status', StatusEnum::ACTIVE)->latest()->limit(12)->get(),
-            'topSellingProducts' => Product::with(['images', 'variations.images', 'reviews' => function ($q) {
-                return $q->where('is_approved', 1);
-            }])->where('status', StatusEnum::ACTIVE)->where('label', ProductLabelEnum::TOP_SELLING)->latest()->limit(12)->get(),
-            'featuredProducts' => Product::with(['images', 'variations.images', 'reviews' => function ($q) {
-                return $q->where('is_approved', 1);
-            }])->where('status', StatusEnum::ACTIVE)->where('label', ProductLabelEnum::FEATURED)->latest()->limit(12)->get(),
+
+
             'featuredCategories' => Category::where('is_featured', 1)->get(),
         ];
         return view('frontend.home', $data);
@@ -177,7 +173,7 @@ class FrontendController extends Controller
     public function getReviewsData(Request $request)
     {
         $reviews = Review::with(['images', 'videos']) // Ensure videos are eager loaded
-        ->where('is_approved', 1)
+            ->where('is_approved', 1)
             ->where('product_id', $request->product_id)
             ->latest();
 
@@ -310,7 +306,6 @@ class FrontendController extends Controller
                     'path' => 'video-thumbnails/' . $imageName,
                     'image_type' => 'video-thumbnail'
                 ]);
-
             }
         }
 
