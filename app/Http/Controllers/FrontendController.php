@@ -28,8 +28,6 @@ class FrontendController extends Controller
             'products' => Product::with(['images', 'reviews' => function ($q) {
                 return $q->where('is_approved', 1);
             }])->where('status', StatusEnum::ACTIVE)->latest()->limit(12)->get(),
-
-
             'featuredCategories' => Category::where('is_featured', 1)->get(),
         ];
         return view('frontend.home', $data);
