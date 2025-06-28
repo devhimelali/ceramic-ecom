@@ -2,6 +2,131 @@
 @section('title', 'Home')
 
 @section('content')
+    <!-- shop start -->
+    <section class="product-home">
+        <div class="product-home__bg"
+            style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/shop-bg-1.png);">
+        </div>
+        <!-- /.product-home__bg -->
+        <div class="container products">
+            <div class="sec-title sec-title--center">
+
+                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
+
+                <h3 class="sec-title__title">Latest Products in Shop</h3>
+                <!-- /.sec-title__title -->
+            </div><!-- /.sec-title -->
+            <div class="swiper-navigation-wrapper">
+                <!-- Navigation Arrows Outside -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper mySwiper">
+                    <div class=" swiper-wrapper">
+                        @forelse ($products as $product)
+                            <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item swiper-slide">
+                                <div class="product__item wow fadeInUp item">
+                                    @php
+                                        $label = $product->label->value;
+                                        $labelClass =
+                                            $label == 'new arrival'
+                                                ? 'new-arrival'
+                                                : ($label == 'featured'
+                                                    ? 'featured'
+                                                    : 'top_selling');
+                                    @endphp
+                                    @if ($product->sale_price && $product->regular_price > 0)
+                                        @php
+                                            $saving =
+                                                (($product->regular_price - $product->sale_price) /
+                                                    $product->regular_price) *
+                                                100;
+                                        @endphp
+                                        <span class="discount" style="margin-left: 10px; font-size: 10px;">
+                                            Saving {{ number_format($saving, 0) }}%
+                                        </span>
+                                    @endif
+                                    <span class="label {{ $labelClass }}">
+                                        {{ $product->label->value }}
+                                    </span>
+                                    <div class="product_item_image">
+                                        <img class="item product-image" src="{{ asset($product->images->first()->path) }}"
+                                            loading="lazy" alt="{{ $product->images->first()->name }}">
+                                    </div>
+                                    <div class="product_item_content">
+                                        <h6 class="product_item_title">
+                                            <a
+                                                href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
+                                        </h6>
+                                        @php
+                                            $totalReviews = $product->reviews->count();
+                                            $averageRating = $totalReviews > 0 ? $product->reviews->avg('rating') : 0;
+                                        @endphp
+
+                                        <div class="product-review mb-2">
+                                            <div class="stars text-warning">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($totalReviews == 0)
+                                                        <i class="far fa-star"></i> {{-- unfilled --}}
+                                                    @elseif ($i <= floor($averageRating))
+                                                        <i class="fas fa-star"></i> {{-- filled --}}
+                                                    @elseif ($i - $averageRating <= 0.5)
+                                                        <i class="fas fa-star-half-alt"></i> {{-- half --}}
+                                                    @else
+                                                        <i class="far fa-star"></i> {{-- unfilled --}}
+                                                    @endif
+                                                @endfor
+
+                                                @if ($totalReviews > 0)
+                                                    <small class="text-muted ms-1">({{ $totalReviews }}
+                                                        review{{ $totalReviews > 1 ? 's' : '' }})</small>
+                                                @else
+                                                    <small class="text-muted ms-1">(No reviews)</small>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="product_item_price">
+                                            @if ($product->sale_price && $product->regular_price > 0)
+                                                <span
+                                                    style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                                </span>
+                                                <span style="color: #888; font-size: 16px;">
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
+                                                </span>
+                                            @else
+                                                <span>
+                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <a href="javascript:void(0);"
+                                                class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
+                                                data-id="{{ $product->id }}"
+                                                data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
+
+                                            <a href="javascript:void(0);"
+                                                class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
+                                                data-product-id="{{ $product->id }}"
+                                                data-url="{{ route('add.to.cart.form', $product->id) }}">
+                                                <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
+                                            </a>
+                                        </div>
+                                    </div><!-- /.product-content -->
+                                </div><!-- /.product-item -->
+                            </div><!-- /.col-md-6 col-lg-4 -->
+                        @empty
+                            <h5 class="text-center">No products found.</h5>
+                        @endforelse
+                    </div><!-- /.row -->
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div><!-- /.container -->
+    </section><!-- /.product-home -->
+    <!-- shop end -->
     <section class="product-home-top-selling bg-light">
         <!-- /.product-home__bg -->
         <div class="container products">
@@ -244,135 +369,10 @@
         }
     </style>
 
-    <!-- shop start -->
-    <section class="product-home">
-        <div class="product-home__bg"
-            style="background-image: url({{ asset('frontend') }}/assets/images/backgrounds/shop-bg-1.png);">
-        </div>
-        <!-- /.product-home__bg -->
-        <div class="container products">
-            <div class="sec-title sec-title--center">
 
-                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
-
-                <h3 class="sec-title__title">Latest Products in Shop</h3>
-                <!-- /.sec-title__title -->
-            </div><!-- /.sec-title -->
-            <div class="swiper-navigation-wrapper">
-                <!-- Navigation Arrows Outside -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper mySwiper">
-                    <div class=" swiper-wrapper">
-                        @forelse ($products as $product)
-                            <div class="col-xl-3 col-lg-4 col-md-6 col-6 product_item swiper-slide">
-                                <div class="product__item wow fadeInUp item">
-                                    @php
-                                        $label = $product->label->value;
-                                        $labelClass =
-                                            $label == 'new arrival'
-                                                ? 'new-arrival'
-                                                : ($label == 'featured'
-                                                    ? 'featured'
-                                                    : 'top_selling');
-                                    @endphp
-                                    @if ($product->sale_price && $product->regular_price > 0)
-                                        @php
-                                            $saving =
-                                                (($product->regular_price - $product->sale_price) /
-                                                    $product->regular_price) *
-                                                100;
-                                        @endphp
-                                        <span class="discount" style="margin-left: 10px; font-size: 10px;">
-                                            Saving {{ number_format($saving, 0) }}%
-                                        </span>
-                                    @endif
-                                    <span class="label {{ $labelClass }}">
-                                        {{ $product->label->value }}
-                                    </span>
-                                    <div class="product_item_image">
-                                        <img class="item product-image"
-                                            src="{{ asset($product->images->first()->path) }}" loading="lazy"
-                                            alt="{{ $product->images->first()->name }}">
-                                    </div>
-                                    <div class="product_item_content">
-                                        <h6 class="product_item_title">
-                                            <a
-                                                href="{{ route('product.details', $product->slug) }}">{{ Str::limit($product->name, 30) }}</a>
-                                        </h6>
-                                        @php
-                                            $totalReviews = $product->reviews->count();
-                                            $averageRating = $totalReviews > 0 ? $product->reviews->avg('rating') : 0;
-                                        @endphp
-
-                                        <div class="product-review mb-2">
-                                            <div class="stars text-warning">
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    @if ($totalReviews == 0)
-                                                        <i class="far fa-star"></i> {{-- unfilled --}}
-                                                    @elseif ($i <= floor($averageRating))
-                                                        <i class="fas fa-star"></i> {{-- filled --}}
-                                                    @elseif ($i - $averageRating <= 0.5)
-                                                        <i class="fas fa-star-half-alt"></i> {{-- half --}}
-                                                    @else
-                                                        <i class="far fa-star"></i> {{-- unfilled --}}
-                                                    @endif
-                                                @endfor
-
-                                                @if ($totalReviews > 0)
-                                                    <small class="text-muted ms-1">({{ $totalReviews }}
-                                                        review{{ $totalReviews > 1 ? 's' : '' }})</small>
-                                                @else
-                                                    <small class="text-muted ms-1">(No reviews)</small>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="product_item_price">
-                                            @if ($product->sale_price && $product->regular_price > 0)
-                                                <span
-                                                    style="text-decoration: line-through; color: red; font-size: 16px; margin-right: 10px;">
-                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                                </span>
-                                                <span style="color: #888; font-size: 16px;">
-                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->sale_price, 2) }}
-                                                </span>
-                                            @else
-                                                <span>
-                                                    {{ env('CURRENCY_SYMBOL') }}{{ number_format($product->regular_price, 2) }}
-                                                </span>
-                                            @endif
-                                        </div>
-
-                                        <div class="d-flex justify-content-between">
-                                            <a href="javascript:void(0);"
-                                                class="p-3 floens-btn product__item__link me-2 custom-button mobile-btn enquireBtn"
-                                                data-id="{{ $product->id }}"
-                                                data-url="{{ route('enquireForm', $product->id) }}">Enquire</a>
-
-                                            <a href="javascript:void(0);"
-                                                class="p-4 floens-btn product__item__link me-2 custom-button addCartItemBtn addToCartBtn"
-                                                data-product-id="{{ $product->id }}"
-                                                data-url="{{ route('add.to.cart.form', $product->id) }}">
-                                                <i style='font-size:17px; right: 15px' class='fas'>&#xf217;</i></a>
-                                            </a>
-                                        </div>
-                                    </div><!-- /.product-content -->
-                                </div><!-- /.product-item -->
-                            </div><!-- /.col-md-6 col-lg-4 -->
-                        @empty
-                            <h5 class="text-center">No products found.</h5>
-                        @endforelse
-                    </div><!-- /.row -->
-                    <div class="swiper-pagination"></div>
-                </div>
-                <div class="swiper-button-next"></div>
-            </div>
-        </div><!-- /.container -->
-    </section><!-- /.product-home -->
-    <!-- shop end -->
 
     <!-- services info start -->
-    <section class="mt-3 services-one__info mb-4 mt-1">
+    <section class="mt-3 services-one__info mb-5 pb-3 mt-1">
         <div class="container">
             <div class="services-one__info__inner">
                 <div class="services-one__info__bg"
