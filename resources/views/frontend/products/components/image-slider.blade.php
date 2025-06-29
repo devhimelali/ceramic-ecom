@@ -55,6 +55,13 @@
             <div class="swiper mySwiper2 mb-3">
                 <div class="swiper-wrapper">
                     @foreach ($images as $image)
+                        @php
+                            $path = public_path($image->path);
+                            if (empty($image->path) || !file_exists($path)) {
+                                continue;
+                            }
+                        @endphp
+
                         <div class="swiper-slide main-image">
                             <img src="{{ asset($image->path) }}" class="img-fluid" />
                         </div>
@@ -66,6 +73,12 @@
             <div class="swiper mySwiperThumbs">
                 <div class="swiper-wrapper">
                     @foreach ($images as $image)
+                        @php
+                            $path = public_path($image->path);
+                            if (empty($image->path) || !file_exists($path)) {
+                                continue;
+                            }
+                        @endphp
                         <div class="swiper-slide">
                             <img src="{{ asset($image->path) }}" class="img-fluid thumb-image" />
                         </div>
