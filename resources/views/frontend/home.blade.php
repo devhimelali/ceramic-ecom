@@ -11,7 +11,7 @@
         <div class="container products">
             <div class="sec-title sec-title--center">
 
-                <h6 class="sec-title__tagline">our shop</h6><!-- /.sec-title__tagline -->
+                {{-- <h6 class="sec-title__tagline">our shop</h6> --}}
 
                 <h3 class="sec-title__title">Latest Products in Shop</h3>
                 <!-- /.sec-title__title -->
@@ -904,11 +904,54 @@
             }
 
             .swiper-button-prev {
-                left: -10px;
+                left: 0px;
             }
 
             .swiper-button-next {
-                right: -10px;
+                right: 3px;
+            }
+
+            .container.products {
+                padding-left: 5px;
+                padding-right: 2px;
+            }
+
+            .product_item {
+                margin-right: 5px !important;
+            }
+
+            .footer-widget.footer-widget--contact {
+                margin-bottom: 5px !important;
+            }
+
+            .footer-widget__top {
+                margin-top: 0px;
+                margin-bottom: auto;
+            }
+
+            .col-md-5.wow.fadeInUp.animated {
+                margin-top: auto;
+            }
+
+            .col-md-7.wow.fadeInUp.animated {
+                margin-top: 5px;
+            }
+
+            .main-footer__bottom__inner {
+                padding-top: 40px;
+                padding-bottom: 10px;
+            }
+
+            .footer-widget.footer-widget--links.footer-widget--links-one {
+                margin-bottom: 20px;
+            }
+
+            .main-footer__top {
+                padding-top: 40px;
+            }
+
+            .product-home {
+                padding-top: 34px !important;
             }
         }
     </style>
