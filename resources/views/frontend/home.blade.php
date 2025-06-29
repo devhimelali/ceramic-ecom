@@ -9,7 +9,7 @@
         </div>
         <!-- /.product-home__bg -->
         <div class="container products">
-            <div class="sec-title sec-title--center">
+            <div class="mb-3 sec-title--center">
 
                 {{-- <h6 class="sec-title__tagline">our shop</h6> --}}
 
@@ -364,7 +364,7 @@
         }
 
         .product-home {
-            padding-top: 60px !important;
+            /*padding-top: 60px !important;*/
             padding-bottom: 20px !important;
         }
     </style>
