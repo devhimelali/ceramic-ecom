@@ -10033,7 +10033,7 @@ li:hover .sidebar__comments__icon::after {
 }
 
 .product-home {
-  padding-top: 115px;
+  padding-top: 45px;
   padding-bottom: 120px;
   position: relative;
   background-color: var(--floens-black2, #2B1E16);
