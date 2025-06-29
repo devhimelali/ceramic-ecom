@@ -95,7 +95,7 @@
     </div>
 
     <div id="loader"
-         style="display: none; position: fixed; top: 50%; left: 50%;
+        style="display: none; position: fixed; top: 50%; left: 50%;
     transform: translate(-50%, -50%); z-index: 1051; background-color: rgba(208,208,208,0.3); width: 100% ; height: 100%;">
         <div class="d-flex justify-content-center align-items-center h-100">
             <div class="spinner-border text-primary" role="status">
